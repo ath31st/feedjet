@@ -1,5 +1,9 @@
 @import "tailwindcss";
-@config "../tailwind.config.ts";
+
+@theme {
+  --breakpoint-4k: 125rem;
+  --breakpoint-2x4k: 220rem;
+}
 
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;

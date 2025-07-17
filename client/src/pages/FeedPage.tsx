@@ -3,9 +3,12 @@ import { FeedCard } from '../components/FeedCard';
 
 export default function FeedPage() {
   return (
-    <div className="min-h-screen bg-black p-4">
-      <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 4k-landscape:grid-cols-2 4k-portrait:grid-cols-1">
-        {mockFeed.map((item) => (
+    <div className="h-screen w-screen bg-black p-4 flex flex-col overflow-hidden">
+      <div
+        className="grid sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-2 4k:grid-cols-1 gap-2 4k:gap-6 h-full"
+        style={{ gridTemplateRows: 'repeat(0, 1fr)' }}
+      >
+        {mockFeed.slice(0, 6).map((item) => (
           <FeedCard key={item.link} item={item} />
         ))}
       </div>
