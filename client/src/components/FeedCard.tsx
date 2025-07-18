@@ -5,7 +5,7 @@ export function FeedCard({ item }: { item: FeedItem }) {
     <a
       href={item.link}
       target="_blank"
-      className="flex max-w-full flex-col overflow-hidden rounded-xl transition md:flex-row"
+      className="flex h-full max-w-full flex-col overflow-hidden 4k:rounded-4xl rounded-xl transition md:flex-row"
       style={{
         backgroundColor: 'var(--card-bg)',
         color: 'var(--card-text)',
