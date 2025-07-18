@@ -4,7 +4,7 @@ const color = getComputedStyle(document.documentElement)
 
 const svg = `
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <text x="0" y="100" font-size="80" fill="${color}">Σ</text>
+  <text x="20" y="100" font-size="80" fill="${color}">Σ</text>
 </svg>
 `;
 

@@ -29,6 +29,7 @@
   --button-bg: hsl(var(--hue), 30%, 90%);
   --button-text: hsl(var(--hue), 35%, 15%);
   --button-hover-bg: hsl(var(--hue), 30%, 85%);
+  --border: hsl(var(--hue), 25%, 60%);
 }
 
 [data-theme="dark"] {
@@ -44,6 +45,7 @@
   --button-bg: hsl(var(--hue), 25%, 20%);
   --button-text: hsl(var(--hue), 35%, 90%);
   --button-hover-bg: hsl(var(--hue), 25%, 30%);
+  --border: hsl(var(--hue), 20%, 40%);
 }
 
 [data-theme="sepia"] {
@@ -59,6 +61,7 @@
   --button-bg: hsl(var(--hue), 55%, 25%);
   --button-text: hsl(var(--hue), 35%, 90%);
   --button-hover-bg: hsl(var(--hue), 55%, 35%);
+  --border: hsl(var(--hue), 45%, 50%);
 }
 
 [data-theme="blue"] {
@@ -74,6 +77,7 @@
   --button-bg: hsl(var(--hue), 55%, 25%);
   --button-text: hsl(var(--hue), 35%, 90%);
   --button-hover-bg: hsl(var(--hue), 55%, 35%);
+  --border: hsl(var(--hue), 45%, 50%);
 }
 
 
@@ -90,6 +94,7 @@
   --button-bg: hsl(var(--hue), 45%, 25%);
   --button-text: hsl(var(--hue), 35%, 90%);
   --button-hover-bg: hsl(var(--hue), 45%, 35%);
+  --border: hsl(var(--hue), 45%, 50%);
 }
 
 body {
