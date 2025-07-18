@@ -17,10 +17,10 @@ export function AnimatedSigmaBackground() {
           color: 'var(--meta-text)',
           backgroundImage: `url("data:image/svg+xml;utf8,${encodeURIComponent(svg)}")`,
           backgroundRepeat: 'repeat',
-          backgroundSize: 'clamp(50px, 20vw, 200px)',
+          backgroundSize: 'clamp(50px, 20vw, 500px)',
           animation: 'scroll-diagonal-switch 20s linear infinite',
           opacity: 0.15,
-          filter: 'blur(0.5px)',
+          filter: 'blur(1px)',
           zIndex: -1,
         }}
       />
@@ -44,12 +44,12 @@ export function AnimatedSigmaBackground() {
           color: 'var(--meta-text)',
           backgroundImage: `url("data:image/svg+xml;utf8,${encodeURIComponent(svg)}")`,
           backgroundRepeat: 'repeat',
-          backgroundSize: 'clamp(100px, 25vw, 500px)',
+          backgroundSize: 'clamp(100px, 30vw, 500px)',
           animation: 'scroll-diagonal-switch 30s linear infinite',
           opacity: 0.07,
           filter: 'blur(7px)',
           zIndex: -3,
-          transform: 'scale(1.7)',
+          transform: 'scale(1.4)',
         }}
       />
     </div>
