@@ -24,7 +24,7 @@ export default function FeedPage() {
   });
 
   return (
-    <div className="flex h-screen w-screen flex-col overflow-hidden 4k:p-20 p-8">
+    <div className="flex h-screen w-screen flex-col overflow-hidden 4k:p-10 p-4">
       <div className="grid h-full 2x4k:grid-cols-2 4k:grid-cols-1 4k:gap-10 gap-4 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-2">
         {visibleItems.map((item, index) => (
           <FeedCardFrame key={item.link}>

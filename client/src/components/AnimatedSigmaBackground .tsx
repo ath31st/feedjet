@@ -1,54 +1,61 @@
-const color = getComputedStyle(document.documentElement)
-  .getPropertyValue('--meta-text')
-  .trim();
+import { useEffect, useState } from 'react';
 
-const svg = `
+export function AnimatedSigmaBackground() {
+  const [color, setColor] = useState('rgba(0,0,0,0.1)');
+
+  useEffect(() => {
+    const metaTextColor = getComputedStyle(document.documentElement)
+      .getPropertyValue('--meta-text')
+      .trim();
+
+    if (metaTextColor) setColor(metaTextColor);
+  }, []);
+
+  const svg = `
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
   <text x="20" y="100" font-size="80" fill="${color}">Σ</text>
 </svg>
 `;
 
-export function AnimatedSigmaBackground() {
+  const dataUrl = `url("data:image/svg+xml;utf8,${encodeURIComponent(svg)}")`;
+
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden">
       <div
-        className="pointer-events-none absolute inset-0 z-0"
+        className="absolute inset-0 z-0"
         style={{
           color: 'var(--meta-text)',
-          backgroundImage: `url("data:image/svg+xml;utf8,${encodeURIComponent(svg)}")`,
+          backgroundImage: dataUrl,
           backgroundRepeat: 'repeat',
           backgroundSize: 'clamp(50px, 20vw, 500px)',
           animation: 'scroll-diagonal-switch 20s linear infinite',
-          opacity: 0.15,
+          opacity: 0.07,
           filter: 'blur(1px)',
-          zIndex: -1,
         }}
       />
       <div
-        className="pointer-events-none absolute inset-0 z-0"
+        className="absolute inset-0 z-0"
         style={{
           color: 'var(--meta-text)',
-          backgroundImage: `url("data:image/svg+xml;utf8,${encodeURIComponent(svg)}")`,
+          backgroundImage: dataUrl,
           backgroundRepeat: 'repeat',
           backgroundSize: 'clamp(100px, 25vw, 500px)',
           animation: 'scroll-diagonal-switch 25s linear infinite',
-          opacity: 0.07,
+          opacity: 0.05,
           filter: 'blur(3px)',
-          zIndex: -2,
           transform: 'scale(1.1)',
         }}
       />
       <div
-        className="pointer-events-none absolute inset-0 z-0"
+        className="absolute inset-0 z-0"
         style={{
           color: 'var(--meta-text)',
-          backgroundImage: `url("data:image/svg+xml;utf8,${encodeURIComponent(svg)}")`,
+          backgroundImage: dataUrl,
           backgroundRepeat: 'repeat',
           backgroundSize: 'clamp(100px, 30vw, 500px)',
           animation: 'scroll-diagonal-switch 30s linear infinite',
-          opacity: 0.07,
+          opacity: 0.05,
           filter: 'blur(7px)',
-          zIndex: -3,
           transform: 'scale(1.4)',
         }}
       />
