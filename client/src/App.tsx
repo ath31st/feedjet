@@ -1,5 +1,10 @@
 import FeedPage from './pages/FeedPage';
+import { ThemeProvider } from './providers/ThemeProvider';
 
 export default function App() {
-  return <FeedPage />;
+  return (
+    <ThemeProvider>
+      <FeedPage />
+    </ThemeProvider>
+  );
 }
