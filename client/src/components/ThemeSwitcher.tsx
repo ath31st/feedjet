@@ -13,19 +13,7 @@ export function ThemeSwitcher() {
   return (
     <div
       style={{ backgroundColor: 'var(--button-bg)' }}
-      className="
-        flex flex-row
-        h-12 4k:h-36 w-3 4k:w-6
-        px-2
-        bg-[var(--button-bg)]
-        rounded-l-md
-        transition-all
-        fixed top-1/6 4k:top-1/10 right-0 
-        transform -translate-y-1/2   
-        duration-300 
-        hover:w-56 4k:hover:w-120 hover:shadow-lg 
-        items-center justify-center-safe gap-2 4k:gap-6
-      "
+      className="-translate-y-1/2 justify-center-safe fixed 4k:top-1/10 top-1/6 right-0 flex 4k:h-36 h-12 4k:w-6 w-3 transform flex-row items-center 4k:gap-6 gap-2 rounded-l-md bg-[var(--button-bg)] px-2 transition-all duration-300 4k:hover:w-120 hover:w-56 hover:shadow-lg "
     >
       {themes.map((t) => (
         <button
@@ -36,12 +24,7 @@ export function ThemeSwitcher() {
           }
           style={{ backgroundColor: t.color }}
           title={t.label}
-          className="
-            w-8 h-8 4k:w-15 4k:h-15
-            rounded-full
-            transition-opacity opacity-75
-            duration-300 hover:opacity-100
-          "
+          className="4k:h-15 h-8 4k:w-15 w-8 rounded-full opacity-75 transition-opacity duration-300 hover:opacity-100 "
         >
           <span className="sr-only">{t.label}</span>
         </button>

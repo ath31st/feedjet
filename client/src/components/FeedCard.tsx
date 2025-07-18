@@ -5,39 +5,39 @@ export function FeedCard({ item }: { item: FeedItem }) {
     <a
       href={item.link}
       target="_blank"
-      className="flex flex-col md:flex-row rounded-xl overflow-hidden transition max-w-full"
+      className="flex max-w-full flex-col overflow-hidden rounded-xl transition md:flex-row"
       style={{
         backgroundColor: 'var(--card-bg)',
         color: 'var(--card-text)',
       }}
     >
-      <div className="flex-shrink-0 w-full md:w-48 4k:w-[640px] aspect-[4/3] overflow-hidden">
+      <div className="aspect-[4/3] 4k:w-[640px] w-full flex-shrink-0 overflow-hidden md:w-48">
         <img
           src={item.image}
           alt=""
-          className="w-full h-full object-cover"
+          className="h-full w-full object-cover"
           loading="lazy"
         />
       </div>
 
-      <div className="p-4 flex flex-col gap-2 flex-grow min-w-0">
+      <div className="flex min-w-0 flex-grow flex-col gap-2 p-4">
         <div
-          className="text-xs 4k:text-4xl"
+          className="4k:text-4xl text-xs"
           style={{ color: 'var(--category-text)' }}
         >
           {item.category}
         </div>
-        <h2 className="text-lg md:text-xl 4k:text-5xl font-semibold leading-snug">
+        <h2 className="font-semibold 4k:text-5xl text-lg leading-snug md:text-xl">
           {item.title}
         </h2>
         <p
-          className="text-sm md:text-base 4k:text-5xl line-clamp-6"
+          className="line-clamp-6 4k:text-5xl text-sm md:text-base"
           style={{ color: 'var(--description-text)' }}
         >
           {item.description}
         </p>
         <div
-          className="text-xs md:text-sm 4k:text-4xl mt-auto"
+          className="mt-auto 4k:text-4xl text-xs md:text-sm"
           style={{ color: 'var(--meta-text)' }}
         >
           {item.author} · {new Date(item.pubDate).toLocaleString('ru-RU')}
