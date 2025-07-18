@@ -20,24 +20,24 @@ export function FeedCard({ item }: { item: FeedItem }) {
         />
       </div>
 
-      <div className="flex min-w-0 flex-grow flex-col gap-2 p-4">
+      <div className="flex min-w-0 flex-grow flex-col 4k:gap-4 gap-2 p-4">
         <div
           className="4k:text-4xl text-xs"
           style={{ color: 'var(--category-text)' }}
         >
           {item.category}
         </div>
-        <h2 className="font-semibold 4k:text-5xl text-lg leading-snug md:text-xl">
+        <h2 className="font-semibold 4k:text-5xl text-base leading-snug">
           {item.title}
         </h2>
         <p
-          className="line-clamp-6 4k:text-5xl text-sm md:text-base"
+          className="line-clamp-6 4k:text-5xl text-sm"
           style={{ color: 'var(--description-text)' }}
         >
           {item.description}
         </p>
         <div
-          className="mt-auto 4k:text-4xl text-xs md:text-sm"
+          className="mt-auto 4k:text-4xl text-xs"
           style={{ color: 'var(--meta-text)' }}
         >
           {item.author} · {new Date(item.pubDate).toLocaleString('ru-RU')}
