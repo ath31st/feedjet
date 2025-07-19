@@ -1,4 +1,5 @@
 import type { FeedItem } from '../mocks/feed';
+import { LazyImage } from './LazyImage';
 
 interface FeedCardProps {
   item: FeedItem;
@@ -15,13 +16,8 @@ export function FeedCard({ item }: FeedCardProps) {
         color: 'var(--card-text)',
       }}
     >
-      <div className="z-1 aspect-[4/3] 4k:w-[640px] w-full flex-shrink-0 overflow-hidden 4k:rounded-4xl rounded-xl md:w-48">
-        <img
-          src={item.image}
-          alt=""
-          className="h-full w-full object-cover"
-          loading="lazy"
-        />
+      <div className="z-1 aspect-[4/3] 4k:w-[640px] w-full flex-shrink-0 overflow-hidden 4k:rounded-4xl rounded-xl md:w-24 lg:w-40 xl:w-72">
+        <LazyImage src={item.image} alt={''} />
       </div>
 
       <div className="flex min-w-0 flex-grow flex-col 4k:gap-4 gap-2 p-4">
