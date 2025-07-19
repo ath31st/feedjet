@@ -16,12 +16,7 @@ export function FeedCard({ item }: FeedCardProps) {
         color: 'var(--card-text)',
       }}
     >
-      <div
-        className="z-1 aspect-[4/3] 4k:w-[640px] w-full flex-shrink-0 overflow-hidden 4k:rounded-4xl rounded-xl 4k:border-4 border-2 md:w-24 lg:w-40 xl:w-72"
-        style={{
-          borderColor: 'var(--border)',
-        }}
-      >
+      <div className="z-1 aspect-[4/3] 4k:w-[640px] w-full flex-shrink-0 overflow-hidden 4k:rounded-4xl rounded-xl md:w-24 lg:w-40 xl:w-72">
         <LazyImage src={item.image} alt={''} />
       </div>
 
