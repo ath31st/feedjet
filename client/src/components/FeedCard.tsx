@@ -15,7 +15,7 @@ export function FeedCard({ item }: FeedCardProps) {
         color: 'var(--card-text)',
       }}
     >
-      <div className="z-1 aspect-[4/3] 4k:w-[640px] w-full flex-shrink-0 overflow-hidden md:w-48">
+      <div className="z-1 aspect-[4/3] 4k:w-[640px] w-full flex-shrink-0 overflow-hidden 4k:rounded-4xl rounded-xl md:w-48">
         <img
           src={item.image}
           alt=""

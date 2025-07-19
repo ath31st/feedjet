@@ -8,7 +8,7 @@ import { FeedCardFrame } from '../components/FeedCardFrame';
 const DISPLAY_COUNT = 6;
 const INTERVAL_MS = 400000;
 
-export default function FeedPage() {
+export function FeedPage() {
   const [startIndex, setStartIndex] = useState(0);
 
   useEffect(() => {
