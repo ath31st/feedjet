@@ -1,5 +1,3 @@
-'use client';
-
 import { motion, type Variants } from 'framer-motion';
 
 export function LoadingThreeDotsJumping() {

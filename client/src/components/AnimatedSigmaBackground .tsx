@@ -1,9 +1,7 @@
-'use client';
-
 import { useEffect, useState } from 'react';
 
 export function AnimatedSigmaBackground() {
-  const [color, setColor] = useState('rgba(0,0,0,0.1)');
+  const [color, setColor] = useState('rgba(255,255,255,0.1)');
 
   useEffect(() => {
     const metaTextColor = getComputedStyle(document.documentElement)
@@ -26,24 +24,24 @@ export function AnimatedSigmaBackground() {
       <div
         className="absolute inset-0 z-0"
         style={{
-          color: 'var(--meta-text)',
+          color,
           backgroundImage: dataUrl,
           backgroundRepeat: 'repeat',
           backgroundSize: 'clamp(50px, 20vw, 500px)',
           animation: 'scroll-diagonal-switch 20s linear infinite',
-          opacity: 0.07,
+          opacity: 0.17,
           filter: 'blur(1px)',
         }}
       />
       <div
         className="absolute inset-0 z-0"
         style={{
-          color: 'var(--meta-text)',
+          color,
           backgroundImage: dataUrl,
           backgroundRepeat: 'repeat',
           backgroundSize: 'clamp(100px, 25vw, 500px)',
           animation: 'scroll-diagonal-switch 25s linear infinite',
-          opacity: 0.05,
+          opacity: 0.15,
           filter: 'blur(3px)',
           transform: 'scale(1.1)',
         }}
@@ -51,12 +49,12 @@ export function AnimatedSigmaBackground() {
       <div
         className="absolute inset-0 z-0"
         style={{
-          color: 'var(--meta-text)',
+          color,
           backgroundImage: dataUrl,
           backgroundRepeat: 'repeat',
           backgroundSize: 'clamp(100px, 30vw, 500px)',
           animation: 'scroll-diagonal-switch 30s linear infinite',
-          opacity: 0.05,
+          opacity: 0.15,
           filter: 'blur(7px)',
           transform: 'scale(1.4)',
         }}
