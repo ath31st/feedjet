@@ -118,3 +118,9 @@ body {
     background-position: 0 240px;
   }
 }
+@keyframes fade-in-out {
+  0% { opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; }
+}

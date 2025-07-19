@@ -1,5 +1,3 @@
-'use client';
-
 import { useEffect, useState } from 'react';
 import { mockFeed } from '../mocks/feed';
 import { AnimatedFeedCard } from '../components/AnimatedFeedCard';
