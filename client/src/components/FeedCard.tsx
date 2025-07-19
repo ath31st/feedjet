@@ -1,6 +1,10 @@
 import type { FeedItem } from '../mocks/feed';
 
-export function FeedCard({ item }: { item: FeedItem }) {
+interface FeedCardProps {
+  item: FeedItem;
+}
+
+export function FeedCard({ item }: FeedCardProps) {
   return (
     <a
       href={item.link}
@@ -11,7 +15,7 @@ export function FeedCard({ item }: { item: FeedItem }) {
         color: 'var(--card-text)',
       }}
     >
-      <div className="aspect-[4/3] 4k:w-[640px] w-full flex-shrink-0 overflow-hidden md:w-48">
+      <div className="z-1 aspect-[4/3] 4k:w-[640px] w-full flex-shrink-0 overflow-hidden md:w-48">
         <img
           src={item.image}
           alt=""

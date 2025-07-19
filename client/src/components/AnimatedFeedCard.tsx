@@ -2,13 +2,12 @@ import { motion } from 'framer-motion';
 import { FeedCard } from './FeedCard';
 import type { FeedItem } from '../mocks/feed';
 
-export function AnimatedFeedCard({
-  item,
-  index,
-}: {
+interface AnimatedFeedCardProps {
   item: FeedItem;
   index: number;
-}) {
+}
+
+export function AnimatedFeedCard({ item, index }: AnimatedFeedCardProps) {
   return (
     <motion.div
       key={item.link}
