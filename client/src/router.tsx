@@ -2,8 +2,9 @@ import { createBrowserRouter } from 'react-router-dom';
 import { FeedPage } from './pages/FeedPage';
 //import { AdminPage } from './pages/AdminPage';
 import { NotFoundPage } from './pages/NotFoundPage';
-//import { UnauthorizedPage } from './pages/UnauthorizedPage';
 import { RootLayout } from './layouts/RootLayout';
+import { UnauthorizedPage } from './pages/UnauthorizedPage';
+import { LoginPage } from './pages/LoginPage';
 
 export const router = createBrowserRouter([
   {
@@ -12,7 +13,8 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <FeedPage /> },
       //   { path: 'admin', element: <AdminPage /> },
-      //   { path: '401', element: <UnauthorizedPage /> },
+      { path: 'login', element: <LoginPage /> },
+      { path: '401', element: <UnauthorizedPage /> },
       { path: '*', element: <NotFoundPage /> },
     ],
   },
