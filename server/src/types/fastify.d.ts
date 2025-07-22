@@ -1,7 +1,7 @@
-import { DrizzleD1Database } from 'drizzle-orm/d1';
+import type { DbType } from '../src/db/index.js';
 
 declare module 'fastify' {
   interface FastifyInstance {
-    db: ReturnType<typeof import('../src/db/index.js')['db']>;
+    db: DbType;
   }
 }

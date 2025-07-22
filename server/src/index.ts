@@ -3,17 +3,17 @@ import cors from '@fastify/cors';
 import { db } from './db/index.js';
 import { usersTable } from './db/schema.js';
 
-const fastify = Fastify({ logger: true });
+const app = Fastify({ logger: true });
 
-await fastify.register(cors, {
+await app.register(cors, {
   origin: '*',
 });
 
-fastify.decorate('db', db);
+app.decorate('db', db);
 
-fastify.get('/test', async (req, reply) => {
-  const rows = await fastify.db.select().from(usersTable).all();
+app.get('/test', async (_req, _reply) => {
+  const rows = await app.db.select().from(usersTable).all();
   return rows;
 });
 
-await fastify.listen({ port: 3000 });
+await app.listen({ port: 3000 });
