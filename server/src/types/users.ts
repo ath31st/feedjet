@@ -1,4 +1,10 @@
-export interface UserInput {
+export interface NewUser {
+  login: string;
+  password: string;
+}
+
+export interface User {
+  id: number;
   login: string;
   password: string;
 }
@@ -6,18 +12,4 @@ export interface UserInput {
 export interface UserUpdateInput {
   login?: string;
   password?: string;
-}
-
-export interface IdParams {
-  Params: {
-    id: string;
-  };
-}
-
-export interface UserCreateBody {
-  Body: UserInput;
-}
-
-export interface UserUpdateBody {
-  Body: UserUpdateInput;
 }
