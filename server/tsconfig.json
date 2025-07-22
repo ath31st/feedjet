@@ -1,5 +1,4 @@
 {
-    "extends": "fastify-tsconfig",
     "compilerOptions": {
         "outDir": "dist",
         "sourceMap": true,
@@ -16,7 +15,7 @@
         },
         "strict": true,
         "esModuleInterop": true,
-        "skipLibCheck": true,
+        "skipLibCheck": true
     },
     "include": [
         "src/**/*.ts",
