@@ -1,66 +1,22 @@
 import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
-
-interface UserInput {
-  login: string;
-  password: string;
-}
-
-interface UserUpdateInput {
-  login?: string;
-  password?: string;
-}
-
-const userInputSchema = {
-  type: 'object',
-  required: ['login', 'password'],
-  properties: {
-    login: { type: 'string', minLength: 3 },
-    password: { type: 'string', minLength: 4 },
-  },
-};
-
-const userUpdateSchema = {
-  type: 'object',
-  properties: {
-    login: { type: 'string', minLength: 3 },
-    password: { type: 'string', minLength: 4 },
-  },
-};
-
-const userResponseSchema = {
-  type: 'object',
-  properties: {
-    id: { type: 'number' },
-    login: { type: 'string' },
-    password: { type: 'string' },
-  },
-};
-
-const usersResponseSchema = {
-  type: 'array',
-  items: userResponseSchema,
-};
-
-interface IdParams {
-  Params: {
-    id: string;
-  };
-}
-
-interface UserCreateBody {
-  Body: UserInput;
-}
-
-interface UserUpdateBody {
-  Body: UserUpdateInput;
-}
+import type {
+  IdParams,
+  UserCreateBody,
+  UserUpdateBody,
+} from '../../types/users.js';
+import {
+  usersResponseSchema,
+  userResponseSchema,
+  userInputSchema,
+  userUpdateSchema,
+} from '../../validations/schemas/users.schemas.js';
 
 export async function userRoutes(app: FastifyInstance) {
   app.get(
     '/',
     {
       schema: {
-        description: 'Получить список всех пользователей',
+        description: 'Retrieve all users',
         tags: ['users'],
         response: { 200: usersResponseSchema },
       },
@@ -74,7 +30,7 @@ export async function userRoutes(app: FastifyInstance) {
     '/:id',
     {
       schema: {
-        description: 'Получить пользователя по ID',
+        description: 'Retrieve user by ID',
         tags: ['users'],
         params: { type: 'object', properties: { id: { type: 'string' } } },
         response: {
@@ -100,7 +56,7 @@ export async function userRoutes(app: FastifyInstance) {
     '/',
     {
       schema: {
-        description: 'Создать нового пользователя',
+        description: 'Create a new user',
         tags: ['users'],
         body: userInputSchema,
         response: { 201: userResponseSchema },
@@ -117,7 +73,7 @@ export async function userRoutes(app: FastifyInstance) {
     '/:id',
     {
       schema: {
-        description: 'Обновить пользователя по ID',
+        description: 'Update user by ID',
         tags: ['users'],
         params: { type: 'object', properties: { id: { type: 'string' } } },
         body: userUpdateSchema,
@@ -148,7 +104,7 @@ export async function userRoutes(app: FastifyInstance) {
     '/:id',
     {
       schema: {
-        description: 'Удалить пользователя по ID',
+        description: 'Delete user by ID',
         tags: ['users'],
         params: { type: 'object', properties: { id: { type: 'string' } } },
         response: {

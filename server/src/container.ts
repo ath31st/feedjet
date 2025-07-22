@@ -1,5 +1,5 @@
 import Parser from 'rss-parser';
-import { RssParser } from './rss/parser.js';
+import { RssParser } from './services/parser.service.js';
 import { drizzle } from 'drizzle-orm/better-sqlite3';
 import Database from 'better-sqlite3';
 import fs from 'node:fs';
