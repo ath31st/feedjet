@@ -1,0 +1,21 @@
+{
+  "name": "rss-server",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "start": "node build/index.js",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "basic-auth": "^2.0.1",
+    "drizzle-orm": "^0.44.3",
+    "fastify": "^5.4.0",
+    "rss-parser": "^3.13.0",
+    "sqlite3": "^5.1.7",
+    "zod": "^4.0.5"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.31.4"
+  }
+}
