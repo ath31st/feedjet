@@ -1,7 +1,7 @@
 {
     "extends": "fastify-tsconfig",
     "compilerOptions": {
-        "outDir": "build",
+        "outDir": "dist",
         "sourceMap": true,
         "target": "ESNext",
         "module": "nodenext",

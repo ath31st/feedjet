@@ -18,7 +18,11 @@
     "lineWidth": 80,
     "attributePosition": "auto",
     "bracketSpacing": true,
-    "includes": ["src/**"]
+    "includes": [
+      "clinet/src/**",
+      "server/src/**",
+      "shared/**"
+    ]
   },
   "linter": {
     "enabled": true,
@@ -29,7 +33,9 @@
           "level": "error",
           "fix": "safe",
           "options": {
-            "attributes": ["className"]
+            "attributes": [
+              "className"
+            ]
           }
         }
       }
