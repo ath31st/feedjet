@@ -1,0 +1,16 @@
+{
+    "extends": "fastify-tsconfig",
+    "compilerOptions": {
+        "outDir": "build",
+        "sourceMap": true,
+        "target": "ESNext",
+        "module": "nodenext",
+        "types": [
+            "node"
+        ],
+    },
+    "include": [
+        "src/**/*.ts",
+        "drizzle.config.ts"
+    ]
+}
