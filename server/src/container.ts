@@ -6,8 +6,6 @@ import fs from 'node:fs';
 import path from 'node:path';
 import * as schema from './db/schema.js';
 import { UserService } from './services/user.service.js';
-import type { FastifyInstance } from 'fastify';
-import fp from 'fastify-plugin';
 
 const dbPath = process.env.DB_FILE_NAME ?? '';
 
@@ -29,9 +27,3 @@ export type DbType = typeof db;
 export const rssParser = new RssParser(new Parser());
 
 export const userService = new UserService(db);
-
-export default fp(async function services(app: FastifyInstance) {
-  app.decorate('db', db);
-  app.decorate('rssParser', rssParser);
-  app.decorate('userService', userService);
-});
