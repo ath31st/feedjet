@@ -14,11 +14,13 @@
     "better-sqlite3": "^12.2.0",
     "dotenv": "^17.2.0",
     "drizzle-orm": "^0.44.3",
-    "rss-parser": "^3.13.0",
-    "zod": "^4.0.5"
+    "express": "^5.1.0",
+    "joi": "^17.13.3",
+    "rss-parser": "^3.13.0"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.13",
+    "@types/express": "^5.0.3",
     "@types/node": "^24.0.15",
     "drizzle-kit": "^0.31.4",
     "tsx": "^4.20.3",
