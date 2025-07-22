@@ -4,13 +4,24 @@
         "outDir": "dist",
         "sourceMap": true,
         "target": "ESNext",
-        "module": "nodenext",
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
         "types": [
             "node"
         ],
+        "paths": {
+            "@shared/*": [
+                "../shared/*"
+            ]
+        },
+        "strict": true,
+        "esModuleInterop": true,
+        "skipLibCheck": true,
     },
     "include": [
         "src/**/*.ts",
-        "drizzle.config.ts"
+        "src/**/*.d.ts",
+        "drizzle.config.ts",
+        "../shared/**/*.ts"
     ]
 }
