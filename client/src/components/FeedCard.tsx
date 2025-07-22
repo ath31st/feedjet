@@ -1,4 +1,4 @@
-import type { FeedItem } from '../mocks/feed';
+import type { FeedItem } from '@shared/types/feed';
 import { LazyImage } from './LazyImage';
 
 interface FeedCardProps {
@@ -25,7 +25,7 @@ export function FeedCard({ item }: FeedCardProps) {
           className="4k:text-4xl text-xs"
           style={{ color: 'var(--category-text)' }}
         >
-          {item.category}
+          {item.categories.join(', ')}
         </div>
         <h2 className="font-semibold 4k:text-5xl text-base leading-snug">
           {item.title}
