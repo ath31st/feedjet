@@ -1,0 +1,28 @@
+import z from 'zod';
+
+const allowedThemes = ['dark', 'light', 'green', 'blue', 'sepia'] as const;
+
+export const kioskConfigParamsSchema = z.object({
+  id: z.coerce.number().int().positive(),
+});
+
+export const kioskConfigCreateSchema = z.object({
+  url: z.string(),
+});
+
+export const kioskConfigUpdateSchema = z
+  .object({
+    cellsPerPage: z.number().int().min(1).max(30).optional(),
+    theme: z.enum(allowedThemes).optional(),
+  })
+  .refine((data) => Object.keys(data).length > 0, {
+    message: 'At least one field must be provided',
+  });
+
+export const kioskConfigResponseSchema = z.object({
+  id: z.number(),
+  cellsPerPagerl: z.number(),
+  theme: z.string(),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});

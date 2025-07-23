@@ -24,3 +24,15 @@ export const rssFeedsTable = sqliteTable('rss_feeds', {
     .notNull()
     .default(sql`(unixepoch())`),
 });
+
+export const kioskConfigTable = sqliteTable('kiosk_config', {
+  id: integer('id').primaryKey().default(1),
+  cellsPerPage: integer('cells_per_page').notNull().default(6),
+  theme: text('theme').notNull().default('dark'),
+  createdAt: integer('created_at', { mode: 'timestamp' })
+    .notNull()
+    .default(sql`(unixepoch())`),
+  updatedAt: integer('updated_at', { mode: 'timestamp' })
+    .notNull()
+    .default(sql`(unixepoch())`),
+});
