@@ -1,6 +1,7 @@
 import { t, authService } from '../../container.js';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
+import { protectedProcedure } from '../../middleware/auth.js';
 
 export const authRouter = t.router({
   login: t.procedure
@@ -29,4 +30,12 @@ export const authRouter = t.router({
 
       return { success: true };
     }),
+
+  me: protectedProcedure.query(({ ctx }) => {
+    if (!ctx.user) {
+      throw new TRPCError({ code: 'UNAUTHORIZED' });
+    }
+
+    return { user: ctx.user };
+  }),
 });

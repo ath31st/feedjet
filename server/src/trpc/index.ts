@@ -5,11 +5,13 @@ import { t } from '../container.js';
 import { rssRouter } from './routes/rss.js';
 import { kioskConfigRouter } from './routes/kiosk.config.js';
 import { createContext } from './context.js';
+import { authRouter } from './routes/auth.js';
 
 const appRouter = t.router({
   user: userRouter,
   rss: rssRouter,
   config: kioskConfigRouter,
+  auth: authRouter,
 });
 
 export type AppRouter = typeof appRouter;
