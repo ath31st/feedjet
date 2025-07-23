@@ -1,5 +1,5 @@
 import type Parser from 'rss-parser';
-import type { RawFeedItem } from '../types/rss.js';
+import type { RawFeedItem } from '../types/feed.js';
 import type { FeedItem } from '@shared/types/feed.ts';
 
 export class RssParser {
