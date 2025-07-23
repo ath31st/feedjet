@@ -8,6 +8,7 @@ import * as schema from './db/schema.js';
 import { UserService } from './services/user.service.js';
 import { UserController } from './controllers/user.controller.js';
 import { initTRPC } from '@trpc/server';
+import { RssService } from './services/rss.service.js';
 
 const dbPath = process.env.DB_FILE_NAME ?? '';
 
@@ -30,5 +31,7 @@ export const rssParser = new RssParser(new Parser());
 
 export const userService = new UserService(db);
 export const userController = new UserController(userService);
+
+export const rssService = new RssService(db);
 
 export const t = initTRPC.create();
