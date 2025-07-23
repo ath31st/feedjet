@@ -2,8 +2,10 @@ import { usersTable } from '../db/schema.js';
 import { eq } from 'drizzle-orm';
 import type { DbType } from '../container.js';
 import type { NewUser, User } from '@shared/types/user.js';
+import bcrypt from 'bcrypt';
 
 export class UserService {
+  private readonly saltRounds = 10;
   private readonly db: DbType;
 
   constructor(db: DbType) {
@@ -14,11 +16,20 @@ export class UserService {
     return this.db.select().from(usersTable).all();
   }
 
+  getByLogin(login: string): User | undefined {
+    return this.db
+      .select()
+      .from(usersTable)
+      .where(eq(usersTable.login, login))
+      .get();
+  }
+
   getById(id: number): User | undefined {
     return this.db.select().from(usersTable).where(eq(usersTable.id, id)).get();
   }
 
   create(data: NewUser): User {
+    data.password = this.hashPassword(data.password);
     return this.db.insert(usersTable).values(data).returning().get();
   }
 
@@ -34,5 +45,9 @@ export class UserService {
   delete(id: number): number {
     return this.db.delete(usersTable).where(eq(usersTable.id, id)).run()
       .changes;
+  }
+
+  private hashPassword(password: string): string {
+    return bcrypt.hashSync(password, this.saltRounds);
   }
 }
