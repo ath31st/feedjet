@@ -10,6 +10,14 @@ export class RssService {
     return this.db.select().from(rssFeedsTable).all();
   }
 
+  getActive(): RssFeed[] {
+    return this.db
+      .select()
+      .from(rssFeedsTable)
+      .where(eq(rssFeedsTable.isActive, true))
+      .all();
+  }
+
   getById(id: number): RssFeed | undefined {
     return this.db
       .select()
