@@ -22,7 +22,7 @@ export class UserService {
   update(id: number, data: Partial<User>): User | undefined {
     return this.db
       .update(usersTable)
-      .set(data)
+      .set({ ...data, updatedAt: new Date() })
       .where(eq(usersTable.id, id))
       .returning()
       .get();

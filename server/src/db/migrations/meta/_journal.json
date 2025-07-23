@@ -15,6 +15,13 @@
       "when": 1753182288573,
       "tag": "0001_dry_ultimatum",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1753249314603,
+      "tag": "0002_curvy_mikhail_rasputin",
+      "breakpoints": true
     }
   ]
 }
