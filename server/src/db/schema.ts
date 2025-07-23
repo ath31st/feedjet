@@ -7,10 +7,10 @@ export const usersTable = sqliteTable('users', {
   password: text().notNull(),
   createdAt: integer('created_at', { mode: 'timestamp' })
     .notNull()
-    .default(sql`(current_timestamp)`),
+    .default(sql`(unixepoch())`),
   updatedAt: integer('updated_at', { mode: 'timestamp' })
     .notNull()
-    .default(sql`(current_timestamp)`),
+    .default(sql`(unixepoch())`),
 });
 
 export const rssFeedsTable = sqliteTable('rss_feeds', {
@@ -19,8 +19,8 @@ export const rssFeedsTable = sqliteTable('rss_feeds', {
   isActive: integer('is_active', { mode: 'boolean' }).default(true),
   createdAt: integer('created_at', { mode: 'timestamp' })
     .notNull()
-    .default(sql`(current_timestamp)`),
+    .default(sql`(unixepoch())`),
   updatedAt: integer('updated_at', { mode: 'timestamp' })
     .notNull()
-    .default(sql`(current_timestamp)`),
+    .default(sql`(unixepoch())`),
 });
