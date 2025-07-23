@@ -25,14 +25,14 @@ export class UserController {
     }
   };
 
-  getById = (req: Request, res: Response) => {
+  findById = (req: Request, res: Response) => {
     try {
       const parseResult = userParamsSchema.safeParse(req.params);
       if (!parseResult.success) {
         return res.status(400).json({ message: 'Invalid ID' });
       }
 
-      const user = this.userService.getById(parseResult.data.id);
+      const user = this.userService.findById(parseResult.data.id);
       if (!user) {
         return res.status(404).json({ message: 'User not found' });
       }

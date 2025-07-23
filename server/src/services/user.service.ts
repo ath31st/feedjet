@@ -24,7 +24,7 @@ export class UserService {
       .get();
   }
 
-  getById(id: number): User | undefined {
+  findById(id: number): User | undefined {
     return this.db.select().from(usersTable).where(eq(usersTable.id, id)).get();
   }
 

@@ -9,7 +9,7 @@ router.post('/users', userController.create);
 router.put('/users/:id', userController.update);
 router.delete('/users/:id', userController.delete);
 router.get('/users', userController.getAll);
-router.get('/users/:id', userController.getById);
+router.get('/users/:id', userController.findById);
 
 const userRoutes = Router();
 userRoutes.use(API_PREFIX, router);

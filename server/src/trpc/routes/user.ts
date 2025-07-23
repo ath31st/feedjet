@@ -12,8 +12,8 @@ export const userRouter = t.router({
     return userService.getAll();
   }),
 
-  getById: t.procedure.input(userParamsSchema).query(({ input }) => {
-    const user = userService.getById(input.id);
+  findById: t.procedure.input(userParamsSchema).query(({ input }) => {
+    const user = userService.findById(input.id);
     if (!user) {
       throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found' });
     }

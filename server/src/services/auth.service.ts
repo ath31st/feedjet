@@ -1,3 +1,4 @@
+import type { User } from '@shared/types/user.js';
 import type { UserService } from './user.service.js';
 import bcrypt from 'bcrypt';
 
@@ -8,12 +9,12 @@ export class AuthService {
     this.userService = userService;
   }
 
-  login(login: string, password: string) {
+  login(login: string, password: string): User | null {
     const user = this.userService.getByLogin(login);
-    if (!user) {
-      return false;
+    if (!user || !this.comparePassword(password, user.password)) {
+      return null;
     }
-    return this.comparePassword(password, user.password);
+    return user;
   }
 
   private comparePassword(password: string, hashedPassword: string): boolean {

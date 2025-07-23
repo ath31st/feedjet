@@ -4,6 +4,7 @@ import { userRouter } from './routes/user.js';
 import { t } from '../container.js';
 import { rssRouter } from './routes/rss.js';
 import { kioskConfigRouter } from './routes/kiosk.config.js';
+import { createContext } from './context.js';
 
 const appRouter = t.router({
   user: userRouter,
@@ -15,7 +16,7 @@ export type AppRouter = typeof appRouter;
 
 export const trpcMiddleware = createExpressMiddleware({
   router: appRouter,
-  createContext: () => ({}),
+  createContext,
   onError: ({ error }) => {
     Logger.error('tRPC error:', error);
   },

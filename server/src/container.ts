@@ -13,6 +13,7 @@ import { KioskConfigService } from './services/kiosk.config.service.js';
 import { ensureKioskConfig } from './db/initialize.kiosk.config.js';
 import Logger from './utils/logger.js';
 import { AuthService } from './services/auth.service.js';
+import type { Context } from './trpc/context.js';
 
 const dbPath = process.env.DB_FILE_NAME ?? '';
 
@@ -41,4 +42,4 @@ export const authService = new AuthService(userService);
 export const rssService = new RssService(db);
 export const kioskConfigService = new KioskConfigService(db);
 
-export const t = initTRPC.create();
+export const t = initTRPC.context<Context>().create();
