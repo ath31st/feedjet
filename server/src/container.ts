@@ -9,6 +9,7 @@ import { UserService } from './services/user.service.js';
 import { UserController } from './controllers/user.controller.js';
 import { initTRPC } from '@trpc/server';
 import { RssService } from './services/rss.service.js';
+import { KioskConfigService } from './services/kiosk.config.service.js';
 
 const dbPath = process.env.DB_FILE_NAME ?? '';
 
@@ -33,5 +34,6 @@ export const userService = new UserService(db);
 export const userController = new UserController(userService);
 
 export const rssService = new RssService(db);
+export const kioskConfigService = new KioskConfigService(db);
 
 export const t = initTRPC.create();

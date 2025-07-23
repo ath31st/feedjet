@@ -3,11 +3,12 @@ import Logger from '../utils/logger.js';
 import { userRouter } from './routes/user.js';
 import { t } from '../container.js';
 import { rssRouter } from './routes/rss.js';
+import { kioskConfigRouter } from './routes/kiosk.config.js';
 
 const appRouter = t.router({
   user: userRouter,
   rss: rssRouter,
-  //config: configRouter,
+  config: kioskConfigRouter,
 });
 
 export const trpcMiddleware = createExpressMiddleware({
