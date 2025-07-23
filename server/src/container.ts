@@ -6,6 +6,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import * as schema from './db/schema.js';
 import { UserService } from './services/user.service.js';
+import { UserController } from './controllers/user.controller.js';
 
 const dbPath = process.env.DB_FILE_NAME ?? '';
 
@@ -27,3 +28,4 @@ export type DbType = typeof db;
 export const rssParser = new RssParser(new Parser());
 
 export const userService = new UserService(db);
+export const userController = new UserController(userService);

@@ -1,15 +1,15 @@
 import 'dotenv/config';
 import express from 'express';
+import userRoutes from './routes/user.routes.js';
+import Logger from './utils/logger.js';
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
 
-app.get('/ping', (_req, res) => {
-  res.send('pong');
-});
+app.use(userRoutes);
 
 app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+  Logger.log(`[server]: Server is running at http://localhost:${port}`);
 });
