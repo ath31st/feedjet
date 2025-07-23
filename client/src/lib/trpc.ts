@@ -8,7 +8,17 @@ export const queryClient = new QueryClient();
 const trpcUrl = `${import.meta.env.VITE_API_URL}/trpc`;
 
 const trpcClient = createTRPCClient<AppRouter>({
-  links: [httpBatchLink({ url: trpcUrl })],
+  links: [
+    httpBatchLink({
+      url: trpcUrl,
+      fetch(url, options) {
+        return fetch(url, {
+          ...options,
+          credentials: 'include',
+        });
+      },
+    }),
+  ],
 });
 
 export const trpc = createTRPCOptionsProxy<AppRouter>({
