@@ -19,7 +19,7 @@
     "attributePosition": "auto",
     "bracketSpacing": true,
     "includes": [
-      "clinet/src/**",
+      "client/src/**",
       "server/src/**",
       "shared/**"
     ]
