@@ -11,11 +11,15 @@ const trpcClient = createTRPCClient<AppRouter>({
   links: [
     httpBatchLink({
       url: trpcUrl,
-      fetch(url, options) {
-        return fetch(url, {
+      fetch: async (url, options) => {
+        const response = await fetch(url, {
           ...options,
           credentials: 'include',
         });
+        if (response.status === 401) {
+          window.location.replace('/login');
+        }
+        return response;
       },
     }),
   ],
