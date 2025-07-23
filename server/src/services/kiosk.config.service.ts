@@ -1,7 +1,10 @@
 import { kioskConfigTable } from '../db/schema.js';
 import { eq } from 'drizzle-orm';
 import type { DbType } from '../container.js';
-import type { KioskConfig, UpdateKioskConfig } from '../types/kiosk.config.js';
+import type {
+  KioskConfig,
+  UpdateKioskConfig,
+} from '@shared/types/kiosk.config.js';
 import { allowedThemes } from '../utils/constants/allowed.themes.js';
 
 export class KioskConfigService {

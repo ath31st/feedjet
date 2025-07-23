@@ -1,7 +1,7 @@
 import { usersTable } from '../db/schema.js';
 import { eq } from 'drizzle-orm';
 import type { DbType } from '../container.js';
-import type { NewUser, User } from '../types/user.js';
+import type { NewUser, User } from '@shared/types/user.js';
 
 export class UserService {
   private readonly db: DbType;

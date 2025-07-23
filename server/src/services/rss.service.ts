@@ -1,7 +1,7 @@
 import type { DbType } from '../container.js';
 import { rssFeedsTable } from '../db/schema.js';
 import { eq } from 'drizzle-orm';
-import type { NewRssFeed, RssFeed, UpdateRssFeed } from '../types/rss.js';
+import type { NewRssFeed, RssFeed, UpdateRssFeed } from '@shared/types/rss.js';
 
 export class RssService {
   private readonly db: DbType;
