@@ -13,6 +13,9 @@
     "check": "biome check --write ."
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.83.0",
+    "@trpc/client": "^11.4.3",
+    "@trpc/react-query": "^11.4.3",
     "axios": "^1.10.0",
     "framer-motion": "^12.23.6",
     "react": "^19.1.0",

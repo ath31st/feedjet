@@ -11,6 +11,8 @@ const appRouter = t.router({
   config: kioskConfigRouter,
 });
 
+export type AppRouter = typeof appRouter;
+
 export const trpcMiddleware = createExpressMiddleware({
   router: appRouter,
   createContext: () => ({}),
