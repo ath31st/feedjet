@@ -14,5 +14,5 @@ app.use('/trpc', trpcMiddleware);
 app.use(userRoutes);
 
 app.listen(port, () => {
-  Logger.log(`[server]: Server is running at http://localhost:${port}`);
+  Logger.log(`🚀 Server is running at http://localhost:${port}`);
 });
