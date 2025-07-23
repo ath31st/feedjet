@@ -1,6 +1,5 @@
 import z from 'zod';
-
-const allowedThemes = ['dark', 'light', 'green', 'blue', 'sepia'] as const;
+import { allowedThemes } from '../../utils/constants/allowed.themes.js';
 
 export const kioskConfigParamsSchema = z.object({
   id: z.coerce.number().int().positive(),

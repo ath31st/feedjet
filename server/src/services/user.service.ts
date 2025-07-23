@@ -1,4 +1,3 @@
-// src/services/user.service.ts
 import { usersTable } from '../db/schema.js';
 import { eq } from 'drizzle-orm';
 import type { DbType } from '../container.js';
