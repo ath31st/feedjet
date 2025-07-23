@@ -22,11 +22,3 @@ export const userResponseSchema = z.object({
   id: z.number(),
   login: z.string(),
 });
-
-export const usersResponseSchema = z.array(userResponseSchema);
-
-export type UserParams = z.infer<typeof userParamsSchema>;
-export type UserCreateInput = z.infer<typeof userCreateSchema>;
-export type UserUpdateInput = z.infer<typeof userUpdateSchema>;
-export type UserResponse = z.infer<typeof userResponseSchema>;
-export type UsersResponse = z.infer<typeof usersResponseSchema>;
