@@ -1,6 +1,7 @@
 import cron from 'node-cron';
 import Logger from '../utils/logger.js';
 import { rssParser, rssService } from '../container.js';
+import type { FeedItem } from '@shared/types/feed.js';
 
 export const startRssCronJob = () => {
   const cronSchedule = process.env.CRON_SCHEDULE;
@@ -10,7 +11,7 @@ export const startRssCronJob = () => {
     return;
   }
 
-  cron.schedule(cronSchedule, () => {
+  cron.schedule(cronSchedule, async () => {
     Logger.log(
       `Running scheduled task to fetch rss feeds with cron schedule: ${cronSchedule}...`,
     );
@@ -22,9 +23,12 @@ export const startRssCronJob = () => {
       return;
     }
 
-    const feedItems = rssFeeds.flatMap((feed) => {
-      return rssParser.parse(feed.url);
-    });
+    const feedItems: FeedItem[] = [];
+
+    for (const rssFeed of rssFeeds) {
+      const items = await rssParser.parse(rssFeed.url);
+      feedItems.push(...items);
+    }
 
     Logger.log(`Fetched ${feedItems.length} feed items.`);
   });
