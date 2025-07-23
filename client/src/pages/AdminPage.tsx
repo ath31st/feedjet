@@ -1,27 +1,49 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useGetAllRss, useCreateRss, useDeleteRss } from '../hooks/useRss';
+import { useMainConfig, useUpdateKioskConfig } from '../hooks/useKioskConfig';
 
 export function AdminPage() {
-  const [feeds, setFeeds] = useState<string[]>([
-    'https://example.com/rss',
-    'https://another-source.com/feed',
-  ]);
-  const [newFeed, setNewFeed] = useState('');
-  const [cellCount, setCellCount] = useState(12);
+  const { data: config } = useMainConfig();
+  const updateMutation = useUpdateKioskConfig();
+  const [cellCount, setCellCount] = useState(0);
 
-  const handleAddFeed = () => {
-    if (newFeed.trim() && !feeds.includes(newFeed.trim())) {
-      setFeeds((prev) => [...prev, newFeed.trim()]);
-      setNewFeed('');
+  useEffect(() => {
+    if (config) {
+      setCellCount(config.cellsPerPage);
     }
-  };
-
-  const handleDeleteFeed = (url: string) => {
-    setFeeds((prev) => prev.filter((f) => f !== url));
-  };
+  }, [config]);
 
   const handleCellCountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = parseInt(e.target.value, 10);
-    if (!Number.isNaN(val)) setCellCount(val);
+    if (!Number.isNaN(val)) {
+      setCellCount(val);
+      updateMutation.mutate({ data: { cellsPerPage: val } });
+    }
+  };
+
+  const {
+    data: feeds,
+    isLoading: feedsLoading,
+    error: feedsError,
+  } = useGetAllRss();
+  const createRss = useCreateRss();
+  const deleteRss = useDeleteRss();
+
+  const [newFeed, setNewFeed] = useState('');
+
+  const handleAddFeed = () => {
+    const url = newFeed.trim();
+    if (!url) return;
+    createRss.mutate(
+      { url },
+      {
+        onSuccess: () => setNewFeed(''),
+      },
+    );
+  };
+
+  const handleDeleteFeed = (id: number) => {
+    deleteRss.mutate({ id });
   };
 
   return (
@@ -36,12 +58,18 @@ export function AdminPage() {
         >
           <h2 className="mb-4 font-semibold text-xl">Текущая конфигурация</h2>
           <p>Ячеек на странице: {cellCount}</p>
-          <p className="mt-4 font-semibold">RSS-ленты:</p>
-          <ul className="mt-2 list-disc space-y-1 pl-5">
-            {feeds.map((url) => (
-              <li key={url}>{url}</li>
-            ))}
-          </ul>
+          <p className="mt-4 font-semibold">RSS‑ленты:</p>
+          {feedsLoading && <p>Загрузка...</p>}
+          {feedsError && (
+            <p className="text-red-500">Ошибка: {feedsError.message}</p>
+          )}
+          {feeds && (
+            <ul className="mt-2 list-disc space-y-1 pl-5">
+              {feeds.map((item) => (
+                <li key={item.id}>{item.url}</li>
+              ))}
+            </ul>
+          )}
         </section>
 
         <section
@@ -63,25 +91,37 @@ export function AdminPage() {
             <button
               type="button"
               onClick={handleAddFeed}
-              className="rounded-lg bg-[var(--button-bg)] px-4 py-2 text-[var(--button-text)] hover:opacity-80"
+              className="rounded-lg bg-[var(--button-bg)] px-4 py-2 text-[var(--button-text)] hover:opacity-80 disabled:opacity-50"
             >
               Добавить
             </button>
           </div>
-          <ul className="space-y-2">
-            {feeds.map((url) => (
-              <li key={url} className="flex items-center justify-between">
-                <span className="truncate">{url}</span>
-                <button
-                  type="button"
-                  onClick={() => handleDeleteFeed(url)}
-                  className="text-red-500 hover:opacity-50"
-                >
-                  ❌
-                </button>
-              </li>
-            ))}
-          </ul>
+          {createRss.error && (
+            <p className="mb-2 text-red-500">
+              Ошибка: {createRss.error.message}
+            </p>
+          )}
+          {feeds && (
+            <ul className="space-y-2">
+              {feeds.map((item) => (
+                <li key={item.id} className="flex items-center justify-between">
+                  <span className="truncate">{item.url}</span>
+                  <button
+                    type="button"
+                    onClick={() => handleDeleteFeed(item.id)}
+                    className="text-red-500 hover:opacity-50 disabled:opacity-50"
+                  >
+                    ❌
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+          {deleteRss.error && (
+            <p className="mt-2 text-red-500">
+              Ошибка: {deleteRss.error.message}
+            </p>
+          )}
         </section>
       </div>
 
@@ -112,14 +152,10 @@ export function AdminPage() {
             backgroundColor: 'var(--card-bg)',
           }}
         >
-          <h2 className="mb-4 font-semibold text-xl">
-            Обновление RSS-ленты в киоске
-          </h2>
+          <h2 className="mb-4 font-semibold text-xl">Обновление страницы</h2>
           <button
             type="button"
-            onClick={() => {
-              window.location.reload();
-            }}
+            onClick={() => window.location.reload()}
             className="rounded-lg bg-[var(--button-bg)] px-4 py-2 text-[var(--button-text)] hover:opacity-80"
           >
             Обновить
