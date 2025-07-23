@@ -16,7 +16,7 @@ export const usersTable = sqliteTable('users', {
 export const rssFeedsTable = sqliteTable('rss_feeds', {
   id: integer('id').primaryKey({ autoIncrement: true }),
   url: text('url').notNull().unique(),
-  isActive: integer('is_active', { mode: 'boolean' }).default(true),
+  isActive: integer('is_active', { mode: 'boolean' }).notNull().default(true),
   createdAt: integer('created_at', { mode: 'timestamp' })
     .notNull()
     .default(sql`(unixepoch())`),
