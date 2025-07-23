@@ -4,7 +4,11 @@ import { eq } from 'drizzle-orm';
 import type { NewRssFeed, RssFeed, UpdateRssFeed } from '../types/rss.js';
 
 export class RssService {
-  constructor(private readonly db: DbType) {}
+  private readonly db: DbType;
+
+  constructor(db: DbType) {
+    this.db = db;
+  }
 
   getAll(): RssFeed[] {
     return this.db.select().from(rssFeedsTable).all();

@@ -6,7 +6,11 @@ import { allowedThemes } from '../utils/constants/allowed.themes.js';
 
 export class KioskConfigService {
   private readonly configId: number = 1;
-  constructor(private readonly db: DbType) {}
+  private readonly db: DbType;
+
+  constructor(db: DbType) {
+    this.db = db;
+  }
 
   update(data: Partial<UpdateKioskConfig>): KioskConfig | undefined {
     return this.db

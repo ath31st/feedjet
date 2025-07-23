@@ -4,7 +4,11 @@ import type { DbType } from '../container.js';
 import type { NewUser, User } from '../types/user.js';
 
 export class UserService {
-  constructor(private readonly db: DbType) {}
+  private readonly db: DbType;
+
+  constructor(db: DbType) {
+    this.db = db;
+  }
 
   getAll(): User[] {
     return this.db.select().from(usersTable).all();

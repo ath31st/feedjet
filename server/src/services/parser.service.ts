@@ -4,6 +4,7 @@ import type { FeedItem } from '@shared/types/feed.ts';
 
 export class RssParser {
   private readonly parser: Parser;
+
   constructor(parser: Parser) {
     this.parser = parser;
   }

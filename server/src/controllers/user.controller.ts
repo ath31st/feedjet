@@ -9,7 +9,11 @@ import {
 } from '../validations/schemas/users.schemas.js';
 
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  private userService: UserService;
+
+  constructor(userService: UserService) {
+    this.userService = userService;
+  }
 
   getAll = (_req: Request, res: Response) => {
     try {
