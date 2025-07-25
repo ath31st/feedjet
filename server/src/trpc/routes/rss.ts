@@ -13,8 +13,12 @@ export const rssRouter = t.router({
     return rssService.getAll();
   }),
 
-  getById: protectedProcedure.input(rssParamsSchema).query(({ input }) => {
-    const rss = rssService.getById(input.id);
+  getActive: protectedProcedure.query(() => {
+    return rssService.getActive();
+  }),
+
+  findById: protectedProcedure.input(rssParamsSchema).query(({ input }) => {
+    const rss = rssService.findById(input.id);
     if (!rss) {
       throw new TRPCError({ code: 'NOT_FOUND', message: 'RSS not found' });
     }

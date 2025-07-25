@@ -1,11 +1,20 @@
 import { useEffect, useState } from 'react';
-import { useGetAllRss, useCreateRss, useDeleteRss } from '../hooks/useRss';
+import {
+  useGetAllRss,
+  useCreateRss,
+  useDeleteRss,
+  useUpdateRss,
+} from '../hooks/useRss';
 import { useMainConfig, useUpdateKioskConfig } from '../hooks/useKioskConfig';
 
 export function AdminPage() {
   const { data: config } = useMainConfig();
-  const updateMutation = useUpdateKioskConfig();
   const [cellCount, setCellCount] = useState(0);
+  const [newFeed, setNewFeed] = useState('');
+  const updateMutation = useUpdateKioskConfig();
+  const createRss = useCreateRss();
+  const deleteRss = useDeleteRss();
+  const updateRss = useUpdateRss();
 
   useEffect(() => {
     if (config) {
@@ -26,10 +35,6 @@ export function AdminPage() {
     isLoading: feedsLoading,
     error: feedsError,
   } = useGetAllRss();
-  const createRss = useCreateRss();
-  const deleteRss = useDeleteRss();
-
-  const [newFeed, setNewFeed] = useState('');
 
   const handleAddFeed = () => {
     const url = newFeed.trim();
@@ -46,6 +51,10 @@ export function AdminPage() {
     deleteRss.mutate({ id });
   };
 
+  const handleUpdateFeed = (id: number, url?: string, isActive?: boolean) => {
+    updateRss.mutate({ id, data: { url, isActive } });
+  };
+
   return (
     <div className="flex w-screen flex-wrap gap-y-6 p-12">
       <div className="flex w-full gap-x-6">
@@ -58,16 +67,18 @@ export function AdminPage() {
         >
           <h2 className="mb-4 font-semibold text-xl">Текущая конфигурация</h2>
           <p>Ячеек на странице: {cellCount}</p>
-          <p className="mt-4 font-semibold">RSS‑ленты:</p>
+          <p className="mt-4 font-semibold">RSS-ленты:</p>
           {feedsLoading && <p>Загрузка...</p>}
           {feedsError && (
             <p className="text-red-500">Ошибка: {feedsError.message}</p>
           )}
           {feeds && (
             <ul className="mt-2 list-disc space-y-1 pl-5">
-              {feeds.map((item) => (
-                <li key={item.id}>{item.url}</li>
-              ))}
+              {feeds
+                .filter((item) => item.isActive)
+                .map((item) => (
+                  <li key={item.id}>{item.url}</li>
+                ))}
             </ul>
           )}
         </section>
@@ -106,13 +117,23 @@ export function AdminPage() {
               {feeds.map((item) => (
                 <li key={item.id} className="flex items-center justify-between">
                   <span className="truncate">{item.url}</span>
-                  <button
-                    type="button"
-                    onClick={() => handleDeleteFeed(item.id)}
-                    className="text-red-500 hover:opacity-50 disabled:opacity-50"
-                  >
-                    ❌
-                  </button>
+                  <div className="flex items-center gap-4">
+                    <input
+                      type="checkbox"
+                      checked={item.isActive}
+                      onChange={() =>
+                        handleUpdateFeed(item.id, undefined, !item.isActive)
+                      }
+                      className="h-5 w-5 cursor-pointer hover:opacity-50 disabled:opacity-50"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteFeed(item.id)}
+                      className="cursor-pointer text-red-500 hover:opacity-50 disabled:opacity-50"
+                    >
+                      ❌
+                    </button>
+                  </div>
                 </li>
               ))}
             </ul>

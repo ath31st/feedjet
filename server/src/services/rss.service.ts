@@ -24,7 +24,7 @@ export class RssService {
       .all();
   }
 
-  getById(id: number): RssFeed | undefined {
+  findById(id: number): RssFeed | undefined {
     return this.db
       .select()
       .from(rssFeedsTable)

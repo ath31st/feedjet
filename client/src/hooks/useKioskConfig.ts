@@ -1,5 +1,5 @@
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { trpc } from '../lib/trpc';
+import { queryClient, trpc } from '../lib/trpc';
 
 export const useMainConfig = () => {
   return useQuery(trpc.config.getMainConfig.queryOptions());
@@ -10,5 +10,13 @@ export const useAllowedThemes = () => {
 };
 
 export const useUpdateKioskConfig = () => {
-  return useMutation(trpc.config.update.mutationOptions());
+  return useMutation(
+    trpc.config.update.mutationOptions({
+      onSuccess() {
+        queryClient.invalidateQueries({
+          queryKey: trpc.config.getMainConfig.queryKey(),
+        });
+      },
+    }),
+  );
 };
