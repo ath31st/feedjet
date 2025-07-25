@@ -1,6 +1,6 @@
 import cron from 'node-cron';
 import Logger from '../utils/logger.js';
-import { rssParser, rssService } from '../container.js';
+import { eventBus, rssParser, rssService } from '../container.js';
 import type { FeedItem } from '@shared/types/feed.js';
 
 export const startRssCronJob = () => {
@@ -31,5 +31,6 @@ export const startRssCronJob = () => {
     }
 
     Logger.log(`Fetched ${feedItems.length} feed items.`);
+    eventBus.emit('feed', feedItems);
   });
 };

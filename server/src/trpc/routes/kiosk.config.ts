@@ -1,7 +1,7 @@
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 import { kioskConfigUpdateSchema } from '../../validations/schemas/kiosk.config.schemas.js';
-import { t, kioskConfigService } from '../../container.js';
+import { t, kioskConfigService, eventBus } from '../../container.js';
 import { protectedProcedure } from '../../middleware/auth.js';
 
 export const kioskConfigRouter = t.router({
@@ -24,6 +24,16 @@ export const kioskConfigRouter = t.router({
       }),
     )
     .mutation(({ input }) => {
-      return kioskConfigService.update(input.data);
+      const updated = kioskConfigService.update(input.data);
+      if (!updated) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: 'Config not found',
+        });
+      }
+
+      eventBus.emit('config', updated);
+
+      return updated;
     }),
 });

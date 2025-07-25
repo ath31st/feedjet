@@ -13,6 +13,7 @@ import { ensureKioskConfig } from './db/initialize.kiosk.config.js';
 import Logger from './utils/logger.js';
 import { AuthService } from './services/auth.service.js';
 import type { Context } from './trpc/context.js';
+import { EventEmitter } from 'events';
 
 const dbPath = process.env.DB_FILE_NAME ?? '';
 
@@ -42,3 +43,5 @@ export const kioskConfigService = new KioskConfigService(db);
 
 export const t = initTRPC.context<Context>().create();
 export const publicProcedure = t.procedure;
+
+export const eventBus = new EventEmitter();
