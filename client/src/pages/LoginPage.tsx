@@ -1,12 +1,23 @@
 import { useState } from 'react';
+import { useLogin } from '../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 export function LoginPage() {
-  const [email, setEmail] = useState('');
+  const navigate = useNavigate();
+  const handleLogin = useLogin();
+  const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log({ email, password });
+    handleLogin.mutate(
+      { login, password },
+      {
+        onSuccess: () => {
+          navigate('/admin', { replace: true });
+        },
+      },
+    );
   };
 
   return (
@@ -23,12 +34,12 @@ export function LoginPage() {
         <h1 className="text-center 4k:text-8xl text-4xl">Вход</h1>
 
         <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          type="text"
+          placeholder="Login"
+          value={login}
+          onChange={(e) => setLogin(e.target.value)}
           required
-          className="rounded-xl border border-[var(--border)] bg-transparent px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--border)]"
+          className="rounded-xl border border-[var(--border)] bg-transparent px-4 py-2 focus:outline-none focus:ring-1 focus:ring-[var(--border)]"
         />
 
         <input
@@ -37,7 +48,7 @@ export function LoginPage() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          className="rounded-xl border border-[var(--border)] bg-transparent px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--border)]"
+          className="rounded-xl border border-[var(--border)] bg-transparent px-4 py-2 focus:outline-none focus:ring-1 focus:ring-[var(--border)]"
         />
 
         <button
