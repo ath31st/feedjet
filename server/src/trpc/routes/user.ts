@@ -13,14 +13,6 @@ export const userRouter = t.router({
     return userService.getAll();
   }),
 
-  findById: protectedProcedure.input(userParamsSchema).query(({ input }) => {
-    const user = userService.findById(input.id);
-    if (!user) {
-      throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found' });
-    }
-    return user;
-  }),
-
   create: publicProcedure.input(userCreateSchema).mutation(({ input }) => {
     return userService.create(input);
   }),
