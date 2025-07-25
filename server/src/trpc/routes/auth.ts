@@ -12,23 +12,16 @@ export const authRouter = t.router({
       }),
     )
 
-    .mutation(async ({ input, ctx }) => {
-      const user = authService.login(input.login, input.password);
-      if (!user) {
+    .mutation(async ({ input }) => {
+      const result = authService.login(input.login, input.password);
+      if (!result) {
         throw new TRPCError({
           code: 'UNAUTHORIZED',
           message: 'Invalid credentials',
         });
       }
 
-      ctx.res.cookie('userId', user.id, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
-        maxAge: Number(process.env.COOKIE_MAX_AGE),
-      });
-
-      return { success: true };
+      return result;
     }),
 
   me: protectedProcedure.query(({ ctx }) => {

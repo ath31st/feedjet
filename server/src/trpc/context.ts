@@ -1,9 +1,17 @@
 import type { CreateExpressContextOptions } from '@trpc/server/adapters/express';
-import { userService } from '../container.js';
+import { userService, authService } from '../container.js';
 
 export async function createContext({ req, res }: CreateExpressContextOptions) {
-  const userId = req.cookies?.userId;
-  const user = userId ? userService.findById(userId) : null;
+  let user = null;
+
+  const authHeader = req.headers.authorization;
+  if (authHeader?.startsWith('Bearer ')) {
+    const token = authHeader.slice(7);
+    try {
+      const payload = authService.validateAccessToken(token);
+      user = userService.findById(payload.id);
+    } catch (_err) {}
+  }
 
   return { req, res, user };
 }
