@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { mockFeed } from '../mocks/feed';
 import { AnimatedFeedCard } from '../components/AnimatedFeedCard';
 import { FeedCardFrame } from '../components/FeedCardFrame';
-import { useConfigSse } from '../hooks/useKioskConfigSse';
+import { useConfigSse } from '../hooks/sse/useKioskConfigSse';
 
 const INTERVAL_MS = 400000;
 
