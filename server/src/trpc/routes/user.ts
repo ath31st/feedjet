@@ -5,14 +5,15 @@ import {
   userCreateSchema,
   userUpdateSchema,
 } from '../../validations/schemas/users.schemas.js';
-import { t, userService } from '../../container.js';
+import { publicProcedure, t, userService } from '../../container.js';
+import { protectedProcedure } from '../../middleware/auth.js';
 
 export const userRouter = t.router({
-  getAll: t.procedure.query(() => {
+  getAll: protectedProcedure.query(() => {
     return userService.getAll();
   }),
 
-  findById: t.procedure.input(userParamsSchema).query(({ input }) => {
+  findById: protectedProcedure.input(userParamsSchema).query(({ input }) => {
     const user = userService.findById(input.id);
     if (!user) {
       throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found' });
@@ -20,11 +21,11 @@ export const userRouter = t.router({
     return user;
   }),
 
-  create: t.procedure.input(userCreateSchema).mutation(({ input }) => {
+  create: publicProcedure.input(userCreateSchema).mutation(({ input }) => {
     return userService.create(input);
   }),
 
-  update: t.procedure
+  update: protectedProcedure
     .input(
       z.object({
         id: userParamsSchema.shape.id,
@@ -39,7 +40,7 @@ export const userRouter = t.router({
       return user;
     }),
 
-  delete: t.procedure.input(userParamsSchema).mutation(({ input }) => {
+  delete: protectedProcedure.input(userParamsSchema).mutation(({ input }) => {
     const deletedCount = userService.delete(input.id);
     if (deletedCount === 0) {
       throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found' });

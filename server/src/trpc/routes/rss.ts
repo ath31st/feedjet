@@ -6,13 +6,14 @@ import {
   rssUpdateSchema,
 } from '../../validations/schemas/rss.schemas.js';
 import { t, rssService } from '../../container.js';
+import { protectedProcedure } from '../../middleware/auth.js';
 
 export const rssRouter = t.router({
-  getAll: t.procedure.query(() => {
+  getAll: protectedProcedure.query(() => {
     return rssService.getAll();
   }),
 
-  getById: t.procedure.input(rssParamsSchema).query(({ input }) => {
+  getById: protectedProcedure.input(rssParamsSchema).query(({ input }) => {
     const rss = rssService.getById(input.id);
     if (!rss) {
       throw new TRPCError({ code: 'NOT_FOUND', message: 'RSS not found' });
@@ -20,11 +21,11 @@ export const rssRouter = t.router({
     return rss;
   }),
 
-  create: t.procedure.input(rssCreateSchema).mutation(({ input }) => {
+  create: protectedProcedure.input(rssCreateSchema).mutation(({ input }) => {
     return rssService.create(input);
   }),
 
-  update: t.procedure
+  update: protectedProcedure
     .input(
       z.object({
         id: rssParamsSchema.shape.id,
@@ -35,7 +36,7 @@ export const rssRouter = t.router({
       return rssService.update(input.id, input.data);
     }),
 
-  delete: t.procedure.input(rssParamsSchema).mutation(({ input }) => {
+  delete: protectedProcedure.input(rssParamsSchema).mutation(({ input }) => {
     return rssService.delete(input.id);
   }),
 });

@@ -5,7 +5,7 @@ import { t, kioskConfigService } from '../../container.js';
 import { protectedProcedure } from '../../middleware/auth.js';
 
 export const kioskConfigRouter = t.router({
-  getMainConfig: t.procedure.query(() => {
+  getMainConfig: protectedProcedure.query(() => {
     const config = kioskConfigService.getMainConfig();
     if (!config) {
       throw new TRPCError({ code: 'NOT_FOUND', message: 'Config not found' });
@@ -13,7 +13,7 @@ export const kioskConfigRouter = t.router({
     return config;
   }),
 
-  getAllowedThemes: t.procedure.query(() => {
+  getAllowedThemes: protectedProcedure.query(() => {
     return kioskConfigService.getAllowedThemes();
   }),
 
