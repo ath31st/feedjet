@@ -19,9 +19,7 @@ export function useConfigSse() {
       try {
         const cfg = JSON.parse(e.data) as KioskConfig;
         setConfig(cfg);
-      } catch {
-        // игнорируем некорректный формат
-      }
+      } catch {}
     };
     es.onerror = () => {
       es.close();

@@ -12,9 +12,13 @@ const trpcClient = createTRPCClient<AppRouter>({
     httpBatchLink({
       url: trpcUrl,
       fetch: async (url, options) => {
+        const token = localStorage.getItem('token');
         const response = await fetch(url, {
           ...options,
-          credentials: 'include',
+          headers: {
+            ...options?.headers,
+            Authorization: `Bearer ${token}`,
+          },
         });
         if (response.status === 401) {
           window.location.replace('/login');
