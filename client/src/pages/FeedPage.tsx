@@ -2,11 +2,12 @@ import { useEffect, useState } from 'react';
 import { mockFeed } from '../mocks/feed';
 import { AnimatedFeedCard } from '../components/AnimatedFeedCard';
 import { FeedCardFrame } from '../components/FeedCardFrame';
+import { useConfigSse } from '../hooks/useKioskConfigSse';
 
-const DISPLAY_COUNT = 6;
 const INTERVAL_MS = 400000;
 
 export function FeedPage() {
+  const { cellsPerPage } = useConfigSse();
   const [startIndex, setStartIndex] = useState(0);
 
   useEffect(() => {
@@ -16,8 +17,8 @@ export function FeedPage() {
     return () => clearInterval(interval);
   }, []);
 
-  const visibleItems = Array.from({ length: DISPLAY_COUNT }).map((_, i) => {
-    const index = (startIndex + DISPLAY_COUNT - 1 - i) % mockFeed.length;
+  const visibleItems = Array.from({ length: cellsPerPage }).map((_, i) => {
+    const index = (startIndex + cellsPerPage - 1 - i) % mockFeed.length;
     return mockFeed[index];
   });
 
