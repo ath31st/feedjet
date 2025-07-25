@@ -6,7 +6,6 @@ import fs from 'node:fs';
 import path from 'node:path';
 import * as schema from './db/schema.js';
 import { UserService } from './services/user.service.js';
-import { UserController } from './controllers/user.controller.js';
 import { initTRPC } from '@trpc/server';
 import { RssService } from './services/rss.service.js';
 import { KioskConfigService } from './services/kiosk.config.service.js';
@@ -37,7 +36,6 @@ export type DbType = typeof db;
 
 export const rssParser = new RssParser(new Parser());
 export const userService = new UserService(db);
-export const userController = new UserController(userService);
 export const authService = new AuthService(userService);
 export const rssService = new RssService(db);
 export const kioskConfigService = new KioskConfigService(db);
