@@ -10,7 +10,7 @@ export class AuthService {
   }
 
   login(login: string, password: string): User | null {
-    const user = this.userService.getByLogin(login);
+    const user = this.userService.findByLogin(login);
     if (!user || !this.comparePassword(password, user.password)) {
       return null;
     }

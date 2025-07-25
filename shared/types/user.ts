@@ -6,12 +6,11 @@ export interface NewUser {
 export interface User {
   id: number;
   login: string;
-  password: string;
   createdAt: Date;
   updatedAt: Date;
 }
 
-export interface UserUpdateInput {
+export interface UserUpdate {
   login?: string;
   password?: string;
 }

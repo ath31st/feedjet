@@ -1,8 +1,10 @@
 import { usersTable } from '../db/schema.js';
 import { eq } from 'drizzle-orm';
 import type { DbType } from '../container.js';
-import type { NewUser, User } from '@shared/types/user.js';
+import type { NewUser, User, UserUpdate } from '@shared/types/user.js';
 import bcrypt from 'bcrypt';
+import { UserServiceError } from '../errors/user.error.js';
+import Logger from '../utils/logger.js';
 
 export class UserService {
   private readonly saltRounds = 10;
@@ -16,7 +18,7 @@ export class UserService {
     return this.db.select().from(usersTable).all();
   }
 
-  getByLogin(login: string): User | undefined {
+  findByLogin(login: string): User | undefined {
     return this.db
       .select()
       .from(usersTable)
@@ -30,16 +32,39 @@ export class UserService {
 
   create(data: NewUser): User {
     data.password = this.hashPassword(data.password);
-    return this.db.insert(usersTable).values(data).returning().get();
+
+    try {
+      return this.db.insert(usersTable).values(data).returning().get();
+    } catch (err: unknown) {
+      if ((err as Error).message.includes('UNIQUE')) {
+        throw new UserServiceError('User with same login already exists');
+      }
+
+      Logger.error(err);
+      throw new UserServiceError('Failed to create user');
+    }
   }
 
-  update(id: number, data: Partial<User>): User | undefined {
-    return this.db
-      .update(usersTable)
-      .set({ ...data, updatedAt: new Date() })
-      .where(eq(usersTable.id, id))
-      .returning()
-      .get();
+  update(id: number, data: Partial<UserUpdate>): User | undefined {
+    if (data.password) {
+      data.password = this.hashPassword(data.password);
+    }
+
+    try {
+      return this.db
+        .update(usersTable)
+        .set({ ...data, updatedAt: new Date() })
+        .where(eq(usersTable.id, id))
+        .returning()
+        .get();
+    } catch (err: unknown) {
+      if ((err as Error).message.includes('UNIQUE')) {
+        throw new UserServiceError('User with same login already exists');
+      }
+
+      Logger.error(err);
+      throw new UserServiceError('Failed to create user');
+    }
   }
 
   delete(id: number): number {
