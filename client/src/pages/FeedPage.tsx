@@ -1,28 +1,22 @@
 import { useEffect, useState } from 'react';
-import { mockFeed } from '../mocks/feed';
 import { AnimatedFeedCard } from '../components/AnimatedFeedCard';
 import { FeedCardFrame } from '../components/FeedCardFrame';
 import { useKioskConfigStore } from '../stores/kioskConfigStrore';
-
-const INTERVAL_MS = 400000;
+import { useRssFeedStore } from '../stores/rssFeedStore';
+import type { FeedItem } from '@shared/types/feed';
 
 export function FeedPage() {
   const cellsPerPage = useKioskConfigStore(
-    (state) => state.config?.cellsPerPage,
+    (state) => state.config.cellsPerPage,
   );
-  const [startIndex, setStartIndex] = useState(0);
+  const feeds = useRssFeedStore((s) => s.feeds);
+  const [visibleItems, setVisibleItems] = useState<FeedItem[]>([]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setStartIndex((prev) => (prev + 1) % mockFeed.length);
-    }, INTERVAL_MS);
-    return () => clearInterval(interval);
-  }, []);
-
-  const visibleItems = Array.from({ length: cellsPerPage }).map((_, i) => {
-    const index = (startIndex + cellsPerPage - 1 - i) % mockFeed.length;
-    return mockFeed[index];
-  });
+    if (feeds.length === 0) return;
+    const newSlice = feeds.slice(0, cellsPerPage);
+    setVisibleItems(newSlice);
+  }, [feeds, cellsPerPage]);
 
   return (
     <div className="flex h-screen w-screen flex-col overflow-hidden 4k:p-10 p-4">
