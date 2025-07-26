@@ -11,9 +11,6 @@ export const queryClient = new QueryClient({
         console.error(message);
         toast.error('Ошибка при изменении, подробности в консоли (F12)');
       },
-      onSuccess: () => {
-        toast.success('Данные обновлены');
-      },
     },
   },
 });
@@ -33,9 +30,6 @@ export const trpcClient = createTRPCClient<AppRouter>({
             Authorization: `Bearer ${token}`,
           },
         });
-        if (response.status === 401) {
-          window.location.replace('/login');
-        }
         return response;
       },
     }),
