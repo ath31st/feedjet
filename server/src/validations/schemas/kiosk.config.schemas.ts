@@ -11,7 +11,7 @@ export const kioskConfigCreateSchema = z.object({
 
 export const kioskConfigUpdateSchema = z
   .object({
-    cellsPerPage: z.number().int().min(1).max(30).optional(),
+    cellsPerPage: z.number().int().min(1).max(10).optional(),
     theme: z.enum(allowedThemes).optional(),
   })
   .refine((data) => Object.keys(data).length > 0, {
