@@ -1,25 +1,25 @@
 // hooks/useRss.ts
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { queryClient, trpc } from '../lib/trpc';
+import { queryClient, trpcWithProxy } from '../lib/trpc';
 
 export const useGetAllRss = () => {
-  return useQuery(trpc.rss.getAll.queryOptions());
+  return useQuery(trpcWithProxy.rss.getAll.queryOptions());
 };
 
 export const useGetActiveRss = () => {
-  return useQuery(trpc.rss.getActive.queryOptions());
+  return useQuery(trpcWithProxy.rss.getActive.queryOptions());
 };
 
 export const useFindRssById = (id: string | number) => {
-  return useQuery(trpc.rss.findById.queryOptions({ id }));
+  return useQuery(trpcWithProxy.rss.findById.queryOptions({ id }));
 };
 
 export const useCreateRss = () => {
   return useMutation(
-    trpc.rss.create.mutationOptions({
+    trpcWithProxy.rss.create.mutationOptions({
       onSuccess() {
         queryClient.invalidateQueries({
-          queryKey: trpc.rss.getAll.queryKey(),
+          queryKey: trpcWithProxy.rss.getAll.queryKey(),
         });
       },
     }),
@@ -28,10 +28,10 @@ export const useCreateRss = () => {
 
 export const useUpdateRss = () => {
   return useMutation(
-    trpc.rss.update.mutationOptions({
+    trpcWithProxy.rss.update.mutationOptions({
       onSuccess() {
         queryClient.invalidateQueries({
-          queryKey: trpc.rss.getAll.queryKey(),
+          queryKey: trpcWithProxy.rss.getAll.queryKey(),
         });
       },
     }),
@@ -40,10 +40,10 @@ export const useUpdateRss = () => {
 
 export const useDeleteRss = () => {
   return useMutation(
-    trpc.rss.delete.mutationOptions({
+    trpcWithProxy.rss.delete.mutationOptions({
       onSuccess() {
         queryClient.invalidateQueries({
-          queryKey: trpc.rss.getAll.queryKey(),
+          queryKey: trpcWithProxy.rss.getAll.queryKey(),
         });
       },
     }),

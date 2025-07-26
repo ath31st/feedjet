@@ -2,12 +2,14 @@ import { useEffect, useState } from 'react';
 import { mockFeed } from '../mocks/feed';
 import { AnimatedFeedCard } from '../components/AnimatedFeedCard';
 import { FeedCardFrame } from '../components/FeedCardFrame';
-import { useConfigSse } from '../hooks/sse/useKioskConfigSse';
+import { useKioskConfigStore } from '../stores/kioskConfigStrore';
 
 const INTERVAL_MS = 400000;
 
 export function FeedPage() {
-  const { cellsPerPage } = useConfigSse();
+  const cellsPerPage = useKioskConfigStore(
+    (state) => state.config?.cellsPerPage,
+  );
   const [startIndex, setStartIndex] = useState(0);
 
   useEffect(() => {
