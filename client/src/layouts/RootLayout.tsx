@@ -4,6 +4,7 @@ import { ThemeSwitcher } from '../components/ThemeSwitcher';
 import { ThemeProvider } from '../providers/ThemeProvider';
 import { TrpcProvider } from '../providers/TrpcProvider';
 import { Initializer } from './Initializer';
+import { ToasterConfig } from '../components/ToasterConfig';
 
 export function RootLayout() {
   return (
@@ -12,6 +13,7 @@ export function RootLayout() {
         <Initializer />
         <AnimatedSigmaBackground />
         <ThemeSwitcher />
+        <ToasterConfig />
         <Outlet />
       </TrpcProvider>
     </ThemeProvider>

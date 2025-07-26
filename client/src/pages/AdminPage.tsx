@@ -5,10 +5,11 @@ import {
   useDeleteRss,
   useUpdateRss,
 } from '../hooks/useRss';
-import { useMainConfig, useUpdateKioskConfig } from '../hooks/useKioskConfig';
+import { useUpdateKioskConfig } from '../hooks/useKioskConfig';
+import { useKioskConfigStore } from '../stores/kioskConfigStrore';
 
 export function AdminPage() {
-  const { data: config } = useMainConfig();
+  const { config } = useKioskConfigStore();
   const [cellCount, setCellCount] = useState(0);
   const [newFeed, setNewFeed] = useState('');
   const updateMutation = useUpdateKioskConfig();
