@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useMe } from '@/features/auth/model/useAuth';
+import { useMe } from '@/features/auth';
 import { LoadingThreeDotsJumping } from '@/shared/ui/LoadingThreeDotsJumping';
 
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {

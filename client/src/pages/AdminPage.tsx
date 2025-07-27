@@ -4,12 +4,12 @@ import {
   useCreateRss,
   useDeleteRss,
   useUpdateRss,
-} from '../entities/rss/lib/useRss';
+} from '../entities/rss';
 import {
   useAllowedThemes,
   useUpdateKioskConfig,
-} from '../features/kiosk-config/model/useKioskConfig';
-import { useReloadKiosks } from '../features/reload-kiosk/model/useReloadKiosks';
+} from '../features/kiosk-config';
+import { useReloadKiosks } from '../features/reload-kiosk';
 import { useKioskConfigStore } from '../entities/kiosk-config';
 import { useLogout } from '../features/auth/model/useAuth';
 
