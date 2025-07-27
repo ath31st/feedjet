@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { FeedCard } from './FeedCard';
 import type { FeedItem } from '@shared/types/feed';
+import { FeedCardFrame } from './FeedCardFrame';
 
 interface AnimatedFeedCardProps {
   item: FeedItem;
@@ -22,7 +23,9 @@ export function AnimatedFeedCard({
       transition={{ duration: 0.7, delay: index * 0.1 }}
       layout
     >
-      <FeedCard item={item} cellsPerPage={cellsPerPage} />
+      <FeedCardFrame key={item.link}>
+        <FeedCard item={item} cellsPerPage={cellsPerPage} />
+      </FeedCardFrame>
     </motion.div>
   );
 }

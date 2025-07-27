@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { AnimatedFeedCard } from '../components/AnimatedFeedCard';
-import { FeedCardFrame } from '../components/FeedCardFrame';
 import { useKioskConfigStore } from '../stores/kioskConfigStrore';
 import { useRssFeedStore } from '../stores/rssFeedStore';
 import type { FeedItem } from '@shared/types/feed';
@@ -31,14 +30,12 @@ export function FeedPage() {
         }}
       >
         {visibleItems.map((item, index) => (
-          <FeedCardFrame key={item.link}>
-            <AnimatedFeedCard
-              key={item.link}
-              item={item}
-              cellsPerPage={cellsPerPage}
-              index={index}
-            />
-          </FeedCardFrame>
+          <AnimatedFeedCard
+            key={item.link}
+            item={item}
+            cellsPerPage={cellsPerPage}
+            index={index}
+          />
         ))}
       </div>
     </div>
