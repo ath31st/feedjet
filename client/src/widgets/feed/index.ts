@@ -1,0 +1,1 @@
+export { FeedWidget } from './FeedWidget';

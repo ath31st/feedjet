@@ -1,4 +1,4 @@
-import { FeedWidget } from '../widgets/feed/FeedWidget';
+import { FeedWidget } from '../widgets/feed';
 
 export function KioskPage() {
   return (
