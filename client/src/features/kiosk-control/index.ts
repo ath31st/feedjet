@@ -1,1 +1,1 @@
-export * from './model/useControl';
+export * from './model/useControlSse';

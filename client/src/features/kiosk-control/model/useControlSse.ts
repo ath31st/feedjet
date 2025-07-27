@@ -12,6 +12,10 @@ export function useControlSse() {
           window.location.reload();
         }
       }
+
+      if (msg.type === 'switch-widget') {
+        console.log(msg);
+      }
     } catch {}
   }, []);
 
