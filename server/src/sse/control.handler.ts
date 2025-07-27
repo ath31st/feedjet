@@ -7,14 +7,23 @@ export const controlSseHandler = (_req: Request, res: Response) => {
   res.setHeader('Connection', 'keep-alive');
   res.flushHeaders();
 
-  const listener = () => {
+  const listener1 = () => {
     res.write(`data: ${JSON.stringify({ type: 'reload-kiosks' })}\n\n`);
   };
 
-  eventBus.on('control', listener);
+  eventBus.on('control', listener1);
+
+  const listener2 = (widgetType: string) => {
+    res.write(
+      `data: ${JSON.stringify({ type: 'switch-widget', widgetType })}\n\n`,
+    );
+  };
+
+  eventBus.on('switch-widget', listener2);
 
   res.on('close', () => {
-    eventBus.off('control', listener);
+    eventBus.off('control', listener1);
+    eventBus.off('switch-widget', listener2);
     res.end();
   });
 };

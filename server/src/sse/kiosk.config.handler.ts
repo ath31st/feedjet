@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express';
 import { eventBus } from '../container.js';
+import type { KioskConfig } from '@shared/types/kiosk.config.js';
 
 export const configSseHandler = (_req: Request, res: Response) => {
   res.setHeader('Content-Type', 'text/event-stream');
@@ -7,9 +8,10 @@ export const configSseHandler = (_req: Request, res: Response) => {
   res.setHeader('Connection', 'keep-alive');
   res.flushHeaders();
 
-  const listener = (cfg: unknown) => {
+  const listener = (cfg: KioskConfig) => {
     res.write(`data: ${JSON.stringify(cfg)}\n\n`);
   };
+
   eventBus.on('config', listener);
 
   res.on('close', () => {
