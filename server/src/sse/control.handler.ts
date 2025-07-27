@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express';
 import { eventBus } from '../container.js';
+import type { WidgetType } from '@shared/types/widget.js';
 
 export const controlSseHandler = (_req: Request, res: Response) => {
   res.setHeader('Content-Type', 'text/event-stream');
@@ -13,7 +14,7 @@ export const controlSseHandler = (_req: Request, res: Response) => {
 
   eventBus.on('control', listener1);
 
-  const listener2 = (widgetType: string) => {
+  const listener2 = (widgetType: WidgetType) => {
     res.write(
       `data: ${JSON.stringify({ type: 'switch-widget', widgetType })}\n\n`,
     );

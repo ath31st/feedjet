@@ -1,6 +1,6 @@
-import z from 'zod';
 import { eventBus, t } from '../../container.js';
 import { protectedProcedure } from '../../middleware/auth.js';
+import { switchWidgetSchema } from '../../validations/schemas/control.schemas.js';
 
 export const controlRouter = t.router({
   reloadKiosks: protectedProcedure.mutation(() => {
@@ -8,8 +8,10 @@ export const controlRouter = t.router({
     return true;
   }),
 
-  switchWidget: protectedProcedure.input(z.string()).mutation((opts) => {
-    eventBus.emit('switch-widget', opts.input);
-    return true;
-  }),
+  switchWidget: protectedProcedure
+    .input(switchWidgetSchema)
+    .mutation(({ input }) => {
+      eventBus.emit('switch-widget', input);
+      return true;
+    }),
 });
