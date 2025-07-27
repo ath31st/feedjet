@@ -27,7 +27,7 @@ export const trpcClient = createTRPCClient<AppRouter>({
           ...options,
           headers: {
             ...options?.headers,
-            Authorization: `Bearer ${token}`,
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
           },
         });
         return response;

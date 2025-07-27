@@ -1,11 +1,16 @@
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 import { kioskConfigUpdateSchema } from '../../validations/schemas/kiosk.config.schemas.js';
-import { t, kioskConfigService, eventBus } from '../../container.js';
+import {
+  t,
+  kioskConfigService,
+  eventBus,
+  publicProcedure,
+} from '../../container.js';
 import { protectedProcedure } from '../../middleware/auth.js';
 
 export const kioskConfigRouter = t.router({
-  getMainConfig: protectedProcedure.query(() => {
+  getMainConfig: publicProcedure.query(() => {
     const config = kioskConfigService.getMainConfig();
     if (!config) {
       throw new TRPCError({ code: 'NOT_FOUND', message: 'Config not found' });
