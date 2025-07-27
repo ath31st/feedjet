@@ -18,12 +18,26 @@ export function FeedPage() {
     setVisibleItems(newSlice);
   }, [feeds, cellsPerPage]);
 
+  const cols = Math.ceil(Math.sqrt(cellsPerPage));
+  const rows = Math.ceil(cellsPerPage / cols);
+
   return (
-    <div className="flex h-screen w-screen flex-col overflow-hidden 4k:p-10 p-4">
-      <div className="grid h-full 2x4k:grid-cols-2 4k:grid-cols-1 4k:gap-10 gap-4 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-2">
+    <div className="h-screen w-screen p-4">
+      <div
+        className="feed-grid grid h-full w-full 4k:gap-8 gap-4 md:grid-cols-2 xl:grid-cols-3"
+        style={{
+          gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
+          gridTemplateRows: `repeat(${rows}, minmax(0, 1fr))`,
+        }}
+      >
         {visibleItems.map((item, index) => (
           <FeedCardFrame key={item.link}>
-            <AnimatedFeedCard key={item.link} item={item} index={index} />
+            <AnimatedFeedCard
+              key={item.link}
+              item={item}
+              cellsPerPage={cellsPerPage}
+              index={index}
+            />
           </FeedCardFrame>
         ))}
       </div>

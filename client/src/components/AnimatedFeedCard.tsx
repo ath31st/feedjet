@@ -5,9 +5,14 @@ import type { FeedItem } from '@shared/types/feed';
 interface AnimatedFeedCardProps {
   item: FeedItem;
   index: number;
+  cellsPerPage: number;
 }
 
-export function AnimatedFeedCard({ item, index }: AnimatedFeedCardProps) {
+export function AnimatedFeedCard({
+  item,
+  index,
+  cellsPerPage,
+}: AnimatedFeedCardProps) {
   return (
     <motion.div
       key={item.link}
@@ -17,7 +22,7 @@ export function AnimatedFeedCard({ item, index }: AnimatedFeedCardProps) {
       transition={{ duration: 0.7, delay: index * 0.1 }}
       layout
     >
-      <FeedCard item={item} />
+      <FeedCard item={item} cellsPerPage={cellsPerPage} />
     </motion.div>
   );
 }
