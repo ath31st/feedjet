@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { FeedCard } from './FeedCard';
-import type { FeedItem } from '@shared/types/feed';
+import type { FeedItem } from '@/entities/feed';
 import { FeedCardFrame } from './FeedCardFrame';
 
 interface AnimatedFeedCardProps {

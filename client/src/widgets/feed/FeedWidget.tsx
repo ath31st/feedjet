@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { AnimatedFeedCard } from './AnimatedFeedCard';
-import type { FeedItem } from '@shared/types/feed';
-import { useRssFeedStore } from '@/entities/feed/model/rssFeedStore';
+import type { FeedItem } from '@/entities/feed';
+import { useRssFeedStore } from '@/entities/feed';
 import { useKioskConfigStore } from '@/entities/kiosk-config/model/kioskConfigStrore';
 
 export function FeedWidget() {

@@ -1,6 +1,6 @@
 import { trpcClient } from '@/shared/api/trpc/trpc';
 import { create } from 'zustand';
-import type { FeedItem } from '@shared/types/feed';
+import type { FeedItem } from '@/entities/feed';
 
 interface RssFeedState {
   feeds: FeedItem[];

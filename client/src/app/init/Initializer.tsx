@@ -1,4 +1,4 @@
-import { useRssFeedSse } from '@/entities/feed/api/useRssFeedSse';
+import { useRssFeedSse } from '@/entities/feed';
 import { useKioskConfigSse } from '@/entities/kiosk-config/api/useKioskConfigSse';
 import { useControlSse } from '@/features/kiosk-control/model/useControl';
 

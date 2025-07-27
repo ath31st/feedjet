@@ -1,4 +1,4 @@
-import type { FeedItem } from '@shared/types/feed';
+import type { FeedItem } from '@/entities/feed';
 import { LazyImage } from './LazyImage';
 
 interface FeedCardProps {
