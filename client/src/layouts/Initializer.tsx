@@ -1,10 +1,10 @@
-import { useKioskConfigInit } from '../hooks/sse/useKioskConfigInit';
-import { useRssFeedInit } from '../hooks/sse/useRssFeedInit';
+import { useKioskConfigSse } from '../hooks/sse/useKioskConfigSse';
+import { useRssFeedSse } from '../hooks/sse/useRssFeedSse';
 import { useControlSse } from '../hooks/sse/useControl';
 
 export function Initializer() {
-  useKioskConfigInit();
-  useRssFeedInit();
+  useKioskConfigSse();
+  useRssFeedSse();
   useControlSse();
   return null;
 }

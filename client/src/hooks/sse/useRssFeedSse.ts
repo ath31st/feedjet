@@ -4,7 +4,7 @@ import { useRssFeedStore } from '../../stores/rssFeedStore';
 
 const FEED_SSE_URL = `${import.meta.env.VITE_API_URL}/sse/feed`;
 
-export function useRssFeedInit() {
+export function useRssFeedSse() {
   const initStore = useRssFeedStore((s) => s.initStore);
   const setFeeds = useRssFeedStore((s) => s.setFeeds);
 

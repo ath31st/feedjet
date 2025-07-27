@@ -4,7 +4,7 @@ import { useKioskConfigStore } from '../../stores/kioskConfigStrore';
 
 const KIOSK_CONFIG_SSE_URL = `${import.meta.env.VITE_API_URL}/sse/config`;
 
-export function useKioskConfigInit() {
+export function useKioskConfigSse() {
   const setConfig = useKioskConfigStore((s) => s.setConfig);
   const init = useKioskConfigStore((s) => s.initStore);
 
