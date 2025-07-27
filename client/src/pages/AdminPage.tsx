@@ -5,21 +5,31 @@ import {
   useDeleteRss,
   useUpdateRss,
 } from '../hooks/useRss';
-import { useUpdateKioskConfig } from '../hooks/useKioskConfig';
+import {
+  useAllowedThemes,
+  useUpdateKioskConfig,
+} from '../hooks/useKioskConfig';
 import { useKioskConfigStore } from '../stores/kioskConfigStrore';
+import { useLogout } from '../hooks/useAuth';
 
 export function AdminPage() {
   const { config } = useKioskConfigStore();
   const [cellCount, setCellCount] = useState(0);
+  const [theme, setTheme] = useState('dark');
   const [newFeed, setNewFeed] = useState('');
-  const updateMutation = useUpdateKioskConfig();
+  const updateKioskConfig = useUpdateKioskConfig();
   const createRss = useCreateRss();
   const deleteRss = useDeleteRss();
   const updateRss = useUpdateRss();
+  const logout = useLogout();
+  const { data: feeds, isLoading: feedsLoading } = useGetAllRss();
+  const { data: themes } = useAllowedThemes();
+  type Theme = NonNullable<typeof themes>[number];
 
   useEffect(() => {
     if (config) {
       setCellCount(config.cellsPerPage);
+      setTheme(config.theme);
     }
   }, [config]);
 
@@ -27,15 +37,9 @@ export function AdminPage() {
     const val = parseInt(e.target.value, 10);
     if (!Number.isNaN(val)) {
       setCellCount(val);
-      updateMutation.mutate({ data: { cellsPerPage: val } });
+      updateKioskConfig.mutate({ data: { cellsPerPage: val } });
     }
   };
-
-  const {
-    data: feeds,
-    isLoading: feedsLoading,
-    error: feedsError,
-  } = useGetAllRss();
 
   const handleAddFeed = () => {
     const url = newFeed.trim();
@@ -56,6 +60,16 @@ export function AdminPage() {
     updateRss.mutate({ id, data: { url, isActive } });
   };
 
+  const handleLogout = () => {
+    logout();
+  };
+
+  const handleThemeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selected = e.target.value as Theme;
+    setTheme(selected);
+    updateKioskConfig.mutate({ data: { theme: selected } });
+  };
+
   return (
     <div className="flex w-screen flex-wrap gap-y-6 p-12">
       <div className="flex w-full gap-x-6">
@@ -70,9 +84,6 @@ export function AdminPage() {
           <p>Ячеек на странице: {cellCount}</p>
           <p className="mt-4 font-semibold">RSS-ленты:</p>
           {feedsLoading && <p>Загрузка...</p>}
-          {feedsError && (
-            <p className="text-red-500">Ошибка: {feedsError.message}</p>
-          )}
           {feeds && (
             <ul className="mt-2 list-disc space-y-1 pl-5">
               {feeds
@@ -108,11 +119,6 @@ export function AdminPage() {
               Добавить
             </button>
           </div>
-          {createRss.error && (
-            <p className="mb-2 text-red-500">
-              Ошибка: {createRss.error.message}
-            </p>
-          )}
           {feeds && (
             <ul className="space-y-2">
               {feeds.map((item) => (
@@ -138,11 +144,6 @@ export function AdminPage() {
                 </li>
               ))}
             </ul>
-          )}
-          {deleteRss.error && (
-            <p className="mt-2 text-red-500">
-              Ошибка: {deleteRss.error.message}
-            </p>
           )}
         </section>
       </div>
@@ -181,6 +182,52 @@ export function AdminPage() {
             className="rounded-lg bg-[var(--button-bg)] px-4 py-2 text-[var(--button-text)] hover:opacity-80"
           >
             Обновить
+          </button>
+        </section>
+      </div>
+      <div className="flex w-full gap-x-6">
+        <section
+          className="w-full rounded-xl p-6 md:w-1/2"
+          style={{
+            borderColor: 'var(--border)',
+            backgroundColor: 'var(--card-bg)',
+          }}
+        >
+          <h2 className="mb-4 font-semibold text-xl">Выбор темы оформления</h2>
+          {themes?.length ? (
+            <select
+              style={{
+                backgroundColor: 'var(--card-bg)',
+              }}
+              value={theme}
+              onChange={handleThemeChange}
+              className="w-32 rounded-lg border border-[var(--border)] bg-transparent px-3 py-2 focus:outline-none focus:ring-1 focus:ring-[var(--border)]"
+            >
+              {themes.map((t) => (
+                <option key={t} value={t}>
+                  {t}
+                </option>
+              ))}
+            </select>
+          ) : (
+            <p>Темы недоступны</p>
+          )}
+        </section>
+
+        <section
+          className="w-full rounded-xl p-6 md:w-1/2"
+          style={{
+            borderColor: 'var(--border)',
+            backgroundColor: 'var(--card-bg)',
+          }}
+        >
+          <h2 className="mb-4 font-semibold text-xl">Выход из аккаунта</h2>
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="rounded-lg bg-[var(--button-bg)] px-4 py-2 text-[var(--button-text)] hover:opacity-80"
+          >
+            Выход
           </button>
         </section>
       </div>
