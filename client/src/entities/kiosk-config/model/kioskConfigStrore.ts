@@ -1,6 +1,6 @@
 import type { KioskConfig } from '@shared/types/kiosk.config';
 import { create } from 'zustand';
-import { trpcClient } from '../../../shared/api/trpc';
+import { trpcClient } from '@/shared/api/trpc';
 
 interface KioskConfigState {
   config: KioskConfig;

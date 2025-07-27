@@ -1,10 +1,10 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { ProtectedRoute } from './ProtectedRoute';
-import { AdminPage } from '../../pages/AdminPage';
-import { KioskPage } from '../../pages/KioskPage';
-import { LoginPage } from '../../pages/LoginPage';
-import { NotFoundPage } from '../../pages/NotFoundPage';
-import { UnauthorizedPage } from '../../pages/UnauthorizedPage';
+import { AdminPage } from '@/pages/AdminPage';
+import { KioskPage } from '@/pages/KioskPage';
+import { LoginPage } from '@/pages/LoginPage';
+import { NotFoundPage } from '@/pages/NotFoundPage';
+import { UnauthorizedPage } from '@/pages/UnauthorizedPage';
 import { RootLayout } from '../layouts/RootLayout';
 
 export const router = createBrowserRouter([

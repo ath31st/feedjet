@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
-import { queryClient, trpcWithProxy } from '../../../shared/api/trpc';
+import { queryClient, trpcWithProxy } from '@/shared/api/trpc';
 
 export const useMe = () => {
   return useQuery({

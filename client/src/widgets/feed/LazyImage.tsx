@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { LoadingThreeDotsJumping } from '../../shared/ui/LoadingThreeDotsJumping';
+import { LoadingThreeDotsJumping } from '@/shared/ui/LoadingThreeDotsJumping';
 
 interface LazyImageProps {
   src: string;

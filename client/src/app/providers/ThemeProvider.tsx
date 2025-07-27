@@ -1,5 +1,5 @@
 import { useEffect, type ReactNode } from 'react';
-import { useKioskConfigStore } from '../../entities/kiosk-config/model/kioskConfigStrore';
+import { useKioskConfigStore } from '@/entities/kiosk-config/model/kioskConfigStrore';
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const theme = useKioskConfigStore((s) => s.config.theme);

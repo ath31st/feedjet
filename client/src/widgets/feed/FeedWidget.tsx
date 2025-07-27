@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { AnimatedFeedCard } from './AnimatedFeedCard';
 import type { FeedItem } from '@shared/types/feed';
-import { useRssFeedStore } from '../../entities/feed/model/rssFeedStore';
-import { useKioskConfigStore } from '../../entities/kiosk-config/model/kioskConfigStrore';
+import { useRssFeedStore } from '@/entities/feed/model/rssFeedStore';
+import { useKioskConfigStore } from '@/entities/kiosk-config/model/kioskConfigStrore';
 
 export function FeedWidget() {
   const cellsPerPage = useKioskConfigStore(
