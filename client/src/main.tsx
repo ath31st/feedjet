@@ -1,9 +1,9 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
-import { router } from './routes/router';
-import './assets/fonts/Inter/Inter.css';
-import './styles/global.css';
+import './shared/assets/fonts/Inter/Inter.css';
+import './shared/styles/global.css';
+import { router } from './app/routes/router';
 
 const rootElement = document.getElementById('root');
 

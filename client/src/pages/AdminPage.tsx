@@ -4,14 +4,14 @@ import {
   useCreateRss,
   useDeleteRss,
   useUpdateRss,
-} from '../hooks/useRss';
+} from '../entities/rss/lib/useRss';
 import {
   useAllowedThemes,
   useUpdateKioskConfig,
-} from '../hooks/useKioskConfig';
-import { useKioskConfigStore } from '../stores/kioskConfigStrore';
-import { useLogout } from '../hooks/useAuth';
-import { useReloadKiosks } from '../hooks/useReloadKiosks';
+} from '../features/kiosk-config/model/useKioskConfig';
+import { useReloadKiosks } from '../features/reload-kiosk/model/useReloadKiosks';
+import { useKioskConfigStore } from '../entities/kiosk-config/model/kioskConfigStrore';
+import { useLogout } from '../features/auth/model/useAuth';
 
 export function AdminPage() {
   const { config } = useKioskConfigStore();
