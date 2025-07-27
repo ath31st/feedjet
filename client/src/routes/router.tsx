@@ -1,5 +1,5 @@
 import { createBrowserRouter } from 'react-router-dom';
-import { FeedPage } from '../pages/FeedPage';
+import { KioskPage } from '../pages/KioskPage';
 import { AdminPage } from '../pages/AdminPage';
 import { NotFoundPage } from '../pages/NotFoundPage';
 import { RootLayout } from '../layouts/RootLayout';
@@ -12,7 +12,7 @@ export const router = createBrowserRouter([
     path: '/',
     element: <RootLayout />,
     children: [
-      { index: true, element: <FeedPage /> },
+      { index: true, element: <KioskPage /> },
       {
         path: 'admin',
         element: (

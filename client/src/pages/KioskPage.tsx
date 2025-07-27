@@ -4,7 +4,7 @@ import { useKioskConfigStore } from '../stores/kioskConfigStrore';
 import { useRssFeedStore } from '../stores/rssFeedStore';
 import type { FeedItem } from '@shared/types/feed';
 
-export function FeedPage() {
+export function KioskPage() {
   const cellsPerPage = useKioskConfigStore(
     (state) => state.config.cellsPerPage,
   );
