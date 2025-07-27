@@ -10,7 +10,7 @@ import {
   useUpdateKioskConfig,
 } from '../features/kiosk-config/model/useKioskConfig';
 import { useReloadKiosks } from '../features/reload-kiosk/model/useReloadKiosks';
-import { useKioskConfigStore } from '../entities/kiosk-config/model/kioskConfigStrore';
+import { useKioskConfigStore } from '../entities/kiosk-config';
 import { useLogout } from '../features/auth/model/useAuth';
 
 export function AdminPage() {

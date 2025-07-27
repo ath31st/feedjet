@@ -1,6 +1,6 @@
 import { useEffect, useCallback } from 'react';
 import { useEventSource } from '@/shared/api/sse/useEventSource';
-import { useKioskConfigStore } from '../model/kioskConfigStrore';
+import { useKioskConfigStore } from '../index';
 
 const KIOSK_CONFIG_SSE_URL = `${import.meta.env.VITE_API_URL}/sse/config`;
 
