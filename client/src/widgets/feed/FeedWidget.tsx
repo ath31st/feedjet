@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react';
 import { AnimatedFeedCard } from './AnimatedFeedCard';
 import type { FeedItem } from '@/entities/feed';
 import { useRssFeedStore } from '@/entities/feed';
-import { useKioskConfigStore } from '@/entities/kiosk-config';
+import { useFeedConfigStore } from '@/entities/feed-config';
 
 export function FeedWidget() {
-  const cellsPerPage = useKioskConfigStore(
-    (state) => state.config.cellsPerPage,
+  const cellsPerPage = useFeedConfigStore(
+    (state) => state.feedConfig.cellsPerPage,
   );
   const feeds = useRssFeedStore((s) => s.feeds);
   const [visibleItems, setVisibleItems] = useState<FeedItem[]>([]);

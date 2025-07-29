@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
 import { eventBus } from '../container.js';
-import type { UiConfig } from '@shared/types/ui.js';
+import type { UiConfig } from '@shared/types/ui.config.js';
 
 export const uiConfigSseHandler = (_req: Request, res: Response) => {
   res.setHeader('Content-Type', 'text/event-stream');

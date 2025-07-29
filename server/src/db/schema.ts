@@ -1,4 +1,4 @@
-import type { themes, widgetTypes } from '@shared/types/ui.js';
+import type { themes, widgetTypes } from '@shared/types/ui.config.js';
 import { sql } from 'drizzle-orm';
 import { int, integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 
@@ -26,10 +26,9 @@ export const rssFeedsTable = sqliteTable('rss_feeds', {
     .default(sql`(unixepoch())`),
 });
 
-export const kioskConfigTable = sqliteTable('kiosk_config', {
+export const feedConfigTable = sqliteTable('feed_config', {
   id: integer('id').primaryKey().default(1),
   cellsPerPage: integer('cells_per_page').notNull().default(6),
-  theme: text('theme').notNull().default('dark'),
   createdAt: integer('created_at', { mode: 'timestamp' })
     .notNull()
     .default(sql`(unixepoch())`),

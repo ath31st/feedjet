@@ -1,12 +1,12 @@
 import { useEffect, useCallback } from 'react';
 import { useEventSource } from '@/shared/api/sse/useEventSource';
-import { useKioskConfigStore } from '../index';
+import { useFeedConfigStore } from '..';
 
-const KIOSK_CONFIG_SSE_URL = `${import.meta.env.VITE_API_URL}/sse/config`;
+const FEED_CONFIG_SSE_URL = `${import.meta.env.VITE_API_URL}/sse/feed-config`;
 
-export function useKioskConfigSse() {
-  const setConfig = useKioskConfigStore((s) => s.setConfig);
-  const init = useKioskConfigStore((s) => s.initStore);
+export function useFeedConfigSse() {
+  const setConfig = useFeedConfigStore((s) => s.setConfig);
+  const init = useFeedConfigStore((s) => s.initStore);
 
   useEffect(() => {
     init();
@@ -22,5 +22,5 @@ export function useKioskConfigSse() {
     [setConfig],
   );
 
-  useEventSource(KIOSK_CONFIG_SSE_URL, onMessage);
+  useEventSource(FEED_CONFIG_SSE_URL, onMessage);
 }

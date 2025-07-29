@@ -5,16 +5,16 @@ import {
   useDeleteRss,
   useUpdateRss,
 } from '../entities/rss';
-import { useUpdateKioskConfig } from '../features/kiosk-config';
+import { useUpdateKioskConfig } from '../features/feed-config';
 import { useReloadKiosks } from '../features/reload-kiosk';
-import { useKioskConfigStore } from '../entities/kiosk-config';
+import { useFeedConfigStore } from '../entities/feed-config';
 import { useLogout } from '../features/auth/model/useAuth';
-import { themes, type Theme } from '@shared/types/ui';
+import { themes, type Theme } from '@shared/types/ui.config';
 import { useUiConfigStore } from '@/entities/ui-config';
 import { useUpdateUiConfig } from '@/features/ui-config';
 
 export function AdminPage() {
-  const { config } = useKioskConfigStore();
+  const { feedConfig } = useFeedConfigStore();
   const { uiConfig } = useUiConfigStore();
   const [cellCount, setCellCount] = useState(0);
   const [theme, setTheme] = useState<Theme>('dark');
@@ -29,10 +29,10 @@ export function AdminPage() {
   const { data: feeds, isLoading: feedsLoading } = useGetAllRss();
 
   useEffect(() => {
-    if (config) {
-      setCellCount(config.cellsPerPage);
+    if (feedConfig) {
+      setCellCount(feedConfig.cellsPerPage);
     }
-  }, [config]);
+  }, [feedConfig]);
 
   useEffect(() => {
     if (uiConfig) {

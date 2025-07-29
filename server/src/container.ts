@@ -8,14 +8,14 @@ import * as schema from './db/schema.js';
 import { UserService } from './services/user.service.js';
 import { initTRPC } from '@trpc/server';
 import { RssService } from './services/rss.service.js';
-import { KioskConfigService } from './services/kiosk.config.service.js';
+import { FeedConfigService } from './services/feed.config.service.js';
 import Logger from './utils/logger.js';
 import { AuthService } from './services/auth.service.js';
 import type { Context } from './trpc/context.js';
 import { EventEmitter } from 'events';
 import { UiConfigService } from './services/ui.config.service.js';
 import { ensureUiConfig } from './db/initialize.ui.config.js';
-import { ensureKioskConfig } from './db/initialize.kiosk.config.js';
+import { ensureFeedConfig } from './db/initialize.feed.config.js';
 
 const dbPath = process.env.DB_FILE_NAME ?? '';
 
@@ -33,7 +33,7 @@ if (!fs.existsSync(resolvedPath)) {
 const sqlite = new Database(dbPath);
 export const db = drizzle(sqlite, { schema });
 
-ensureKioskConfig(db);
+ensureFeedConfig(db);
 ensureUiConfig(db);
 
 export type DbType = typeof db;
@@ -42,7 +42,7 @@ export const rssParser = new RssParser(new Parser());
 export const userService = new UserService(db);
 export const authService = new AuthService(userService);
 export const rssService = new RssService(db);
-export const kioskConfigService = new KioskConfigService(db);
+export const feedConfigService = new FeedConfigService(db);
 export const uiConfigService = new UiConfigService(db);
 
 export const t = initTRPC.context<Context>().create();
