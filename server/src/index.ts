@@ -23,5 +23,5 @@ app.use('/trpc', trpcMiddleware);
 startRssCronJob();
 
 app.listen(port, () => {
-  Logger.log(`🚀 Server is running at http://localhost:${port}`);
+  Logger.info(`🚀 Server is running at http://localhost:${port}`);
 });

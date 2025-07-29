@@ -21,7 +21,10 @@ const Logger = {
 
   log(...args: unknown[]) {
     const timestamp = this.getTimestamp();
-    console.log(`${this.colors.log}[${timestamp}]`, ...args, this.resetColor);
+    console.log(
+      `${this.colors.log}[${timestamp}] LOG:${this.resetColor}`,
+      ...args,
+    );
   },
 
   error(...args: unknown[]) {
@@ -30,27 +33,24 @@ const Logger = {
       arg instanceof Error ? this.formatError(arg) : arg,
     );
     console.error(
-      `${this.colors.error}[${timestamp}] ERROR:`,
+      `${this.colors.error}[${timestamp}] ERROR:${this.resetColor}`,
       ...formattedArgs,
-      this.resetColor,
     );
   },
 
   warn(...args: unknown[]) {
     const timestamp = this.getTimestamp();
     console.warn(
-      `${this.colors.warn}[${timestamp}] WARNING:`,
+      `${this.colors.warn}[${timestamp}] WARNING:${this.resetColor}`,
       ...args,
-      this.resetColor,
     );
   },
 
   info(...args: unknown[]) {
     const timestamp = this.getTimestamp();
     console.info(
-      `${this.colors.info}[${timestamp}] INFO:`,
+      `${this.colors.info}[${timestamp}] INFO:${this.resetColor}`,
       ...args,
-      this.resetColor,
     );
   },
 };

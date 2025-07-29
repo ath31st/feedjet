@@ -11,9 +11,7 @@ export const startRssCronJob = () => {
   }
 
   cron.schedule(cronSchedule, async () => {
-    Logger.log(
-      `Running scheduled task to fetch rss feeds with cron schedule: ${cronSchedule}...`,
-    );
+    Logger.log('Running scheduled task to fetch rss feeds.');
 
     const rssFeeds = rssService.getActive();
 
