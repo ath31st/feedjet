@@ -6,5 +6,6 @@
     ],
     "devDependencies": {
         "@biomejs/biome": "^2.1.2"
-    }
+    },
+    "type": "module"
 }

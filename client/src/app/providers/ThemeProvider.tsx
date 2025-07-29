@@ -1,8 +1,8 @@
 import { useEffect, type ReactNode } from 'react';
-import { useKioskConfigStore } from '@/entities/kiosk-config';
+import { useUiConfigStore } from '@/entities/ui-config';
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const theme = useKioskConfigStore((s) => s.config.theme);
+  const theme = useUiConfigStore((s) => s.uiConfig.theme);
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);

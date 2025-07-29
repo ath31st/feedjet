@@ -5,35 +5,40 @@ import {
   useDeleteRss,
   useUpdateRss,
 } from '../entities/rss';
-import {
-  useAllowedThemes,
-  useUpdateKioskConfig,
-} from '../features/kiosk-config';
+import { useUpdateKioskConfig } from '../features/kiosk-config';
 import { useReloadKiosks } from '../features/reload-kiosk';
 import { useKioskConfigStore } from '../entities/kiosk-config';
 import { useLogout } from '../features/auth/model/useAuth';
+import { themes, type Theme } from '@shared/types/ui';
+import { useUiConfigStore } from '@/entities/ui-config';
+import { useUpdateUiConfig } from '@/features/ui-config';
 
 export function AdminPage() {
   const { config } = useKioskConfigStore();
+  const { uiConfig } = useUiConfigStore();
   const [cellCount, setCellCount] = useState(0);
-  const [theme, setTheme] = useState('dark');
+  const [theme, setTheme] = useState<Theme>('dark');
   const [newFeed, setNewFeed] = useState('');
   const updateKioskConfig = useUpdateKioskConfig();
+  const updateUiConfig = useUpdateUiConfig();
   const createRss = useCreateRss();
   const deleteRss = useDeleteRss();
   const updateRss = useUpdateRss();
   const logout = useLogout();
   const reload = useReloadKiosks();
   const { data: feeds, isLoading: feedsLoading } = useGetAllRss();
-  const { data: themes } = useAllowedThemes();
-  type Theme = NonNullable<typeof themes>[number];
 
   useEffect(() => {
     if (config) {
       setCellCount(config.cellsPerPage);
-      setTheme(config.theme);
     }
   }, [config]);
+
+  useEffect(() => {
+    if (uiConfig) {
+      setTheme(uiConfig.theme);
+    }
+  }, [uiConfig]);
 
   const handleCellCountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = parseInt(e.target.value, 10);
@@ -67,9 +72,9 @@ export function AdminPage() {
   };
 
   const handleThemeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selected = e.target.value as Theme;
+    const selected = e.target.value;
     setTheme(selected);
-    updateKioskConfig.mutate({ data: { theme: selected } });
+    updateUiConfig.mutate({ data: { theme: selected } });
   };
 
   return (
