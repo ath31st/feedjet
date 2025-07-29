@@ -1,13 +1,4 @@
-const baseColor = [138, 148, 168];
-
-function getSVG(alpha: number) {
-  const fill = `rgba(${baseColor.join(',')},${alpha})`;
-  return `url("data:image/svg+xml;utf8,${encodeURIComponent(
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox='0 0 100 100'>
-      <text x='20' y='100' font-size='80' fill='${fill}'>Σ</text>
-    </svg>`,
-  )}")`;
-}
+import sigmaUrl from '../assets/sigma_crimsonpro.webp';
 
 export function AnimatedSigmaBackground() {
   return (
@@ -15,36 +6,39 @@ export function AnimatedSigmaBackground() {
       <div
         className="absolute inset-0 z-0"
         style={{
-          backgroundImage: getSVG(0.08),
+          backgroundImage: `url("${sigmaUrl}")`,
           backgroundRepeat: 'repeat',
           backgroundSize: 'clamp(50px, 20vw, 800px)',
           animation:
             'scroll-diagonal-switch 20s linear infinite, fade-in-out 20s linear infinite',
           filter: 'blur(1px)',
+          willChange: 'transform, background-position, opacity',
         }}
       />
       <div
         className="absolute inset-0 z-0"
         style={{
-          backgroundImage: getSVG(0.06),
+          backgroundImage: `url("${sigmaUrl}")`,
           backgroundRepeat: 'repeat',
           backgroundSize: 'clamp(100px, 25vw, 900px)',
           animation:
             'scroll-diagonal-switch 25s linear infinite, fade-in-out 25s linear infinite',
           filter: 'blur(3px)',
           transform: 'scale(1.1)',
+          willChange: 'transform, background-position, opacity',
         }}
       />
       <div
         className="absolute inset-0 z-0"
         style={{
-          backgroundImage: getSVG(0.05),
+          backgroundImage: `url("${sigmaUrl}")`,
           backgroundRepeat: 'repeat',
           backgroundSize: 'clamp(100px, 30vw, 2000px)',
           animation:
             'scroll-diagonal-switch 30s linear infinite, fade-in-out 30s linear infinite',
           filter: 'blur(6px)',
           transform: 'scale(1.3)',
+          willChange: 'transform, background-position, opacity',
         }}
       />
     </div>
