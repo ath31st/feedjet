@@ -5,15 +5,15 @@
   "license": "MIT",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "start": "node dist/src/index.js",
+    "start": "node dist/server/src/index.js",
     "prebuild": "drizzle-kit generate && drizzle-kit push",
-    "build": "tsc"
+    "build": "tsc && tsc-alias"
   },
   "dependencies": {
     "@trpc/server": "^11.4.3",
     "basic-auth": "^2.0.1",
     "bcrypt": "^6.0.0",
-    "better-sqlite3": "^12.2.0",
+    "better-sqlite3": "^9.6.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^17.2.0",
@@ -33,6 +33,7 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.0.15",
     "drizzle-kit": "^0.31.4",
+    "tsc-alias": "^1.8.16",
     "tsx": "^4.20.3",
     "typescript": "^5.8.3"
   }
