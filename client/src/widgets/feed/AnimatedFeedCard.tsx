@@ -16,6 +16,7 @@ export function AnimatedFeedCard({
 }: AnimatedFeedCardProps) {
   return (
     <motion.div
+      className="h-full min-h-0"
       key={item.link}
       initial={{ opacity: 0, x: -150 }}
       animate={{ opacity: 1, x: 0 }}

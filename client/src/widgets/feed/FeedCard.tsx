@@ -16,7 +16,6 @@ export function FeedCard({ item, cellsPerPage }: FeedCardProps) {
         backgroundColor: 'var(--card-bg)',
       }}
     >
-      <div></div>
       <div className="z-1 4k:w-140 w-[30%] flex-shrink-0 overflow-hidden 4k:rounded-4xl rounded-xl">
         <LazyImage src={item.image} alt={''} />
       </div>
