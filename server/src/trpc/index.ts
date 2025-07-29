@@ -8,6 +8,7 @@ import { createContext } from './context.js';
 import { authRouter } from './routes/auth.route.js';
 import { rssParserRouter } from './routes/rss.parser.route.js';
 import { controlRouter } from './routes/control.route.js';
+import { uiConfigRouter } from './routes/ui.config.route.js';
 
 const appRouter = t.router({
   user: userRouter,
@@ -16,6 +17,7 @@ const appRouter = t.router({
   config: kioskConfigRouter,
   auth: authRouter,
   control: controlRouter,
+  uiConfig: uiConfigRouter,
 });
 
 export type AppRouter = typeof appRouter;
