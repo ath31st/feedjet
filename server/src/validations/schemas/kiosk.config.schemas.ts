@@ -5,10 +5,6 @@ export const kioskConfigParamsSchema = z.object({
   id: z.coerce.number().int().positive(),
 });
 
-export const kioskConfigCreateSchema = z.object({
-  url: z.string(),
-});
-
 export const kioskConfigUpdateSchema = z
   .object({
     cellsPerPage: z.number().int().min(1).max(9).optional(),
