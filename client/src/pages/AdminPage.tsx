@@ -1,25 +1,16 @@
 import { useEffect, useState } from 'react';
-import {
-  useGetAllRss,
-  useCreateRss,
-  useDeleteRss,
-  useUpdateRss,
-} from '../entities/rss';
+import { useGetAllRss } from '../entities/rss';
 import { useUpdateKioskConfig } from '../features/feed-config';
 import { useFeedConfigStore } from '../entities/feed-config';
 import { ReloadKioskPageButton } from '@/features/reload-kiosk';
-import { CommonButton } from '@/shared/ui/common/CommonButton';
 import { LogoutButton } from '@/features/auth/ui/LogoutButton';
 import { ThemeSelector } from '@/features/theme-selector';
+import { FeedAddForm, FeedList } from '@/features/rss-management';
 
 export function AdminPage() {
   const { feedConfig } = useFeedConfigStore();
   const [cellCount, setCellCount] = useState(0);
-  const [newFeed, setNewFeed] = useState('');
   const updateKioskConfig = useUpdateKioskConfig();
-  const createRss = useCreateRss();
-  const deleteRss = useDeleteRss();
-  const updateRss = useUpdateRss();
   const { data: feeds, isLoading: feedsLoading } = useGetAllRss();
 
   useEffect(() => {
@@ -34,25 +25,6 @@ export function AdminPage() {
       setCellCount(val);
       updateKioskConfig.mutate({ data: { cellsPerPage: val } });
     }
-  };
-
-  const handleAddFeed = () => {
-    const url = newFeed.trim();
-    if (!url) return;
-    createRss.mutate(
-      { url },
-      {
-        onSuccess: () => setNewFeed(''),
-      },
-    );
-  };
-
-  const handleDeleteFeed = (id: number) => {
-    deleteRss.mutate({ id });
-  };
-
-  const handleUpdateFeed = (id: number, url?: string, isActive?: boolean) => {
-    updateRss.mutate({ id, data: { url, isActive } });
   };
 
   return (
@@ -89,46 +61,8 @@ export function AdminPage() {
           }}
         >
           <h2 className="mb-4 font-semibold text-xl">Управление RSS-лентами</h2>
-          <div className="mb-4 flex gap-2">
-            <input
-              type="text"
-              placeholder="Новая RSS ссылка"
-              value={newFeed}
-              onChange={(e) => setNewFeed(e.target.value)}
-              className="flex-grow rounded-lg border border-[var(--border)] bg-transparent px-3 py-2 focus:outline-none focus:ring-1 focus:ring-[var(--border)]"
-            />
-            <CommonButton
-              type="button"
-              text="Добавить"
-              onClick={handleAddFeed}
-            />
-          </div>
-          {feeds && (
-            <ul className="space-y-2">
-              {feeds.map((item) => (
-                <li key={item.id} className="flex items-center justify-between">
-                  <span className="truncate">{item.url}</span>
-                  <div className="flex items-center gap-4">
-                    <input
-                      type="checkbox"
-                      checked={item.isActive}
-                      onChange={() =>
-                        handleUpdateFeed(item.id, undefined, !item.isActive)
-                      }
-                      className="h-5 w-5 cursor-pointer hover:opacity-50 disabled:opacity-50"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => handleDeleteFeed(item.id)}
-                      className="cursor-pointer text-red-500 hover:opacity-50 disabled:opacity-50"
-                    >
-                      ❌
-                    </button>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
+          <FeedAddForm />
+          <FeedList />
         </section>
       </div>
 
