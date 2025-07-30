@@ -1,6 +1,6 @@
 import { useEffect, useCallback } from 'react';
 import { useEventSource } from '@/shared/api/sse/useEventSource';
-import { useUiConfigStore } from '../model/useUiConfigStore';
+import { useUiConfigStore } from '../model/uiConfigStore';
 
 const UI_CONFIG_SSE_URL = `${import.meta.env.VITE_API_URL}/sse/ui-config`;
 

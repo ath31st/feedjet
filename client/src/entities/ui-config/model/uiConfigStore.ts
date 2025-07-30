@@ -48,7 +48,12 @@ export const useUiConfigStore = create<UiConfigState>()((set) => ({
       });
     }
   },
-  setConfig: (config) => set({ uiConfig: config }),
+  setConfig: (config) => {
+    if (config.theme) {
+      localStorage.setItem('theme', config.theme);
+    }
+    set({ uiConfig: config });
+  },
   setLoading: (loading) => set({ loading }),
   setError: (error) => set({ error }),
   clearError: () => set({ error: null }),
