@@ -1,1 +1,1 @@
-export * from './model/useFeedConfig';
+export { CellCountSelector } from './ui/CellCountSelector';
