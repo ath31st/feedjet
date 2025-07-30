@@ -2,7 +2,7 @@ import { ReloadKioskPageButton } from '@/features/reload-kiosk';
 import { LogoutButton } from '@/features/auth/ui/LogoutButton';
 import { ThemeSelector } from '@/features/theme-selector';
 import { FeedAddForm, FeedList } from '@/features/rss-management';
-import { CellCountSelector } from '@/features/feed-config';
+import { CellCountSelector } from '@/features/cell-count-selector';
 import { WidgetSelector } from '@/features/widget-selector';
 import { WidgetRotaionInterval } from '@/features/widget-rotation-interval';
 
