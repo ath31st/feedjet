@@ -7,21 +7,16 @@ import {
 } from '../entities/rss';
 import { useUpdateKioskConfig } from '../features/feed-config';
 import { useFeedConfigStore } from '../entities/feed-config';
-import { themes, type Theme } from '@shared/types/ui.config';
-import { useUiConfigStore } from '@/entities/ui-config';
-import { useUpdateUiConfig } from '@/features/ui-config';
 import { ReloadKioskPageButton } from '@/features/reload-kiosk';
 import { CommonButton } from '@/shared/ui/common/CommonButton';
 import { LogoutButton } from '@/features/auth/ui/LogoutButton';
+import { ThemeSelector } from '@/features/theme-selector';
 
 export function AdminPage() {
   const { feedConfig } = useFeedConfigStore();
-  const { uiConfig } = useUiConfigStore();
   const [cellCount, setCellCount] = useState(0);
-  const [theme, setTheme] = useState<Theme>('dark');
   const [newFeed, setNewFeed] = useState('');
   const updateKioskConfig = useUpdateKioskConfig();
-  const updateUiConfig = useUpdateUiConfig();
   const createRss = useCreateRss();
   const deleteRss = useDeleteRss();
   const updateRss = useUpdateRss();
@@ -32,12 +27,6 @@ export function AdminPage() {
       setCellCount(feedConfig.cellsPerPage);
     }
   }, [feedConfig]);
-
-  useEffect(() => {
-    if (uiConfig) {
-      setTheme(uiConfig.theme);
-    }
-  }, [uiConfig]);
 
   const handleCellCountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = parseInt(e.target.value, 10);
@@ -64,12 +53,6 @@ export function AdminPage() {
 
   const handleUpdateFeed = (id: number, url?: string, isActive?: boolean) => {
     updateRss.mutate({ id, data: { url, isActive } });
-  };
-
-  const handleThemeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selected = e.target.value;
-    setTheme(selected);
-    updateUiConfig.mutate({ data: { theme: selected } });
   };
 
   return (
@@ -189,24 +172,7 @@ export function AdminPage() {
           }}
         >
           <h2 className="mb-4 font-semibold text-xl">Выбор темы оформления</h2>
-          {themes?.length ? (
-            <select
-              style={{
-                backgroundColor: 'var(--card-bg)',
-              }}
-              value={theme}
-              onChange={handleThemeChange}
-              className="w-32 rounded-lg border border-[var(--border)] bg-transparent px-3 py-2 focus:outline-none focus:ring-1 focus:ring-[var(--border)]"
-            >
-              {themes.map((t) => (
-                <option key={t} value={t}>
-                  {t}
-                </option>
-              ))}
-            </select>
-          ) : (
-            <p>Темы недоступны</p>
-          )}
+          <ThemeSelector />
         </section>
       </div>
     </div>
