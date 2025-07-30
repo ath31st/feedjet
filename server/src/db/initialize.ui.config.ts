@@ -15,7 +15,7 @@ export function ensureUiConfig(db: DbType) {
       .values({
         id: 1,
         rotatingWidgets: ['feed', 'schedule'],
-        autoSwitchIntervalMs: 30000,
+        autoSwitchIntervalMs: 60000,
         theme: 'dark',
       })
       .run();

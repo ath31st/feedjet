@@ -4,6 +4,7 @@ import { ThemeSelector } from '@/features/theme-selector';
 import { FeedAddForm, FeedList } from '@/features/rss-management';
 import { CellCountSelector } from '@/features/feed-config';
 import { WidgetSelector } from '@/features/widget-selector';
+import { WidgetRotaionInterval } from '@/features/widget-rotation-interval';
 
 export function AdminPage() {
   return (
@@ -34,6 +35,7 @@ export function AdminPage() {
           <div className="flex flex-col gap-4">
             <ThemeSelector />
             <WidgetSelector />
+            <WidgetRotaionInterval />
           </div>
         </section>
       </div>
