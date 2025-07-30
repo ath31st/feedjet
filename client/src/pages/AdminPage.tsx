@@ -7,7 +7,9 @@ import { CellCountSelector } from '@/features/feed-config';
 export function AdminPage() {
   return (
     <div className="flex w-screen flex-wrap gap-y-6 p-12">
-      <LogoutButton />
+      <div className="absolute top-6 right-6">
+        <LogoutButton />
+      </div>
       <div className="flex w-full gap-x-6">
         <section
           className="w-full rounded-xl p-6 md:w-1/2"
@@ -53,7 +55,9 @@ export function AdminPage() {
             backgroundColor: 'var(--card-bg)',
           }}
         >
-          <h2 className="mb-4 font-semibold text-xl">Обновление страницы</h2>
+          <h2 className="mb-4 font-semibold text-xl">
+            Обновление страницы киоска
+          </h2>
           <ReloadKioskPageButton />
         </section>
       </div>
