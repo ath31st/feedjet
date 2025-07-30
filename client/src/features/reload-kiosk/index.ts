@@ -1,1 +1,1 @@
-export * from './model/useReloadKiosks';
+export { ReloadKioskPageButton } from './ui/ReloadKioskPageButton';

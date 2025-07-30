@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useLogin } from '../index';
+import { useLogin } from '../model/useAuth';
 
 interface LoginFormProps {
   onSuccess: () => void;

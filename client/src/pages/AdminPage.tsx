@@ -6,12 +6,13 @@ import {
   useUpdateRss,
 } from '../entities/rss';
 import { useUpdateKioskConfig } from '../features/feed-config';
-import { useReloadKiosks } from '../features/reload-kiosk';
 import { useFeedConfigStore } from '../entities/feed-config';
-import { useLogout } from '../features/auth/model/useAuth';
 import { themes, type Theme } from '@shared/types/ui.config';
 import { useUiConfigStore } from '@/entities/ui-config';
 import { useUpdateUiConfig } from '@/features/ui-config';
+import { ReloadKioskPageButton } from '@/features/reload-kiosk';
+import { CommonButton } from '@/shared/ui/common/CommonButton';
+import { LogoutButton } from '@/features/auth/ui/LogoutButton';
 
 export function AdminPage() {
   const { feedConfig } = useFeedConfigStore();
@@ -24,8 +25,6 @@ export function AdminPage() {
   const createRss = useCreateRss();
   const deleteRss = useDeleteRss();
   const updateRss = useUpdateRss();
-  const logout = useLogout();
-  const reload = useReloadKiosks();
   const { data: feeds, isLoading: feedsLoading } = useGetAllRss();
 
   useEffect(() => {
@@ -42,7 +41,7 @@ export function AdminPage() {
 
   const handleCellCountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = parseInt(e.target.value, 10);
-    if (!Number.isNaN(val)) {
+    if (!Number.isNaN(val) && val >= 1 && val <= 9) {
       setCellCount(val);
       updateKioskConfig.mutate({ data: { cellsPerPage: val } });
     }
@@ -67,10 +66,6 @@ export function AdminPage() {
     updateRss.mutate({ id, data: { url, isActive } });
   };
 
-  const handleLogout = () => {
-    logout();
-  };
-
   const handleThemeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selected = e.target.value;
     setTheme(selected);
@@ -79,6 +74,7 @@ export function AdminPage() {
 
   return (
     <div className="flex w-screen flex-wrap gap-y-6 p-12">
+      <LogoutButton />
       <div className="flex w-full gap-x-6">
         <section
           className="w-full rounded-xl p-6 md:w-1/2"
@@ -118,13 +114,11 @@ export function AdminPage() {
               onChange={(e) => setNewFeed(e.target.value)}
               className="flex-grow rounded-lg border border-[var(--border)] bg-transparent px-3 py-2 focus:outline-none focus:ring-1 focus:ring-[var(--border)]"
             />
-            <button
+            <CommonButton
               type="button"
+              text="Добавить"
               onClick={handleAddFeed}
-              className="rounded-lg bg-[var(--button-bg)] px-4 py-2 text-[var(--button-text)] hover:opacity-80 disabled:opacity-50"
-            >
-              Добавить
-            </button>
+            />
           </div>
           {feeds && (
             <ul className="space-y-2">
@@ -183,13 +177,7 @@ export function AdminPage() {
           }}
         >
           <h2 className="mb-4 font-semibold text-xl">Обновление страницы</h2>
-          <button
-            type="button"
-            onClick={() => reload.mutate()}
-            className="rounded-lg bg-[var(--button-bg)] px-4 py-2 text-[var(--button-text)] hover:opacity-80"
-          >
-            Обновить
-          </button>
+          <ReloadKioskPageButton />
         </section>
       </div>
       <div className="flex w-full gap-x-6">
@@ -219,23 +207,6 @@ export function AdminPage() {
           ) : (
             <p>Темы недоступны</p>
           )}
-        </section>
-
-        <section
-          className="w-full rounded-xl p-6 md:w-1/2"
-          style={{
-            borderColor: 'var(--border)',
-            backgroundColor: 'var(--card-bg)',
-          }}
-        >
-          <h2 className="mb-4 font-semibold text-xl">Выход из аккаунта</h2>
-          <button
-            type="button"
-            onClick={handleLogout}
-            className="rounded-lg bg-[var(--button-bg)] px-4 py-2 text-[var(--button-text)] hover:opacity-80"
-          >
-            Выход
-          </button>
         </section>
       </div>
     </div>

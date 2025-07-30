@@ -10,7 +10,7 @@ export function RootLayout() {
     <ThemeProvider>
       <TrpcProvider>
         <Initializer />
-        <AnimatedSigmaBackground />
+        {/* <AnimatedSigmaBackground /> */}
         <ToasterConfig />
         <Outlet />
       </TrpcProvider>

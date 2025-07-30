@@ -1,2 +1,3 @@
 export { LoginForm } from './ui/LoginForm';
-export { useLogin, useLogout, useMe } from './model/useAuth';
+export { LogoutButton as Logout } from './ui/LogoutButton';
+export { useMe } from './model/useAuth';
