@@ -16,7 +16,6 @@ export function useUiConfigSse() {
     (e: MessageEvent) => {
       try {
         const cfg = JSON.parse(e.data);
-        console.log(cfg);
         setConfig(cfg);
       } catch {}
     },
