@@ -3,6 +3,7 @@ import { LogoutButton } from '@/features/auth/ui/LogoutButton';
 import { ThemeSelector } from '@/features/theme-selector';
 import { FeedAddForm, FeedList } from '@/features/rss-management';
 import { CellCountSelector } from '@/features/feed-config';
+import { WidgetSelector } from '@/features/widget-selector';
 
 export function AdminPage() {
   return (
@@ -29,8 +30,11 @@ export function AdminPage() {
             backgroundColor: 'var(--card-bg)',
           }}
         >
-          <h2 className="mb-4 font-semibold text-xl">Выбор темы оформления</h2>
-          <ThemeSelector />
+          <h2 className="mb-4 font-semibold text-xl">Настройки оформления</h2>
+          <div className="flex flex-col gap-4">
+            <ThemeSelector />
+            <WidgetSelector />
+          </div>
         </section>
       </div>
 
