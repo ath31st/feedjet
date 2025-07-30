@@ -1,12 +1,15 @@
 import { CommonButton } from '@/shared/ui/common/CommonButton';
-import { useReloadKiosks } from '../model/useReloadKiosks';
+import { useReloadKioskPageButton } from '../model/useReloadKiosks';
 
 export function ReloadKioskPageButton() {
-  const reload = useReloadKiosks();
-  const handleReload = () => {
-    reload.mutate();
-  };
+  const { handleReload, isPending } = useReloadKioskPageButton();
+
   return (
-    <CommonButton type="button" text="🔄 Обновить" onClick={handleReload} />
+    <CommonButton
+      type="button"
+      text={isPending ? 'Обновляется...' : '🔄 Обновить'}
+      onClick={handleReload}
+      disabled={isPending}
+    />
   );
 }
