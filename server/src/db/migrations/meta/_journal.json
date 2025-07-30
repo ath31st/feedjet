@@ -71,6 +71,13 @@
       "when": 1753784720555,
       "tag": "0009_natural_jack_murdock",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "6",
+      "when": 1753891734642,
+      "tag": "0010_fluffy_rawhide_kid",
+      "breakpoints": true
     }
   ]
 }

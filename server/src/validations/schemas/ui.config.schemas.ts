@@ -8,7 +8,6 @@ const themeSchema = z.enum(themes);
 export type ThemeSchema = z.infer<typeof themeSchema>;
 
 export const uiConfigSchema = z.object({
-  activeWidget: widgetTypeSchema,
   theme: themeSchema,
   rotatingWidgets: z
     .array(widgetTypeSchema)
@@ -18,7 +17,6 @@ export const uiConfigSchema = z.object({
 
 export const uiConfigUpdateSchema = z
   .object({
-    activeWidget: widgetTypeSchema.optional(),
     theme: themeSchema.optional(),
     rotatingWidgets: z.array(widgetTypeSchema).min(1).optional(),
     autoSwitchIntervalMs: z.number().int().nonnegative().optional(),

@@ -17,7 +17,6 @@ interface UiConfigState {
 const DEFAULT_CONFIG: UiConfig = {
   id: 0,
   theme: 'dark',
-  activeWidget: 'feed',
   rotatingWidgets: ['feed', 'schedule'],
   autoSwitchIntervalMs: 30000,
   createdAt: new Date(),

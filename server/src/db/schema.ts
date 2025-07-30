@@ -39,9 +39,6 @@ export const feedConfigTable = sqliteTable('feed_config', {
 
 export const uiConfigTable = sqliteTable('ui_config', {
   id: integer('id').primaryKey().default(1),
-  activeWidget: text('active_widget')
-    .notNull()
-    .$type<(typeof widgetTypes)[number]>(),
   rotatingWidgets: text('rotating_widgets', { mode: 'json' })
     .notNull()
     .$type<Array<(typeof widgetTypes)[number]>>(),

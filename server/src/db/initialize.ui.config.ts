@@ -14,7 +14,6 @@ export function ensureUiConfig(db: DbType) {
     db.insert(uiConfigTable)
       .values({
         id: 1,
-        activeWidget: 'feed',
         rotatingWidgets: ['feed', 'schedule'],
         autoSwitchIntervalMs: 30000,
         theme: 'dark',

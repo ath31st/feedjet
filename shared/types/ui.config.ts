@@ -1,6 +1,5 @@
 export interface UiConfig {
   id: number;
-  activeWidget: WidgetType;
   rotatingWidgets: WidgetType[];
   autoSwitchIntervalMs: number;
   theme: Theme;
@@ -9,13 +8,12 @@ export interface UiConfig {
 }
 
 export interface NewUiConfig {
-  activeWidget: string;
-  theme: string;
+  theme: Theme;
+  rotatingWidgets: WidgetType[];
   autoSwitchIntervalMs: number;
 }
 
 export interface UpdateUiConfig {
-  activeWidget?: WidgetType;
   theme?: Theme;
   rotatingWidgets?: WidgetType[];
   autoSwitchIntervalMs?: number;
