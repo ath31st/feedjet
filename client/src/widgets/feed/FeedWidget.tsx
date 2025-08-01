@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react';
 import { AnimatedFeedCard } from './AnimatedFeedCard';
-import type { FeedItem } from '@/entities/feed';
 import { useRssFeedStore } from '@/entities/feed';
 import { useFeedConfigStore } from '@/entities/feed-config';
 import { isRotate90 } from '@/shared/lib/parseRotateParam';
+import { useCarousel } from './useFeedCarousel';
 
 interface FeedCardProps {
   rotate: number;
@@ -14,13 +13,7 @@ export function FeedWidget({ rotate }: FeedCardProps) {
     (state) => state.feedConfig.cellsPerPage,
   );
   const feeds = useRssFeedStore((s) => s.feeds);
-  const [visibleItems, setVisibleItems] = useState<FeedItem[]>([]);
-
-  useEffect(() => {
-    if (feeds.length === 0) return;
-    const newSlice = feeds.slice(0, cellsPerPage);
-    setVisibleItems(newSlice);
-  }, [feeds, cellsPerPage]);
+  const visibleItems = useCarousel(feeds, cellsPerPage, 10_000);
 
   return (
     <div

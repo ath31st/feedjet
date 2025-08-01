@@ -5,6 +5,8 @@ import { FeedAddForm, FeedList } from '@/features/rss-management';
 import { CellCountSelector } from '@/features/cell-count-selector';
 import { WidgetSelector } from '@/features/widget-selector';
 import { WidgetRotaionInterval } from '@/features/widget-rotation-interval';
+import { PagesCountSelector } from '@/features/feed-pages-count-selector';
+import { FeedRotaionInterval } from '@/features/feed-rotation-interval';
 
 export function AdminPage() {
   return (
@@ -33,8 +35,17 @@ export function AdminPage() {
         >
           <h2 className="mb-4 font-semibold text-xl">Настройки оформления</h2>
           <div className="flex flex-col gap-4">
+            <label htmlFor="theme" className="mb-2 block">
+              Тема:
+            </label>
             <ThemeSelector />
+            <label htmlFor="widget" className="mb-2 block">
+              Виджеты в ротации:
+            </label>
             <WidgetSelector />
+            <label htmlFor="rotation-interval" className="mb-2 block">
+              Интервал смены виджетов (в секундах):
+            </label>
             <WidgetRotaionInterval />
           </div>
         </section>
@@ -48,11 +59,19 @@ export function AdminPage() {
             backgroundColor: 'var(--card-bg)',
           }}
         >
-          <h2 className="mb-4 font-semibold text-xl">Настройки отображения</h2>
+          <h2 className="mb-4 font-semibold text-xl">Настройки RSSS виджета</h2>
           <label htmlFor="cell-count" className="mb-2 block">
             Количество ячеек на страницу:
           </label>
           <CellCountSelector />
+          <label htmlFor="pages-count" className="mb-2 block">
+            Количество страниц:
+          </label>
+          <PagesCountSelector />
+          <label htmlFor="rotation-interval" className="mb-2 block">
+            Интервал движения карусели фидов (в секундах):
+          </label>
+          <FeedRotaionInterval />
         </section>
         <section
           className="w-full rounded-xl p-6 md:w-1/2"
