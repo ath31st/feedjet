@@ -5,7 +5,6 @@ import { BirthdaysWidget } from '@/widgets/birthdays';
 import { useUiConfigStore } from '@/entities/ui-config';
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-//import { BackgroundAnimation } from '@/shared/ui/BackgroundAnimation';
 
 const widgetMap: Record<string, React.ReactNode> = {
   feed: <FeedWidget />,
@@ -40,7 +39,6 @@ export function KioskPage() {
   return (
     <div className="h-screen w-screen p-4">
       <AnimatedSigmaBackground />
-      {/* <BackgroundAnimation /> */}
       <AnimatePresence mode="wait">
         <motion.div
           key={widgets[index]}

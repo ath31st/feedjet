@@ -13,7 +13,6 @@
     "check": "biome check --write ."
   },
   "dependencies": {
-    "@lottiefiles/dotlottie-react": "^0.14.4",
     "@tanstack/react-query": "^5.83.0",
     "@trpc/client": "^11.4.3",
     "@trpc/react-query": "^11.4.3",
