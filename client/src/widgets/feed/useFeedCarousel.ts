@@ -3,19 +3,24 @@ import { useEffect, useState } from 'react';
 export function useCarousel<T>(
   items: T[],
   pageSize: number,
+  pagesCount: number,
   intervalMs: number,
 ) {
   const [page, setPage] = useState(0);
-  const total = Math.ceil(items.length / pageSize);
+
+  const maxPages = Math.min(Math.ceil(items.length / pageSize), pagesCount);
 
   useEffect(() => {
-    if (total < 2) return;
-    const id = setInterval(() => {
-      setPage((p) => (p + 1) % total);
-    }, intervalMs);
-    return () => clearInterval(id);
-  }, [total, intervalMs]);
+    if (maxPages < 2) return;
 
-  const slice = items.slice(page * pageSize, page * pageSize + pageSize);
-  return slice;
+    const id = setInterval(() => {
+      setPage((p) => (p + 1) % maxPages);
+    }, intervalMs);
+
+    return () => clearInterval(id);
+  }, [maxPages, intervalMs]);
+
+  const start = page * pageSize;
+  const end = start + pageSize;
+  return items.slice(start, end);
 }
