@@ -15,6 +15,8 @@ export function ensureFeedConfig(db: DbType) {
       .values({
         id: 1,
         cellsPerPage: 6,
+        pagesCount: 1,
+        carouselIntervalMs: 30000,
       })
       .run();
     Logger.info('Feed config initialized');
