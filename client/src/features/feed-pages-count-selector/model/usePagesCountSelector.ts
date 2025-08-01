@@ -1,21 +1,21 @@
 import { useFeedConfig, useUpdateFeedConfig } from '@/entities/feed-config';
 import { useEffect, useState } from 'react';
 
-export function useCellCount() {
+export function usePagesCount() {
   const { data: config } = useFeedConfig();
   const updateConfig = useUpdateFeedConfig();
-  const [cellCount, setCellCount] = useState(0);
+  const [pagesCount, setPagesCount] = useState(0);
 
   useEffect(() => {
-    if (config?.cellsPerPage) {
-      setCellCount(config.cellsPerPage);
+    if (config?.pagesCount) {
+      setPagesCount(config.pagesCount);
     }
   }, [config]);
 
   const setCount = (val: number) => {
-    setCellCount(val);
-    updateConfig.mutate({ data: { cellsPerPage: val } });
+    setPagesCount(val);
+    updateConfig.mutate({ data: { pagesCount: val } });
   };
 
-  return { cellCount, setCount };
+  return { pagesCount, setCount };
 }

@@ -2,7 +2,7 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { queryClient, trpcWithProxy } from '@/shared/api/trpc/trpc';
 import { toast } from 'sonner';
 
-export const useMainConfig = () => {
+export const useFeedConfig = () => {
   return useQuery(trpcWithProxy.feedConfig.getConfig.queryOptions());
 };
 
