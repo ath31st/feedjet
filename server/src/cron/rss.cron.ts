@@ -1,6 +1,11 @@
 import cron from 'node-cron';
 import Logger from '../utils/logger.js';
-import { eventBus, rssParser, rssService } from '../container.js';
+import {
+  eventBus,
+  rssParser,
+  rssService,
+  feedConfigService,
+} from '../container.js';
 
 export const startRssCronJob = () => {
   const cronSchedule = process.env.CRON_SCHEDULE;
@@ -20,7 +25,15 @@ export const startRssCronJob = () => {
       return;
     }
 
-    const latestItems = await rssParser.parseLatestFeedIitems(rssFeeds);
+    const config = feedConfigService.getPagesConfig();
+    if (!config) {
+      Logger.warn('Feed config not found, skipping RSS fetch.');
+      return;
+    }
+    const { cellsPerPage, pagesCount } = config;
+    const limit = cellsPerPage * pagesCount;
+
+    const latestItems = await rssParser.parseLatestFeedIitems(rssFeeds, limit);
 
     if (latestItems.length === 0) {
       Logger.log('No feed items fetched.');

@@ -22,7 +22,10 @@ export class RssParser {
       .filter((item) => item != null);
   }
 
-  async parseLatestFeedIitems(rssFeeds: RssFeed[]): Promise<FeedItem[]> {
+  async parseLatestFeedIitems(
+    rssFeeds: RssFeed[],
+    limit?: number,
+  ): Promise<FeedItem[]> {
     const promises = rssFeeds.map(async (rssFeed) => {
       try {
         return await this.parse(rssFeed.url);
@@ -36,7 +39,7 @@ export class RssParser {
     const feedItems: FeedItem[] = itemsArrays.flat();
 
     const sortedItems = sortFeedItemsByDateDescending(feedItems);
-    return sortedItems.slice(0, this.maxItems);
+    return sortedItems.slice(0, limit || this.maxItems);
   }
 
   mapToFeedItem(item: RawFeedItem): FeedItem | null {
