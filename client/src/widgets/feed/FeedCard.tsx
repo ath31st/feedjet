@@ -23,7 +23,7 @@ export function FeedCard({ item, cellsPerPage }: FeedCardProps) {
 
       <div className="flex min-w-0 flex-grow flex-col gap-2 px-4">
         <div
-          className={`text-${cellsPerPage > 6 ? 'xs' : 'sm'}`}
+          className={`min-w-0 truncate text-${cellsPerPage > 6 ? 'xs' : 'sm'}`}
           style={{ color: 'var(--category-text)' }}
         >
           {item.categories.join(', ')}
