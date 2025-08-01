@@ -6,7 +6,7 @@ export const feedConfigParamsSchema = z.object({
 
 export const feedConfigUpdateSchema = z
   .object({
-    cellsPerPage: z.number().int().min(1).max(9).optional(),
+    cellsPerPage: z.number().int().min(1).max(10).optional(),
   })
   .refine((data) => Object.keys(data).length > 0, {
     message: 'At least one field must be provided',

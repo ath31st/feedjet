@@ -7,7 +7,7 @@ interface CellCountSelectorProps {
 
 export function CellCountSelector({
   min = 1,
-  max = 9,
+  max = 10,
 }: CellCountSelectorProps) {
   const { cellCount, setCount } = useCellCount();
 

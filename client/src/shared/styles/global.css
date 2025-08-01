@@ -1,17 +1,5 @@
 @import "tailwindcss";
 
-@theme {
-  --breakpoint-4k: 125rem;
-  --breakpoint-2x4k: 220rem;
-}
-
-@media (min-width: 125rem) and (orientation: portrait) {
-  .feed-grid {
-    grid-template-columns: 1fr !important;
-    grid-auto-rows: 1fr;
-  }
-}
-
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;

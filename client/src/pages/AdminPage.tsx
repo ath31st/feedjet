@@ -52,7 +52,7 @@ export function AdminPage() {
           <label htmlFor="cell-count" className="mb-2 block">
             Количество ячеек на страницу:
           </label>
-          <CellCountSelector min={1} max={9} />
+          <CellCountSelector />
         </section>
         <section
           className="w-full rounded-xl p-6 md:w-1/2"

@@ -4,7 +4,11 @@ import type { FeedItem } from '@/entities/feed';
 import { useRssFeedStore } from '@/entities/feed';
 import { useFeedConfigStore } from '@/entities/feed-config';
 
-export function FeedWidget() {
+interface FeedCardProps {
+  tvMode?: boolean;
+}
+
+export function FeedWidget({ tvMode }: FeedCardProps) {
   const cellsPerPage = useFeedConfigStore(
     (state) => state.feedConfig.cellsPerPage,
   );
@@ -17,16 +21,11 @@ export function FeedWidget() {
     setVisibleItems(newSlice);
   }, [feeds, cellsPerPage]);
 
-  const cols = Math.ceil(Math.sqrt(cellsPerPage));
-  const rows = Math.ceil(cellsPerPage / cols);
-
   return (
     <div
-      className="feed-grid grid h-full w-full 4k:gap-8 gap-4 md:grid-cols-2 xl:grid-cols-3"
-      style={{
-        gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
-        gridTemplateRows: `repeat(${rows}, minmax(0, 1fr))`,
-      }}
+      className={`grid h-full w-full grid-cols-1 gap-4 ${
+        tvMode ? '' : 'xl:grid-cols-2'
+      }`}
     >
       {visibleItems.map((item, index) => (
         <AnimatedFeedCard
