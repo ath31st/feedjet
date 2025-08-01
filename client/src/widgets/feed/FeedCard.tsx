@@ -1,5 +1,6 @@
 import type { FeedItem } from '@/entities/feed';
 import { LazyImage } from './LazyImage';
+import noImageAvailableUrl from '@/shared/assets/images/no-image-available.jpg';
 
 interface FeedCardProps {
   item: FeedItem;
@@ -17,7 +18,7 @@ export function FeedCard({ item, cellsPerPage }: FeedCardProps) {
       }}
     >
       <div className="z-1 4k:w-140 w-[30%] flex-shrink-0 overflow-hidden 4k:rounded-4xl rounded-xl">
-        <LazyImage src={item.image} alt={''} />
+        <LazyImage src={item.image || noImageAvailableUrl} alt={''} />
       </div>
 
       <div className="flex min-w-0 flex-grow flex-col 4k:gap-4 gap-2 p-4">
