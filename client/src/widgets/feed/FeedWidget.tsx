@@ -3,12 +3,13 @@ import { AnimatedFeedCard } from './AnimatedFeedCard';
 import type { FeedItem } from '@/entities/feed';
 import { useRssFeedStore } from '@/entities/feed';
 import { useFeedConfigStore } from '@/entities/feed-config';
+import { isRotate90 } from '@/shared/lib/parseRotateParam';
 
 interface FeedCardProps {
-  tvMode?: boolean;
+  rotate: number;
 }
 
-export function FeedWidget({ tvMode }: FeedCardProps) {
+export function FeedWidget({ rotate }: FeedCardProps) {
   const cellsPerPage = useFeedConfigStore(
     (state) => state.feedConfig.cellsPerPage,
   );
@@ -24,7 +25,7 @@ export function FeedWidget({ tvMode }: FeedCardProps) {
   return (
     <div
       className={`grid h-full w-full grid-cols-1 gap-4 ${
-        tvMode ? '' : 'xl:grid-cols-2'
+        isRotate90(rotate) ? '' : 'xl:grid-cols-2'
       }`}
     >
       {visibleItems.map((item, index) => (
