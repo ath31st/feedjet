@@ -8,10 +8,6 @@ export function FeedWidgetSettings() {
     <SettingsCard title="Настройки RSS-виджета" className="w-full md:w-1/2">
       <div className="flex flex-col">
         <CellCountSelector />
-
-        <label htmlFor="pages-count" className="mb-2 block">
-          Количество страниц:
-        </label>
         <PagesCountSelector />
 
         <label htmlFor="feed-rotation-interval" className="mb-2 block">
