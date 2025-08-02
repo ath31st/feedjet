@@ -59,8 +59,8 @@ export const uiConfigTable = sqliteTable('ui_config', {
 export const scheduleEventsTable = sqliteTable('schedule_events', {
   id: integer('id').primaryKey({ autoIncrement: true }),
   date: text('date').notNull(),
-  start_time: text('start_time').notNull(),
-  end_time: text('end_time'),
+  startTime: text('start_time').notNull(),
+  endTime: text('end_time'),
   title: text('title').notNull(),
   description: text('description'),
   createdAt: integer('created_at', { mode: 'timestamp' })
