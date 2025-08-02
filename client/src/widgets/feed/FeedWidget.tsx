@@ -2,7 +2,7 @@ import { AnimatedFeedCard } from './AnimatedFeedCard';
 import { useRssFeedStore } from '@/entities/feed';
 import { useFeedConfigStore } from '@/entities/feed-config';
 import { isRotate90 } from '@/shared/lib/parseRotateParam';
-import { useCarousel } from './useFeedCarousel';
+import { useCarousel } from '@/shared/lib/useCarousel';
 
 interface FeedCardProps {
   rotate: number;
