@@ -6,15 +6,8 @@ import { SettingsCard } from '@/shared/ui/SettingsCard';
 export function AppearanceSettingsWidget() {
   return (
     <SettingsCard title="Настройки оформления" className="w-full md:w-1/2">
-      <div className="flex flex-col">
-        <label htmlFor="theme" className="mb-2 block">
-          Тема:
-        </label>
+      <div className="flex flex-col gap-4">
         <ThemeSelector />
-
-        <label htmlFor="widget" className="mb-2 block">
-          Виджеты в ротации:
-        </label>
         <WidgetSelector />
         <WidgetRotationInterval />
       </div>

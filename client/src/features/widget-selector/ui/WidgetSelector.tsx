@@ -6,24 +6,27 @@ export function WidgetSelector() {
   const { rotatingWidgets, handleWidgetChange } = useWidgetSelector();
 
   return (
-    <ToggleGroup.Root
-      type="multiple"
-      className="flex w-32 flex-wrap items-start gap-1 rounded-lg border border-[var(--border)] p-2"
-      value={rotatingWidgets}
-      onValueChange={(next) => {
-        if (next.length === 0) return;
-        handleWidgetChange(next);
-      }}
-    >
-      {widgetTypes.map((t) => (
-        <ToggleGroup.Item
-          key={t}
-          value={t}
-          className="cursor-pointer rounded-md px-2 py-1 text-sm hover:bg-[var(--button-hover-bg)] data-[state=on]:bg-[var(--button-bg)] "
-        >
-          {t}
-        </ToggleGroup.Item>
-      ))}
-    </ToggleGroup.Root>
+    <div className="flex flex-col gap-1">
+      <span className="text-[var(--text)]">Виджеты в ротации:</span>
+      <ToggleGroup.Root
+        type="multiple"
+        className="flex justify-center gap-1 rounded-lg border border-[var(--border)] p-1"
+        value={rotatingWidgets}
+        onValueChange={(next) => {
+          if (next.length === 0) return;
+          handleWidgetChange(next);
+        }}
+      >
+        {widgetTypes.map((t) => (
+          <ToggleGroup.Item
+            key={t}
+            value={t}
+            className="cursor-pointer rounded-md px-2 py-1 text-sm hover:bg-[var(--button-hover-bg)] data-[state=on]:bg-[var(--button-bg)]"
+          >
+            {t}
+          </ToggleGroup.Item>
+        ))}
+      </ToggleGroup.Root>
+    </div>
   );
 }
