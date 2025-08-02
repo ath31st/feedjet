@@ -7,14 +7,19 @@ import { NotFoundPage } from '@/pages/NotFoundPage';
 import { UnauthorizedPage } from '@/pages/UnauthorizedPage';
 import { RootLayout } from '../layouts/RootLayout';
 import { CommonLayout } from '../layouts/CommonLayout';
+import { KioskLayout } from '../layouts/KioskLayout';
+import { AdminLayout } from '../layouts/AdminLayout';
 
 export const router = createBrowserRouter([
   {
     path: '/',
     element: <RootLayout />,
     children: [
-      { index: true, element: <KioskPage /> },
-
+      {
+        path: '',
+        element: <KioskLayout />,
+        children: [{ index: true, element: <KioskPage /> }],
+      },
       {
         element: <CommonLayout />,
         children: [
@@ -22,9 +27,10 @@ export const router = createBrowserRouter([
             path: 'admin',
             element: (
               <ProtectedRoute>
-                <AdminPage />
+                <AdminLayout />
               </ProtectedRoute>
             ),
+            children: [{ index: true, element: <AdminPage /> }],
           },
           { path: 'login', element: <LoginPage /> },
           { path: '401', element: <UnauthorizedPage /> },
