@@ -5,6 +5,7 @@ import { FeedWidgetSettings } from '@/widgets/feed-widget-settings';
 import { KioskControlWidget } from '@/widgets/kiosk-control';
 import * as Tabs from '@radix-ui/react-tabs';
 import { AdminTabTrigger } from '@/shared/ui/AdminTabTrigger';
+import { ScheduleManagementWidget } from '@/widgets/schedule-management';
 
 export function AdminPage() {
   return (
@@ -39,15 +40,7 @@ export function AdminPage() {
         </Tabs.Content>
 
         <Tabs.Content value="schedule">
-          <div
-            className="rounded-xl border p-6 text-center"
-            style={{
-              borderColor: 'var(--border)',
-            }}
-          >
-            <h2 className="mb-4 font-semibold text-xl">Расписание</h2>
-            <p>Функция в разработке</p>
-          </div>
+          <ScheduleManagementWidget />
         </Tabs.Content>
       </Tabs.Root>
     </div>
