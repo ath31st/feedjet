@@ -47,6 +47,19 @@ export class ScheduleEventService {
     }
   }
 
+  findByDate(date: string): ScheduleEvent[] {
+    try {
+      return this.db
+        .select()
+        .from(scheduleEventsTable)
+        .where(eq(scheduleEventsTable.date, date))
+        .all();
+    } catch (err) {
+      Logger.error(err);
+      throw new ScheduleEventError('Failed to fetch events by date');
+    }
+  }
+
   create(data: NewScheduleEvent): ScheduleEvent {
     try {
       return this.db.insert(scheduleEventsTable).values(data).returning().get();

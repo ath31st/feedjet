@@ -4,6 +4,7 @@ import { TRPCError } from '@trpc/server';
 import {
   scheduleEventCreateSchema,
   scheduleEventFindByDateRangeSchema,
+  scheduleEventFindByDateSchema,
   scheduleEventParamsSchema,
   scheduleEventUpdateSchema,
 } from '../../validations/schemas/schedule.event.schemas.js';
@@ -27,6 +28,12 @@ export const scheduleEventRouter = t.router({
         input.startDate,
         input.endDate,
       );
+    }),
+
+  findByDate: publicProcedure
+    .input(scheduleEventFindByDateSchema)
+    .query(({ input }) => {
+      return scheduleEventService.findByDate(input.date);
     }),
 
   create: protectedProcedure
