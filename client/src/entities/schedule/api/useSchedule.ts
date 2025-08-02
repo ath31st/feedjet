@@ -6,6 +6,18 @@ export const useFindScheduleEventById = (id: string | number) => {
   return useQuery(trpcWithProxy.scheduleEvent.findById.queryOptions({ id }));
 };
 
+export const useFindScheduleEventByDateRange = (
+  startDate: string,
+  endDate: string,
+) => {
+  return useQuery(
+    trpcWithProxy.scheduleEvent.findByDateRange.queryOptions({
+      startDate,
+      endDate,
+    }),
+  );
+};
+
 export const useFindScheduleEventByDate = (date: string) => {
   return useQuery(
     trpcWithProxy.scheduleEvent.findByDate.queryOptions({ date }),
@@ -42,7 +54,7 @@ export const useDeleteScheduleEvent = () => {
   return useMutation(
     trpcWithProxy.scheduleEvent.delete.mutationOptions({
       onSuccess() {
-        toast.success('RSS успешно удален');
+        toast.success('Событие успешно удалено');
         queryClient.invalidateQueries({
           queryKey: trpcWithProxy.scheduleEvent.findByDateRange.queryKey(),
         });
