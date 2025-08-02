@@ -55,3 +55,18 @@ export const uiConfigTable = sqliteTable('ui_config', {
     .notNull()
     .default(sql`(unixepoch())`),
 });
+
+export const scheduleEventsTable = sqliteTable('schedule_events', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  date: text('date').notNull(),
+  start_time: text('start_time').notNull(),
+  end_time: text('end_time'),
+  title: text('title').notNull(),
+  description: text('description'),
+  createdAt: integer('created_at', { mode: 'timestamp' })
+    .notNull()
+    .default(sql`(unixepoch())`),
+  updatedAt: integer('updated_at', { mode: 'timestamp' })
+    .notNull()
+    .default(sql`(unixepoch())`),
+});
