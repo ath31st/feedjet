@@ -1,3 +1,6 @@
+'use client';
+
+import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { useThemeSelector } from '../model/useThemeSelector';
 import { themes } from '@shared/types/ui.config';
 
@@ -7,17 +10,31 @@ export function ThemeSelector() {
   if (!themes?.length) return <p>Темы недоступны</p>;
 
   return (
-    <select
-      style={{ backgroundColor: 'var(--card-bg)' }}
-      value={theme}
-      onChange={(e) => handleThemeChange(e.target.value)}
-      className="w-32 rounded-lg border border-[var(--border)] bg-transparent px-3 py-2 focus:outline-none focus:ring-1 focus:ring-[var(--border)]"
-    >
-      {themes.map((t) => (
-        <option key={t} value={t}>
-          {t}
-        </option>
-      ))}
-    </select>
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger asChild>
+        <button
+          type="button"
+          className="w-32 rounded-lg border border-[var(--border)] bg-[var(--card-bg)] px-3 py-2 text-left focus:outline-none"
+        >
+          {theme}
+        </button>
+      </DropdownMenu.Trigger>
+
+      <DropdownMenu.Content
+        align="start"
+        sideOffset={4}
+        className="z-50 min-w-[8rem] overflow-hidden rounded-lg border border-[var(--border)] bg-[var(--card-bg)] shadow-md"
+      >
+        {themes.map((t) => (
+          <DropdownMenu.Item
+            key={t}
+            onSelect={() => handleThemeChange(t)}
+            className="cursor-pointer px-3 py-2 text-sm outline-none hover:bg-[var(--button-hover-bg)] data-[highlighted]:bg-[var(--hover-bg)]"
+          >
+            {t}
+          </DropdownMenu.Item>
+        ))}
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
   );
 }
