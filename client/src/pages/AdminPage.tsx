@@ -11,7 +11,7 @@ import { FeedRotaionInterval } from '@/features/feed-rotation-interval';
 export function AdminPage() {
   return (
     <div className="flex w-screen flex-wrap gap-y-6 p-12">
-      <div className="absolute top-6 right-6">
+      <div className="absolute top-2 right-12">
         <LogoutButton />
       </div>
       <div className="flex w-full gap-x-6">
