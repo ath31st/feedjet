@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 export function UnauthorizedPage() {
   return (
-    <div className="flex h-screen w-screen items-center justify-center">
+    <div className="flex min-h-screen items-center justify-center">
       <div
         className="flex flex-col items-center gap-8 rounded-xl p-12"
         style={{

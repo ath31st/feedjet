@@ -1,6 +1,6 @@
 export function NotFoundPage() {
   return (
-    <div className="flex h-screen w-screen items-center justify-center">
+    <div className="flex min-h-screen items-center justify-center">
       <div
         className="rounded-xl border-2 4k:p-28 p-12 text-2xl"
         style={{

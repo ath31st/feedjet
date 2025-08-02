@@ -8,7 +8,7 @@ import { AdminTabTrigger } from '@/shared/ui/AdminTabTrigger';
 
 export function AdminPage() {
   return (
-    <div className="flex h-screen w-screen flex-col items-center p-6 md:p-12">
+    <div className="p-6">
       <div className="absolute top-6 right-12">
         <LogoutButton />
       </div>

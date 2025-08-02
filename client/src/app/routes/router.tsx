@@ -6,6 +6,7 @@ import { LoginPage } from '@/pages/LoginPage';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 import { UnauthorizedPage } from '@/pages/UnauthorizedPage';
 import { RootLayout } from '../layouts/RootLayout';
+import { CommonLayout } from '../layouts/CommonLayout';
 
 export const router = createBrowserRouter([
   {
@@ -13,17 +14,23 @@ export const router = createBrowserRouter([
     element: <RootLayout />,
     children: [
       { index: true, element: <KioskPage /> },
+
       {
-        path: 'admin',
-        element: (
-          <ProtectedRoute>
-            <AdminPage />
-          </ProtectedRoute>
-        ),
+        element: <CommonLayout />,
+        children: [
+          {
+            path: 'admin',
+            element: (
+              <ProtectedRoute>
+                <AdminPage />
+              </ProtectedRoute>
+            ),
+          },
+          { path: 'login', element: <LoginPage /> },
+          { path: '401', element: <UnauthorizedPage /> },
+          { path: '*', element: <NotFoundPage /> },
+        ],
       },
-      { path: 'login', element: <LoginPage /> },
-      { path: '401', element: <UnauthorizedPage /> },
-      { path: '*', element: <NotFoundPage /> },
     ],
   },
 ]);

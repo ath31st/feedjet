@@ -5,7 +5,7 @@ export function LoginPage() {
   const navigate = useNavigate();
 
   return (
-    <div className="flex h-screen w-screen items-center justify-center">
+    <div className="flex min-h-screen items-center justify-center">
       <LoginForm onSuccess={() => navigate('/admin', { replace: true })} />
     </div>
   );
