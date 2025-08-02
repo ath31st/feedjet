@@ -7,9 +7,6 @@ export function FeedWidgetSettings() {
   return (
     <SettingsCard title="Настройки RSS-виджета" className="w-full md:w-1/2">
       <div className="flex flex-col">
-        <label htmlFor="cell-count" className="mb-2 block">
-          Количество ячеек на страницу:
-        </label>
         <CellCountSelector />
 
         <label htmlFor="pages-count" className="mb-2 block">
