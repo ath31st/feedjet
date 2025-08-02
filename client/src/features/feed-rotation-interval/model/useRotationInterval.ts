@@ -1,21 +1,25 @@
 import { useFeedConfig, useUpdateFeedConfig } from '@/entities/feed-config';
 import { useEffect, useState } from 'react';
 
-export function useRotaionInterval() {
+export function useRotationInterval(min = 10, max = 10000) {
   const { data: config } = useFeedConfig();
   const updateConfig = useUpdateFeedConfig();
-  const [intervalSec, setIntervalSec] = useState(0);
+  const [value, setValue] = useState(min);
 
   useEffect(() => {
     if (config?.carouselIntervalMs) {
-      setIntervalSec(Math.floor(config.carouselIntervalMs / 1000));
+      const seconds = Math.floor(config.carouselIntervalMs / 1000);
+      if (seconds >= min && seconds <= max) {
+        setValue(seconds);
+      }
     }
-  }, [config]);
+  }, [config, min, max]);
 
-  const handleInterval = (val: number) => {
-    setIntervalSec(val);
-    updateConfig.mutate({ data: { carouselIntervalMs: val * 1000 } });
+  const update = (val: number) => {
+    const clamped = Math.min(Math.max(val, min), max);
+    setValue(clamped);
+    updateConfig.mutate({ data: { carouselIntervalMs: clamped * 1000 } });
   };
 
-  return { intervalSec, handleInterval };
+  return { value, update };
 }

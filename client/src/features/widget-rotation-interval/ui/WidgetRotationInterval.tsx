@@ -1,31 +1,20 @@
+import {
+  RotationInterval,
+  type RotationIntervalProps,
+} from '@/shared/ui/RotationInterval';
 import { useRotationInterval } from '../model/useRotationInterval';
 
-interface WidgetRotationIntervalProps {
-  min?: number;
-  max?: number;
-}
-
-export function WidgetRotationInterval({
-  min = 10,
-  max = 10000,
-}: WidgetRotationIntervalProps) {
-  const { intervalSec, handleInterval } = useRotationInterval();
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = parseInt(e.target.value, 10);
-    if (!Number.isNaN(val) && val >= min && val <= max) {
-      handleInterval(val);
-    }
-  };
-
+export function WidgetRotationInterval(
+  props: Omit<RotationIntervalProps, 'label' | 'inputId' | 'value' | 'update'>,
+) {
+  const { value, update } = useRotationInterval(props.min, props.max);
   return (
-    <input
-      type="number"
-      value={intervalSec}
-      onChange={handleChange}
-      min={min}
-      max={max}
-      className="w-32 rounded-lg border border-[var(--border)] bg-transparent px-3 py-2 focus:outline-none focus:ring-1 focus:ring-[var(--border)]"
+    <RotationInterval
+      label="Интервал смены виджетов (в секундах):"
+      inputId="widget-rotation-interval"
+      value={value}
+      update={update}
+      {...props}
     />
   );
 }

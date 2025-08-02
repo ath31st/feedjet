@@ -9,10 +9,6 @@ export function FeedWidgetSettings() {
       <div className="flex flex-col">
         <CellCountSelector />
         <PagesCountSelector />
-
-        <label htmlFor="feed-rotation-interval" className="mb-2 block">
-          Интервал движения карусели фидов (в секундах):
-        </label>
         <FeedRotationInterval />
       </div>
     </SettingsCard>

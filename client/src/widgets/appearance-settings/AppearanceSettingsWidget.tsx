@@ -16,10 +16,6 @@ export function AppearanceSettingsWidget() {
           Виджеты в ротации:
         </label>
         <WidgetSelector />
-
-        <label htmlFor="rotation-interval" className="mb-2 block">
-          Интервал смены виджетов (в секундах):
-        </label>
         <WidgetRotationInterval />
       </div>
     </SettingsCard>
