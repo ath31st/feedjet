@@ -16,6 +16,7 @@ import { EventEmitter } from 'events';
 import { UiConfigService } from './services/ui.config.service.js';
 import { ensureUiConfig } from './db/initialize.ui.config.js';
 import { ensureFeedConfig } from './db/initialize.feed.config.js';
+import { ScheduleEventService } from './services/schedule.event.service.js';
 
 const dbPath = process.env.DB_FILE_NAME ?? '';
 
@@ -44,6 +45,7 @@ export const authService = new AuthService(userService);
 export const rssService = new RssService(db);
 export const feedConfigService = new FeedConfigService(db);
 export const uiConfigService = new UiConfigService(db);
+export const scheduleEventService = new ScheduleEventService(db);
 
 export const t = initTRPC.context<Context>().create();
 export const publicProcedure = t.procedure;

@@ -15,6 +15,15 @@ export const scheduleEventCreateSchema = z.object({
   description: z.string().optional(),
 });
 
+export const scheduleEventFindByDateRangeSchema = z.object({
+  startDate: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format (YYYY-MM-DD)'),
+  endDate: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format (YYYY-MM-DD)'),
+});
+
 export const scheduleEventUpdateSchema = scheduleEventCreateSchema
   .partial()
   .refine((data) => Object.keys(data).length > 0, {
@@ -31,4 +40,8 @@ export const scheduleEventResponseSchema = z.object({
     .optional(),
   title: z.string(),
   description: z.string().optional(),
+});
+
+export const scheduleEventParamsSchema = z.object({
+  id: z.coerce.number().int().positive(),
 });

@@ -1,5 +1,5 @@
 import { scheduleEventsTable } from '../db/schema.js';
-import { eq, gte, lt, and } from 'drizzle-orm';
+import { eq, gte, lte, and } from 'drizzle-orm';
 import type { DbType } from '../container.js';
 import type {
   ScheduleEvent,
@@ -9,7 +9,7 @@ import type {
 import { ScheduleEventError } from '../errors/schedule.event.error.js';
 import Logger from '../utils/logger.js';
 
-export class ScheduleService {
+export class ScheduleEventService {
   private readonly db: DbType;
 
   constructor(db: DbType) {
@@ -37,7 +37,7 @@ export class ScheduleService {
         .where(
           and(
             gte(scheduleEventsTable.date, startDate),
-            lt(scheduleEventsTable.date, endDate),
+            lte(scheduleEventsTable.date, endDate),
           ),
         )
         .all();

@@ -9,6 +9,7 @@ import { authRouter } from './routes/auth.route.js';
 import { rssParserRouter } from './routes/rss.parser.route.js';
 import { controlRouter } from './routes/control.route.js';
 import { uiConfigRouter } from './routes/ui.config.route.js';
+import { scheduleEventRouter } from './routes/scedule.event.route.js';
 
 const appRouter = t.router({
   user: userRouter,
@@ -18,6 +19,7 @@ const appRouter = t.router({
   auth: authRouter,
   control: controlRouter,
   uiConfig: uiConfigRouter,
+  scheduleEvent: scheduleEventRouter,
 });
 
 export type AppRouter = typeof appRouter;
