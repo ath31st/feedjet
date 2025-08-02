@@ -1,1 +1,1 @@
-export { WidgetRotaionInterval } from './ui/WidgetRotationInterval';
+export { WidgetRotationInterval } from './ui/WidgetRotationInterval';

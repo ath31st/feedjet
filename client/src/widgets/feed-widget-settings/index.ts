@@ -1,0 +1,1 @@
+export { FeedWidgetSettings } from './FeedWidgetSettings';

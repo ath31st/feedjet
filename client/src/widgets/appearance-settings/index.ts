@@ -1,0 +1,1 @@
+export { AppearanceSettingsWidget } from './AppearanceSettingsWidget';

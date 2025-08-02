@@ -2,7 +2,7 @@ import { useUpdateUiConfig } from '@/entities/ui-config';
 import { useConfig } from '@/entities/ui-config';
 import { useEffect, useState } from 'react';
 
-export function useRotaionInterval() {
+export function useRotationInterval() {
   const { data: config } = useConfig();
   const updateConfig = useUpdateUiConfig();
   const [intervalSec, setIntervalSec] = useState(0);

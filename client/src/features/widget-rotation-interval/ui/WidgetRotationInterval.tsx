@@ -1,15 +1,15 @@
-import { useRotaionInterval } from '../model/useRotationInterval';
+import { useRotationInterval } from '../model/useRotationInterval';
 
-interface WidgetRotaionIntervalProps {
+interface WidgetRotationIntervalProps {
   min?: number;
   max?: number;
 }
 
-export function WidgetRotaionInterval({
+export function WidgetRotationInterval({
   min = 10,
   max = 10000,
-}: WidgetRotaionIntervalProps) {
-  const { intervalSec, handleInterval } = useRotaionInterval();
+}: WidgetRotationIntervalProps) {
+  const { intervalSec, handleInterval } = useRotationInterval();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = parseInt(e.target.value, 10);
