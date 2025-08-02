@@ -1,42 +1,29 @@
+import * as ToggleGroup from '@radix-ui/react-toggle-group';
 import { widgetTypes } from '@shared/types/ui.config';
 import { useWidgetSelector } from '../model/useWidgetSelector';
-import { arraysEqual } from '@/shared/lib/isEqual';
 
 export function WidgetSelector() {
   const { rotatingWidgets, handleWidgetChange } = useWidgetSelector();
 
   return (
-    <select
-      multiple
-      className="h-20 w-32 overflow-hidden rounded-lg border border-[var(--border)] bg-transparent px-3 py-2 focus:outline-none focus:ring-1 focus:ring-[var(--border)]"
+    <ToggleGroup.Root
+      type="multiple"
+      className="flex w-32 flex-wrap items-start gap-1 rounded-lg border border-[var(--border)] p-2"
+      value={rotatingWidgets}
+      onValueChange={(next) => {
+        if (next.length === 0) return;
+        handleWidgetChange(next);
+      }}
     >
       {widgetTypes.map((t) => (
-        <option
+        <ToggleGroup.Item
           key={t}
           value={t}
-          selected={rotatingWidgets.includes(t)}
-          onMouseDown={(e) => {
-            e.preventDefault();
-            const isSelected = rotatingWidgets.includes(t);
-            const next = isSelected
-              ? rotatingWidgets.length > 1
-                ? rotatingWidgets.filter((v) => v !== t)
-                : rotatingWidgets
-              : [...rotatingWidgets, t];
-            if (!arraysEqual(next, rotatingWidgets)) {
-              handleWidgetChange(next);
-            }
-          }}
-          style={{
-            backgroundColor: rotatingWidgets.includes(t)
-              ? 'var(--border)'
-              : 'var(--card-bg)',
-            color: rotatingWidgets.includes(t) ? 'var(--text)' : 'inherit',
-          }}
+          className="cursor-pointer rounded-md px-2 py-1 text-sm hover:bg-[var(--button-hover-bg)] data-[state=on]:bg-[var(--button-bg)] "
         >
           {t}
-        </option>
+        </ToggleGroup.Item>
       ))}
-    </select>
+    </ToggleGroup.Root>
   );
 }
