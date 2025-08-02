@@ -5,8 +5,8 @@ export interface ScheduleEvent {
   endTime?: string | null;
   title: string;
   description?: string | null;
-  createdAt: Date;
-  updatedAt: Date;
+  // createdAt: Date;
+  // updatedAt: Date;
 }
 
 export type Schedule = ScheduleEvent[];
