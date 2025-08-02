@@ -6,7 +6,7 @@ import { CellCountSelector } from '@/features/cell-count-selector';
 import { WidgetSelector } from '@/features/widget-selector';
 import { WidgetRotaionInterval } from '@/features/widget-rotation-interval';
 import { PagesCountSelector } from '@/features/feed-pages-count-selector';
-import { FeedRotaionInterval } from '@/features/feed-rotation-interval';
+import { FeedRotationInterval } from '@/features/feed-rotation-interval';
 
 export function AdminPage() {
   return (
@@ -71,7 +71,7 @@ export function AdminPage() {
           <label htmlFor="rotation-interval" className="mb-2 block">
             Интервал движения карусели фидов (в секундах):
           </label>
-          <FeedRotaionInterval />
+          <FeedRotationInterval />
         </section>
         <section
           className="w-full rounded-xl p-6 md:w-1/2"

@@ -1,1 +1,1 @@
-export { FeedRotaionInterval } from './ui/FeedRotationInterval';
+export { FeedRotationInterval } from './ui/FeedRotationInterval';

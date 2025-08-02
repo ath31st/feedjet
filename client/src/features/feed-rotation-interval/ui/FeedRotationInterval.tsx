@@ -1,14 +1,14 @@
 import { useRotaionInterval } from '../model/useRotationInterval';
 
-interface FeedRotaionIntervalProps {
+interface FeedRotationIntervalProps {
   min?: number;
   max?: number;
 }
 
-export function FeedRotaionInterval({
+export function FeedRotationInterval({
   min = 10,
   max = 10000,
-}: FeedRotaionIntervalProps) {
+}: FeedRotationIntervalProps) {
   const { intervalSec, handleInterval } = useRotaionInterval();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
