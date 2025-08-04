@@ -1,34 +1,40 @@
-import { LoadingThreeDotsJumping } from '@/shared/ui/LoadingThreeDotsJumping';
+import * as Switch from '@radix-ui/react-switch';
+import { Cross2Icon } from '@radix-ui/react-icons';
 import { useRssManagement } from '../model/useRssManagement';
+import { LoadingThreeDotsJumping } from '@/shared/ui/LoadingThreeDotsJumping';
 
 export function FeedList() {
   const { feeds, feedsLoading, handleDeleteFeed, handleUpdateFeed } =
     useRssManagement();
 
   if (feedsLoading) return <LoadingThreeDotsJumping />;
-
   if (!feeds?.length) return <p>В базе данных нет RSS-лент</p>;
 
   return (
     <ul className="space-y-2">
       {feeds.map((item) => (
-        <li key={item.id} className="flex items-center justify-between">
+        <li
+          key={item.id}
+          className="flex items-center justify-between rounded-lg border border-[var(--border)] px-4 py-2"
+        >
           <span className="truncate">{item.url}</span>
-          <div className="flex items-center gap-4">
-            <input
-              type="checkbox"
+          <div className="flex items-center gap-2">
+            <Switch.Root
               checked={item.isActive}
-              onChange={() =>
-                handleUpdateFeed(item.id, undefined, !item.isActive)
+              onCheckedChange={(checked) =>
+                handleUpdateFeed(item.id, undefined, checked)
               }
-              className="h-5 w-5 cursor-pointer hover:opacity-50 disabled:opacity-50"
-            />
+              className="relative h-5 w-10 shrink-0 cursor-pointer rounded-full border border-[var(--border)] bg-[var(--button-bg)] transition-colors"
+            >
+              <Switch.Thumb className="block h-4 w-4 translate-x-[2px] rounded-full bg-[var(--text)] transition-transform data-[state=checked]:translate-x-[22px]" />
+            </Switch.Root>
+
             <button
               type="button"
               onClick={() => handleDeleteFeed(item.id)}
-              className="cursor-pointer text-red-500 hover:opacity-50 disabled:opacity-50"
+              className="bg-transparent p-1 hover:opacity-60"
             >
-              ❌
+              <Cross2Icon className="h-4 w-4" />
             </button>
           </div>
         </li>
