@@ -1,1 +1,1 @@
-export { CellCountSelector } from './ui/CellCountSelector';
+export { VisibleCellCountSelector } from './ui/VisibleCellCountSelector';

@@ -2,7 +2,7 @@ import { useFeedConfig, useUpdateFeedConfig } from '..';
 import { useEffect, useState } from 'react';
 
 export function useConfigNumberField<
-  Field extends 'cellsPerPage' | 'pagesCount',
+  Field extends 'visibleCellCount' | 'carouselSize',
 >(field: Field, min = 1) {
   const { data: config } = useFeedConfig();
   const update = useUpdateFeedConfig();

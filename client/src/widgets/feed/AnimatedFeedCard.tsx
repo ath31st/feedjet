@@ -6,13 +6,13 @@ import { FeedCardFrame } from './FeedCardFrame';
 interface AnimatedFeedCardProps {
   item: FeedItem;
   index: number;
-  cellsPerPage: number;
+  cellsCount: number;
 }
 
 export function AnimatedFeedCard({
   item,
   index,
-  cellsPerPage,
+  cellsCount,
 }: AnimatedFeedCardProps) {
   return (
     <motion.div
@@ -24,7 +24,7 @@ export function AnimatedFeedCard({
       layout
     >
       <FeedCardFrame key={item.link}>
-        <FeedCard item={item} cellsPerPage={cellsPerPage} />
+        <FeedCard item={item} cellsCount={cellsCount} />
       </FeedCardFrame>
     </motion.div>
   );

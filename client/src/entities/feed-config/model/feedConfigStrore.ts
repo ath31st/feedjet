@@ -14,8 +14,8 @@ interface FeedConfigState {
 }
 
 const DEFAULT_CONFIG: FeedConfig = {
-  cellsPerPage: 6,
-  pagesCount: 1,
+  visibleCellCount: 6,
+  carouselSize: 6,
   carouselIntervalMs: 30000,
   id: 0,
   createdAt: new Date(),

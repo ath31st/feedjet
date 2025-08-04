@@ -4,10 +4,10 @@ import noImageAvailableUrl from '@/shared/assets/images/no-image-available.jpg';
 
 interface FeedCardProps {
   item: FeedItem;
-  cellsPerPage: number;
+  cellsCount: number;
 }
 
-export function FeedCard({ item, cellsPerPage }: FeedCardProps) {
+export function FeedCard({ item, cellsCount }: FeedCardProps) {
   return (
     <a
       href={item.link}
@@ -23,22 +23,22 @@ export function FeedCard({ item, cellsPerPage }: FeedCardProps) {
 
       <div className="flex min-w-0 flex-grow flex-col gap-2 px-4">
         <div
-          className={`min-w-0 truncate text-${cellsPerPage > 6 ? 'xs' : 'sm'}`}
+          className={`min-w-0 truncate text-${cellsCount > 6 ? 'xs' : 'sm'}`}
           style={{ color: 'var(--category-text)' }}
         >
           {item.categories.join(', ')}
         </div>
-        <h2 className={`font-semibold text-${cellsPerPage > 6 ? 'xs' : 'sm'}`}>
+        <h2 className={`font-semibold text-${cellsCount > 6 ? 'xs' : 'sm'}`}>
           {item.title}
         </h2>
         <p
-          className={`${cellsPerPage > 4 ? 'line-clamp-5' : 'line-clamp-8'} text-${cellsPerPage > 6 ? 'xs' : 'sm'}`}
+          className={`${cellsCount > 4 ? 'line-clamp-5' : 'line-clamp-8'} text-${cellsCount > 6 ? 'xs' : 'sm'}`}
           style={{ color: 'var(--description-text)' }}
         >
           {item.description}
         </p>
         <div
-          className={`mt-auto text-${cellsPerPage > 6 ? 'xs' : 'sm'}`}
+          className={`mt-auto text-${cellsCount > 6 ? 'xs' : 'sm'}`}
           style={{ color: 'var(--meta-text)' }}
         >
           {item.author} · {new Date(item.pubDate).toLocaleString('ru-RU')}

@@ -1,8 +1,15 @@
-import { publicProcedure, rssParser, rssService, t } from '../../container.js';
+import {
+  feedConfigService,
+  publicProcedure,
+  rssParser,
+  rssService,
+  t,
+} from '../../container.js';
 
 export const rssParserRouter = t.router({
   parseLatestFeedIitems: publicProcedure.query(() => {
     const rssFeeds = rssService.getActive();
-    return rssParser.parseLatestFeedIitems(rssFeeds);
+    const limit = feedConfigService.getConfig()?.carouselSize;
+    return rssParser.parseLatestFeedIitems(rssFeeds, limit);
   }),
 });
