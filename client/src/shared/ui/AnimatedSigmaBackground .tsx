@@ -2,9 +2,9 @@ import sigmaUrl from '../assets/sigma_crimsonpro.webp';
 
 export function AnimatedSigmaBackground() {
   return (
-    <div className="pointer-events-none absolute inset-0 overflow-hidden">
+    <div className="pointer-events-none absolute inset-0 z-1 overflow-hidden">
       <div
-        className="absolute inset-0 z-0"
+        className="absolute inset-0"
         style={{
           backgroundImage: `url("${sigmaUrl}")`,
           backgroundRepeat: 'repeat',
@@ -16,7 +16,7 @@ export function AnimatedSigmaBackground() {
         }}
       />
       <div
-        className="absolute inset-0 z-0"
+        className="absolute inset-0"
         style={{
           backgroundImage: `url("${sigmaUrl}")`,
           backgroundRepeat: 'repeat',
@@ -29,7 +29,7 @@ export function AnimatedSigmaBackground() {
         }}
       />
       <div
-        className="absolute inset-0 z-0"
+        className="absolute inset-0"
         style={{
           backgroundImage: `url("${sigmaUrl}")`,
           backgroundRepeat: 'repeat',
