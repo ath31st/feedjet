@@ -1,23 +1,25 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 export function useCarousel<T>(
   items: T[] | undefined,
   visibleCount: number,
   intervalMs: number,
+  startIndex: number,
+  setStartIndex: (fn: (prev: number) => number) => void,
 ): T[] {
   const safeItems = Array.isArray(items) ? items : [];
-
-  const [startIndex, setStartIndex] = useState(0);
 
   useEffect(() => {
     if (safeItems.length <= visibleCount) return;
 
     const id = setInterval(() => {
-      setStartIndex((prev) => (prev + 1) % safeItems.length);
+      setStartIndex((prev: number) => {
+        return (prev + 1) % safeItems.length;
+      });
     }, intervalMs);
 
     return () => clearInterval(id);
-  }, [safeItems.length, visibleCount, intervalMs]);
+  }, [safeItems.length, visibleCount, intervalMs, setStartIndex]);
 
   if (safeItems.length === 0) return [];
 

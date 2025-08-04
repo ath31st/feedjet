@@ -1,5 +1,5 @@
 import { AnimatedFeedCard } from './AnimatedFeedCard';
-import { useRssFeedStore } from '@/entities/feed';
+import { useFeedCarouselStore, useRssFeedStore } from '@/entities/feed';
 import { useFeedConfigStore } from '@/entities/feed-config';
 import { isRotate90 } from '@/shared/lib/parseRotateParam';
 import { useCarousel } from '@/shared/lib/useCarousel';
@@ -13,7 +13,14 @@ export function FeedWidget({ rotate }: FeedCardProps) {
     (s) => s.feedConfig,
   );
   const feeds = useRssFeedStore((s) => s.feeds);
-  const visibleItems = useCarousel(feeds, visibleCellCount, carouselIntervalMs);
+  const { startIndex, setStartIndex } = useFeedCarouselStore();
+  const visibleItems = useCarousel(
+    feeds,
+    visibleCellCount,
+    carouselIntervalMs,
+    startIndex,
+    setStartIndex,
+  );
 
   return (
     <div
