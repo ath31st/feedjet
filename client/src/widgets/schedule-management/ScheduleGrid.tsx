@@ -1,26 +1,7 @@
-import {
-  format,
-  addDays,
-  startOfWeek,
-  parse,
-  addHours,
-  isWithinInterval,
-  subSeconds,
-} from 'date-fns';
+import { format, startOfWeek } from 'date-fns';
 import { ru } from 'date-fns/locale';
-import { useState } from 'react';
-import {
-  useCreateScheduleEvent,
-  useUpdateScheduleEvent,
-  useDeleteScheduleEvent,
-  useFindScheduleEventByDateRange,
-} from '@/entities/schedule';
+import { useScheduleGrid } from '@/entities/schedule';
 import { ManageScheduleSlotDialog } from '@/features/manage-schedule-slot';
-import type {
-  NewScheduleEvent,
-  ScheduleEvent,
-  UpdateScheduleEvent,
-} from '@shared/types/schedule.event';
 import React from 'react';
 
 interface ScheduleGridProps {
@@ -30,43 +11,16 @@ interface ScheduleGridProps {
 export function ScheduleGrid({
   weekStart = startOfWeek(new Date(), { weekStartsOn: 1 }),
 }: ScheduleGridProps) {
-  const days = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
-  const hours = Array.from(
-    { length: 12 },
-    (_, i) => `${String(8 + i).padStart(2, '0')}:00`,
-  );
-
-  const [selectedSlot, setSelectedSlot] = useState<{
-    date: string;
-    startTime: string;
-  } | null>(null);
-
-  const { data: allEvents = [] } = useFindScheduleEventByDateRange(
-    format(weekStart, 'yyyy-MM-dd'),
-    format(addDays(weekStart, 7), 'yyyy-MM-dd'),
-  );
-
-  const createMutation = useCreateScheduleEvent();
-  const updateMutation = useUpdateScheduleEvent();
-  const deleteMutation = useDeleteScheduleEvent();
-
-  const handleCreate = (data: NewScheduleEvent) => createMutation.mutate(data);
-  const handleUpdate = (id: number, data: UpdateScheduleEvent) =>
-    updateMutation.mutate({ id, data });
-  const handleDelete = (id: number) => deleteMutation.mutate({ id });
-
-  const TIME_FORMAT = 'HH:mm';
-
-  const getEventsForSlot = (date: string, time: string): ScheduleEvent[] => {
-    const slotStart = parse(time, TIME_FORMAT, new Date());
-    const slotEnd = subSeconds(addHours(slotStart, 1), 1);
-
-    return allEvents.filter((e) => {
-      if (e.date !== date) return false;
-      const eventTime = parse(e.startTime, TIME_FORMAT, new Date());
-      return isWithinInterval(eventTime, { start: slotStart, end: slotEnd });
-    });
-  };
+  const {
+    days,
+    hours,
+    selectedSlot,
+    setSelectedSlot,
+    getEventsForSlot,
+    handleCreate,
+    handleUpdate,
+    handleDelete,
+  } = useScheduleGrid(weekStart);
 
   return (
     <div className="w-full overflow-auto rounded-lg border border-[var(--border)]">
