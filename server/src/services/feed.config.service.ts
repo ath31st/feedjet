@@ -30,18 +30,4 @@ export class FeedConfigService {
       .where(eq(feedConfigTable.id, this.configId))
       .get();
   }
-
-  getPagesConfig():
-    | {
-        pagesCount: number;
-        cellsPerPage: number;
-      }
-    | undefined {
-    const config = this.getConfig();
-    if (!config) return;
-    return {
-      pagesCount: config.pagesCount,
-      cellsPerPage: config.cellsPerPage,
-    };
-  }
 }

@@ -6,8 +6,8 @@ export const feedConfigParamsSchema = z.object({
 
 export const feedConfigUpdateSchema = z
   .object({
-    cellsPerPage: z.number().int().min(1).max(10).optional(),
-    pagesCount: z.number().int().min(1).max(10).optional(),
+    visibleCellCount: z.number().int().min(1).max(10).optional(),
+    carouselSize: z.number().int().min(1).max(60).optional(),
     carouselIntervalMs: z.number().int().min(10_000).max(3_600_000).optional(),
   })
   .refine((data) => Object.keys(data).length > 0, {
@@ -16,8 +16,8 @@ export const feedConfigUpdateSchema = z
 
 export const feedConfigResponseSchema = z.object({
   id: z.number(),
-  cellsPerPage: z.number().int(),
-  pagesCount: z.number().int(),
+  visibleCellCount: z.number().int(),
+  carouselSize: z.number().int(),
   carouselIntervalMs: z.number().int(),
   createdAt: z.date(),
   updatedAt: z.date(),

@@ -14,8 +14,8 @@ export function ensureFeedConfig(db: DbType) {
     db.insert(feedConfigTable)
       .values({
         id: 1,
-        cellsPerPage: 6,
-        pagesCount: 1,
+        visibleCellCount: 6,
+        carouselSize: 6,
         carouselIntervalMs: 30000,
       })
       .run();

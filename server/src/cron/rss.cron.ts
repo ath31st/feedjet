@@ -25,15 +25,17 @@ export const startRssCronJob = () => {
       return;
     }
 
-    const config = feedConfigService.getPagesConfig();
+    const config = feedConfigService.getConfig();
     if (!config) {
       Logger.warn('Feed config not found, skipping RSS fetch.');
       return;
     }
-    const { cellsPerPage, pagesCount } = config;
-    const limit = cellsPerPage * pagesCount;
+    const { carouselSize } = config;
 
-    const latestItems = await rssParser.parseLatestFeedIitems(rssFeeds, limit);
+    const latestItems = await rssParser.parseLatestFeedIitems(
+      rssFeeds,
+      carouselSize,
+    );
 
     if (latestItems.length === 0) {
       Logger.log('No feed items fetched.');

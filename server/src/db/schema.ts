@@ -28,8 +28,8 @@ export const rssFeedsTable = sqliteTable('rss_feeds', {
 
 export const feedConfigTable = sqliteTable('feed_config', {
   id: integer('id').primaryKey().default(1),
-  cellsPerPage: integer('cells_per_page').notNull().default(6),
-  pagesCount: integer('pages_count').notNull().default(1),
+  visibleCellCount: integer('visible_cell_count').notNull().default(6),
+  carouselSize: integer('carousel_size').notNull().default(6),
   carouselIntervalMs: integer('carousel_interval_ms').notNull().default(30000),
   createdAt: integer('created_at', { mode: 'timestamp' })
     .notNull()
