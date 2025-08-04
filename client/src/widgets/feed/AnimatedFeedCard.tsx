@@ -17,10 +17,9 @@ export function AnimatedFeedCard({
   return (
     <motion.div
       className="h-full min-h-0"
-      key={item.link}
-      initial={{ opacity: 0, x: -150 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -50 }}
+      initial={{ opacity: 0, y: -150 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 50 }}
       transition={{ duration: 0.7, delay: index * 0.1 }}
       layout
     >

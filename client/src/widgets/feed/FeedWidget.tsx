@@ -9,17 +9,11 @@ interface FeedCardProps {
 }
 
 export function FeedWidget({ rotate }: FeedCardProps) {
-  const { cellsPerPage, pagesCount, carouselIntervalMs } = useFeedConfigStore(
+  const { cellsPerPage, carouselIntervalMs } = useFeedConfigStore(
     (s) => s.feedConfig,
   );
   const feeds = useRssFeedStore((s) => s.feeds);
-
-  const visibleItems = useCarousel(
-    feeds,
-    cellsPerPage,
-    pagesCount,
-    carouselIntervalMs,
-  );
+  const visibleItems = useCarousel(feeds, cellsPerPage, carouselIntervalMs);
 
   return (
     <div
@@ -31,8 +25,8 @@ export function FeedWidget({ rotate }: FeedCardProps) {
         <AnimatedFeedCard
           key={item.link}
           item={item}
-          cellsPerPage={cellsPerPage}
           index={index}
+          cellsPerPage={cellsPerPage}
         />
       ))}
     </div>

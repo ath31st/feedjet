@@ -1,26 +1,31 @@
 import { useEffect, useState } from 'react';
 
 export function useCarousel<T>(
-  items: T[],
-  pageSize: number,
-  pagesCount: number,
+  items: T[] | undefined,
+  visibleCount: number,
   intervalMs: number,
-) {
-  const [page, setPage] = useState(0);
+): T[] {
+  const safeItems = Array.isArray(items) ? items : [];
 
-  const maxPages = Math.min(Math.ceil(items.length / pageSize), pagesCount);
+  const [startIndex, setStartIndex] = useState(0);
 
   useEffect(() => {
-    if (maxPages < 2) return;
+    if (safeItems.length <= visibleCount) return;
 
     const id = setInterval(() => {
-      setPage((p) => (p + 1) % maxPages);
+      setStartIndex((prev) => (prev + 1) % safeItems.length);
     }, intervalMs);
 
     return () => clearInterval(id);
-  }, [maxPages, intervalMs]);
+  }, [safeItems.length, visibleCount, intervalMs]);
 
-  const start = page * pageSize;
-  const end = start + pageSize;
-  return items.slice(start, end);
+  if (safeItems.length === 0) return [];
+
+  const result: T[] = [];
+
+  for (let i = 0; i < visibleCount; i++) {
+    result.unshift(safeItems[(startIndex + i) % safeItems.length]);
+  }
+
+  return result;
 }
