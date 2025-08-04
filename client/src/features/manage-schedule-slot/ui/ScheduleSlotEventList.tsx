@@ -1,4 +1,4 @@
-import type { ScheduleEvent } from '@shared/types/schedule.event';
+import type { ScheduleEvent } from '@/entities/schedule';
 import { Pencil1Icon, TrashIcon } from '@radix-ui/react-icons';
 
 interface ScheduleSlotEventListProps {

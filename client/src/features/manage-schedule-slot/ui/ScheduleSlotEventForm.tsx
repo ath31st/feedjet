@@ -1,9 +1,6 @@
 import { CommonButton } from '@/shared/ui/common/CommonButton';
-import type {
-  NewScheduleEvent,
-  ScheduleEvent,
-} from '@shared/types/schedule.event';
-import { useState } from 'react';
+import type { NewScheduleEvent, ScheduleEvent } from '@/entities/schedule';
+import { useScheduleSlotEventForm } from '../model/useScheduleSlotEventForm';
 
 interface ScheduleSlotEventFormProps {
   initialData?: Partial<ScheduleEvent>;
@@ -20,25 +17,16 @@ export function ScheduleSlotEventForm({
   onSubmit,
   onCancel,
 }: ScheduleSlotEventFormProps) {
-  const [title, setTitle] = useState(initialData?.title ?? '');
-  const [description, setDescription] = useState(
-    initialData?.description ?? '',
-  );
-  const [startTime, setStartTime] = useState(initialData?.startTime ?? time);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!title.trim()) return;
-
-    onSubmit({
-      title: title.trim(),
-      description: description.trim() || undefined,
-      date,
-      startTime,
-    });
-  };
-
-  const slotHour = time.split(':')[0];
+  const {
+    title,
+    setTitle,
+    description,
+    setDescription,
+    startTime,
+    setStartTime,
+    handleSubmit,
+    slotHour,
+  } = useScheduleSlotEventForm({ initialData, date, time, onSubmit });
 
   return (
     <form onSubmit={handleSubmit} className="space-y-3">

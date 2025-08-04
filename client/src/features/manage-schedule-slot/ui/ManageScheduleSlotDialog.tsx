@@ -1,14 +1,11 @@
 import * as Dialog from '@radix-ui/react-dialog';
-import { useState } from 'react';
-import type {
-  ScheduleEvent,
-  NewScheduleEvent,
-} from '@shared/types/schedule.event';
+import type { ScheduleEvent, NewScheduleEvent } from '@/entities/schedule';
 import { ScheduleSlotEventForm } from './ScheduleSlotEventForm';
 import { ScheduleSlotEventList } from './ScheduleSlotEventList';
 import { CommonButton } from '@/shared/ui/common/CommonButton';
 import { format, parseISO } from 'date-fns';
 import { ru } from 'date-fns/locale';
+import { useManageScheduleSlotDialog } from '../model/useManageScheduleSlotDialog';
 
 interface ManageScheduleSlotDialogProps {
   date: string;
@@ -31,29 +28,14 @@ export function ManageScheduleSlotDialog({
   onUpdate,
   onDelete,
 }: ManageScheduleSlotDialogProps) {
-  const [mode, setMode] = useState<'view' | 'create' | 'edit'>('view');
-  const [editing, setEditing] = useState<ScheduleEvent | null>(null);
-
-  const handleEdit = (event: ScheduleEvent) => {
-    setEditing(event);
-    setMode('edit');
-  };
-
-  const handleFormSubmit = (data: NewScheduleEvent) => {
-    if (mode === 'edit' && editing) {
-      onUpdate(editing.id, data);
-    } else {
-      console.log(data);
-      onCreate(data);
-    }
-    setMode('view');
-    setEditing(null);
-  };
-
-  const handleCancel = () => {
-    setMode('view');
-    setEditing(null);
-  };
+  const {
+    mode,
+    editing,
+    setCreateMode,
+    handleEdit,
+    handleFormSubmit,
+    handleCancel,
+  } = useManageScheduleSlotDialog({ onCreate, onUpdate });
 
   return (
     <Dialog.Root open={open} onOpenChange={onClose}>
@@ -75,7 +57,7 @@ export function ManageScheduleSlotDialog({
                 <CommonButton
                   type="button"
                   text="+ Создать событие"
-                  onClick={() => setMode('create')}
+                  onClick={setCreateMode}
                   disabled={false}
                 />
               </div>
