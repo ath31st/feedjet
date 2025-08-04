@@ -23,7 +23,7 @@ export function FeedWidget({ rotate }: FeedCardProps) {
 
   return (
     <div
-      className={`grid h-full w-full grid-cols-1 gap-4 ${
+      className={`grid h-full w-full grid-flow-row auto-rows-fr grid-cols-1 gap-4 ${
         isRotate90(rotate) ? '' : 'xl:grid-cols-2'
       }`}
     >
