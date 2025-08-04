@@ -9,41 +9,33 @@ interface FeedCardProps {
 
 export function FeedCard({ item, cellsCount }: FeedCardProps) {
   return (
-    <a
-      href={item.link}
-      target="_blank"
-      className="flex h-full overflow-hidden rounded-xl transition"
-      style={{
-        backgroundColor: 'var(--card-bg)',
-      }}
-    >
-      <div className="z-1 w-[30%] flex-shrink-0 overflow-hidden rounded-xl">
-        <LazyImage src={item.image || noImageAvailableUrl} alt={''} />
-      </div>
+    <div className="flex h-full rounded-xl bg-[var(--card-bg)] p-2 shadow-2xl">
+      <div className="flex overflow-hidden">
+        <div className="z-1 w-[30%] flex-shrink-0 overflow-hidden rounded-xl">
+          <LazyImage src={item.image || noImageAvailableUrl} alt={''} />
+        </div>
 
-      <div className="flex min-w-0 flex-grow flex-col gap-2 px-4">
-        <div
-          className={`min-w-0 truncate text-${cellsCount > 6 ? 'xs' : 'sm'}`}
-          style={{ color: 'var(--category-text)' }}
-        >
-          {item.categories.join(', ')}
-        </div>
-        <h2 className={`font-semibold text-${cellsCount > 6 ? 'xs' : 'sm'}`}>
-          {item.title}
-        </h2>
-        <p
-          className={`${cellsCount > 4 ? 'line-clamp-5' : 'line-clamp-8'} text-${cellsCount > 6 ? 'xs' : 'sm'}`}
-          style={{ color: 'var(--description-text)' }}
-        >
-          {item.description}
-        </p>
-        <div
-          className={`mt-auto text-${cellsCount > 6 ? 'xs' : 'sm'}`}
-          style={{ color: 'var(--meta-text)' }}
-        >
-          {item.author} · {new Date(item.pubDate).toLocaleString('ru-RU')}
+        <div className="flex h-full min-w-0 flex-col gap-2 px-4">
+          <div className="overflow-hidden text-ellipsis whitespace-nowrap text-[var(--category-text)] text-xs">
+            {item.categories.join(', ')}
+          </div>
+          <div className="flex min-h-0 flex-1 flex-col gap-1">
+            <div className="overflow-hidden font-semibold text-xs">
+              {item.title}
+            </div>
+
+            <div className="relative flex-1 overflow-hidden">
+              <p className="text-[var(--description-text)] text-xs">
+                {item.description}
+              </p>
+              <div className="pointer-events-none absolute bottom-0 left-0 h-6 w-full bg-gradient-to-t from-[var(--card-bg)] to-transparent" />
+            </div>
+          </div>
+          <div className="overflow-hidden text-ellipsis whitespace-nowrap text-[var(--meta-text)] text-xs">
+            {item.author} · {new Date(item.pubDate).toLocaleString('ru-RU')}
+          </div>
         </div>
       </div>
-    </a>
+    </div>
   );
 }

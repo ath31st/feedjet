@@ -1,7 +1,6 @@
 import { motion } from 'framer-motion';
 import { FeedCard } from './FeedCard';
 import type { FeedItem } from '@/entities/feed';
-import { FeedCardFrame } from './FeedCardFrame';
 
 interface AnimatedFeedCardProps {
   item: FeedItem;
@@ -23,9 +22,7 @@ export function AnimatedFeedCard({
       transition={{ duration: 0.7, delay: index * 0.1 }}
       layout
     >
-      <FeedCardFrame key={item.link}>
-        <FeedCard item={item} cellsCount={cellsCount} />
-      </FeedCardFrame>
+      <FeedCard item={item} cellsCount={cellsCount} />
     </motion.div>
   );
 }
