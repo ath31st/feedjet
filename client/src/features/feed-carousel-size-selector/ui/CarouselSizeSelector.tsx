@@ -1,15 +1,15 @@
-import { useConfigNumberField } from '@/entities/feed-config/lib/useConfigNumberField';
+import { useFeedConfigFields } from '@/entities/feed-config';
 import { NumberSliderSelector } from '@/shared/ui/NumberSliderSelector';
 
 export function CarouselSizeSelector() {
-  const { value, set } = useConfigNumberField('carouselSize');
+  const { carouselSize, setCarouselSize } = useFeedConfigFields();
   return (
     <NumberSliderSelector
       max={60}
       min={1}
       label="Размер карусели"
-      value={value}
-      setValue={set}
+      value={carouselSize}
+      setValue={setCarouselSize}
     />
   );
 }

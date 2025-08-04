@@ -1,13 +1,15 @@
 import { NumberSliderSelector } from '@/shared/ui/NumberSliderSelector';
-import { useConfigNumberField } from '@/entities/feed-config';
+import { useFeedConfigFields } from '@/entities/feed-config';
 
 export function VisibleCellCountSelector() {
-  const { value, set } = useConfigNumberField('visibleCellCount');
+  const { visibleCellCount, setVisibleCellCount } = useFeedConfigFields();
   return (
     <NumberSliderSelector
+      max={10}
+      min={1}
       label="Ячеек на странице"
-      value={value}
-      setValue={set}
+      value={visibleCellCount}
+      setValue={setVisibleCellCount}
     />
   );
 }
