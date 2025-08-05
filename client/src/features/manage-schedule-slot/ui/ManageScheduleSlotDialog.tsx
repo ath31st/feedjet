@@ -6,6 +6,7 @@ import { CommonButton } from '@/shared/ui/common/CommonButton';
 import { format, parseISO } from 'date-fns';
 import { ru } from 'date-fns/locale';
 import { useManageScheduleSlotDialog } from '../model/useManageScheduleSlotDialog';
+import { PlusIcon } from '@radix-ui/react-icons';
 
 interface ManageScheduleSlotDialogProps {
   date: string;
@@ -56,10 +57,11 @@ export function ManageScheduleSlotDialog({
               <div className="mt-4 flex justify-end">
                 <CommonButton
                   type="button"
-                  text="+ Создать событие"
                   onClick={setCreateMode}
                   disabled={false}
-                />
+                >
+                  <PlusIcon />
+                </CommonButton>
               </div>
             </>
           )}

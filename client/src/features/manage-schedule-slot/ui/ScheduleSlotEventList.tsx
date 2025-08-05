@@ -1,5 +1,5 @@
 import type { ScheduleEvent } from '@/entities/schedule';
-import { Pencil1Icon, TrashIcon } from '@radix-ui/react-icons';
+import { Cross1Icon, Pencil1Icon } from '@radix-ui/react-icons';
 
 interface ScheduleSlotEventListProps {
   events: ScheduleEvent[];
@@ -54,7 +54,7 @@ export function ScheduleSlotEventList({
                 onClick={() => onDelete(event.id)}
                 aria-label="Удалить событие"
               >
-                <TrashIcon className="h-4 w-4" />
+                <Cross1Icon className="h-4 w-4" />
               </button>
             )}
           </div>

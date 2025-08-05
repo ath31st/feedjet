@@ -1,6 +1,7 @@
 import { CommonButton } from '@/shared/ui/common/CommonButton';
 import type { NewScheduleEvent, ScheduleEvent } from '@/entities/schedule';
 import { useScheduleSlotEventForm } from '../model/useScheduleSlotEventForm';
+import { CheckIcon, ResetIcon } from '@radix-ui/react-icons';
 
 interface ScheduleSlotEventFormProps {
   initialData?: Partial<ScheduleEvent>;
@@ -85,21 +86,19 @@ export function ScheduleSlotEventForm({
 
       <div className="flex justify-end gap-2">
         {onCancel && (
-          <CommonButton
-            type="button"
-            text="Отмена"
-            onClick={onCancel}
-            disabled={false}
-          />
+          <CommonButton type="button" onClick={onCancel} disabled={false}>
+            <ResetIcon />
+          </CommonButton>
         )}
         <CommonButton
           type="submit"
-          text="Сохранить"
           onClick={() => {
             handleSubmit;
           }}
           disabled={!title.trim()}
-        />
+        >
+          <CheckIcon />
+        </CommonButton>
       </div>
     </form>
   );
