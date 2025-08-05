@@ -28,10 +28,10 @@ export function NumberSliderSelector({
         step={1}
         onValueChange={([val]) => setValue(val)}
       >
-        <Slider.Track className="relative h-1 w-full grow rounded-full bg-[var(--border)]">
+        <Slider.Track className="relative h-1 w-full grow cursor-pointer rounded-full bg-[var(--border)]">
           <Slider.Range className="absolute h-full rounded-full bg-[var(--text)]" />
         </Slider.Track>
-        <Slider.Thumb className="block h-4 w-4 rounded-full bg-[var(--text)] focus:outline-none" />
+        <Slider.Thumb className="block h-4 w-4 cursor-pointer rounded-full bg-[var(--text)] focus:outline-none" />
       </Slider.Root>
     </div>
   );

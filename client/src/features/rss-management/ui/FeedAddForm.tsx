@@ -15,7 +15,7 @@ export function FeedAddForm() {
         className="flex-grow rounded-lg border border-[var(--border)] bg-transparent px-3 py-2 focus:outline-none focus:ring-1 focus:ring-[var(--border)]"
       />
       <CommonButton type="button" onClick={handleAddFeed}>
-        <PlusIcon className="h-5 w-5" />
+        <PlusIcon className="" />
       </CommonButton>
     </div>
   );

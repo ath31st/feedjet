@@ -1,3 +1,6 @@
+import { MinusIcon, PlusIcon } from '@radix-ui/react-icons';
+import { CommonButton } from './common/CommonButton';
+
 export interface RotationIntervalProps {
   label: string;
   inputId: string;
@@ -23,13 +26,9 @@ export function RotationInterval({
         {label}
       </label>
       <div className="flex items-center gap-2">
-        <button
-          type="button"
-          onClick={() => update(value - step)}
-          className="h-10 w-8 rounded-lg border border-[var(--border)] px-2 py-1 hover:bg-[var(--button-hover-bg)]"
-        >
-          -
-        </button>
+        <CommonButton type="button" onClick={() => update(value - step)}>
+          <MinusIcon className="" />
+        </CommonButton>
         <input
           id={inputId}
           type="number"
@@ -40,15 +39,11 @@ export function RotationInterval({
           }}
           min={min}
           max={max}
-          className="rounded-lg border border-[var(--border)] bg-transparent px-3 py-2 focus:outline-none focus:ring-1 focus:ring-[var(--border)]"
+          className="rounded-lg border border-[var(--border)] bg-transparent px-3 py-1 focus:outline-none focus:ring-1 focus:ring-[var(--border)]"
         />
-        <button
-          type="button"
-          onClick={() => update(value + step)}
-          className="h-10 w-8 rounded-lg border border-[var(--border)] px-2 py-1 hover:bg-[var(--button-hover-bg)]"
-        >
-          +
-        </button>
+        <CommonButton type="button" onClick={() => update(value + step)}>
+          <PlusIcon />
+        </CommonButton>
         <span className="text-[var(--text-secondary)] text-sm">секунд</span>
       </div>
     </div>
