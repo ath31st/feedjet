@@ -3,9 +3,8 @@ import { hours } from '@/shared/constant/hours';
 import { formatDateToMap } from '@/shared/lib/formatDateToMap';
 import { getDaysOfWeekByDate } from '@/shared/lib/getDaysOfWeekByDate';
 import { getOnlyDateStr } from '@/shared/lib/getOnlyDateStr';
-import { getPositionPercentByDate } from '@/shared/lib/getPositionPercentByDate';
 import { PlayIcon } from '@radix-ui/react-icons';
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export function ScheduleWidget() {
   const todayDate = new Date();
@@ -18,12 +17,15 @@ export function ScheduleWidget() {
   const formatedDaysOfWeek = daysOfWeek.map((day) => formatDateToMap(day));
   const todayIndex = daysOfWeek.findIndex((d) => d.getDate() === now.getDate());
 
-  const positionPercent = getPositionPercentByDate(now, hours.length);
+  const nowHours = now.getHours();
+  const nowMinutes = now.getMinutes();
+  const positionPercent =
+    (((nowHours - 8) * 60 + nowMinutes) / ((20 - 8) * 60)) * 100;
 
   useEffect(() => {
     const intervalId = setInterval(() => {
       setNow(new Date());
-    }, 60_000);
+    }, 60000);
 
     return () => clearInterval(intervalId);
   }, []);

@@ -14,13 +14,11 @@ import {
   isWithinInterval,
 } from 'date-fns';
 import type { NewScheduleEvent, UpdateScheduleEvent } from '..';
+import { hours } from '@/shared/constant/hours';
+import { getDaysOfWeekByDate } from '@/shared/lib/getDaysOfWeekByDate';
 
 export function useScheduleGrid(weekStart: Date) {
-  const days = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
-  const hours = Array.from(
-    { length: 12 },
-    (_, i) => `${String(8 + i).padStart(2, '0')}:00`,
-  );
+  const days = getDaysOfWeekByDate(weekStart);
 
   const [selectedSlot, setSelectedSlot] = useState<{
     date: string;
