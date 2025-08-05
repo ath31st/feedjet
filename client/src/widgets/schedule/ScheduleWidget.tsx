@@ -1,21 +1,119 @@
 import { useFindScheduleEventsByDate } from '@/entities/schedule';
+import { formatDateToMap } from '@/shared/lib/formatDateToMap';
+import { getCurrentDaysOfWeekWithDate } from '@/shared/lib/getCurrentDaysOfWeekWithDate';
 import { getTodayDate } from '@/shared/lib/getTodayDate';
+import { PlayIcon } from '@radix-ui/react-icons';
+import { useEffect, useState } from 'react';
 
 export function ScheduleWidget() {
-  const getTodaySchedule = useFindScheduleEventsByDate(getTodayDate());
-  console.log(getTodaySchedule.data);
+  const [now, setNow] = useState(new Date());
+  const { data, isLoading, isError, error } = useFindScheduleEventsByDate(
+    getTodayDate(),
+  );
+
+  const todayDate = getTodayDate();
+  const daysOfWeek = getCurrentDaysOfWeekWithDate();
+  const formatedDaysOfWeek = daysOfWeek.map((day) => formatDateToMap(day));
+  const todayIndex = daysOfWeek.findIndex(
+    (d) => d.toISOString().split('T')[0] === todayDate,
+  );
+
+  const hours = Array.from({ length: 13 }, (_, i) => 8 + i);
+
+  const nowHours = now.getHours();
+  const nowMinutes = now.getMinutes();
+  const positionPercent =
+    (((nowHours - 8) * 60 + nowMinutes) / ((20 - 8) * 60)) * 100;
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setNow(new Date());
+    }, 60_000);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="flex h-screen items-center justify-center font-medium text-xl">
+        Загрузка расписания...
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="flex h-screen items-center justify-center font-medium text-red-600">
+        Ошибка загрузки расписания:{' '}
+        {error instanceof Error ? error.message : 'Unknown error'}
+      </div>
+    );
+  }
 
   return (
-    <div
-      className="flex h-full w-full flex-col items-center justify-center gap-10 rounded-xl 4k:border-12 border-4 border-dashed p-4 text-center font-medium text-4xl"
-      style={{
-        borderColor: 'var(--border)',
-        color: 'var(--text)',
-        backgroundColor: 'var(--card-bg)',
-      }}
-    >
-      <p>🚧 Ведутся работы 🚧</p>
-      <p>Расписание</p>
+    <div className="h-screen w-full" style={{ color: 'var(--text)' }}>
+      <h1 className="h-1/7 py-6 text-center font-semibold text-3xl">
+        Расписание
+      </h1>
+      <div
+        className="mx-auto flex h-[calc(100%-4.5rem)] w-full max-w-6xl border-t-2"
+        style={{ borderColor: 'var(--border)' }}
+      >
+        <div className="flex w-1/4 flex-col gap-10 p-4">
+          {formatedDaysOfWeek.map((d, idx) => {
+            const isToday = idx === todayIndex;
+            return (
+              <div
+                key={d.weekDay}
+                className="rounded-lg p-4 text-center"
+                style={{
+                  border: isToday
+                    ? '2px solid var(--border)'
+                    : '2px solid transparent',
+                  backgroundColor: isToday ? 'var(--card-bg)' : 'transparent',
+                }}
+              >
+                <div className="font-semibold text-xl">{d.dayMonth}</div>
+                <div className="text-lg" style={{ color: 'var(--meta-text)' }}>
+                  {d.weekDay}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="h-full w-px border-1 border-[var(--border)]" />
+
+        <div className="w-1/4 p-6">
+          <div className="flex flex-col gap-16">
+            <div className="relative h-full">
+              <div
+                className="-translate-y-1/2 -left-6 absolute"
+                style={{
+                  top: `${positionPercent}%`,
+                }}
+              >
+                <PlayIcon
+                  className="h-8 w-8"
+                  style={{ color: 'var(--text)' }}
+                />
+              </div>
+
+              <div className="flex flex-col gap-16">
+                {hours.map((hour) => (
+                  <div
+                    key={hour}
+                    className="text-xl"
+                    style={{ color: 'var(--meta-text)' }}
+                  >
+                    {hour.toString().padStart(2, '0')}:00
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

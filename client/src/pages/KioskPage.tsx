@@ -8,9 +8,10 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useSearchParams } from 'react-router-dom';
 import { Rotator } from '@/widgets/feed/Rotator';
 import { parseRotateParam } from '@/shared/lib/parseRotateParam';
+import { LoadingThreeDotsJumping } from '@/shared/ui/LoadingThreeDotsJumping';
 
 export function KioskPage() {
-  const { uiConfig } = useUiConfigStore();
+  const { uiConfig, loading } = useUiConfigStore();
   const widgets = uiConfig?.rotatingWidgets ?? [];
   const interval = uiConfig?.autoSwitchIntervalMs ?? 0;
   const [index, setIndex] = useState(0);
@@ -39,6 +40,14 @@ export function KioskPage() {
       setIndex(0);
     }
   }, [widgets, index]);
+
+  if (loading) {
+    return (
+      <div className="flex h-screen w-screen items-center justify-center">
+        <LoadingThreeDotsJumping />
+      </div>
+    );
+  }
 
   const currentWidget = widgetMap[widgets[index]] ?? null;
 
