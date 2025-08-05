@@ -3,7 +3,7 @@ import { hours } from '@/shared/constant/hours';
 import { formatDateToMap } from '@/shared/lib/formatDateToMap';
 import { getDaysOfWeekByDate } from '@/shared/lib/getDaysOfWeekByDate';
 import { getOnlyDateStr } from '@/shared/lib/getOnlyDateStr';
-import { getPositionPercentByDate } from '@/shared/lib/getPositionPercentByDate';
+import { getPositionPercentByDateTime } from '@/shared/lib/getPositionPercentByDateTime';
 import { PlayIcon } from '@radix-ui/react-icons';
 import { useEffect, useState } from 'react';
 
@@ -21,7 +21,7 @@ export function ScheduleWidget() {
   const formatedDaysOfWeek = daysOfWeek.map((day) => formatDateToMap(day));
   const todayIndex = daysOfWeek.findIndex((d) => d.getDate() === now.getDate());
 
-  const positionPercent = getPositionPercentByDate(
+  const positionPercent = getPositionPercentByDateTime(
     now,
     parseInt(hours[0]),
     hours.length,
@@ -50,14 +50,6 @@ export function ScheduleWidget() {
       </div>
     );
   }
-
-  const getEventPosition = (time: string) => {
-    const [h, m] = time.split(':').map(Number);
-    const totalHours = h + m / 60;
-    const startHour = parseInt(hours[0]);
-    const percent = ((totalHours - startHour) / (hours.length - 1)) * 100;
-    return percent;
-  };
 
   return (
     <div className="flex h-screen w-full flex-col">
@@ -96,9 +88,9 @@ export function ScheduleWidget() {
         <div className="w-3/4 p-10">
           <div className="relative h-full">
             <div
-              className="-translate-y-1/2 -left-10 absolute z-20"
+              className="-left-10 absolute z-20"
               style={{
-                top: `${positionPercent}%`,
+                top: `${Math.min(100, Math.max(0, positionPercent))}%`,
               }}
             >
               <PlayIcon
@@ -107,11 +99,11 @@ export function ScheduleWidget() {
               />
             </div>
 
-            <div className="flex h-full flex-col justify-between">
+            <div className="flex h-full flex-col">
               {hours.map((hour) => (
                 <div
                   key={hour}
-                  className="text-2xl"
+                  className="items-top flex flex-1 text-2xl"
                   style={{ color: 'var(--meta-text)' }}
                 >
                   {hour}
@@ -124,7 +116,7 @@ export function ScheduleWidget() {
                 key={event.id}
                 className="absolute right-0 left-20 rounded-lg px-3 py-1 font-medium text-lg"
                 style={{
-                  top: `${getEventPosition(event.startTime)}%`,
+                  top: `${getPositionPercentByDateTime(event.startTime, parseInt(hours[0]), hours.length)}%`,
                   backgroundColor: 'var(--card-bg)',
                   border: '1px solid var(--border)',
                 }}
