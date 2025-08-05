@@ -24,9 +24,9 @@ export function FeedList() {
               onCheckedChange={(checked) =>
                 handleUpdateFeed(item.id, undefined, checked)
               }
-              className="relative h-5 w-10 shrink-0 cursor-pointer rounded-full border border-[var(--border)] bg-[var(--button-bg)] transition-colors"
+              className="relative h-5 w-10 shrink-0 cursor-pointer rounded-full border border-[var(--border)] transition-colors data-[state=checked]:bg-[var(--button-bg)]"
             >
-              <Switch.Thumb className="block h-4 w-4 translate-x-[2px] rounded-full bg-[var(--text)] transition-transform data-[state=checked]:translate-x-[22px]" />
+              <Switch.Thumb className="block h-4 w-4 translate-x-[1px] rounded-full bg-[var(--text)] transition-transform data-[state=checked]:translate-x-[21px]" />
             </Switch.Root>
 
             <button
