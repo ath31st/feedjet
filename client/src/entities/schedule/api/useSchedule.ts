@@ -18,7 +18,7 @@ export const useFindScheduleEventByDateRange = (
   );
 };
 
-export const useFindScheduleEventByDate = (date: string) => {
+export const useFindScheduleEventsByDate = (date: string) => {
   return useQuery(
     trpcWithProxy.scheduleEvent.findByDate.queryOptions({ date }),
   );
