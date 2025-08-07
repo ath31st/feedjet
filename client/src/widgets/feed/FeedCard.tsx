@@ -1,8 +1,9 @@
 import type { FeedItem } from '@/entities/feed';
-import { LazyImage } from './LazyImage';
-import noImageAvailableUrl from '@/shared/assets/images/no-image-available.jpg';
 import { getTextSizeByCells } from '@/shared/lib/getTextSizeByCells';
 import { getImageWidthByCells } from '@/shared/lib/getImageWidthByCells';
+import { FeedImage } from './FeedImage';
+import { LazyImage } from '@/shared/ui/LazyImage';
+import noImageAvailableUrl from '@/shared/assets/images/no-image-available.jpg';
 
 interface FeedCardProps {
   item: FeedItem;
@@ -16,7 +17,11 @@ export function FeedCard({ item, cellsCount }: FeedCardProps) {
         <div
           className={`${getImageWidthByCells(cellsCount)} z-10 flex-shrink-0 overflow-hidden rounded-xl`}
         >
-          <LazyImage src={item.image || noImageAvailableUrl} alt={''} />
+          {item.image ? (
+            <FeedImage url={item.image} alt={''} />
+          ) : (
+            <LazyImage src={noImageAvailableUrl} alt={''} />
+          )}
         </div>
 
         <div className="flex h-full min-w-0 flex-col gap-2 px-4">
