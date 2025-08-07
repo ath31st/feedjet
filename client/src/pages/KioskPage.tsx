@@ -9,6 +9,7 @@ import { useSearchParams } from 'react-router-dom';
 import { Rotator } from '@/widgets/feed/Rotator';
 import { parseRotateParam } from '@/shared/lib/parseRotateParam';
 import { LoadingThreeDotsJumping } from '@/shared/ui/LoadingThreeDotsJumping';
+import { parseAnimationParam } from '@/shared/lib/parseAnimationParam';
 
 export function KioskPage() {
   const { uiConfig, loading } = useUiConfigStore();
@@ -18,9 +19,10 @@ export function KioskPage() {
 
   const [searchParams] = useSearchParams();
   const rotate = parseRotateParam(searchParams.get('rotate'));
+  const animation = parseAnimationParam(searchParams.get('animation'));
 
   const widgetMap: Record<string, React.ReactNode> = {
-    feed: <FeedWidget rotate={rotate} />,
+    feed: <FeedWidget rotate={rotate} animation={animation} />,
     schedule: <ScheduleWidget />,
     birthdays: <BirthdaysWidget />,
   };

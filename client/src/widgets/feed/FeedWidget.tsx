@@ -1,14 +1,16 @@
 import { AnimatedFeedCard } from './AnimatedFeedCard';
 import { useFeedCarouselStore, useRssFeedStore } from '@/entities/feed';
 import { useFeedConfigStore } from '@/entities/feed-config';
+import type { AnimationType } from '@/shared/lib/parseAnimationParam';
 import { isRotate90 } from '@/shared/lib/parseRotateParam';
 import { useCarousel } from '@/shared/lib/useCarousel';
 
 interface FeedCardProps {
   rotate: number;
+  animation: AnimationType;
 }
 
-export function FeedWidget({ rotate }: FeedCardProps) {
+export function FeedWidget({ rotate, animation }: FeedCardProps) {
   const { visibleCellCount, carouselIntervalMs } = useFeedConfigStore(
     (s) => s.feedConfig,
   );
@@ -34,6 +36,7 @@ export function FeedWidget({ rotate }: FeedCardProps) {
           item={item}
           index={index}
           cellsCount={visibleCellCount}
+          animation={animation}
         />
       ))}
     </div>
