@@ -31,3 +31,6 @@ dist-ssr
 # ide
 .vscode
 .idea
+
+# cache
+server/.image-cache
