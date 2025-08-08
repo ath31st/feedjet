@@ -10,6 +10,7 @@ import { rssParserRouter } from './routes/rss.parser.route.js';
 import { controlRouter } from './routes/control.route.js';
 import { uiConfigRouter } from './routes/ui.config.route.js';
 import { scheduleEventRouter } from './routes/schedule.event.route.js';
+import { imageCacheRouter } from './routes/image.cache.route.js';
 
 const appRouter = t.router({
   user: userRouter,
@@ -20,6 +21,7 @@ const appRouter = t.router({
   control: controlRouter,
   uiConfig: uiConfigRouter,
   scheduleEvent: scheduleEventRouter,
+  image: imageCacheRouter,
 });
 
 export type AppRouter = typeof appRouter;
