@@ -13,7 +13,7 @@ interface FeedCardProps {
 export function FeedCard({ item, cellsCount }: FeedCardProps) {
   return (
     <div className="flex h-full rounded-xl bg-[var(--card-bg)] p-2 shadow-2xl">
-      <div className="flex overflow-hidden">
+      <div className="flex w-full overflow-hidden">
         <div
           className={`${getImageWidthByCells(cellsCount)} z-10 flex-shrink-0 overflow-hidden rounded-xl`}
         >
