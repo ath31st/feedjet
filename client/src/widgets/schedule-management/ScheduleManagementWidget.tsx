@@ -1,4 +1,4 @@
-import { ScheduleGrid } from './ScheduleGrid';
+import { ScheduleGrid } from './ui/ScheduleGrid';
 
 export function ScheduleManagementWidget() {
   return <ScheduleGrid />;

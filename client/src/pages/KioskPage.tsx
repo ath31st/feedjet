@@ -6,7 +6,7 @@ import { useUiConfigStore } from '@/entities/ui-config';
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useSearchParams } from 'react-router-dom';
-import { Rotator } from '@/widgets/feed/Rotator';
+import { Rotator } from '@/shared/ui/Rotator';
 import { parseRotateParam } from '@/shared/lib/parseRotateParam';
 import { LoadingThreeDotsJumping } from '@/shared/ui/LoadingThreeDotsJumping';
 import { parseAnimationParam } from '@/shared/lib/parseAnimationParam';

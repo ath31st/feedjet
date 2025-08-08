@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { LoadingThreeDotsJumping } from '@/shared/ui/LoadingThreeDotsJumping';
 import { LazyImage } from '@/shared/ui/LazyImage';
-import { useFeedImage } from './api/useFeedImage';
+import { useFeedImage } from '../api/useFeedImage';
 
 interface FeedImageProps {
   url: string;
