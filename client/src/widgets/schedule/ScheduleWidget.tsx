@@ -4,18 +4,17 @@ import { formatDateToMap } from '@/shared/lib/formatDateToMap';
 import { getDaysOfWeekByDate } from '@/shared/lib/getDaysOfWeekByDate';
 import { getOnlyDateStr } from '@/shared/lib/getOnlyDateStr';
 import { getPositionPercentByDateTime } from '@/shared/lib/getPositionPercentByDateTime';
+import { LoadingThreeDotsJumping } from '@/shared/ui/LoadingThreeDotsJumping';
 import { PlayIcon } from '@radix-ui/react-icons';
 import { useEffect, useState } from 'react';
+import { TextMarquee } from '@/shared/ui/TextMarquee';
 
 export function ScheduleWidget() {
   const todayDate = new Date();
   const [now, setNow] = useState(todayDate);
-  const {
-    data: events,
-    isLoading,
-    isError,
-    error,
-  } = useFindScheduleEventsByDate(getOnlyDateStr(todayDate));
+  const { data: events, isLoading } = useFindScheduleEventsByDate(
+    getOnlyDateStr(todayDate),
+  );
 
   const daysOfWeek = getDaysOfWeekByDate(now);
   const formatedDaysOfWeek = daysOfWeek.map((day) => formatDateToMap(day));
@@ -36,17 +35,8 @@ export function ScheduleWidget() {
 
   if (isLoading) {
     return (
-      <div className="flex h-screen items-center justify-center font-medium text-xl">
-        Загрузка расписания...
-      </div>
-    );
-  }
-
-  if (isError) {
-    return (
-      <div className="flex h-screen items-center justify-center font-medium text-red-600">
-        Ошибка загрузки расписания:{' '}
-        {error instanceof Error ? error.message : 'Unknown error'}
+      <div className="flex h-screen w-screen items-center justify-center">
+        <LoadingThreeDotsJumping />
       </div>
     );
   }
@@ -121,7 +111,7 @@ export function ScheduleWidget() {
                   border: '1px solid var(--border)',
                 }}
               >
-                {event.title}
+                <TextMarquee text={`${event.startTime} | ${event.title}`} />
               </div>
             ))}
           </div>
