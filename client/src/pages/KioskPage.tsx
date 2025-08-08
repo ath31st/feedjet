@@ -27,6 +27,10 @@ export function KioskPage() {
     birthdays: <BirthdaysWidget />,
   };
 
+  const safeIndex = widgets.length > 0 ? index % widgets.length : 0;
+  const widgetKey = widgets[safeIndex];
+  const currentWidget = widgetMap[widgetKey] ?? null;
+
   useEffect(() => {
     if (!interval || widgets.length < 2) return;
 
@@ -37,13 +41,7 @@ export function KioskPage() {
     return () => clearInterval(id);
   }, [interval, widgets]);
 
-  useEffect(() => {
-    if (index >= widgets.length) {
-      setIndex(0);
-    }
-  }, [widgets, index]);
-
-  if (loading) {
+  if (loading || !widgetKey || !currentWidget) {
     return (
       <div className="flex h-screen w-screen items-center justify-center">
         <LoadingThreeDotsJumping />
@@ -51,13 +49,11 @@ export function KioskPage() {
     );
   }
 
-  const currentWidget = widgetMap[widgets[index]] ?? null;
-
   return (
     <div className="h-screen w-screen">
       <AnimatePresence mode="wait">
         <motion.div
-          key={widgets[index]}
+          key={widgetKey}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
