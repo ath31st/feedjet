@@ -23,7 +23,7 @@ export function KioskPage() {
 
   const widgetMap: Record<string, React.ReactNode> = {
     feed: <FeedWidget rotate={rotate} animation={animation} />,
-    schedule: <ScheduleWidget />,
+    schedule: <ScheduleWidget rotate={rotate} />,
     birthdays: <BirthdaysWidget />,
   };
 
