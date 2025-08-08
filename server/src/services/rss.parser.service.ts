@@ -4,6 +4,7 @@ import type { FeedItem } from '@shared/types/feed.ts';
 import Logger from '../utils/logger.js';
 import { sortFeedItemsByDateDescending } from '../utils/feed.items.sorting.js';
 import type { RssFeed } from '@shared/types/rss.js';
+import { feedItemMapper } from '../mappers/feed.item.mapper.js';
 
 export class RssParser {
   private readonly maxItems = Number(process.env.MAX_ITEMS) || 10;
@@ -18,7 +19,7 @@ export class RssParser {
     if (!feed.items) return [];
 
     return feed.items
-      .map((item) => this.mapToFeedItem(item as RawFeedItem))
+      .map((item) => feedItemMapper.mapToFeedItem(item as RawFeedItem))
       .filter((item) => item != null);
   }
 
@@ -40,19 +41,5 @@ export class RssParser {
 
     const sortedItems = sortFeedItemsByDateDescending(feedItems);
     return sortedItems.slice(0, limit || this.maxItems);
-  }
-
-  mapToFeedItem(item: RawFeedItem): FeedItem | null {
-    if (!item.title || !item.link) return null;
-
-    return {
-      title: item.title,
-      link: item.link,
-      description: item.contentSnippet ?? '',
-      image: item.enclosure?.url ?? '',
-      categories: item.categories ?? [],
-      author: item['dc:creator'] ?? '',
-      pubDate: item.pubDate ?? '',
-    };
   }
 }
