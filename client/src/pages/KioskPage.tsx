@@ -27,6 +27,8 @@ export function KioskPage() {
     birthdays: <BirthdaysWidget />,
   };
 
+  const currentWidget = widgetMap[widgets[index]] ?? null;
+
   useEffect(() => {
     if (!interval || widgets.length < 2) return;
 
@@ -50,8 +52,6 @@ export function KioskPage() {
       </div>
     );
   }
-
-  const currentWidget = widgetMap[widgets[index]] ?? null;
 
   return (
     <div className="h-screen w-screen">
