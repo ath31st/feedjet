@@ -10,6 +10,7 @@ import { PlayIcon } from '@radix-ui/react-icons';
 import { useEffect, useState } from 'react';
 import { TextMarquee } from '@/shared/ui/TextMarquee';
 import { isRotate90 } from '@/shared/lib/parseRotateParam';
+import eagleUrl from '@/shared/assets/digital_eagle.svg';
 
 interface ScheduleWidgetProps {
   rotate: number;
@@ -53,7 +54,24 @@ export function ScheduleWidget({ rotate }: ScheduleWidgetProps) {
 
   return (
     <div className="flex h-full w-full flex-col">
-      <h1 className="h-1/7 text-center font-semibold text-3xl">Расписание</h1>
+      <div
+        className={`flex h-1/${isEffectiveXl ? 5 : 7} items-center justify-center p-4`}
+      >
+        <img
+          src={eagleUrl}
+          alt="Eagle"
+          className="h-full w-1/2 object-contain"
+          style={{
+            filter: 'drop-shadow(0 0 6px var(--border))',
+          }}
+        />
+        <h1
+          className={`w-${isEffectiveXl ? '4/5' : '2/3'} overflow-hidden text-center text-4xl uppercase`}
+        >
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt
+        </h1>
+      </div>
 
       <div
         className="mx-auto flex w-full flex-1 border-t-2"
