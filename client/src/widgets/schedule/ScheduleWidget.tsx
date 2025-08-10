@@ -19,9 +19,11 @@ interface ScheduleWidgetProps {
 export function ScheduleWidget({ rotate }: ScheduleWidgetProps) {
   const todayDate = new Date();
   const [now, setNow] = useState(todayDate);
-  const { data: events, isLoading } = useFindScheduleEventsByDate(
-    getOnlyDateStr(todayDate),
-  );
+  const {
+    data: events,
+    isLoading,
+    refetch: refetchEvents,
+  } = useFindScheduleEventsByDate(getOnlyDateStr(todayDate));
 
   const daysOfWeek = getDaysOfWeekByDate(now);
   const formatedDaysOfWeek = daysOfWeek.map((day) => formatDateToMap(day));
@@ -40,9 +42,10 @@ export function ScheduleWidget({ rotate }: ScheduleWidgetProps) {
   useEffect(() => {
     const intervalId = setInterval(() => {
       setNow(new Date());
+      refetchEvents();
     }, 60_000);
     return () => clearInterval(intervalId);
-  }, []);
+  }, [refetchEvents]);
 
   if (isLoading) {
     return (
