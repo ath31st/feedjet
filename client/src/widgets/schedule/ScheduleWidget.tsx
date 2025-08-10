@@ -34,6 +34,7 @@ export function ScheduleWidget({ rotate }: ScheduleWidgetProps) {
 
   const isXl = useIsXl();
   const isEffectiveXl = isRotate90(rotate) ? !isXl : isXl;
+  const effectiveSpeed = isRotate90(rotate) ? 1 : 50;
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -125,7 +126,10 @@ export function ScheduleWidget({ rotate }: ScheduleWidgetProps) {
                   border: '1px solid var(--border)',
                 }}
               >
-                <TextMarquee text={`${event.startTime} | ${event.title}`} />
+                <TextMarquee
+                  speed={effectiveSpeed}
+                  text={`${event.startTime} | ${event.title}`}
+                />
               </div>
             ))}
           </div>
