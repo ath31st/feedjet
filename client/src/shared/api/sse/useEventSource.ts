@@ -1,29 +1,69 @@
 import { useEffect, useRef } from 'react';
 
+type Opts = {
+  reconnectInterval?: number | ((attempt: number) => number);
+  maxAttempts?: number;
+};
+
 export function useEventSource(
   url: string,
   onMessage: (event: MessageEvent) => void,
-  { reconnectInterval = 3000 }: { reconnectInterval?: number } = {},
+  { reconnectInterval = 3000, maxAttempts = Infinity }: Opts = {},
 ) {
   const esRef = useRef<EventSource | null>(null);
   const reconnectTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const mountedRef = useRef(false);
+  const onMessageRef = useRef(onMessage);
+  const attemptsRef = useRef(0);
 
   useEffect(() => {
+    onMessageRef.current = onMessage;
+  }, [onMessage]);
+
+  useEffect(() => {
+    mountedRef.current = true;
+    attemptsRef.current = 0;
+
+    const getInterval = (attempt: number) =>
+      typeof reconnectInterval === 'function'
+        ? reconnectInterval(attempt)
+        : reconnectInterval;
+
     const connect = () => {
+      if (!mountedRef.current) return;
       const es = new EventSource(url);
       esRef.current = es;
 
-      es.onmessage = onMessage;
+      es.onopen = () => {
+        attemptsRef.current = 0;
+        if (reconnectTimerRef.current) {
+          clearTimeout(reconnectTimerRef.current);
+          reconnectTimerRef.current = null;
+        }
+      };
+
+      es.onmessage = (e) => onMessageRef.current(e);
 
       es.onerror = () => {
-        es.close();
-        esRef.current = null;
+        attemptsRef.current += 1;
 
-        if (!reconnectTimerRef.current) {
-          reconnectTimerRef.current = setTimeout(() => {
-            reconnectTimerRef.current = null;
-            connect();
-          }, reconnectInterval);
+        if (attemptsRef.current >= 3) {
+          try {
+            es.close();
+          } catch {}
+          esRef.current = null;
+
+          if (
+            mountedRef.current &&
+            attemptsRef.current <= maxAttempts &&
+            !reconnectTimerRef.current
+          ) {
+            const wait = Math.max(0, getInterval(attemptsRef.current));
+            reconnectTimerRef.current = setTimeout(() => {
+              reconnectTimerRef.current = null;
+              if (mountedRef.current) connect();
+            }, wait);
+          }
         }
       };
     };
@@ -31,8 +71,12 @@ export function useEventSource(
     connect();
 
     return () => {
+      mountedRef.current = false;
       esRef.current?.close();
-      if (reconnectTimerRef.current) clearTimeout(reconnectTimerRef.current);
+      if (reconnectTimerRef.current) {
+        clearTimeout(reconnectTimerRef.current);
+        reconnectTimerRef.current = null;
+      }
     };
-  }, [url, onMessage, reconnectInterval]);
+  }, [url, reconnectInterval, maxAttempts]);
 }
