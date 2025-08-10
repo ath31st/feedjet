@@ -89,7 +89,7 @@ export function ScheduleWidget({ rotate }: ScheduleWidgetProps) {
 
         <div className="h-full border border-[var(--border)]" />
 
-        <div className={`w-3/4 p-${isEffectiveXl ? 4 : 10}`}>
+        <div className={`w-full ${isEffectiveXl ? 'px-10 py-4' : 'p-12 py-8'}`}>
           <div className="relative h-full">
             <div
               className="-left-10 absolute z-20"
@@ -130,17 +130,33 @@ export function ScheduleWidget({ rotate }: ScheduleWidgetProps) {
             ))}
           </div>
         </div>
+
+        {isEffectiveXl && (
+          <>
+            <div className="h-full border border-[var(--border)]" />
+            <div
+              className="w-1/3 text-center font-medium text-3xl"
+              style={{
+                color: 'var(--text)',
+              }}
+            >
+              Контент бокового блока
+            </div>
+          </>
+        )}
       </div>
 
-      <div
-        className="h-1/7 text-center font-medium text-3xl"
-        style={{
-          borderTop: '2px solid var(--border)',
-          color: 'var(--text)',
-        }}
-      >
-        Контент нижнего блока
-      </div>
+      {!isEffectiveXl && (
+        <div
+          className="h-1/7 text-center font-medium text-3xl"
+          style={{
+            borderTop: '2px solid var(--border)',
+            color: 'var(--text)',
+          }}
+        >
+          Контент нижнего блока
+        </div>
+      )}
     </div>
   );
 }
