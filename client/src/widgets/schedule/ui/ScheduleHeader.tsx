@@ -2,12 +2,13 @@ import eagleUrl from '@/shared/assets/digital_eagle.svg';
 
 interface ScheduleHeaderProps {
   isEffectiveXl: boolean;
+  title?: string;
 }
 
-export function ScheduleHeader({ isEffectiveXl }: ScheduleHeaderProps) {
+export function ScheduleHeader({ isEffectiveXl, title }: ScheduleHeaderProps) {
   return (
     <div
-      className={`flex ${isEffectiveXl ? 'h-1/5' : 'h-1/7'} items-center justify-center p-4`}
+      className={`flex ${isEffectiveXl ? 'h-1/5' : 'h-1/7'} items-center justify-center px-18 py-4`}
     >
       <img
         src={eagleUrl}
@@ -16,10 +17,10 @@ export function ScheduleHeader({ isEffectiveXl }: ScheduleHeaderProps) {
         style={{ filter: 'drop-shadow(0 0 6px var(--border))' }}
       />
       <h1
-        className={`w-${isEffectiveXl ? '4/5' : '2/3'} overflow-hidden text-center text-4xl uppercase`}
+        className={`w-${isEffectiveXl ? '4/5' : '2/3'} overflow-hidden text-center font-semibold text-4xl uppercase`}
       >
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt
+        {title ||
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt'}
       </h1>
     </div>
   );

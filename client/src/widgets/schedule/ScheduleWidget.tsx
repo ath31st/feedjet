@@ -9,9 +9,10 @@ import { ScheduleHeader } from './ui/ScheduleHeader';
 import { DaysColumn } from './ui/DaysColumn';
 import { TimeGrid } from './ui/TimeGrid';
 import { EventsList } from './ui/EventsList';
-import { SideContent } from './ui/SideContent';
-import { BottomContent } from './ui/BottomContent';
 import { useScheduleWithTimer } from './model/useScheduleWithTimer';
+import { useScheduleEnv } from './model/useKioskEnv';
+import { DigitalClock } from './ui/DigitalClock';
+import { WeatherForecast } from './ui/WeatherForecast';
 
 interface ScheduleWidgetProps {
   rotate: number;
@@ -28,6 +29,7 @@ export function ScheduleWidget({ rotate }: ScheduleWidgetProps) {
     startHour,
     hours.length,
   );
+  const { scheduleHeaderTitle, scheduleLocationTitle } = useScheduleEnv();
   const isXl = useIsXl();
   const isEffectiveXl = isRotate90(rotate) ? !isXl : isXl;
   const effectiveSpeed = isRotate90(rotate) ? 1 : 50;
@@ -42,7 +44,10 @@ export function ScheduleWidget({ rotate }: ScheduleWidgetProps) {
 
   return (
     <div className="flex h-full w-full flex-col">
-      <ScheduleHeader isEffectiveXl={isEffectiveXl} />
+      <ScheduleHeader
+        isEffectiveXl={isEffectiveXl}
+        title={scheduleHeaderTitle}
+      />
 
       <div
         className="mx-auto flex w-full flex-1 border-t-2"
@@ -66,10 +71,23 @@ export function ScheduleWidget({ rotate }: ScheduleWidgetProps) {
             />
           </div>
         </div>
-        {isEffectiveXl && <SideContent />}
+        {isEffectiveXl && (
+          <>
+            <div className="h-full border border-[var(--border)]" />
+            <div className="flex h-full w-1/3 flex-col gap-4 px-4 py-10">
+              <DigitalClock />
+              <WeatherForecast locationTitle={scheduleLocationTitle} />
+            </div>
+          </>
+        )}
       </div>
 
-      {!isEffectiveXl && <BottomContent />}
+      {!isEffectiveXl && (
+        <div className="flex h-1/7 flex-row gap-4 border-[var(--border)] border-t-2 px-4">
+          <DigitalClock />
+          <WeatherForecast locationTitle={scheduleLocationTitle} />
+        </div>
+      )}
     </div>
   );
 }
