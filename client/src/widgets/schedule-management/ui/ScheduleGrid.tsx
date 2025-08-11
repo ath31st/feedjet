@@ -25,11 +25,11 @@ export function ScheduleGrid({
   return (
     <div className="w-full overflow-auto rounded-lg border border-[var(--border)]">
       <div className="grid grid-cols-[80px_repeat(7,1fr)]">
-        <div className="h-10 border-[var(--border)] border-b bg-muted" />
+        <div className="h-12 border-[var(--border)] border-b bg-muted" />
         {days.map((date) => (
           <div
             key={date.toISOString()}
-            className="flex h-10 flex-col items-center justify-center border-[var(--border)] border-b border-l bg-muted text-xs"
+            className="flex h-12 flex-col items-center justify-center border-[var(--border)] border-b border-l bg-muted text-md"
           >
             <span className="font-medium">
               {format(date, 'EE', { locale: ru })}
@@ -44,7 +44,7 @@ export function ScheduleGrid({
           <React.Fragment key={`hour-row-${hour}`}>
             <div
               key={`hour-${hour}`}
-              className="flex h-16 items-start justify-center border-[var(--border)] border-t px-1 pt-1 text-xs"
+              className="flex h-16 items-start justify-center border-[var(--border)] border-t px-1 pt-1 text-md"
             >
               {hour}
             </div>
@@ -68,7 +68,7 @@ export function ScheduleGrid({
                       className="w-full overflow-hidden truncate whitespace-nowrap text-foreground text-xs"
                       title={event.title}
                     >
-                      {event.title}
+                      {`${event.startTime}|${event.title}`}
                     </div>
                   ))}
                 </button>

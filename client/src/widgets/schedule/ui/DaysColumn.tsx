@@ -16,7 +16,7 @@ export function DaysColumn({
 }: DaysColumnProps) {
   return (
     <div
-      className={`flex w-1/${isEffectiveXl ? 5 : 4} flex-col p-4 gap-${isEffectiveXl ? 4 : 10}`}
+      className={`flex w-1/${isEffectiveXl ? 5 : 3} flex-col p-4 gap-${isEffectiveXl ? 4 : 10}`}
     >
       {days.map((d, idx) => {
         const isToday = idx === todayIndex;

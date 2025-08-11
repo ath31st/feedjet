@@ -17,7 +17,7 @@ export function DigitalClock() {
       <div>
         {hours}:{minutes}
       </div>
-      <div className="text-3xl text-[var(--meta-text)]">{seconds}</div>
+      <div className="text-6xl text-[var(--meta-text)]">{seconds}</div>
     </div>
   );
 }
