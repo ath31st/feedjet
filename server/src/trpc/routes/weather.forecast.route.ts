@@ -5,12 +5,12 @@ export const weatherForecastRouter = t.router({
   getCurrent: publicProcedure
     .input(weatherForecastParamsSchema)
     .query(({ input }) => {
-      return weatherForecastService.getCurrent(input.lon, input.lat);
+      return weatherForecastService.getCurrent(input.lat, input.lon);
     }),
 
   getDailyForecast: publicProcedure
     .input(weatherForecastParamsSchema)
     .query(({ input }) => {
-      return weatherForecastService.getDailyForecast(input.lon, input.lat);
+      return weatherForecastService.getDailyForecast(input.lat, input.lon);
     }),
 });

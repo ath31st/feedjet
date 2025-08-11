@@ -1,27 +1,73 @@
+import type { WeatherForecast as Forecast } from '@/entities/weather-forecast';
+import { LoadingThreeDotsJumping } from '@/shared/ui/LoadingThreeDotsJumping';
+
 interface WeatherForecastProps {
   locationTitle?: string;
+  dailyForecast: Forecast[];
+  currentWeather: Forecast | null;
+  isLoadingDaily: boolean;
+  isLoadingCurrent: boolean;
 }
 
-export function WeatherForecast({ locationTitle }: WeatherForecastProps) {
-  const weatherForecast = [
-    { time: '12:00', temp: '+23°C', icon: '☀️' },
-    { time: '13:00', temp: '+24°C', icon: '🌤️' },
-    { time: '14:00', temp: '+22°C', icon: '⛅' },
-  ];
+export function WeatherForecast({
+  locationTitle,
+  dailyForecast,
+  currentWeather,
+  isLoadingDaily,
+  isLoadingCurrent,
+}: WeatherForecastProps) {
+  const isLoading = isLoadingDaily || isLoadingCurrent;
+
+  if (isLoading) {
+    return (
+      <div className="flex h-full flex-1 items-center justify-center">
+        <LoadingThreeDotsJumping />
+      </div>
+    );
+  }
+
+  if (!currentWeather || !dailyForecast.length) {
+    return (
+      <div className="flex h-full flex-1 items-center justify-center text-[var(--meta-text)]">
+        Нет данных о погоде
+      </div>
+    );
+  }
 
   return (
-    <div className="flex h-full flex-1 flex-col items-center justify-center gap-4">
-      <div className="text-center text-4xl text-[var(--meta-text)]">
-        Погода в {locationTitle || 'Lorem Ipsum'}:
-      </div>
-      <div className="flex flex-col text-4xl text-[var(--meta-text)]">
-        {weatherForecast.map(({ time, temp, icon }) => (
-          <div key={time} className="flex gap-4 text-[var(--card-text)]">
-            <span>{time}</span>
-            <span>{temp}</span>
-            <span>{icon}</span>
+    <div className="flex h-full flex-1 gap-10 px-4 py-10">
+      <div className="flex h-full w-1/2 flex-col items-center justify-center gap-4 text-[var(--meta-text)]">
+        <div className="text-center text-3xl">
+          Погода в {locationTitle || 'Lorem ipsum'}
+        </div>
+        <div className="flex h-full flex-row items-center">
+          <img
+            src={currentWeather.iconUrl}
+            alt={currentWeather.description}
+            className="h-24 w-24"
+          />
+          <div className="font-semibold text-3xl text-[var(--card-text)]">
+            {Math.round(currentWeather.temperature)}°C
           </div>
-        ))}
+        </div>
+
+        <div className="flex h-full flex-col gap-1 text-lg">
+          <div>Ощущается как {Math.round(currentWeather.feelsLike)}°C</div>
+          <div>Влажность: {currentWeather.humidity}%</div>
+          <div>Давление: {currentWeather.pressure} мм рт. ст.</div>
+        </div>
+      </div>
+
+      <div className="flex h-full w-1/3 flex-col justify-center text-[var(--card-text)] text-xl">
+        {dailyForecast
+          .slice(0, 6)
+          .map(({ time, temperature, iconUrl, description }) => (
+            <div key={time} className="flex h-full gap-6">
+              <span className="w-16">{time}</span>
+              <img src={iconUrl} alt={description} className="h-8 w-8" />
+              <span>{Math.round(temperature)}°C</span>
+            </div>
+          ))}
       </div>
     </div>
   );

@@ -13,9 +13,9 @@ export class WeatherForecastService {
   }
 
   async getCurrent(lat: number, lon: number): Promise<WeatherForecast | null> {
-    this.client.setLocationByCoordinates(lat, lon);
     try {
-      const data = await this.client.getCurrent();
+      const data = await this.client.getCurrent({ coordinates: { lat, lon } });
+
       return weatherForecastMapper.toWeatherForecast(data);
     } catch (e) {
       Logger.error('Failed fetch current weather', e);
@@ -24,14 +24,12 @@ export class WeatherForecastService {
   }
 
   async getDailyForecast(lat: number, lon: number): Promise<WeatherForecast[]> {
-    this.client.setLocationByCoordinates(lat, lon);
     try {
-      const data = await this.client.getForecast();
-      const dailyData = data.slice(0, 8);
+      const data = await this.client.getForecast(8, {
+        coordinates: { lat, lon },
+      });
 
-      return dailyData.map((item) =>
-        weatherForecastMapper.toWeatherForecast(item),
-      );
+      return data.map((item) => weatherForecastMapper.toWeatherForecast(item));
     } catch (e) {
       Logger.error('Failed fetch forecast', e);
       return [];

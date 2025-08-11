@@ -13,6 +13,10 @@ import { useScheduleWithTimer } from './model/useScheduleWithTimer';
 import { useScheduleEnv } from './model/useScheduleWidgetEnv';
 import { DigitalClock } from './ui/DigitalClock';
 import { WeatherForecast } from './ui/WeatherForecast';
+import {
+  useCurrentWeatherForecast,
+  useDailyWeatherForecast,
+} from '@/entities/weather-forecast';
 
 interface ScheduleWidgetProps {
   rotate: number;
@@ -29,7 +33,16 @@ export function ScheduleWidget({ rotate }: ScheduleWidgetProps) {
     startHour,
     hours.length,
   );
-  const { scheduleHeaderTitle, scheduleLocationTitle } = useScheduleEnv();
+  const {
+    scheduleHeaderTitle,
+    scheduleLocationTitle,
+    scheduleLocationLon,
+    scheduleLocationLat,
+  } = useScheduleEnv();
+  const { data: dailyForecast, isLoading: isLoadingDaily } =
+    useDailyWeatherForecast(scheduleLocationLat, scheduleLocationLon);
+  const { data: currentWeather, isLoading: isLoadingCurrent } =
+    useCurrentWeatherForecast(scheduleLocationLat, scheduleLocationLon);
   const isXl = useIsXl();
   const isEffectiveXl = isRotate90(rotate) ? !isXl : isXl;
   const effectiveSpeed = isRotate90(rotate) ? 1 : 50;
@@ -74,18 +87,30 @@ export function ScheduleWidget({ rotate }: ScheduleWidgetProps) {
         {isEffectiveXl && (
           <>
             <div className="h-full border border-[var(--border)]" />
-            <div className="flex h-full w-1/3 flex-col gap-4 px-4 py-10">
+            <div className="flex h-full w-1/2 flex-col gap-4 px-4 py-10">
               <DigitalClock />
-              <WeatherForecast locationTitle={scheduleLocationTitle} />
+              <WeatherForecast
+                locationTitle={scheduleLocationTitle}
+                dailyForecast={dailyForecast ?? []}
+                currentWeather={currentWeather ?? null}
+                isLoadingDaily={isLoadingDaily}
+                isLoadingCurrent={isLoadingCurrent}
+              />
             </div>
           </>
         )}
       </div>
 
       {!isEffectiveXl && (
-        <div className="flex h-1/7 flex-row gap-4 border-[var(--border)] border-t-2 px-4">
+        <div className="flex h-1/5 flex-row gap-4 border-[var(--border)] border-t-2 px-4">
           <DigitalClock />
-          <WeatherForecast locationTitle={scheduleLocationTitle} />
+          <WeatherForecast
+            locationTitle={scheduleLocationTitle}
+            dailyForecast={dailyForecast ?? []}
+            currentWeather={currentWeather ?? null}
+            isLoadingDaily={isLoadingDaily}
+            isLoadingCurrent={isLoadingCurrent}
+          />
         </div>
       )}
     </div>
