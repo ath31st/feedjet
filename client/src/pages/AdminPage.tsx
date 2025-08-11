@@ -20,7 +20,7 @@ export function AdminPage() {
 
       <Tabs.Root defaultValue="settings" className="w-full">
         <Tabs.List
-          className="mb-6 flex border-[color:var(--border)] border-b-2"
+          className="flex border-[color:var(--border)] border-b-2"
           aria-label="Управление админ-панелью"
         >
           <AdminTabTrigger value="settings">Настройки</AdminTabTrigger>
@@ -28,7 +28,7 @@ export function AdminPage() {
         </Tabs.List>
 
         <Tabs.Content value="settings" className="flex flex-col gap-6">
-          <div className="flex w-full gap-6">
+          <div className="mt-6 flex w-full gap-6">
             <RssManagementWidget />
             <AppearanceSettingsWidget />
           </div>
