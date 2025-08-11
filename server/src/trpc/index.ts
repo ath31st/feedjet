@@ -11,6 +11,7 @@ import { controlRouter } from './routes/control.route.js';
 import { uiConfigRouter } from './routes/ui.config.route.js';
 import { scheduleEventRouter } from './routes/schedule.event.route.js';
 import { imageCacheRouter } from './routes/image.cache.route.js';
+import { weatherForecastRouter } from './routes/weather.forecast.route.js';
 
 const appRouter = t.router({
   user: userRouter,
@@ -22,6 +23,7 @@ const appRouter = t.router({
   uiConfig: uiConfigRouter,
   scheduleEvent: scheduleEventRouter,
   image: imageCacheRouter,
+  weather: weatherForecastRouter,
 });
 
 export type AppRouter = typeof appRouter;

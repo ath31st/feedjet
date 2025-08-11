@@ -23,10 +23,7 @@ export class WeatherForecastService {
     }
   }
 
-  async getDayliForecast(
-    lon: number,
-    lat: number,
-  ): Promise<WeatherForecast[] | null> {
+  async getDayliForecast(lon: number, lat: number): Promise<WeatherForecast[]> {
     this.client.setLocationByCoordinates(lon, lat);
     try {
       const data = await this.client.getForecast();
@@ -37,7 +34,7 @@ export class WeatherForecastService {
       );
     } catch (e) {
       Logger.error('Failed fetch forecast', e);
-      return null;
+      return [];
     }
   }
 }
