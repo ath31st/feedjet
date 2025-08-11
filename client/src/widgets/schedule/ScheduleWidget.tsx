@@ -23,7 +23,26 @@ interface ScheduleWidgetProps {
 }
 
 export function ScheduleWidget({ rotate }: ScheduleWidgetProps) {
-  const { now, events, isLoading } = useScheduleWithTimer();
+  const {
+    scheduleHeaderTitle,
+    scheduleLocationTitle,
+    scheduleLocationLon,
+    scheduleLocationLat,
+  } = useScheduleEnv();
+  const {
+    data: dailyForecast,
+    isLoading: isLoadingDaily,
+    refetch: refetchDaily,
+  } = useDailyWeatherForecast(scheduleLocationLat, scheduleLocationLon);
+  const {
+    data: currentWeather,
+    isLoading: isLoadingCurrent,
+    refetch: refetchCurrent,
+  } = useCurrentWeatherForecast(scheduleLocationLat, scheduleLocationLon);
+  const { now, events, isLoading } = useScheduleWithTimer({
+    refetchCurrent,
+    refetchDaily,
+  });
   const daysOfWeek = getDaysOfWeekByDate(now);
   const startHour = parseInt(hours[0]);
   const formatedDaysOfWeek = daysOfWeek.map(formatDateToMap);
@@ -33,16 +52,6 @@ export function ScheduleWidget({ rotate }: ScheduleWidgetProps) {
     startHour,
     hours.length,
   );
-  const {
-    scheduleHeaderTitle,
-    scheduleLocationTitle,
-    scheduleLocationLon,
-    scheduleLocationLat,
-  } = useScheduleEnv();
-  const { data: dailyForecast, isLoading: isLoadingDaily } =
-    useDailyWeatherForecast(scheduleLocationLat, scheduleLocationLon);
-  const { data: currentWeather, isLoading: isLoadingCurrent } =
-    useCurrentWeatherForecast(scheduleLocationLat, scheduleLocationLon);
   const isXl = useIsXl();
   const isEffectiveXl = isRotate90(rotate) ? !isXl : isXl;
   const effectiveSpeed = isRotate90(rotate) ? 1 : 50;
