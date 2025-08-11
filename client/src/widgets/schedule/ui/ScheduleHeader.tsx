@@ -7,7 +7,7 @@ interface ScheduleHeaderProps {
 export function ScheduleHeader({ isEffectiveXl }: ScheduleHeaderProps) {
   return (
     <div
-      className={`flex h-1/${isEffectiveXl ? 5 : 7} items-center justify-center p-4`}
+      className={`flex ${isEffectiveXl ? 'h-1/5' : 'h-1/7'} items-center justify-center p-4`}
     >
       <img
         src={eagleUrl}
