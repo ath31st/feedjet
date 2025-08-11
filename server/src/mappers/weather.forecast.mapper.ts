@@ -6,7 +6,11 @@ export const weatherForecastMapper = {
     forecast: ForecastWeather | CurrentWeather,
   ): WeatherForecast => {
     return {
-      time: forecast.dt,
+      time: new Intl.DateTimeFormat('ru-RU', {
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZone: 'Europe/Moscow',
+      }).format(forecast.dt),
       icon: forecast.weather.icon.raw,
       iconUrl: forecast.weather.icon.url,
       temperature: forecast.weather.temp.cur,

@@ -12,8 +12,8 @@ export class WeatherForecastService {
     this.client.setUnits('metric');
   }
 
-  async getCurrent(lon: number, lat: number): Promise<WeatherForecast | null> {
-    this.client.setLocationByCoordinates(lon, lat);
+  async getCurrent(lat: number, lon: number): Promise<WeatherForecast | null> {
+    this.client.setLocationByCoordinates(lat, lon);
     try {
       const data = await this.client.getCurrent();
       return weatherForecastMapper.toWeatherForecast(data);
@@ -23,8 +23,8 @@ export class WeatherForecastService {
     }
   }
 
-  async getDailyForecast(lon: number, lat: number): Promise<WeatherForecast[]> {
-    this.client.setLocationByCoordinates(lon, lat);
+  async getDailyForecast(lat: number, lon: number): Promise<WeatherForecast[]> {
+    this.client.setLocationByCoordinates(lat, lon);
     try {
       const data = await this.client.getForecast();
       const dailyData = data.slice(0, 8);

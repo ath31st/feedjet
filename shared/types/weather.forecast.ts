@@ -1,5 +1,5 @@
 export interface WeatherForecast {
-  time: Date;
+  time: string;
   icon: string;
   iconUrl: string;
   temperature: number;
