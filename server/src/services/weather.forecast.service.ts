@@ -23,13 +23,13 @@ export class WeatherForecastService {
     }
   }
 
-  async getDayliForecast(lon: number, lat: number): Promise<WeatherForecast[]> {
+  async getDailyForecast(lon: number, lat: number): Promise<WeatherForecast[]> {
     this.client.setLocationByCoordinates(lon, lat);
     try {
       const data = await this.client.getForecast();
-      const dayliData = data.slice(0, 8);
+      const dailyData = data.slice(0, 8);
 
-      return dayliData.map((item) =>
+      return dailyData.map((item) =>
         weatherForecastMapper.toWeatherForecast(item),
       );
     } catch (e) {

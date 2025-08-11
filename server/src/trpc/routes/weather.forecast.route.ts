@@ -8,9 +8,9 @@ export const weatherForecastRouter = t.router({
       return weatherForecastService.getCurrent(input.lon, input.lat);
     }),
 
-  getDayliForecast: publicProcedure
+  getDailyForecast: publicProcedure
     .input(weatherForecastParamsSchema)
     .query(({ input }) => {
-      return weatherForecastService.getDayliForecast(input.lon, input.lat);
+      return weatherForecastService.getDailyForecast(input.lon, input.lat);
     }),
 });
