@@ -10,7 +10,7 @@ import { DaysColumn } from './ui/DaysColumn';
 import { TimeGrid } from './ui/TimeGrid';
 import { EventsList } from './ui/EventsList';
 import { useScheduleWithTimer } from './model/useScheduleWithTimer';
-import { useScheduleEnv } from './model/useKioskEnv';
+import { useScheduleEnv } from './model/useScheduleWidgetEnv';
 import { DigitalClock } from './ui/DigitalClock';
 import { WeatherForecast } from './ui/WeatherForecast';
 
