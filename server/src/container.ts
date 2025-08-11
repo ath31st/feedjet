@@ -18,6 +18,8 @@ import { ensureUiConfig } from './db/initialize.ui.config.js';
 import { ensureFeedConfig } from './db/initialize.feed.config.js';
 import { ScheduleEventService } from './services/schedule.event.service.js';
 import { ImageCacheService } from './services/image.cache.service.js';
+import { OpenWeatherAPI } from 'openweather-api-node';
+import { WeatherForecastService } from './services/weather.forecast.service.js';
 
 const dbPath = process.env.DB_FILE_NAME ?? '';
 
@@ -43,8 +45,17 @@ if (cacheDir) {
   fs.mkdirSync(cacheDir, { recursive: true });
   Logger.info(`Image cache directory: ${cacheDir}`);
 }
-
 export const imageCacheService = new ImageCacheService(cacheDir);
+
+export const openWeatherApiKey = process.env.OPEN_WEATHER_API_KEY;
+if (!openWeatherApiKey) {
+  Logger.error('Error: OPEN_WEATHER_API_KEY environment variable is not set');
+  process.exit(1);
+}
+const openWeatherClient = new OpenWeatherAPI({ key: openWeatherApiKey });
+export const weatherForecastService = new WeatherForecastService(
+  openWeatherClient,
+);
 
 export const rssParser = new RssParser(new Parser());
 export const userService = new UserService(db);
