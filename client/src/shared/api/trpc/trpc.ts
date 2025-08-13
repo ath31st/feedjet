@@ -23,14 +23,14 @@ export const trpcClient = createTRPCClient<AppRouter>({
       url: trpcUrl,
       fetch: async (url, options) => {
         const token = localStorage.getItem('token');
-        const response = await fetch(url, {
-          ...options,
-          headers: {
-            ...options?.headers,
-            ...(token ? { Authorization: `Bearer ${token}` } : {}),
-          },
+        const headers = new Headers(options?.headers);
+        if (token) {
+          headers.set('Authorization', `Bearer ${token}`);
+        }
+        return fetch(url, {
+          ...(options as RequestInit),
+          headers,
         });
-        return response;
       },
     }),
   ],
