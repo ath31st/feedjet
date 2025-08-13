@@ -111,7 +111,7 @@ export function ScheduleWidget({ rotate }: ScheduleWidgetProps) {
       </div>
 
       {!isEffectiveXl && (
-        <div className="flex h-1/5 flex-row gap-4 border-[var(--border)] border-t-2 px-4">
+        <div className="flex h-1/7 flex-row gap-4 border-[var(--border)] border-t-2 px-4">
           <DigitalClock />
           <WeatherForecast
             locationTitle={scheduleLocationTitle}
