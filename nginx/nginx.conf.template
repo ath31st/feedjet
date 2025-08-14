@@ -1,0 +1,44 @@
+events {
+    worker_connections 1024;
+}
+
+server {
+    listen 80;
+    server_name localhost;
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+    server_name localhost;
+
+    ssl_certificate {{CERT_PATH}};
+    ssl_certificate_key {{KEY_PATH}};
+
+    location / {
+        proxy_pass http://localhost:5173;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+    }
+
+    location ~ ^/sse/ {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Connection '';
+        proxy_set_header Host $host;
+        proxy_buffering off;
+        proxy_cache off;
+    }
+
+    location /trpc {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+    }
+
+    location /cache {
+        root {{CACHE_DIR}};
+        expires 3d;
+        add_header Cache-Control "public";
+    }
+}

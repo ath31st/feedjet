@@ -34,3 +34,6 @@ dist-ssr
 
 # cache
 server/.image-cache
+
+# nginx
+nginx/certs
