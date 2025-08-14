@@ -24,12 +24,18 @@ export class RssService {
       .all();
   }
 
-  findById(id: number): RssFeed | undefined {
-    return this.db
+  findById(id: number): RssFeed {
+    const rss = this.db
       .select()
       .from(rssFeedsTable)
       .where(eq(rssFeedsTable.id, id))
       .get();
+
+    if (!rss) {
+      throw new RssServiceError(404, 'RSS feed not found');
+    }
+
+    return rss;
   }
 
   create(data: NewRssFeed): RssFeed {
@@ -45,14 +51,20 @@ export class RssService {
     }
   }
 
-  update(id: number, data: Partial<UpdateRssFeed>): RssFeed | undefined {
+  update(id: number, data: Partial<UpdateRssFeed>): RssFeed {
     try {
-      return this.db
+      const updatedRss = this.db
         .update(rssFeedsTable)
         .set({ ...data, updatedAt: new Date() })
         .where(eq(rssFeedsTable.id, id))
         .returning()
         .get();
+
+      if (!updatedRss) {
+        throw new RssServiceError(404, 'RSS feed not found');
+      }
+
+      return updatedRss;
     } catch (err: unknown) {
       if ((err as Error).message.includes('UNIQUE')) {
         throw new RssServiceError(409, 'Duplicate URL');

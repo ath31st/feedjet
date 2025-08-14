@@ -85,8 +85,16 @@ export class UserService {
   }
 
   delete(id: number): number {
-    return this.db.delete(usersTable).where(eq(usersTable.id, id)).run()
-      .changes;
+    const count = this.db
+      .delete(usersTable)
+      .where(eq(usersTable.id, id))
+      .run().changes;
+
+    if (count === 0) {
+      throw new UserServiceError(404, 'User not found');
+    }
+
+    return count;
   }
 
   private hashPassword(password: string): string {

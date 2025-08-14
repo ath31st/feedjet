@@ -1,4 +1,3 @@
-import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 import {
   rssCreateSchema,
@@ -18,13 +17,11 @@ export const rssRouter = t.router({
     return rssService.getActive();
   }),
 
-  findById: protectedProcedure.input(rssParamsSchema).query(({ input }) => {
-    const rss = rssService.findById(input.id);
-    if (!rss) {
-      throw new TRPCError({ code: 'NOT_FOUND', message: 'RSS not found' });
-    }
-    return rss;
-  }),
+  findById: protectedProcedure.input(rssParamsSchema).query(({ input }) =>
+    handleServiceCall(() => {
+      return rssService.findById(input.id);
+    }),
+  ),
 
   create: protectedProcedure
     .input(rssCreateSchema)

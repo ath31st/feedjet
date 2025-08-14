@@ -1,4 +1,3 @@
-import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 import {
   userParamsSchema,
@@ -31,11 +30,10 @@ export const userRouter = t.router({
       handleServiceCall(() => userService.update(input.id, input.data)),
     ),
 
-  delete: protectedProcedure.input(userParamsSchema).mutation(({ input }) => {
-    const deletedCount = userService.delete(input.id);
-    if (deletedCount === 0) {
-      throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found' });
-    }
-    return { success: true };
-  }),
+  delete: protectedProcedure.input(userParamsSchema).mutation(({ input }) =>
+    handleServiceCall(() => {
+      userService.delete(input.id);
+      return { success: true };
+    }),
+  ),
 });
