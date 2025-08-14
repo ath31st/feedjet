@@ -1,6 +1,3 @@
-export class UserServiceError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = 'UserSeriveError';
-  }
-}
+import { ServiceError } from './service.error.js';
+
+export class UserServiceError extends ServiceError {}

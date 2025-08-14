@@ -7,15 +7,18 @@ import {
 } from '../../validations/schemas/users.schemas.js';
 import { publicProcedure, t, userService } from '../../container.js';
 import { protectedProcedure } from '../../middleware/auth.js';
+import { handleServiceCall } from '../error.handler.js';
 
 export const userRouter = t.router({
   getAll: protectedProcedure.query(() => {
     return userService.getAll();
   }),
 
-  create: publicProcedure.input(userCreateSchema).mutation(({ input }) => {
-    return userService.create(input);
-  }),
+  create: publicProcedure
+    .input(userCreateSchema)
+    .mutation(({ input }) =>
+      handleServiceCall(() => userService.create(input)),
+    ),
 
   update: protectedProcedure
     .input(
@@ -24,13 +27,9 @@ export const userRouter = t.router({
         data: userUpdateSchema,
       }),
     )
-    .mutation(({ input }) => {
-      const user = userService.update(input.id, input.data);
-      if (!user) {
-        throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found' });
-      }
-      return user;
-    }),
+    .mutation(({ input }) =>
+      handleServiceCall(() => userService.update(input.id, input.data)),
+    ),
 
   delete: protectedProcedure.input(userParamsSchema).mutation(({ input }) => {
     const deletedCount = userService.delete(input.id);

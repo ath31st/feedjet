@@ -48,11 +48,11 @@ export class UserService {
       return userMapper.toDTO(user);
     } catch (err: unknown) {
       if ((err as Error).message.includes('UNIQUE')) {
-        throw new UserServiceError('User with same login already exists');
+        throw new UserServiceError(409, 'User with same login already exists');
       }
 
       Logger.error(err);
-      throw new UserServiceError('Failed to create user');
+      throw new UserServiceError(500, 'Failed to create user');
     }
   }
 
@@ -69,14 +69,18 @@ export class UserService {
         .returning()
         .get();
 
+      if (!updatedUser) {
+        throw new UserServiceError(404, 'User not found');
+      }
+
       return userMapper.toDTO(updatedUser);
     } catch (err: unknown) {
       if ((err as Error).message.includes('UNIQUE')) {
-        throw new UserServiceError('User with same login already exists');
+        throw new UserServiceError(409, 'User with same login already exists');
       }
 
       Logger.error(err);
-      throw new UserServiceError('Failed to create user');
+      throw new UserServiceError(500, 'Failed to create user');
     }
   }
 

@@ -1,4 +1,4 @@
-export type ServiceErrorCode = 409 | 400 | 500;
+export type ServiceErrorCode = 400 | 401 | 403 | 404 | 409 | 500;
 
 export class ServiceError extends Error {
   constructor(
