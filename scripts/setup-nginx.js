@@ -39,9 +39,11 @@ if (!cacheDirValue) {
   process.exit(1);
 }
 
+const containerDir = path.dirname(containerTsPath);
+const serverRoot = path.resolve(containerDir, '..');
 const absCacheDir = path.isAbsolute(cacheDirValue)
   ? cacheDirValue
-  : path.resolve(projectRoot, cacheDirValue);
+  : path.resolve(serverRoot, cacheDirValue);
 
 if (!fs.existsSync(certsDir)) fs.mkdirSync(certsDir, { recursive: true });
 
