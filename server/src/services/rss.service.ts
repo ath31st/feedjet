@@ -37,11 +37,11 @@ export class RssService {
       return this.db.insert(rssFeedsTable).values(data).returning().get();
     } catch (err: unknown) {
       if ((err as Error).message.includes('UNIQUE')) {
-        throw new RssServiceError('RSS feed already exists');
+        throw new RssServiceError(409, 'RSS feed already exists');
       }
 
       Logger.error(err);
-      throw new RssServiceError('Failed to create RSS feed');
+      throw new RssServiceError(500, 'Failed to create RSS feed');
     }
   }
 
@@ -55,11 +55,11 @@ export class RssService {
         .get();
     } catch (err: unknown) {
       if ((err as Error).message.includes('UNIQUE')) {
-        throw new RssServiceError('Duplicate URL');
+        throw new RssServiceError(409, 'Duplicate URL');
       }
 
       Logger.error(err);
-      throw new RssServiceError('Update failed');
+      throw new RssServiceError(500, 'Update failed');
     }
   }
 

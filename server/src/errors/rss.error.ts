@@ -1,6 +1,3 @@
-export class RssServiceError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = 'RssServiceError';
-  }
-}
+import { ServiceError } from './service.error.js';
+
+export class RssServiceError extends ServiceError {}

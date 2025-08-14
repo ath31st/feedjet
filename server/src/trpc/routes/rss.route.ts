@@ -7,6 +7,7 @@ import {
 } from '../../validations/schemas/rss.schemas.js';
 import { t, rssService } from '../../container.js';
 import { protectedProcedure } from '../../middleware/auth.js';
+import { handleServiceCall } from '../error.handler.js';
 
 export const rssRouter = t.router({
   getAll: protectedProcedure.query(() => {
@@ -25,9 +26,9 @@ export const rssRouter = t.router({
     return rss;
   }),
 
-  create: protectedProcedure.input(rssCreateSchema).mutation(({ input }) => {
-    return rssService.create(input);
-  }),
+  create: protectedProcedure
+    .input(rssCreateSchema)
+    .mutation(({ input }) => handleServiceCall(() => rssService.create(input))),
 
   update: protectedProcedure
     .input(
@@ -36,9 +37,9 @@ export const rssRouter = t.router({
         data: rssUpdateSchema,
       }),
     )
-    .mutation(({ input }) => {
-      return rssService.update(input.id, input.data);
-    }),
+    .mutation(({ input }) =>
+      handleServiceCall(() => rssService.update(input.id, input.data)),
+    ),
 
   delete: protectedProcedure.input(rssParamsSchema).mutation(({ input }) => {
     return rssService.delete(input.id);
