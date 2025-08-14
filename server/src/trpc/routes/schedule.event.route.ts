@@ -1,6 +1,5 @@
 import { publicProcedure, scheduleEventService, t } from '../../container.js';
 import { protectedProcedure } from '../../middleware/auth.js';
-import { TRPCError } from '@trpc/server';
 import {
   scheduleEventCreateSchema,
   scheduleEventFindByDateRangeSchema,
@@ -9,38 +8,43 @@ import {
   scheduleEventUpdateSchema,
 } from '../../validations/schemas/schedule.event.schemas.js';
 import z from 'zod';
+import { handleServiceCall } from '../error.handler.js';
 
 export const scheduleEventRouter = t.router({
   findById: publicProcedure
     .input(scheduleEventParamsSchema)
-    .query(({ input }) => {
-      const event = scheduleEventService.findById(input.id);
-      if (!event) {
-        throw new TRPCError({ code: 'NOT_FOUND', message: 'Event not found' });
-      }
-      return event;
-    }),
+    .query(({ input }) =>
+      handleServiceCall(() => {
+        return scheduleEventService.findById(input.id);
+      }),
+    ),
 
   findByDateRange: publicProcedure
     .input(scheduleEventFindByDateRangeSchema)
-    .query(({ input }) => {
-      return scheduleEventService.findByDateRange(
-        input.startDate,
-        input.endDate,
-      );
-    }),
+    .query(({ input }) =>
+      handleServiceCall(() => {
+        return scheduleEventService.findByDateRange(
+          input.startDate,
+          input.endDate,
+        );
+      }),
+    ),
 
   findByDate: publicProcedure
     .input(scheduleEventFindByDateSchema)
-    .query(({ input }) => {
-      return scheduleEventService.findByDate(input.date);
-    }),
+    .query(({ input }) =>
+      handleServiceCall(() => {
+        return scheduleEventService.findByDate(input.date);
+      }),
+    ),
 
   create: protectedProcedure
     .input(scheduleEventCreateSchema)
-    .mutation(({ input }) => {
-      return scheduleEventService.create(input);
-    }),
+    .mutation(({ input }) =>
+      handleServiceCall(() => {
+        return scheduleEventService.create(input);
+      }),
+    ),
 
   update: protectedProcedure
     .input(
@@ -49,17 +53,17 @@ export const scheduleEventRouter = t.router({
         data: scheduleEventUpdateSchema,
       }),
     )
-    .mutation(({ input }) => {
-      const event = scheduleEventService.update(input.id, input.data);
-      if (!event) {
-        throw new TRPCError({ code: 'NOT_FOUND', message: 'Event not found' });
-      }
-      return event;
-    }),
+    .mutation(({ input }) =>
+      handleServiceCall(() => {
+        return scheduleEventService.update(input.id, input.data);
+      }),
+    ),
 
   delete: protectedProcedure
     .input(scheduleEventParamsSchema)
-    .mutation(({ input }) => {
-      return scheduleEventService.delete(input.id);
-    }),
+    .mutation(({ input }) =>
+      handleServiceCall(() => {
+        return scheduleEventService.delete(input.id);
+      }),
+    ),
 });

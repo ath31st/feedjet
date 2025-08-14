@@ -16,16 +16,22 @@ export class ScheduleEventService {
     this.db = db;
   }
 
-  findById(id: number): ScheduleEvent | undefined {
+  findById(id: number): ScheduleEvent {
     try {
-      return this.db
+      const event = this.db
         .select()
         .from(scheduleEventsTable)
         .where(eq(scheduleEventsTable.id, id))
         .get();
+
+      if (!event) {
+        throw new ScheduleEventError(404, 'Event not found');
+      }
+
+      return event;
     } catch (err) {
       Logger.error(err);
-      throw new ScheduleEventError('Failed to fetch event by id');
+      throw new ScheduleEventError(500, 'Failed to fetch event by id');
     }
   }
 
@@ -43,7 +49,7 @@ export class ScheduleEventService {
         .all();
     } catch (err) {
       Logger.error(err);
-      throw new ScheduleEventError('Failed to fetch events by date range');
+      throw new ScheduleEventError(500, 'Failed to fetch events by date range');
     }
   }
 
@@ -56,7 +62,7 @@ export class ScheduleEventService {
         .all();
     } catch (err) {
       Logger.error(err);
-      throw new ScheduleEventError('Failed to fetch events by date');
+      throw new ScheduleEventError(500, 'Failed to fetch events by date');
     }
   }
 
@@ -65,24 +71,27 @@ export class ScheduleEventService {
       return this.db.insert(scheduleEventsTable).values(data).returning().get();
     } catch (err: unknown) {
       Logger.error(err);
-      throw new ScheduleEventError('Failed to create schedule event');
+      throw new ScheduleEventError(500, 'Failed to create schedule event');
     }
   }
 
-  update(
-    id: number,
-    data: Partial<UpdateScheduleEvent>,
-  ): ScheduleEvent | undefined {
+  update(id: number, data: Partial<UpdateScheduleEvent>): ScheduleEvent {
     try {
-      return this.db
+      const updatedEvent = this.db
         .update(scheduleEventsTable)
         .set({ ...data, updatedAt: new Date() })
         .where(eq(scheduleEventsTable.id, id))
         .returning()
         .get();
+
+      if (!updatedEvent) {
+        throw new ScheduleEventError(404, 'Event not found');
+      }
+
+      return updatedEvent;
     } catch (err) {
       Logger.error(err);
-      throw new ScheduleEventError('Failed to update schedule event');
+      throw new ScheduleEventError(500, 'Failed to update schedule event');
     }
   }
 
@@ -94,7 +103,7 @@ export class ScheduleEventService {
         .run().changes;
     } catch (err) {
       Logger.error(err);
-      throw new ScheduleEventError('Failed to delete schedule event');
+      throw new ScheduleEventError(500, 'Failed to delete schedule event');
     }
   }
 }

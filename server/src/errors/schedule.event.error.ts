@@ -1,6 +1,3 @@
-export class ScheduleEventError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = 'ScheduleEventError';
-  }
-}
+import { ServiceError } from './service.error.js';
+
+export class ScheduleEventError extends ServiceError {}
