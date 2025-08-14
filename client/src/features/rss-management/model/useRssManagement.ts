@@ -5,6 +5,8 @@ import {
   useDeleteRss,
   useUpdateRss,
 } from '@/entities/rss';
+import { isValidUrl } from '@/shared/lib/isValidUrl';
+import { toast } from 'sonner';
 
 export function useRssManagement() {
   const [newFeed, setNewFeed] = useState('');
@@ -15,7 +17,12 @@ export function useRssManagement() {
 
   const handleAddFeed = () => {
     const url = newFeed.trim();
-    if (!url) return;
+
+    if (!url || !isValidUrl(url)) {
+      toast.error('Некорректная ссылка RSS');
+      return;
+    }
+
     createRss.mutate(
       { url },
       {
@@ -32,13 +39,17 @@ export function useRssManagement() {
     updateRss.mutate({ id, data: { url, isActive } });
   };
 
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewFeed(e.target.value);
+  };
+
   return {
     newFeed,
-    setNewFeed,
     feeds,
     feedsLoading,
     handleAddFeed,
     handleDeleteFeed,
     handleUpdateFeed,
+    handleInput,
   };
 }
