@@ -56,7 +56,7 @@ export class UserService {
     }
   }
 
-  update(id: number, data: Partial<UserUpdate>): User | undefined {
+  update(id: number, data: Partial<UserUpdate>): User {
     if (data.password) {
       data.password = this.hashPassword(data.password);
     }
@@ -85,16 +85,21 @@ export class UserService {
   }
 
   delete(id: number): number {
-    const count = this.db
-      .delete(usersTable)
-      .where(eq(usersTable.id, id))
-      .run().changes;
+    try {
+      const count = this.db
+        .delete(usersTable)
+        .where(eq(usersTable.id, id))
+        .run().changes;
 
-    if (count === 0) {
-      throw new UserServiceError(404, 'User not found');
+      if (count === 0) {
+        throw new UserServiceError(404, 'User not found');
+      }
+
+      return count;
+    } catch (err) {
+      Logger.error(err);
+      throw new UserServiceError(500, 'Failed to delete user');
     }
-
-    return count;
   }
 
   private hashPassword(password: string): string {
