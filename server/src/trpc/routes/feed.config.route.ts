@@ -8,6 +8,7 @@ import {
   publicProcedure,
 } from '../../container.js';
 import { protectedProcedure } from '../../middleware/auth.js';
+import { handleServiceCall } from '../error.handler.js';
 
 export const feedConfigRouter = t.router({
   getConfig: publicProcedure.query(() => {
@@ -19,22 +20,12 @@ export const feedConfigRouter = t.router({
   }),
 
   update: protectedProcedure
-    .input(
-      z.object({
-        data: feedConfigUpdateSchema,
+    .input(z.object({ data: feedConfigUpdateSchema }))
+    .mutation(({ input }) =>
+      handleServiceCall(() => {
+        const updated = feedConfigService.update(input.data);
+        eventBus.emit('feed-config', updated);
+        return updated;
       }),
-    )
-    .mutation(({ input }) => {
-      const updated = feedConfigService.update(input.data);
-      if (!updated) {
-        throw new TRPCError({
-          code: 'NOT_FOUND',
-          message: 'Feed config not found',
-        });
-      }
-
-      eventBus.emit('feed-config', updated);
-
-      return updated;
-    }),
+    ),
 });

@@ -11,6 +11,15 @@ export function handleServiceCall<T>(fn: () => T): T {
         case 400:
           trpcCode = 'BAD_REQUEST';
           break;
+        case 401:
+          trpcCode = 'UNAUTHORIZED';
+          break;
+        case 403:
+          trpcCode = 'FORBIDDEN';
+          break;
+        case 404:
+          trpcCode = 'NOT_FOUND';
+          break;
         case 409:
           trpcCode = 'CONFLICT';
           break;
