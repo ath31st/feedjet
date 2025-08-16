@@ -1,60 +1,62 @@
 events {
     worker_connections 1024;
 }
-
-server {
-    listen 80;
-    server_name localhost;
-    return 301 https://$host$request_uri;
-}
-
-server {
-    listen 443 ssl;
-    server_name localhost;
-
-    ssl_certificate {{CERT_PATH}};
-    ssl_certificate_key {{KEY_PATH}};
-
-    location / {
-        proxy_pass http://localhost:5173;
-        proxy_http_version 1.1;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_read_timeout 90s;
+http {
+    server {
+        listen 80;
+        server_name localhost;
+        return 301 https://$host$request_uri;
     }
 
-    location ~ ^/sse/ {
-        proxy_pass http://localhost:3000;
-        proxy_http_version 1.1;
-        proxy_set_header Connection '';
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
+    server {
+        listen 443 ssl;
+        server_name localhost;
 
-        proxy_buffering off;
-        proxy_cache off;
-        proxy_request_buffering off;
+        ssl_certificate {{CERT_PATH}};
+        ssl_certificate_key {{KEY_PATH}};
 
-        proxy_read_timeout 3600s;
-        proxy_send_timeout 3600s;
-        keepalive_timeout 65;
-    }
+        location / {
+            proxy_pass http://localhost:5173;
+            proxy_http_version 1.1;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_read_timeout 90s;
+        }
 
-    location /trpc {
-        proxy_pass http://localhost:3000;
-        proxy_http_version 1.1;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
+        location ~ ^/sse/ {
+            proxy_pass http://localhost:3000;
+            proxy_http_version 1.1;
+            proxy_set_header Connection '';
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
 
-    location /cache {
-        root {{CACHE_DIR}};
-        expires 3d;
-        add_header Cache-Control "public";
+            proxy_buffering off;
+            proxy_cache off;
+            proxy_request_buffering off;
+            chunked_transfer_encoding off;
+
+            proxy_read_timeout 3600s;
+            proxy_send_timeout 3600s;
+            keepalive_timeout 65;
+        }
+
+        location /trpc {
+            proxy_pass http://localhost:3000;
+            proxy_http_version 1.1;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+
+        location /cache {
+            root {{CACHE_DIR}};
+            expires 3d;
+            add_header Cache-Control "public";
+        }
     }
 }
