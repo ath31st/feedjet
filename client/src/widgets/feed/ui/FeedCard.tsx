@@ -3,7 +3,7 @@ import { getTextSizeByCells } from '@/shared/lib/getTextSizeByCells';
 import { getImageWidthByCells } from '@/shared/lib/getImageWidthByCells';
 import { FeedImage } from './FeedImage';
 import { LazyImage } from '@/shared/ui/LazyImage';
-import noImageAvailableUrl from '@/shared/assets/images/no-image-available.jpg';
+import { getRandomFallbackImage } from '@/shared/lib/getRandomFallbackImage';
 
 interface FeedCardProps {
   item: FeedItem;
@@ -20,7 +20,7 @@ export function FeedCard({ item, cellsCount }: FeedCardProps) {
           {item.image ? (
             <FeedImage url={item.image} alt={''} />
           ) : (
-            <LazyImage src={noImageAvailableUrl} alt={''} />
+            <LazyImage src={getRandomFallbackImage(item.link)} alt={''} />
           )}
         </div>
 
