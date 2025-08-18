@@ -1,5 +1,5 @@
 export function getRandomFallbackImage(stringForHash?: string): string {
-  const maxImages = 14;
+  const maxImages = 35;
   if (!stringForHash) {
     const randomIndex = Math.floor(Math.random() * maxImages) + 1;
     return `/images/${randomIndex}.webp`;
