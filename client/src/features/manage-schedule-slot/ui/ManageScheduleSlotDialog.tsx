@@ -46,6 +46,9 @@ export function ManageScheduleSlotDialog({
           <Dialog.Title className="mb-4 font-semibold text-lg">
             {format(parseISO(date), 'd MMMM yyyy', { locale: ru })} {startTime}
           </Dialog.Title>
+          <Dialog.Description className="sr-only">
+            Управление событиями для выбранного слота расписания
+          </Dialog.Description>
 
           {mode === 'view' && (
             <>
