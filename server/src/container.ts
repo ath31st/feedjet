@@ -20,6 +20,7 @@ import { ScheduleEventService } from './services/schedule.event.service.js';
 import { ImageCacheService } from './services/image.cache.service.js';
 import { OpenWeatherAPI } from 'openweather-api-node';
 import { WeatherForecastService } from './services/weather.forecast.service.js';
+import { FileStorageService } from './services/file.storage.service.js';
 
 const dbPath = process.env.DB_FILE_NAME ?? '';
 
@@ -46,6 +47,13 @@ if (cacheDir) {
   Logger.info(`Image cache directory: ${cacheDir}`);
 }
 export const imageCacheService = new ImageCacheService(cacheDir);
+
+const fileStorageDir = process.env.FILE_STORAGE_DIR ?? './file-storage';
+if (fileStorageDir) {
+  fs.mkdirSync(fileStorageDir, { recursive: true });
+  Logger.info(`File storage directory: ${fileStorageDir}`);
+}
+export const fileStorageService = new FileStorageService(fileStorageDir);
 
 export const openWeatherApiKey = process.env.OPEN_WEATHER_API_KEY;
 if (!openWeatherApiKey) {
