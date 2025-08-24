@@ -1,5 +1,11 @@
 import { QueryClient } from '@tanstack/react-query';
-import { createTRPCClient, httpBatchLink } from '@trpc/client';
+import {
+  splitLink,
+  httpLink,
+  httpBatchLink,
+  isNonJsonSerializable,
+  createTRPCClient,
+} from '@trpc/client';
 import { createTRPCOptionsProxy } from '@trpc/tanstack-react-query';
 import type { AppRouter } from '@shared/trpc/router';
 import { toast } from 'sonner';
@@ -19,19 +25,38 @@ const trpcUrl = `${import.meta.env.VITE_API_URL}/trpc`;
 
 export const trpcClient = createTRPCClient<AppRouter>({
   links: [
-    httpBatchLink({
-      url: trpcUrl,
-      fetch: async (url, options) => {
-        const token = localStorage.getItem('token');
-        const headers = new Headers(options?.headers);
-        if (token) {
-          headers.set('Authorization', `Bearer ${token}`);
-        }
-        return fetch(url, {
-          ...(options as RequestInit),
-          headers,
-        });
-      },
+    splitLink({
+      condition: (op) => isNonJsonSerializable(op.input),
+
+      true: httpLink({
+        url: trpcUrl,
+        fetch: async (url, options) => {
+          const token = localStorage.getItem('token');
+          const headers = new Headers(options?.headers);
+          if (token) {
+            headers.set('Authorization', `Bearer ${token}`);
+          }
+          return fetch(url, {
+            ...(options as RequestInit),
+            headers,
+          });
+        },
+      }),
+
+      false: httpBatchLink({
+        url: trpcUrl,
+        fetch: async (url, options) => {
+          const token = localStorage.getItem('token');
+          const headers = new Headers(options?.headers);
+          if (token) {
+            headers.set('Authorization', `Bearer ${token}`);
+          }
+          return fetch(url, {
+            ...(options as RequestInit),
+            headers,
+          });
+        },
+      }),
     }),
   ],
 });
