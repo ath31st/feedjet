@@ -1,7 +1,7 @@
-import { octetInputParser } from '@trpc/server/http';
 import { Readable } from 'node:stream';
 import { fileStorageService, t } from '../../container.js';
 import { protectedProcedure } from '../../middleware/auth.js';
+import { fileParamsSchema } from '../../validations/schemas/file.storage.validation.js';
 
 function webReadableToNode(
   readable: ReadableStream<Uint8Array>,
@@ -26,17 +26,15 @@ function webReadableToNode(
 
 export const fileStorageRouter = t.router({
   uploadFile: protectedProcedure
-    .input(octetInputParser)
-    .mutation(async ({ input, ctx }) => {
-      const fileName = ctx.req.headers['x-file-name'] as string;
-      if (!fileName) {
-        throw new Error('Missing file name header');
-      }
+    .input(fileParamsSchema)
+    .mutation(async ({ input }) => {
+      const file = input.get('file') as File;
+      const filename = input.get('filename') as string;
+      const nodeStream = webReadableToNode(file.stream());
 
-      const nodeStream = webReadableToNode(input);
       const savedPath = await fileStorageService.saveStream(
         nodeStream,
-        fileName,
+        filename,
       );
 
       return { ok: true, path: savedPath };
