@@ -6,6 +6,10 @@ export const useVideoWithMetadataList = () => {
   return useQuery(trpcWithProxy.videoFile.listFiles.queryOptions());
 };
 
+export const useDiskUsage = () => {
+  return useQuery(trpcWithProxy.videoFile.getDiskUsage.queryOptions());
+};
+
 export const useVideoFile = () => {
   return useMutation(
     trpcWithProxy.videoFile.deleteFile.mutationOptions({
@@ -13,6 +17,9 @@ export const useVideoFile = () => {
         toast.success('Файл успешно удален');
         queryClient.invalidateQueries({
           queryKey: trpcWithProxy.videoFile.listFiles.queryKey(),
+        });
+        queryClient.invalidateQueries({
+          queryKey: trpcWithProxy.videoFile.getDiskUsage.queryKey(),
         });
       },
       onError: (err: unknown) => {
@@ -34,6 +41,9 @@ export const useUploadVideo = () => {
         });
         queryClient.invalidateQueries({
           queryKey: trpcWithProxy.videoFile.listFiles.queryKey(),
+        });
+        queryClient.invalidateQueries({
+          queryKey: trpcWithProxy.videoFile.getDiskUsage.queryKey(),
         });
       },
       onError: (err: unknown) => {

@@ -9,7 +9,7 @@ export function VideoUpload() {
 
   const handleFiles = (files: File[]) => {
     if (!files.length) return;
-    console.log('Выбраны файлы:', files);
+
     files.forEach((file) => {
       const formData = new FormData();
       formData.set('file', file);
@@ -65,7 +65,7 @@ export function VideoUpload() {
 
       {/** biome-ignore lint/a11y/noStaticElementInteractions: no need to add a11y  */}
       <div
-        className={`flex h-40 items-center justify-center rounded border-2 border-dashed ${
+        className={`flex h-30 items-center justify-center rounded border-2 border-dashed ${
           dragOver
             ? 'border-[var(--border)] bg-[var(--button-hover-bg)]'
             : 'border-[var(--border)]'
