@@ -9,7 +9,7 @@ export class FileStorageService {
     this.baseDir = baseDir;
   }
 
-  private getFilePath(fileName: string) {
+  protected getFilePath(fileName: string) {
     return path.join(this.baseDir, fileName);
   }
 

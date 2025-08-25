@@ -12,7 +12,7 @@ import { uiConfigRouter } from './routes/ui.config.route.js';
 import { scheduleEventRouter } from './routes/schedule.event.route.js';
 import { imageCacheRouter } from './routes/image.cache.route.js';
 import { weatherForecastRouter } from './routes/weather.forecast.route.js';
-import { fileStorageRouter } from './routes/file.storage.route.js';
+import { videoStorageRouter } from './routes/video.storage.route.js';
 
 const appRouter = t.router({
   user: userRouter,
@@ -25,7 +25,7 @@ const appRouter = t.router({
   scheduleEvent: scheduleEventRouter,
   image: imageCacheRouter,
   weather: weatherForecastRouter,
-  file: fileStorageRouter,
+  videoFile: videoStorageRouter,
 });
 
 export type AppRouter = typeof appRouter;

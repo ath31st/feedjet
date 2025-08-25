@@ -1,5 +1,5 @@
 import { Readable } from 'node:stream';
-import { fileStorageService, t } from '../../container.js';
+import { videoStorageService, t } from '../../container.js';
 import { protectedProcedure } from '../../middleware/auth.js';
 import {
   fileDeleteParamsSchema,
@@ -27,7 +27,7 @@ function webReadableToNode(
   return nodeStream;
 }
 
-export const fileStorageRouter = t.router({
+export const videoStorageRouter = t.router({
   uploadFile: protectedProcedure
     .input(fileParamsSchema)
     .mutation(async ({ input }) => {
@@ -35,7 +35,7 @@ export const fileStorageRouter = t.router({
       const filename = input.get('filename') as string;
       const nodeStream = webReadableToNode(file.stream());
 
-      const savedPath = await fileStorageService.saveStream(
+      const savedPath = await videoStorageService.saveStream(
         nodeStream,
         filename,
       );
@@ -44,14 +44,14 @@ export const fileStorageRouter = t.router({
     }),
 
   listFiles: protectedProcedure.query(async () => {
-    const files = await fileStorageService.listFiles();
+    const files = await videoStorageService.listVideosWithMetadata();
     return files;
   }),
 
   deleteFile: protectedProcedure
     .input(fileDeleteParamsSchema)
     .mutation(async ({ input }) => {
-      await fileStorageService.remove(input.filename);
+      await videoStorageService.remove(input.filename);
       return { ok: true };
     }),
 });
