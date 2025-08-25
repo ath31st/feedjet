@@ -5,7 +5,7 @@ import { useUploadVideo } from '@/entities/video/api/useVideo';
 export function VideoUpload() {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [dragOver, setDragOver] = useState(false);
-  const uploadFile = useUploadVideo();
+  const { mutate: uploadFile, isPending } = useUploadVideo();
 
   const handleFiles = (files: File[]) => {
     if (!files.length) return;
@@ -15,7 +15,7 @@ export function VideoUpload() {
       formData.set('file', file);
       formData.set('filename', file.name);
 
-      uploadFile.mutate(formData);
+      uploadFile(formData);
     });
   };
 
@@ -55,8 +55,12 @@ export function VideoUpload() {
         className="hidden"
       />
 
-      <CommonButton type="button" onClick={handleButtonClick}>
-        Выбрать видео
+      <CommonButton
+        type="button"
+        onClick={handleButtonClick}
+        disabled={isPending}
+      >
+        {isPending ? 'Идет загрузка...' : 'Выбрать видео'}
       </CommonButton>
 
       {/** biome-ignore lint/a11y/noStaticElementInteractions: no need to add a11y  */}
@@ -73,9 +77,15 @@ export function VideoUpload() {
         onDragLeave={() => setDragOver(false)}
         onDrop={handleDrop}
       >
-        <span className="text-[var(--meta-text)] text-sm">
-          Перетащите видеофайлы сюда
-        </span>
+        {isPending ? (
+          <span className="text-[var(--meta-text)] text-sm">
+            Идет загрузка...
+          </span>
+        ) : (
+          <span className="text-[var(--meta-text)] text-sm">
+            Перетащите видеофайлы сюда
+          </span>
+        )}
       </div>
     </div>
   );

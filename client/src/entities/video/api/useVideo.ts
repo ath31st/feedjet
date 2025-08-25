@@ -40,6 +40,12 @@ export const useUploadVideo = () => {
           return;
         }
       },
+      onMutate: (data: FormData) => {
+        toast.loading(`Загрузка ${data.get('filename')}…`);
+      },
+      onSettled: () => {
+        toast.dismiss();
+      },
     }),
   );
 };
