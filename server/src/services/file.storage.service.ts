@@ -40,4 +40,19 @@ export class FileStorageService {
     const files = await fs.readdir(this.baseDir);
     return files;
   }
+
+  async getDiskUsage() {
+    const stats = await fs.statfs(this.baseDir);
+
+    const blockSize = stats.bsize;
+    const total = stats.blocks * blockSize;
+    const free = stats.bavail * blockSize;
+    const used = total - free;
+
+    return {
+      total,
+      used,
+      free,
+    };
+  }
 }

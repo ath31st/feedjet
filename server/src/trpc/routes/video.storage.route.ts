@@ -54,4 +54,8 @@ export const videoStorageRouter = t.router({
       await videoStorageService.remove(input.filename);
       return { ok: true };
     }),
+
+  getDiskUsage: protectedProcedure.query(async () => {
+    return videoStorageService.getDiskUsage();
+  }),
 });
