@@ -1,7 +1,10 @@
 import { Readable } from 'node:stream';
 import { fileStorageService, t } from '../../container.js';
 import { protectedProcedure } from '../../middleware/auth.js';
-import { fileParamsSchema } from '../../validations/schemas/file.storage.validation.js';
+import {
+  fileDeleteParamsSchema,
+  fileParamsSchema,
+} from '../../validations/schemas/file.storage.validation.js';
 
 function webReadableToNode(
   readable: ReadableStream<Uint8Array>,
@@ -44,4 +47,11 @@ export const fileStorageRouter = t.router({
     const files = await fileStorageService.listFiles();
     return files;
   }),
+
+  deleteFile: protectedProcedure
+    .input(fileDeleteParamsSchema)
+    .mutation(async ({ input }) => {
+      await fileStorageService.remove(input.filename);
+      return { ok: true };
+    }),
 });

@@ -6,6 +6,25 @@ export const useFileList = () => {
   return useQuery(trpcWithProxy.file.listFiles.queryOptions());
 };
 
+export const useDeleteFile = () => {
+  return useMutation(
+    trpcWithProxy.file.deleteFile.mutationOptions({
+      onSuccess: () => {
+        toast.success('Файл успешно удален');
+        queryClient.invalidateQueries({
+          queryKey: trpcWithProxy.file.listFiles.queryKey(),
+        });
+      },
+      onError: (err: unknown) => {
+        if (err instanceof Error) {
+          toast.error(err.message || 'Ошибка при удалении файла');
+          return;
+        }
+      },
+    }),
+  );
+};
+
 export const useUploadFile = () => {
   return useMutation(
     trpcWithProxy.file.uploadFile.mutationOptions({
