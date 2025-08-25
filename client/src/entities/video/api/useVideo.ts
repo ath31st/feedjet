@@ -28,8 +28,10 @@ export const useVideoFile = () => {
 export const useUploadVideo = () => {
   return useMutation(
     trpcWithProxy.videoFile.uploadFile.mutationOptions({
-      onSuccess: (data) => {
-        toast.success(`Файл успешно загружен: ${data.path}`);
+      onSuccess: (data, _, ctx) => {
+        toast.success(`Файл ${data.filename} успешно загружен`, {
+          id: ctx?.toastId,
+        });
         queryClient.invalidateQueries({
           queryKey: trpcWithProxy.videoFile.listFiles.queryKey(),
         });
@@ -41,10 +43,7 @@ export const useUploadVideo = () => {
         }
       },
       onMutate: (data: FormData) => {
-        toast.loading(`Загрузка ${data.get('filename')}…`);
-      },
-      onSettled: () => {
-        toast.dismiss();
+        return { toastId: toast.loading(`Загрузка ${data.get('filename')}…`) };
       },
     }),
   );

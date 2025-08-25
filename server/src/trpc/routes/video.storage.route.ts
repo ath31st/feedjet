@@ -40,7 +40,7 @@ export const videoStorageRouter = t.router({
         filename,
       );
 
-      return { ok: true, path: savedPath };
+      return { ok: true, path: savedPath, filename };
     }),
 
   listFiles: protectedProcedure.query(async () => {
