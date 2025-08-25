@@ -5,4 +5,6 @@ export interface VideoMetadata {
   duration: number;
   width: number;
   height: number;
+  size: number;
+  createdAt: number;
 }

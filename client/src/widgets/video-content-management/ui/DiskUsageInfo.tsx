@@ -1,5 +1,5 @@
 import { useDiskUsage } from '@/entities/video/api/useVideo';
-import { formatBytes } from '../lib/formatBytes';
+import { formatBytes } from '@/shared/lib/formatBytes';
 
 export function DiskUsageInfo() {
   const { data, isLoading } = useDiskUsage();

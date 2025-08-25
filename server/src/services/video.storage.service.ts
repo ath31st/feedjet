@@ -32,6 +32,8 @@ export class VideoStorageService extends FileStorageService {
     const name = path.basename(fileName, path.extname(fileName));
     const actualFormat = formats.includes(ext) ? ext : (formats[0] ?? '');
 
+    const fileStats = await this.getFileStats(fileName);
+
     return {
       name: name,
       fileName: fileName,
@@ -39,6 +41,8 @@ export class VideoStorageService extends FileStorageService {
       duration: Math.round(parseFloat(format.duration ?? '0')),
       width: stream.width ?? 0,
       height: stream.height ?? 0,
+      size: fileStats.size,
+      createdAt: fileStats.birthtime.getTime(),
     };
   }
 

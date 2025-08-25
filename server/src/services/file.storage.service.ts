@@ -55,4 +55,10 @@ export class FileStorageService {
       free,
     };
   }
+
+  async getFileStats(fileName: string) {
+    const filePath = this.getFilePath(fileName);
+    const stats = await fs.stat(filePath);
+    return stats;
+  }
 }
