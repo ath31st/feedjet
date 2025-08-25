@@ -6,12 +6,22 @@ export function VideoList() {
   const videos: VideoMetadata[] = useVideoWithMetadataList().data || [];
   const removeVideo = useVideoFile();
 
+  function formatDuration(seconds: number): string {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  }
+
   const handleRemoveVideo = (videoName: string) => {
     removeVideo.mutate({ filename: videoName });
   };
 
   if (!videos.length) {
-    return <div className="text-muted text-sm">Нет загруженных видео</div>;
+    return (
+      <div className="text-[var(--meta-text)] text-sm">
+        Нет загруженных видео
+      </div>
+    );
   }
 
   return (
@@ -24,8 +34,9 @@ export function VideoList() {
           >
             <div className="flex flex-col">
               <span className="truncate">{v.name}</span>
-              <span className="text-muted-foreground text-xs">
-                {v.width}x{v.height}px · {v.duration}s · {v.format}
+              <span className="text-[var(--meta-text)] text-xs">
+                {formatDuration(v.duration)} · {v.width}x{v.height}px ·{' '}
+                {v.format}
               </span>
             </div>
 
