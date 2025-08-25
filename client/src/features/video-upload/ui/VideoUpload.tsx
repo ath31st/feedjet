@@ -1,11 +1,11 @@
 import { useRef, useState } from 'react';
 import { CommonButton } from '@/shared/ui/common/CommonButton';
-import { useUploadFile } from '@/entities/video/api/useVideo';
+import { useUploadVideo } from '@/entities/video/api/useVideo';
 
 export function VideoUpload() {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [dragOver, setDragOver] = useState(false);
-  const uploadFile = useUploadFile();
+  const uploadFile = useUploadVideo();
 
   const handleFiles = (files: File[]) => {
     if (!files.length) return;

@@ -1,9 +1,10 @@
-import { useDeleteFile, useFileList } from '@/entities/video/api/useVideo';
+import type { VideoMetadata } from '@/entities/video';
+import { useVideoFile, useVideoWithMetadataList } from '@/entities/video';
 import { Cross2Icon } from '@radix-ui/react-icons';
 
 export function VideoList() {
-  const videos = useFileList().data || [];
-  const removeVideo = useDeleteFile();
+  const videos: VideoMetadata[] = useVideoWithMetadataList().data || [];
+  const removeVideo = useVideoFile();
 
   const handleRemoveVideo = (videoName: string) => {
     removeVideo.mutate({ filename: videoName });
@@ -18,14 +19,20 @@ export function VideoList() {
       <ul className="space-y-2">
         {videos.map((v) => (
           <li
-            key={v}
+            key={v.fileName}
             className="flex items-center justify-between rounded-lg border border-[var(--border)] px-4 py-2"
           >
-            <span className="truncate">{v}</span>
+            <div className="flex flex-col">
+              <span className="truncate">{v.name}</span>
+              <span className="text-muted-foreground text-xs">
+                {v.width}x{v.height}px · {v.duration}s · {v.format}
+              </span>
+            </div>
+
             <div className="flex items-center gap-2">
               <button
                 type="button"
-                onClick={() => handleRemoveVideo(v)}
+                onClick={() => handleRemoveVideo(v.fileName)}
                 className="bg-transparent p-1 hover:opacity-60"
               >
                 <Cross2Icon className="h-4 w-4 cursor-pointer" />
