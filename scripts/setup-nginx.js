@@ -20,6 +20,7 @@ if (!fs.existsSync(containerTsPath)) {
 
 const content = fs.readFileSync(containerTsPath, 'utf-8');
 
+// cacheDir
 let match = content.match(/export\s+const\s+cacheDir\s*=\s*process\.env\.CACHE_DIR\s*\?\?\s*['"`]([^'"`]+)['"`]/m);
 let cacheDirValue = match ? match[1] : null;
 
@@ -45,6 +46,30 @@ const absCacheDir = path.isAbsolute(cacheDirValue)
   ? cacheDirValue
   : path.resolve(serverRoot, cacheDirValue);
 
+// fileStorageDir
+match = content.match(/export\s+const\s+fileStorageDir\s*=\s*process\.env\.FILE_STORAGE_DIR\s*\?\?\s*['"`]([^'"`]+)['"`]/m);
+let videoDirValue = match ? match[1] : null;
+
+if (!videoDirValue) {
+  match = content.match(/export\s+const\s+fileStorageDir\s*=\s*['"`]([^'"`]+)['"`]/m);
+  if (match) videoDirValue = match[1];
+}
+
+if (!videoDirValue) {
+  match = content.match(/export\s+const\s+fileStorageDir\s*=\s*path\.resolve\(\s*['"`]([^'"`]+)['"`]\s*\)/m);
+  if (match) videoDirValue = match[1];
+}
+
+if (!videoDirValue) {
+  console.error('❌ Не удалось автоматически извлечь fileStorageDir из container.ts.');
+  process.exit(1);
+}
+
+const absVideoDir = path.isAbsolute(videoDirValue)
+  ? videoDirValue
+  : path.resolve(serverRoot, videoDirValue);
+
+// certs
 if (!fs.existsSync(certsDir)) fs.mkdirSync(certsDir, { recursive: true });
 
 const crtPath = path.join(certsDir, 'local.crt');
@@ -80,6 +105,7 @@ const template = fs.readFileSync(nginxConfTemplate, 'utf-8');
 
 const nginxConf = template
   .replace(/{{\s*CACHE_DIR\s*}}/g, absCacheDir)
+  .replace(/{{\s*VIDEO_DIR\s*}}/g, absVideoDir)
   .replace(/{{\s*CERT_PATH\s*}}/g, crtPath)
   .replace(/{{\s*KEY_PATH\s*}}/g, keyPath);
 
@@ -87,5 +113,6 @@ fs.writeFileSync(nginxConfOutput, nginxConf, 'utf-8');
 
 console.log(`✅ nginx.conf обновлён: ${path.relative(projectRoot, nginxConfOutput)}`);
 console.log(`📁 cacheDir: ${absCacheDir}`);
+console.log(`📁 videoDir: ${absVideoDir}`);
 console.log(`📄 certs: ${crtPath}, ${keyPath}`);
 console.log(`🚀 Запусти: sudo nginx -c "${nginxConfOutput}"`);

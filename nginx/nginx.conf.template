@@ -63,5 +63,10 @@ http {
             expires 3d;
             add_header Cache-Control "public";
         }
+
+        location /video/ {
+            alias {{VIDEO_DIR}}/;
+            add_header Cache-Control "public";
+        }
     }
 }
