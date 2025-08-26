@@ -26,35 +26,33 @@ export function VideoList() {
   }
 
   return (
-    <div className="flex flex-col gap-2">
-      <ul className="space-y-2">
-        {videos
-          .sort((a, b) => a.createdAt - b.createdAt)
-          .map((v) => (
-            <li
-              key={v.fileName}
-              className="flex items-center justify-between rounded-lg border border-[var(--border)] px-4 py-2"
-            >
-              <div className="flex flex-col">
-                <span className="truncate">{v.name}</span>
-                <span className="text-[var(--meta-text)] text-xs">
-                  {formatDuration(v.duration)} · {v.width}x{v.height}px ·{' '}
-                  {v.format} · {formatBytes(v.size)}
-                </span>
-              </div>
+    <div className="grid grid-cols-2 gap-x-6 gap-y-2">
+      {videos
+        .sort((a, b) => a.createdAt - b.createdAt)
+        .map((v) => (
+          <div
+            key={v.fileName}
+            className="flex items-center justify-between rounded-lg border border-[var(--border)] px-4 py-2"
+          >
+            <div className="flex flex-col">
+              <span className="truncate">{v.name}</span>
+              <span className="text-[var(--meta-text)] text-xs">
+                {formatDuration(v.duration)} · {v.width}x{v.height}px ·{' '}
+                {v.format} · {formatBytes(v.size)}
+              </span>
+            </div>
 
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => handleRemoveVideo(v.fileName)}
-                  className="bg-transparent p-1 hover:opacity-60"
-                >
-                  <Cross2Icon className="h-4 w-4 cursor-pointer" />
-                </button>
-              </div>
-            </li>
-          ))}
-      </ul>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => handleRemoveVideo(v.fileName)}
+                className="bg-transparent p-1 hover:opacity-60"
+              >
+                <Cross2Icon className="h-4 w-4 cursor-pointer" />
+              </button>
+            </div>
+          </div>
+        ))}
     </div>
   );
 }
