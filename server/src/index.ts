@@ -8,12 +8,13 @@ import { feedSseHandler } from './sse/feed.handler.js';
 import { feedConfigSseHandler } from './sse/feed.config.handler.js';
 import { controlSseHandler } from './sse/control.handler.js';
 import { uiConfigSseHandler } from './sse/ui.config.handler.js';
-import { cacheDir, videoStorageService } from './container.js';
+import { imageCacheService, videoStorageService } from './container.js';
 import { startImageCacheCleanupJob } from './cron/image.cache.cron.js';
 
 const app = express();
 const port = process.env.PORT || 3000;
 
+const cacheDir = imageCacheService.getCacheDir();
 app.use(
   '/cache',
   express.static(cacheDir, {

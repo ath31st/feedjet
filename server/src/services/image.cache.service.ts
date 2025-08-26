@@ -14,6 +14,10 @@ export class ImageCacheService {
     this.cacheDir = cacheDir;
   }
 
+  getCacheDir() {
+    return this.cacheDir;
+  }
+
   private async getCachePath(key: string) {
     const hash = createHash('sha1').update(key).digest('hex');
     const fileName = `${hash}.webp`;
