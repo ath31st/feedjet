@@ -4,6 +4,7 @@ import { formatBytes } from '@/shared/lib/formatBytes';
 import { Cross2Icon, EyeOpenIcon } from '@radix-ui/react-icons';
 import { useState } from 'react';
 import { VideoPreviewDialog } from './VideoPreviewDialog';
+import { formatDuration } from '@/shared/lib/formatDuration';
 
 const SERVER_URL = import.meta.env.VITE_API_URL;
 
@@ -11,12 +12,6 @@ export function VideoList() {
   const videos: VideoMetadata[] = useVideoWithMetadataList().data || [];
   const removeVideo = useVideoFile();
   const [openVideo, setOpenVideo] = useState<VideoMetadata | null>(null);
-
-  function formatDuration(seconds: number): string {
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-  }
 
   const handleRemoveVideo = (videoName: string) => {
     removeVideo.mutate({ filename: videoName });
@@ -40,15 +35,15 @@ export function VideoList() {
               key={v.fileName}
               className="flex items-center justify-between rounded-lg border border-[var(--border)] px-4 py-2"
             >
-              <div className="flex flex-col">
-                <span className="truncate">{v.name}</span>
+              <div className="flex flex-col overflow-hidden">
+                <span className=" truncate">{v.name}</span>
                 <span className="text-[var(--meta-text)] text-xs">
                   {formatDuration(v.duration)} · {v.width}x{v.height}px ·{' '}
                   {v.format} · {formatBytes(v.size)}
                 </span>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="ml-2 flex flex-shrink-0 items-center gap-2">
                 <button
                   type="button"
                   onClick={() => setOpenVideo(v)}
