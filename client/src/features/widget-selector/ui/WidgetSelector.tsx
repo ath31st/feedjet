@@ -1,5 +1,5 @@
 import * as ToggleGroup from '@radix-ui/react-toggle-group';
-import { widgetTypes } from '@shared/types/ui.config';
+import { widgetTypes, widgetLabels } from '@shared/types/ui.config';
 import { useWidgetSelector } from '../model/useWidgetSelector';
 
 export function WidgetSelector() {
@@ -21,9 +21,9 @@ export function WidgetSelector() {
           <ToggleGroup.Item
             key={t}
             value={t}
-            className="cursor-pointer rounded-md px-2 py-1 text-sm hover:bg-[var(--button-hover-bg)] data-[state=on]:bg-[var(--button-bg)]"
+            className="w-24 cursor-pointer rounded-lg px-2 py-1 text-sm hover:bg-[var(--button-hover-bg)] data-[state=on]:bg-[var(--button-bg)]"
           >
-            {t}
+            {widgetLabels[t]}
           </ToggleGroup.Item>
         ))}
       </ToggleGroup.Root>
