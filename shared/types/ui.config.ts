@@ -22,5 +22,5 @@ export interface UpdateUiConfig {
 export const themes = ['dark', 'light', 'green', 'blue', 'sepia'];
 export type Theme = (typeof themes)[number];
 
-export const widgetTypes = ['schedule', 'birthdays', 'feed'];
+export const widgetTypes = ['schedule', 'video', 'feed'];
 export type WidgetType = (typeof widgetTypes)[number];

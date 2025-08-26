@@ -1,7 +1,7 @@
 import { AnimatedSigmaBackground } from '@/shared/ui/AnimatedSigmaBackground ';
 import { FeedWidget } from '../widgets/feed';
 import { ScheduleWidget } from '@/widgets/schedule';
-import { BirthdaysWidget } from '@/widgets/birthdays';
+import { VideoPlayerWidget } from '@/widgets/video-player';
 import { useUiConfigStore } from '@/entities/ui-config';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Rotator } from '@/shared/ui/Rotator';
@@ -20,7 +20,7 @@ export function KioskPage() {
   const widgetMap: Record<string, React.ReactNode> = {
     feed: <FeedWidget rotate={rotate} animation={animation} />,
     schedule: <ScheduleWidget rotate={rotate} />,
-    birthdays: <BirthdaysWidget />,
+    video: <VideoPlayerWidget rotate={rotate} />,
   };
 
   const currentWidget = widgetMap[widgets[index]] ?? null;
