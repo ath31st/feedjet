@@ -22,9 +22,9 @@ export function DiskUsageInfo() {
             {formatBytes(data.used)} / {formatBytes(data.total)}
           </span>
         </div>
-        <div className="h-20 w-full rounded bg-[var(--button-bg)]">
+        <div className="h-20 w-full rounded-lg bg-[var(--button-bg)]">
           <div
-            className="h-20 rounded bg-[var(--button-hover-bg)]"
+            className="h-20 rounded-lg bg-[var(--button-hover-bg)]"
             style={{ width: `${usedPercent}%` }}
           />
         </div>
