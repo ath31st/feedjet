@@ -8,7 +8,7 @@ import { feedSseHandler } from './sse/feed.handler.js';
 import { feedConfigSseHandler } from './sse/feed.config.handler.js';
 import { controlSseHandler } from './sse/control.handler.js';
 import { uiConfigSseHandler } from './sse/ui.config.handler.js';
-import { cacheDir } from './container.js';
+import { cacheDir, videoStorageService } from './container.js';
 import { startImageCacheCleanupJob } from './cron/image.cache.cron.js';
 
 const app = express();
@@ -20,6 +20,8 @@ app.use(
     maxAge: '3d',
   }),
 );
+const videoStorageBaseDir = videoStorageService.getBaseDir();
+app.use('/video', express.static(videoStorageBaseDir));
 app.use(cors());
 app.use('/trpc', trpcMiddleware);
 app.use(express.json());

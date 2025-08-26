@@ -13,6 +13,10 @@ export class FileStorageService {
     return path.join(this.baseDir, fileName);
   }
 
+  getBaseDir() {
+    return this.baseDir;
+  }
+
   async saveBuffer(buffer: Buffer, originalName: string) {
     const filePath = this.getFilePath(originalName);
     await fs.writeFile(filePath, buffer);
