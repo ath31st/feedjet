@@ -30,7 +30,7 @@ export function VideoPreviewDialog({
             src={`${serverUrl}/video/${video.fileName}`}
             controls
             autoPlay
-            className="h-auto max-h-[80vh] max-w-[90vw] rounded-lg"
+            className="h-auto max-h-[80vh] max-w-[80vw] rounded-lg"
           >
             <track kind="captions" label="no captions" />
           </video>
