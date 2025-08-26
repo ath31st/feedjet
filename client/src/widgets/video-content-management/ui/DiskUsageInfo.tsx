@@ -1,5 +1,6 @@
 import { useDiskUsage } from '@/entities/video/api/useVideo';
 import { formatBytes } from '@/shared/lib/formatBytes';
+import { ProgressBar } from './ProgressBar';
 
 export function DiskUsageInfo() {
   const { data, isLoading } = useDiskUsage();
@@ -22,12 +23,7 @@ export function DiskUsageInfo() {
             {formatBytes(data.used)} / {formatBytes(data.total)}
           </span>
         </div>
-        <div className="h-20 w-full rounded-lg bg-[var(--button-bg)]">
-          <div
-            className="h-20 rounded-lg bg-[var(--button-hover-bg)]"
-            style={{ width: `${usedPercent}%` }}
-          />
-        </div>
+        <ProgressBar value={usedPercent} />
       </div>
     </div>
   );
