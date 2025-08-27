@@ -58,3 +58,18 @@ export const useUploadVideo = () => {
     }),
   );
 };
+
+export const useUpdateIsActiveVideoWithMetadata = () => {
+  return useMutation(
+    trpcWithProxy.videoFile.updateIsActive.mutationOptions({
+      onSuccess: (data) => {
+        toast.success(
+          `Файл ${data ? 'добавлен в список проигрывания' : 'удален из списка проигрывания'}`,
+        );
+        queryClient.invalidateQueries({
+          queryKey: trpcWithProxy.videoFile.listFiles.queryKey(),
+        });
+      },
+    }),
+  );
+};

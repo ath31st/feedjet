@@ -1,17 +1,24 @@
 import type { VideoMetadata } from '@/entities/video';
-import { useRemoveVideoFile, useVideoWithMetadataList } from '@/entities/video';
+import {
+  useRemoveVideoFile,
+  useUpdateIsActiveVideoWithMetadata,
+  useVideoWithMetadataList,
+} from '@/entities/video';
 import { formatBytes } from '@/shared/lib/formatBytes';
 import { Cross1Icon, EyeOpenIcon } from '@radix-ui/react-icons';
 import { useState } from 'react';
 import { VideoPreviewDialog } from './VideoPreviewDialog';
 import { formatDuration } from '@/shared/lib/formatDuration';
 import { IconButton } from '@/shared/ui/common/IconButton';
+import * as Switch from '@radix-ui/react-switch';
 
 const SERVER_URL = import.meta.env.VITE_API_URL;
 
 export function VideoList() {
   const videos: VideoMetadata[] = useVideoWithMetadataList().data || [];
   const { mutate: removeVideo, isPending } = useRemoveVideoFile();
+  const { mutate: updateIsActive, isPending: isActivePending } =
+    useUpdateIsActiveVideoWithMetadata();
   const [openVideo, setOpenVideo] = useState<VideoMetadata | null>(null);
 
   const handleRemoveVideo = (videoName: string) => {
@@ -45,6 +52,17 @@ export function VideoList() {
               </div>
 
               <div className="ml-2 flex flex-shrink-0 items-center gap-2">
+                <Switch.Root
+                  checked={v.isActive}
+                  disabled={isActivePending}
+                  onCheckedChange={(checked) =>
+                    updateIsActive({ filename: v.fileName, isActive: checked })
+                  }
+                  className="relative h-5 w-10 shrink-0 cursor-pointer rounded-full border border-[var(--border)] transition-colors data-[state=checked]:bg-[var(--button-bg)]"
+                >
+                  <Switch.Thumb className="block h-4 w-4 translate-x-[1px] rounded-full bg-[var(--text)] transition-transform data-[state=checked]:translate-x-[21px]" />
+                </Switch.Root>
+
                 <IconButton
                   disabled={isPending}
                   onClick={() => setOpenVideo(v)}

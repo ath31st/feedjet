@@ -1,4 +1,4 @@
-import { useDiskUsage } from '@/entities/video/api/useVideo';
+import { useDiskUsage } from '@/entities/video';
 import { formatBytes } from '@/shared/lib/formatBytes';
 import { ProgressBar } from './ProgressBar';
 

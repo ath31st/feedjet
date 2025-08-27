@@ -37,7 +37,7 @@ export class VideoStorageService extends FileStorageService {
     return { path: savedPath, savedFileName };
   }
 
-  async update(fileName: string, isActive: boolean) {
+  async update(fileName: string, isActive: boolean): Promise<boolean> {
     const filePath = this.getFilePath(fileName);
     const fileExists = await this.exists(filePath);
 
@@ -46,7 +46,7 @@ export class VideoStorageService extends FileStorageService {
       throw new VideoStorageServiceError(404, 'File not found on disk');
     }
 
-    this.updateIsActive(fileName, isActive);
+    return this.updateIsActive(fileName, isActive);
   }
 
   async delete(fileName: string) {
