@@ -70,6 +70,17 @@ export const useUpdateIsActiveVideoWithMetadata = () => {
           queryKey: trpcWithProxy.videoFile.listFiles.queryKey(),
         });
       },
+      onError: (err: unknown) => {
+        queryClient.invalidateQueries({
+          queryKey: trpcWithProxy.videoFile.listFiles.queryKey(),
+        });
+        if (err instanceof Error) {
+          toast.error(
+            err.message || 'Ошибка при обновлении списка проигрывания',
+          );
+          return;
+        }
+      },
     }),
   );
 };
