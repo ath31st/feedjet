@@ -53,7 +53,7 @@ if (fileStorageDir) {
   fs.mkdirSync(fileStorageDir, { recursive: true });
   Logger.info(`File storage directory: ${fileStorageDir}`);
 }
-export const videoStorageService = new VideoStorageService(fileStorageDir);
+export const videoStorageService = new VideoStorageService(db, fileStorageDir);
 
 export const openWeatherApiKey = process.env.OPEN_WEATHER_API_KEY;
 if (!openWeatherApiKey) {

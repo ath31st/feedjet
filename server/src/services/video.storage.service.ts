@@ -3,10 +3,45 @@ import { promisify } from 'node:util';
 import { FileStorageService } from './file.storage.service.js';
 import type { VideoMetadata } from '@shared/types/video.js';
 import path from 'node:path';
+import type { DbType } from '../container.js';
+import { videosTable } from '../db/schema.js';
+import { eq } from 'drizzle-orm';
+import { VideoStorageServiceError } from '../errors/video.error.js';
+import { webReadableToNode } from '../utils/stream.js';
 
 const execFileAsync = promisify(execFile);
 
 export class VideoStorageService extends FileStorageService {
+  private readonly db: DbType;
+
+  constructor(db: DbType, baseDir: string) {
+    super(baseDir);
+    this.db = db;
+  }
+
+  async upload(
+    file: File,
+    filename: string,
+  ): Promise<{ path: string; savedFileName: string }> {
+    const nodeStream = webReadableToNode(file.stream());
+
+    const savedPath = await this.saveStream(nodeStream, filename);
+
+    let meta = this.findVideoMetadataByFileName(filename);
+    if (meta) {
+      this.removeVideoMetadataByFileName(filename);
+    }
+    meta = await this.getVideoMetadata(filename);
+    const savedFileName = this.saveVideoMetadata(meta);
+
+    return { path: savedPath, savedFileName };
+  }
+
+  async delete(fileName: string) {
+    this.removeVideoMetadataByFileName(fileName);
+    await super.remove(fileName);
+  }
+
   async getVideoMetadata(fileName: string): Promise<VideoMetadata> {
     const filePath = this.getFilePath(fileName);
 
@@ -47,17 +82,44 @@ export class VideoStorageService extends FileStorageService {
     };
   }
 
-  async listVideosWithMetadata() {
-    const files = await this.listFiles();
-    const result: VideoMetadata[] = [];
+  async listVideosWithMetadata(): Promise<VideoMetadata[]> {
+    return this.db.select().from(videosTable).all();
+  }
 
-    for (const file of files) {
-      try {
-        const meta = await this.getVideoMetadata(file);
-        result.push(meta);
-      } catch {}
+  saveVideoMetadata(meta: VideoMetadata): string {
+    const { fileName } = this.db
+      .insert(videosTable)
+      .values(meta)
+      .returning({ fileName: videosTable.fileName })
+      .get();
+
+    return fileName;
+  }
+
+  updateIsActive(fileName: string, isActive: boolean): boolean {
+    const meta = this.db
+      .update(videosTable)
+      .set({ isActive })
+      .where(eq(videosTable.fileName, fileName))
+      .returning()
+      .get();
+
+    if (!meta) {
+      throw new VideoStorageServiceError(404, 'Video not found');
     }
 
-    return result;
+    return meta.isActive;
+  }
+
+  removeVideoMetadataByFileName(fileName: string) {
+    this.db.delete(videosTable).where(eq(videosTable.fileName, fileName)).run();
+  }
+
+  findVideoMetadataByFileName(fileName: string): VideoMetadata | undefined {
+    return this.db
+      .select()
+      .from(videosTable)
+      .where(eq(videosTable.fileName, fileName))
+      .get();
   }
 }
