@@ -37,6 +37,18 @@ export class VideoStorageService extends FileStorageService {
     return { path: savedPath, savedFileName };
   }
 
+  async update(fileName: string, isActive: boolean) {
+    const filePath = this.getFilePath(fileName);
+    const fileExists = await this.exists(filePath);
+
+    if (!fileExists) {
+      this.removeVideoMetadataByFileName(fileName);
+      throw new VideoStorageServiceError(404, 'File not found on disk');
+    }
+
+    this.updateIsActive(fileName, isActive);
+  }
+
   async delete(fileName: string) {
     this.removeVideoMetadataByFileName(fileName);
     await super.remove(fileName);

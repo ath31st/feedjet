@@ -4,6 +4,7 @@ import {
   fileDeleteParamsSchema,
   fileParamsSchema,
 } from '../../validations/schemas/file.storage.validation.js';
+import { updateVideoMetadataSchema } from '../../validations/schemas/video.validation.js';
 
 export const videoStorageRouter = t.router({
   uploadFile: protectedProcedure
@@ -21,9 +22,15 @@ export const videoStorageRouter = t.router({
     }),
 
   listFiles: protectedProcedure.query(async () => {
-    const files = await videoStorageService.listVideosWithMetadata();
-    return files;
+    const videos = await videoStorageService.listVideosWithMetadata();
+    return videos;
   }),
+
+  updateIsActive: protectedProcedure
+    .input(updateVideoMetadataSchema)
+    .mutation(async ({ input }) => {
+      return videoStorageService.update(input.filename, input.isActive);
+    }),
 
   deleteFile: protectedProcedure
     .input(fileDeleteParamsSchema)

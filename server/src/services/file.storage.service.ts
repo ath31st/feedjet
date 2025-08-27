@@ -40,6 +40,15 @@ export class FileStorageService {
     await fs.unlink(filePath);
   }
 
+  async exists(filePath: string): Promise<boolean> {
+    try {
+      await fs.access(filePath);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
   async listFiles() {
     const files = await fs.readdir(this.baseDir);
     return files;
