@@ -1,10 +1,11 @@
 import type { VideoMetadata } from '@/entities/video';
 import { useRemoveVideoFile, useVideoWithMetadataList } from '@/entities/video';
 import { formatBytes } from '@/shared/lib/formatBytes';
-import { Cross2Icon, EyeOpenIcon } from '@radix-ui/react-icons';
+import { Cross1Icon, EyeOpenIcon } from '@radix-ui/react-icons';
 import { useState } from 'react';
 import { VideoPreviewDialog } from './VideoPreviewDialog';
 import { formatDuration } from '@/shared/lib/formatDuration';
+import { IconButton } from '@/shared/ui/common/IconButton';
 
 const SERVER_URL = import.meta.env.VITE_API_URL;
 
@@ -44,23 +45,17 @@ export function VideoList() {
               </div>
 
               <div className="ml-2 flex flex-shrink-0 items-center gap-2">
-                <button
-                  type="button"
+                <IconButton
                   disabled={isPending}
                   onClick={() => setOpenVideo(v)}
-                  className="bg-transparent p-1 hover:opacity-60"
-                >
-                  <EyeOpenIcon className="h-4 w-4 cursor-pointer" />
-                </button>
+                  icon={<EyeOpenIcon className="h-4 w-4 cursor-pointer" />}
+                />
 
-                <button
-                  type="button"
+                <IconButton
                   disabled={isPending}
                   onClick={() => handleRemoveVideo(v.fileName)}
-                  className="bg-transparent p-1 hover:opacity-60"
-                >
-                  <Cross2Icon className="h-4 w-4 cursor-pointer" />
-                </button>
+                  icon={<Cross1Icon className="h-4 w-4 cursor-pointer" />}
+                />
               </div>
             </div>
           ))}

@@ -1,7 +1,8 @@
 import * as Switch from '@radix-ui/react-switch';
-import { Cross2Icon } from '@radix-ui/react-icons';
+import { Cross1Icon } from '@radix-ui/react-icons';
 import { useRssManagement } from '../model/useRssManagement';
 import { LoadingThreeDotsJumping } from '@/shared/ui/LoadingThreeDotsJumping';
+import { IconButton } from '@/shared/ui/common/IconButton';
 
 export function FeedList() {
   const { feeds, feedsLoading, handleDeleteFeed, handleUpdateFeed } =
@@ -29,13 +30,11 @@ export function FeedList() {
               <Switch.Thumb className="block h-4 w-4 translate-x-[1px] rounded-full bg-[var(--text)] transition-transform data-[state=checked]:translate-x-[21px]" />
             </Switch.Root>
 
-            <button
-              type="button"
+            <IconButton
               onClick={() => handleDeleteFeed(item.id)}
-              className="bg-transparent p-1 hover:opacity-60"
-            >
-              <Cross2Icon className="h-4 w-4 cursor-pointer" />
-            </button>
+              ariaLabel="Удалить ленту"
+              icon={<Cross1Icon className="h-4 w-4 cursor-pointer" />}
+            />
           </div>
         </li>
       ))}

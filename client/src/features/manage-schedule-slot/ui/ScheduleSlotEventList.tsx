@@ -1,4 +1,5 @@
 import type { ScheduleEvent } from '@/entities/schedule';
+import { IconButton } from '@/shared/ui/common/IconButton';
 import { Cross1Icon, Pencil1Icon } from '@radix-ui/react-icons';
 
 interface ScheduleSlotEventListProps {
@@ -38,24 +39,18 @@ export function ScheduleSlotEventList({
           </div>
           <div className="flex items-center gap-1">
             {onEdit && (
-              <button
-                type="button"
-                className="rounded-md p-1 hover:bg-[var(--button-hover-bg)]"
+              <IconButton
                 onClick={() => onEdit(event)}
-                aria-label="Редактировать событие"
-              >
-                <Pencil1Icon className="h-4 w-4" />
-              </button>
+                ariaLabel="Редактировать событие"
+                icon={<Pencil1Icon className="h-4 w-4 cursor-pointer" />}
+              />
             )}
             {onDelete && (
-              <button
-                type="button"
-                className="rounded-md p-1 hover:bg-[var(--button-hover-bg)]"
+              <IconButton
                 onClick={() => onDelete(event.id)}
-                aria-label="Удалить событие"
-              >
-                <Cross1Icon className="h-4 w-4" />
-              </button>
+                ariaLabel="Удалить событие"
+                icon={<Cross1Icon className="h-4 w-4 cursor-pointer" />}
+              />
             )}
           </div>
         </li>
