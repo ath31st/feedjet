@@ -1,6 +1,6 @@
 export {
   useUploadVideo,
-  useVideoFile,
+  useRemoveVideoFile,
   useVideoWithMetadataList,
 } from './api/useVideo';
 

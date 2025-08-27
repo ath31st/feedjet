@@ -1,5 +1,5 @@
 import type { VideoMetadata } from '@/entities/video';
-import { useVideoFile, useVideoWithMetadataList } from '@/entities/video';
+import { useRemoveVideoFile, useVideoWithMetadataList } from '@/entities/video';
 import { formatBytes } from '@/shared/lib/formatBytes';
 import { Cross2Icon, EyeOpenIcon } from '@radix-ui/react-icons';
 import { useState } from 'react';
@@ -10,11 +10,11 @@ const SERVER_URL = import.meta.env.VITE_API_URL;
 
 export function VideoList() {
   const videos: VideoMetadata[] = useVideoWithMetadataList().data || [];
-  const removeVideo = useVideoFile();
+  const { mutate: removeVideo, isPending } = useRemoveVideoFile();
   const [openVideo, setOpenVideo] = useState<VideoMetadata | null>(null);
 
   const handleRemoveVideo = (videoName: string) => {
-    removeVideo.mutate({ filename: videoName });
+    removeVideo({ filename: videoName });
   };
 
   if (!videos.length) {
@@ -46,6 +46,7 @@ export function VideoList() {
               <div className="ml-2 flex flex-shrink-0 items-center gap-2">
                 <button
                   type="button"
+                  disabled={isPending}
                   onClick={() => setOpenVideo(v)}
                   className="bg-transparent p-1 hover:opacity-60"
                 >
@@ -54,6 +55,7 @@ export function VideoList() {
 
                 <button
                   type="button"
+                  disabled={isPending}
                   onClick={() => handleRemoveVideo(v.fileName)}
                   className="bg-transparent p-1 hover:opacity-60"
                 >

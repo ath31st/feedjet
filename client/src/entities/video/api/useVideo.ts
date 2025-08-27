@@ -10,7 +10,7 @@ export const useDiskUsage = () => {
   return useQuery(trpcWithProxy.videoFile.getDiskUsage.queryOptions());
 };
 
-export const useVideoFile = () => {
+export const useRemoveVideoFile = () => {
   return useMutation(
     trpcWithProxy.videoFile.deleteFile.mutationOptions({
       onSuccess: () => {
