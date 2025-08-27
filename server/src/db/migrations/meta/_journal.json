@@ -99,6 +99,13 @@
       "when": 1754308185548,
       "tag": "0013_overjoyed_speedball",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "6",
+      "when": 1756300832308,
+      "tag": "0014_spooky_yellow_claw",
+      "breakpoints": true
     }
   ]
 }

@@ -42,6 +42,7 @@ export class VideoStorageService extends FileStorageService {
       width: stream.width ?? 0,
       height: stream.height ?? 0,
       size: fileStats.size,
+      isActive: false,
       createdAt: fileStats.birthtime.getTime(),
     };
   }

@@ -70,3 +70,18 @@ export const scheduleEventsTable = sqliteTable('schedule_events', {
     .notNull()
     .default(sql`(unixepoch())`),
 });
+
+export const videosTable = sqliteTable('videos', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  name: text('name').notNull(),
+  fileName: text('file_name').notNull(),
+  format: text('format').notNull(),
+  duration: integer('duration').notNull(),
+  width: integer('width').notNull(),
+  height: integer('height').notNull(),
+  size: integer('size').notNull(),
+  isActive: integer('is_active', { mode: 'boolean' }).notNull().default(false),
+  createdAt: integer('created_at', { mode: 'timestamp' })
+    .notNull()
+    .default(sql`(unixepoch())`),
+});

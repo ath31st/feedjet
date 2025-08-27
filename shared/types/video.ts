@@ -6,5 +6,6 @@ export interface VideoMetadata {
   width: number;
   height: number;
   size: number;
+  isActive: boolean;
   createdAt: number;
 }
