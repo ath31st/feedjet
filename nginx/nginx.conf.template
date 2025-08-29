@@ -16,6 +16,8 @@ http {
         ssl_certificate {{CERT_PATH}};
         ssl_certificate_key {{KEY_PATH}};
 
+        client_max_body_size 5000m;
+
         location / {
             proxy_pass http://localhost:5173;
             proxy_http_version 1.1;
