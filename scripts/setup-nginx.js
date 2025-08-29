@@ -7,18 +7,18 @@ import { execSync } from 'node:child_process';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(__dirname, '..');
 
-const containerTsPath = path.join(projectRoot, 'server', 'src', 'container.ts');
+const configTsPath = path.join(projectRoot, 'server', 'src', 'config', 'config.ts');
 const nginxDir = path.join(projectRoot, 'nginx');
 const certsDir = path.join(nginxDir, 'certs');
 const nginxConfTemplate = path.join(nginxDir, 'nginx.conf.template');
 const nginxConfOutput = path.join(nginxDir, 'nginx.conf');
 
-if (!fs.existsSync(containerTsPath)) {
-  console.error(`❌ Не найден ${path.relative(projectRoot, containerTsPath)}. Проверь путь.`);
+if (!fs.existsSync(configTsPath)) {
+  console.error(`❌ Не найден ${path.relative(projectRoot, configTsPath)}. Проверь путь.`);
   process.exit(1);
 }
 
-const content = fs.readFileSync(containerTsPath, 'utf-8');
+const content = fs.readFileSync(configTsPath, 'utf-8');
 
 // cacheDir
 let match = content.match(/export\s+const\s+cacheDir\s*=\s*process\.env\.CACHE_DIR\s*\?\?\s*['"`]([^'"`]+)['"`]/m);
@@ -40,7 +40,7 @@ if (!cacheDirValue) {
   process.exit(1);
 }
 
-const containerDir = path.dirname(containerTsPath);
+const containerDir = path.dirname(configTsPath);
 const serverRoot = path.resolve(containerDir, '..');
 const absCacheDir = path.isAbsolute(cacheDirValue)
   ? cacheDirValue
