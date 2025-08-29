@@ -2,7 +2,7 @@ import cron from 'node-cron';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import Logger from '../utils/logger.js';
-import { cacheDir } from '../container.js';
+import { cacheDir } from '../config/config.js';
 
 const MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 
