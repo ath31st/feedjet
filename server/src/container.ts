@@ -48,7 +48,7 @@ if (cacheDir) {
 }
 export const imageCacheService = new ImageCacheService(cacheDir);
 
-const fileStorageDir = process.env.FILE_STORAGE_DIR ?? './file-storage';
+export const fileStorageDir = process.env.FILE_STORAGE_DIR ?? './file-storage';
 if (fileStorageDir) {
   fs.mkdirSync(fileStorageDir, { recursive: true });
   Logger.info(`File storage directory: ${fileStorageDir}`);
