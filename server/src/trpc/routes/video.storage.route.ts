@@ -1,4 +1,4 @@
-import { videoStorageService, t } from '../../container.js';
+import { videoStorageService, t, publicProcedure } from '../../container.js';
 import { protectedProcedure } from '../../middleware/auth.js';
 import {
   fileDeleteParamsSchema,
@@ -26,7 +26,7 @@ export const videoStorageRouter = t.router({
     return videos;
   }),
 
-  listActiveVideos: protectedProcedure.query(() => {
+  listActiveVideos: publicProcedure.query(() => {
     const videos = videoStorageService.listActiveVideos();
     return videos;
   }),
