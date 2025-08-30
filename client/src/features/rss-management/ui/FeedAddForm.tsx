@@ -8,6 +8,7 @@ export function FeedAddForm() {
   return (
     <div className="mb-4 flex gap-2">
       <input
+        id="newFeed"
         type="url"
         placeholder="Новая RSS ссылка"
         value={newFeed}
