@@ -1,5 +1,6 @@
 import * as Dialog from '@radix-ui/react-dialog';
 import type { VideoMetadata } from '@/entities/video';
+import { usePersistentVolume } from '../model/usePersistentVolume';
 
 interface VideoPreviewDialogProps {
   video: VideoMetadata | null;
@@ -12,6 +13,8 @@ export function VideoPreviewDialog({
   onClose,
   serverUrl,
 }: VideoPreviewDialogProps) {
+  const videoRef = usePersistentVolume();
+
   if (!video) return null;
 
   return (
@@ -27,6 +30,7 @@ export function VideoPreviewDialog({
           </Dialog.Description>
 
           <video
+            ref={videoRef}
             src={`${serverUrl}/video/${video.fileName}`}
             controls
             autoPlay
