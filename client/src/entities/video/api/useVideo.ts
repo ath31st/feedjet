@@ -6,6 +6,10 @@ export const useVideoWithMetadataList = () => {
   return useQuery(trpcWithProxy.videoFile.listFiles.queryOptions());
 };
 
+export const useActiveVideoList = () => {
+  return useQuery(trpcWithProxy.videoFile.listActiveVideos.queryOptions());
+};
+
 export const useDiskUsage = () => {
   return useQuery(trpcWithProxy.videoFile.getDiskUsage.queryOptions());
 };

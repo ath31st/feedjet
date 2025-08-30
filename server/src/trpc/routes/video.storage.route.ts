@@ -21,8 +21,13 @@ export const videoStorageRouter = t.router({
       return { ok: true, path, filename: savedFileName };
     }),
 
-  listFiles: protectedProcedure.query(async () => {
-    const videos = await videoStorageService.listVideosWithMetadata();
+  listFiles: protectedProcedure.query(() => {
+    const videos = videoStorageService.listVideosWithMetadata();
+    return videos;
+  }),
+
+  listActiveVideos: protectedProcedure.query(() => {
+    const videos = videoStorageService.listActiveVideos();
     return videos;
   }),
 

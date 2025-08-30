@@ -21,7 +21,7 @@ export const useVideoStore = create<VideoStore>((set) => ({
   initStore: async () => {
     set({ loading: true });
     try {
-      const data = await trpcClient.videoFile.listFiles.query();
+      const data = await trpcClient.videoFile.listActiveVideos.query();
       set({
         videos: data,
         currentVideo: data.length > 0 ? data[0] : null,

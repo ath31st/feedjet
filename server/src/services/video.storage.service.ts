@@ -94,8 +94,16 @@ export class VideoStorageService extends FileStorageService {
     };
   }
 
-  async listVideosWithMetadata(): Promise<VideoMetadata[]> {
+  listVideosWithMetadata(): VideoMetadata[] {
     return this.db.select().from(videosTable).all();
+  }
+
+  listActiveVideos(): VideoMetadata[] {
+    return this.db
+      .select()
+      .from(videosTable)
+      .where(eq(videosTable.isActive, true))
+      .all();
   }
 
   saveVideoMetadata(meta: VideoMetadata): string {
