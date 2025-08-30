@@ -20,7 +20,7 @@ export function KioskPage() {
   const widgetMap: Record<string, React.ReactNode> = {
     feed: <FeedWidget rotate={rotate} animation={animation} />,
     schedule: <ScheduleWidget rotate={rotate} />,
-    video: <VideoPlayerWidget rotate={rotate} />,
+    video: <VideoPlayerWidget />,
   };
 
   const currentWidget = widgetMap[widgets[index]] ?? null;

@@ -3,11 +3,7 @@ import { useVideoStore } from '@/entities/video';
 import { EmptyVideoPlaylist } from './EmptyVideoPlaylist';
 import { SERVER_URL } from '@/shared/config/env';
 
-interface VideoPlayerKioskProps {
-  rotate?: number;
-}
-
-export function VideoPlayerKiosk({ rotate }: VideoPlayerKioskProps) {
+export function VideoPlayerKiosk() {
   const { currentVideo, initStore, nextVideo, playId } = useVideoStore();
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -28,7 +24,7 @@ export function VideoPlayerKiosk({ rotate }: VideoPlayerKioskProps) {
       ref={videoRef}
       key={`${currentVideo.fileName}-${playId}`}
       src={`${SERVER_URL}/video/${currentVideo.fileName}`}
-      className="h-screen w-screen"
+      className="h-full w-full"
       autoPlay
       muted
       playsInline
