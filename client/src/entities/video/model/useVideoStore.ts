@@ -10,6 +10,7 @@ type VideoStore = {
   initStore: () => Promise<void>;
   setVideos: (videos: VideoMetadata[]) => void;
   setCurrentVideo: (video: VideoMetadata | null) => void;
+  nextVideo: () => void;
 };
 
 export const useVideoStore = create<VideoStore>((set) => ({
@@ -21,7 +22,12 @@ export const useVideoStore = create<VideoStore>((set) => ({
     set({ loading: true });
     try {
       const data = await trpcClient.videoFile.listFiles.query();
-      set({ videos: data, error: null, loading: false });
+      set({
+        videos: data,
+        currentVideo: data.length > 0 ? data[0] : null,
+        error: null,
+        loading: false,
+      });
     } catch (err) {
       set({
         error: err instanceof Error ? err.message : 'Unknown error',
@@ -29,6 +35,27 @@ export const useVideoStore = create<VideoStore>((set) => ({
       });
     }
   },
-  setVideos: (videos) => set({ videos }),
+  setVideos: (videos) =>
+    set((state) => {
+      const exists =
+        state.currentVideo &&
+        videos.some((v) => v.fileName === state.currentVideo?.fileName);
+
+      return {
+        videos,
+        currentVideo: exists ? state.currentVideo : (videos[0] ?? null),
+      };
+    }),
   setCurrentVideo: (video) => set({ currentVideo: video }),
+  nextVideo: () =>
+    set((state) => {
+      if (!state.videos.length) return { currentVideo: null };
+      if (!state.currentVideo) return { currentVideo: state.videos[0] };
+
+      const index = state.videos.findIndex(
+        (v) => v.fileName === state.currentVideo?.fileName,
+      );
+      const nextIndex = (index + 1) % state.videos.length;
+      return { currentVideo: state.videos[nextIndex] };
+    }),
 }));
