@@ -1,7 +1,8 @@
 import { useCallback } from 'react';
 import { useEventSource } from '../../../shared/api/sse/useEventSource';
+import { SERVER_URL } from '@/shared/config/env';
 
-const CONROL_SSE_URL = `${import.meta.env.VITE_API_URL}/sse/control`;
+const CONROL_SSE_URL = `${SERVER_URL}/sse/control`;
 
 export function useControlSse() {
   const onMessage = useCallback((e: MessageEvent) => {

@@ -1,11 +1,11 @@
 import { useEffect, useRef } from 'react';
 import { useVideoStore } from '@/entities/video';
 import { EmptyVideoPlaylist } from './EmptyVideoPlaylist';
+import { SERVER_URL } from '@/shared/config/env';
 
 interface VideoPlayerKioskProps {
   rotate?: number;
 }
-const SERVER_URL = import.meta.env.VITE_API_URL;
 
 export function VideoPlayerKiosk({ rotate }: VideoPlayerKioskProps) {
   const { currentVideo, initStore, nextVideo, playId } = useVideoStore();

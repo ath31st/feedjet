@@ -1,8 +1,9 @@
 import { useEffect, useCallback } from 'react';
 import { useEventSource } from '@/shared/api/sse/useEventSource';
 import { useRssFeedStore } from '..';
+import { SERVER_URL } from '@/shared/config/env';
 
-const FEED_SSE_URL = `${import.meta.env.VITE_API_URL}/sse/feed`;
+const FEED_SSE_URL = `${SERVER_URL}/sse/feed`;
 
 export function useRssFeedSse() {
   const initStore = useRssFeedStore((s) => s.initStore);

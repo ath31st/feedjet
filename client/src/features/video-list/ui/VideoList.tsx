@@ -11,8 +11,7 @@ import { VideoPreviewDialog } from './VideoPreviewDialog';
 import { formatDuration } from '@/shared/lib/formatDuration';
 import { IconButton } from '@/shared/ui/common/IconButton';
 import * as Switch from '@radix-ui/react-switch';
-
-const SERVER_URL = import.meta.env.VITE_API_URL;
+import { SERVER_URL } from '@/shared/config/env';
 
 export function VideoList() {
   const videos: VideoMetadata[] = useVideoWithMetadataList().data || [];
