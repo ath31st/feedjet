@@ -5,6 +5,7 @@ import { trpcClient } from '@/shared/api/trpc';
 type VideoStore = {
   videos: VideoMetadata[];
   currentVideo: VideoMetadata | null;
+  playId: number;
   loading: boolean;
   error: string | null;
   initStore: () => Promise<void>;
@@ -16,6 +17,7 @@ type VideoStore = {
 export const useVideoStore = create<VideoStore>((set) => ({
   videos: [],
   currentVideo: null,
+  playId: 0,
   loading: false,
   error: null,
   initStore: async () => {
@@ -25,6 +27,7 @@ export const useVideoStore = create<VideoStore>((set) => ({
       set({
         videos: data,
         currentVideo: data.length > 0 ? data[0] : null,
+        playId: 0,
         error: null,
         loading: false,
       });
@@ -46,16 +49,21 @@ export const useVideoStore = create<VideoStore>((set) => ({
         currentVideo: exists ? state.currentVideo : (videos[0] ?? null),
       };
     }),
-  setCurrentVideo: (video) => set({ currentVideo: video }),
+  setCurrentVideo: (video) => set({ currentVideo: video, playId: 0 }),
   nextVideo: () =>
     set((state) => {
       if (!state.videos.length) return { currentVideo: null };
-      if (!state.currentVideo) return { currentVideo: state.videos[0] };
+      if (!state.currentVideo)
+        return { currentVideo: state.videos[0], playId: state.playId + 1 };
 
       const index = state.videos.findIndex(
         (v) => v.fileName === state.currentVideo?.fileName,
       );
       const nextIndex = (index + 1) % state.videos.length;
-      return { currentVideo: state.videos[nextIndex] };
+
+      return {
+        currentVideo: state.videos[nextIndex],
+        playId: state.playId + 1,
+      };
     }),
 }));
