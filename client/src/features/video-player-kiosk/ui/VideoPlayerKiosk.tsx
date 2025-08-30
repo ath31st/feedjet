@@ -24,7 +24,7 @@ export function VideoPlayerKiosk() {
       ref={videoRef}
       key={`${currentVideo.fileName}-${playId}`}
       src={`${SERVER_URL}/video/${currentVideo.fileName}`}
-      className="h-full w-full"
+      className="relative z-10 h-full w-full"
       autoPlay
       muted
       playsInline
