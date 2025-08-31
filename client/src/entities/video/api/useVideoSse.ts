@@ -3,7 +3,7 @@ import { useEventSource } from '@/shared/api/sse/useEventSource';
 import { useVideoStore } from '..';
 import { SERVER_URL } from '@/shared/config/env';
 
-const VIDEO_SSE_URL = `${SERVER_URL}/sse/feed`;
+const VIDEO_SSE_URL = `${SERVER_URL}/sse/video`;
 
 export function useVideoSse() {
   const initStore = useVideoStore((s) => s.initStore);

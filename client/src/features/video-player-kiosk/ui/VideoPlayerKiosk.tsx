@@ -4,31 +4,38 @@ import { EmptyVideoPlaylist } from './EmptyVideoPlaylist';
 import { SERVER_URL } from '@/shared/config/env';
 
 export function VideoPlayerKiosk() {
-  const { currentVideo, initStore, nextVideo, playId } = useVideoStore();
+  const { currentVideo, nextVideo } = useVideoStore();
   const videoRef = useRef<HTMLVideoElement>(null);
+  const fileName = currentVideo?.fileName;
 
   useEffect(() => {
-    initStore();
-  }, [initStore]);
+    const vid = videoRef.current;
+    if (!vid) return;
 
-  useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.play().catch(() => {});
+    vid.pause();
+    vid.removeAttribute('src');
+    vid.load();
+
+    if (currentVideo) {
+      const url = `${SERVER_URL}/video/${fileName}`;
+      vid.src = url;
+      vid.load();
+      vid.play().catch(() => {});
     }
-  }, []);
+  }, [fileName, currentVideo]);
 
   if (!currentVideo) return <EmptyVideoPlaylist />;
 
   return (
     <video
       ref={videoRef}
-      key={`${currentVideo.fileName}-${playId}`}
-      src={`${SERVER_URL}/video/${currentVideo.fileName}`}
       className="relative z-10 h-full w-full"
       autoPlay
       muted
+      controls
       playsInline
       onEnded={() => nextVideo()}
+      onError={() => nextVideo()}
     >
       <track kind="captions" label="no captions" />
     </video>
