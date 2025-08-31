@@ -32,7 +32,6 @@ export function VideoPlayerKiosk() {
       className="relative z-10 h-full w-full"
       autoPlay
       muted
-      controls
       playsInline
       onEnded={() => nextVideo()}
       onError={() => nextVideo()}
