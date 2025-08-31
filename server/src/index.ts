@@ -10,6 +10,7 @@ import { controlSseHandler } from './sse/control.handler.js';
 import { uiConfigSseHandler } from './sse/ui.config.handler.js';
 import { imageCacheService, videoStorageService } from './container.js';
 import { startImageCacheCleanupJob } from './cron/image.cache.cron.js';
+import { videoSseHandler } from './sse/video.handlers.js';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -30,6 +31,7 @@ app.get('/sse/feed', feedSseHandler);
 app.get('/sse/feed-config', feedConfigSseHandler);
 app.get('/sse/ui-config', uiConfigSseHandler);
 app.get('/sse/control', controlSseHandler);
+app.get('/sse/video', videoSseHandler);
 
 startRssCronJob();
 startImageCacheCleanupJob();

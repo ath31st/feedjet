@@ -1,4 +1,9 @@
-import { videoStorageService, t, publicProcedure } from '../../container.js';
+import {
+  videoStorageService,
+  t,
+  publicProcedure,
+  eventBus,
+} from '../../container.js';
 import { protectedProcedure } from '../../middleware/auth.js';
 import {
   fileDeleteParamsSchema,
@@ -34,13 +39,22 @@ export const videoStorageRouter = t.router({
   updateIsActive: protectedProcedure
     .input(updateVideoMetadataSchema)
     .mutation(async ({ input }) => {
-      return videoStorageService.update(input.filename, input.isActive);
+      const result = await videoStorageService.update(
+        input.filename,
+        input.isActive,
+      );
+      const activeVideos = videoStorageService.listActiveVideos();
+      eventBus.emit('video', activeVideos);
+
+      return result;
     }),
 
   deleteFile: protectedProcedure
     .input(fileDeleteParamsSchema)
     .mutation(async ({ input }) => {
-      videoStorageService.delete(input.filename);
+      await videoStorageService.delete(input.filename);
+      const activeVideos = videoStorageService.listActiveVideos();
+      eventBus.emit('video', activeVideos);
 
       return { ok: true };
     }),
