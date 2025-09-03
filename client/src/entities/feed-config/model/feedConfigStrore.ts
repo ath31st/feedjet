@@ -6,7 +6,7 @@ interface FeedConfigState {
   feedConfig: FeedConfig;
   loading: boolean;
   error: string | null;
-  initStore: () => Promise<void>;
+  fetchFeedConfig: () => Promise<void>;
   setConfig: (config: FeedConfig) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
@@ -26,7 +26,7 @@ export const useFeedConfigStore = create<FeedConfigState>()((set) => ({
   feedConfig: DEFAULT_CONFIG,
   loading: false,
   error: null,
-  initStore: async () => {
+  fetchFeedConfig: async () => {
     set({ loading: true });
     try {
       const data = await trpcClient.feedConfig.getConfig.query();

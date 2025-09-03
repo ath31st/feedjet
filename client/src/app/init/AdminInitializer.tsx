@@ -1,4 +1,3 @@
-import { useFeedConfigSse } from '@/entities/feed-config';
 import { useUiConfigStore } from '@/entities/ui-config';
 import { useEffect } from 'react';
 
@@ -9,6 +8,5 @@ export function AdminInitializer() {
     fetchUiConfig();
   }, [fetchUiConfig]);
 
-  useFeedConfigSse();
   return null;
 }

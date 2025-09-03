@@ -7,11 +7,11 @@ const FEED_CONFIG_SSE_URL = `${SERVER_URL}/sse/feed-config`;
 
 export function useFeedConfigSse() {
   const setConfig = useFeedConfigStore((s) => s.setConfig);
-  const init = useFeedConfigStore((s) => s.initStore);
+  const fetchFeedConfig = useFeedConfigStore((s) => s.fetchFeedConfig);
 
   useEffect(() => {
-    init();
-  }, [init]);
+    fetchFeedConfig();
+  }, [fetchFeedConfig]);
 
   const onMessage = useCallback(
     (e: MessageEvent) => {
