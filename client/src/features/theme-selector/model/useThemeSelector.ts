@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import {
   useUiConfigStore,
   useUpdateUiConfig,
@@ -6,23 +5,22 @@ import {
 } from '@/entities/ui-config';
 
 export function useThemeSelector() {
-  const [theme, setTheme] = useState<Theme>('dark');
-  const { uiConfig } = useUiConfigStore();
+  const { uiConfig, setConfig } = useUiConfigStore();
   const updateUiConfig = useUpdateUiConfig();
 
-  const handleThemeChange = (selected: Theme) => {
-    setTheme(selected);
-    updateUiConfig.mutate({ data: { theme: selected } });
+  const handleThemeChange = async (selected: Theme) => {
+    const updatedConfig = await updateUiConfig.mutateAsync({
+      data: { theme: selected },
+    });
+    setConfig({
+      ...updatedConfig,
+      createdAt: new Date(updatedConfig.createdAt),
+      updatedAt: new Date(updatedConfig.updatedAt),
+    });
   };
 
-  useEffect(() => {
-    if (uiConfig?.theme) {
-      setTheme(uiConfig.theme);
-    }
-  }, [uiConfig]);
-
   return {
-    theme,
+    theme: uiConfig?.theme ?? 'dark',
     handleThemeChange,
   };
 }

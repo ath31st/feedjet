@@ -7,11 +7,11 @@ const UI_CONFIG_SSE_URL = `${SERVER_URL}/sse/ui-config`;
 
 export function useUiConfigSse() {
   const setConfig = useUiConfigStore((s) => s.setConfig);
-  const initStore = useUiConfigStore((s) => s.initStore);
+  const fetchUiConfig = useUiConfigStore((s) => s.fetchUiConfig);
 
   useEffect(() => {
-    initStore();
-  }, [initStore]);
+    fetchUiConfig();
+  }, [fetchUiConfig]);
 
   const onMessage = useCallback(
     (e: MessageEvent) => {

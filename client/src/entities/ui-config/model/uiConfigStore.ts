@@ -6,7 +6,7 @@ interface UiConfigState {
   uiConfig: UiConfig;
   error: string | null;
   loading: boolean;
-  initStore: () => Promise<void>;
+  fetchUiConfig: () => Promise<void>;
   setConfig: (config: UiConfig) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
@@ -16,7 +16,7 @@ interface UiConfigState {
 
 const DEFAULT_CONFIG: UiConfig = {
   id: 0,
-  theme: 'dark',
+  theme: localStorage.getItem('theme') || 'dark',
   rotatingWidgets: ['feed', 'schedule'],
   autoSwitchIntervalMs: 30000,
   createdAt: new Date(),
@@ -27,7 +27,7 @@ export const useUiConfigStore = create<UiConfigState>()((set) => ({
   uiConfig: DEFAULT_CONFIG,
   error: null,
   loading: false,
-  initStore: async () => {
+  fetchUiConfig: async () => {
     set({ loading: true });
     try {
       const data = await trpcClient.uiConfig.getUiConfig.query();
