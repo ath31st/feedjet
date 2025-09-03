@@ -1,22 +1,23 @@
-import { useUpdateUiConfig } from '@/entities/ui-config';
-import { useConfig } from '@/entities/ui-config';
-import { useEffect, useState } from 'react';
+import { useUpdateUiConfig, useUiConfigStore } from '@/entities/ui-config';
 
 export function useRotationInterval(min = 10, max = 10000) {
-  const { data: config } = useConfig();
+  const { uiConfig, setConfig } = useUiConfigStore();
   const updateConfig = useUpdateUiConfig();
-  const [value, setValue] = useState(0);
 
-  useEffect(() => {
-    if (config?.autoSwitchIntervalMs) {
-      setValue(Math.floor(config.autoSwitchIntervalMs / 1000));
-    }
-  }, [config]);
+  const value = uiConfig?.autoSwitchIntervalMs
+    ? Math.floor(uiConfig.autoSwitchIntervalMs / 1000)
+    : 0;
 
-  const update = (val: number) => {
+  const update = async (val: number) => {
     const clamped = Math.min(Math.max(val, min), max);
-    setValue(clamped);
-    updateConfig.mutate({ data: { autoSwitchIntervalMs: clamped * 1000 } });
+    const updatedConfig = await updateConfig.mutateAsync({
+      data: { autoSwitchIntervalMs: clamped * 1000 },
+    });
+    setConfig({
+      ...updatedConfig,
+      createdAt: new Date(updatedConfig.createdAt),
+      updatedAt: new Date(updatedConfig.updatedAt),
+    });
   };
 
   return { value, update };

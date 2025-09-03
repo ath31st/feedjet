@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import {
   useUiConfigStore,
   useUpdateUiConfig,
@@ -6,23 +5,22 @@ import {
 } from '@/entities/ui-config';
 
 export function useWidgetSelector() {
-  const [rotatingWidgets, setRotatingWidgets] = useState<WidgetType[]>([]);
-  const { uiConfig } = useUiConfigStore();
+  const { uiConfig, setConfig } = useUiConfigStore();
   const updateUiConfig = useUpdateUiConfig();
 
-  const handleWidgetChange = (selected: WidgetType[]) => {
-    setRotatingWidgets(selected);
-    updateUiConfig.mutate({ data: { rotatingWidgets: selected } });
+  const handleWidgetChange = async (selected: WidgetType[]) => {
+    const updatedConfig = await updateUiConfig.mutateAsync({
+      data: { rotatingWidgets: selected },
+    });
+    setConfig({
+      ...updatedConfig,
+      createdAt: new Date(updatedConfig.createdAt),
+      updatedAt: new Date(updatedConfig.updatedAt),
+    });
   };
 
-  useEffect(() => {
-    if (uiConfig?.rotatingWidgets) {
-      setRotatingWidgets(uiConfig.rotatingWidgets);
-    }
-  }, [uiConfig]);
-
   return {
-    rotatingWidgets,
+    rotatingWidgets: uiConfig?.rotatingWidgets ?? [],
     handleWidgetChange,
   };
 }
