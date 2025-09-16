@@ -1,7 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  font-family: system-ui, Avenir, 'JetBrains Mono', Helvetica, Arial, sans-serif;
+  font-family:
+    system-ui, Avenir, "JetBrains Mono", Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -46,7 +47,7 @@
 [data-theme="sepia"] {
   --hue: 30;
 
-  --background: hsl(var(--hue), 30%, 10%);   
+  --background: hsl(var(--hue), 30%, 10%);
   --text: hsl(var(--hue), 35%, 90%);
   --card-bg: hsl(var(--hue), 25%, 15%);
   --card-text: hsl(var(--hue), 35%, 90%);
@@ -75,7 +76,6 @@
   --border: hsl(var(--hue), 45%, 50%);
 }
 
-
 [data-theme="green"] {
   --hue: 160;
 
@@ -96,7 +96,7 @@ body {
   margin: 0;
   background-color: var(--background);
   color: var(--text);
-  font-family:'JetBrains Mono', sans-serif;
+  font-family: "JetBrains Mono", sans-serif;
 }
 
 @keyframes scroll-diagonal-switch {
@@ -112,8 +112,16 @@ body {
 }
 
 @keyframes fade-in-out {
-  0% { opacity: 0; }
-  20% { opacity: 1; }
-  80% { opacity: 1; }
-  100% { opacity: 0; }
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
