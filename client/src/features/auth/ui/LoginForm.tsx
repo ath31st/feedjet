@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useLogin } from '../model/useAuth';
+import { CommonButton } from '@/shared/ui/common/CommonButton';
 
 interface LoginFormProps {
   onSuccess: () => void;
@@ -50,12 +51,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
         className="rounded-xl border border-[var(--border)] bg-transparent px-4 py-2 focus:outline-none focus:ring-1 focus:ring-[var(--border)]"
       />
 
-      <button
-        type="submit"
-        className="mt-4 rounded-xl bg-[var(--button-bg)] py-2 text-[var(--button-text)] transition-opacity hover:opacity-60"
-      >
-        Войти
-      </button>
+      <CommonButton type="submit">Войти</CommonButton>
     </form>
   );
 }
