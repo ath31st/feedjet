@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express';
 import { eventBus } from '../container.js';
+import type { ControlEvent } from '@shared/types/control.event.js';
 
 export const controlSseHandler = (_req: Request, res: Response) => {
   res.setHeader('Content-Type', 'text/event-stream');
@@ -7,8 +8,8 @@ export const controlSseHandler = (_req: Request, res: Response) => {
   res.setHeader('Connection', 'keep-alive');
   res.flushHeaders();
 
-  const listener = () => {
-    res.write(`data: ${JSON.stringify({ type: 'reload-kiosks' })}\n\n`);
+  const listener = (event: ControlEvent) => {
+    res.write(`data: ${JSON.stringify(event)}\n\n`);
   };
 
   eventBus.on('control', listener);
