@@ -4,13 +4,15 @@ import cors from 'cors';
 import Logger from './utils/logger.js';
 import { trpcMiddleware } from './trpc/index.js';
 import { startRssCronJob } from './cron/rss.cron.js';
-import { feedSseHandler } from './sse/feed.handler.js';
-import { feedConfigSseHandler } from './sse/feed.config.handler.js';
-import { controlSseHandler } from './sse/control.handler.js';
-import { uiConfigSseHandler } from './sse/ui.config.handler.js';
 import { imageCacheService, videoStorageService } from './container.js';
 import { startImageCacheCleanupJob } from './cron/image.cache.cron.js';
-import { videoSseHandler } from './sse/video.handlers.js';
+import {
+  controlSseHandler,
+  feedConfigSseHandler,
+  feedSseHandler,
+  uiConfigSseHandler,
+  videoSseHandler,
+} from './sse/sse.handlers.js';
 
 const app = express();
 const port = process.env.PORT || 3000;
