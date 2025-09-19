@@ -1,28 +1,8 @@
-import { useEffect, useRef } from 'react';
-import { useVideoStore } from '@/entities/video';
 import { EmptyVideoPlaylist } from './EmptyVideoPlaylist';
-import { SERVER_URL } from '@/shared/config/env';
+import { useVideoPlayer } from '../model/useVideoPlayer';
 
 export function VideoPlayerKiosk() {
-  const { currentVideo, nextVideo } = useVideoStore();
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const fileName = currentVideo?.fileName;
-
-  useEffect(() => {
-    const vid = videoRef.current;
-    if (!vid) return;
-
-    vid.pause();
-    vid.removeAttribute('src');
-    vid.load();
-
-    if (currentVideo) {
-      const url = `${SERVER_URL}/video/${fileName}`;
-      vid.src = url;
-      vid.load();
-      vid.play().catch(() => {});
-    }
-  }, [fileName, currentVideo]);
+  const { videoRef, currentVideo, onEnded, onError } = useVideoPlayer();
 
   if (!currentVideo) return <EmptyVideoPlaylist />;
 
@@ -33,8 +13,8 @@ export function VideoPlayerKiosk() {
       autoPlay
       muted
       playsInline
-      onEnded={() => nextVideo()}
-      onError={() => nextVideo()}
+      onEnded={onEnded}
+      onError={onError}
     >
       <track kind="captions" label="no captions" />
     </video>
