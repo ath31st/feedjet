@@ -1,23 +1,11 @@
 import { useRef, useState } from 'react';
 import { CommonButton } from '@/shared/ui/common/CommonButton';
-import { useUploadVideo } from '@/entities/video/api/useVideo';
+import { useVideoUpload } from '../model/useVideoUpload';
 
 export function VideoUpload() {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [dragOver, setDragOver] = useState(false);
-  const { mutate: uploadFile, isPending } = useUploadVideo();
-
-  const handleFiles = (files: File[]) => {
-    if (!files.length) return;
-
-    files.forEach((file) => {
-      const formData = new FormData();
-      formData.set('file', file);
-      formData.set('filename', file.name);
-
-      uploadFile(formData);
-    });
-  };
+  const { uploadFiles, isPending } = useVideoUpload();
 
   const handleButtonClick = () => {
     inputRef.current?.click();
@@ -25,7 +13,7 @@ export function VideoUpload() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
-    handleFiles(Array.from(e.target.files));
+    uploadFiles(Array.from(e.target.files));
   };
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
@@ -38,9 +26,9 @@ export function VideoUpload() {
         .map((item) => item.getAsFile())
         .filter((file): file is File => Boolean(file));
 
-      handleFiles(files);
+      uploadFiles(files);
     } else if (e.dataTransfer.files) {
-      handleFiles(Array.from(e.dataTransfer.files));
+      uploadFiles(Array.from(e.dataTransfer.files));
     }
   };
 
