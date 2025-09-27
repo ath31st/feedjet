@@ -13,6 +13,7 @@ import { scheduleEventRouter } from './routes/schedule.event.route.js';
 import { imageCacheRouter } from './routes/image.cache.route.js';
 import { weatherForecastRouter } from './routes/weather.forecast.route.js';
 import { videoStorageRouter } from './routes/video.storage.route.js';
+import { kioskRouter } from './routes/kiosk.route.js';
 
 const appRouter = t.router({
   user: userRouter,
@@ -26,6 +27,7 @@ const appRouter = t.router({
   image: imageCacheRouter,
   weather: weatherForecastRouter,
   videoFile: videoStorageRouter,
+  kiosk: kioskRouter,
 });
 
 export type AppRouter = typeof appRouter;
