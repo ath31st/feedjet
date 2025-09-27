@@ -1,4 +1,5 @@
 import z from 'zod';
+import { kioskIdInputSchema, kioskIdSchema } from './kiosk.schemas.js';
 
 export const feedConfigParamsSchema = z.object({
   id: z.coerce.number().int().positive(),
@@ -14,11 +15,8 @@ export const feedConfigUpdateSchema = z
     message: 'At least one field must be provided',
   });
 
-export const feedConfigResponseSchema = z.object({
-  id: z.number(),
-  visibleCellCount: z.number().int(),
-  carouselSize: z.number().int(),
-  carouselIntervalMs: z.number().int(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
+export const feedConfigGetInputSchema = kioskIdInputSchema;
+export const feedConfigUpdateInputSchema = z.object({
+  kioskId: kioskIdSchema,
+  data: feedConfigUpdateSchema,
 });
