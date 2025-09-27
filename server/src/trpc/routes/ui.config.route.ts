@@ -1,4 +1,3 @@
-import { z } from 'zod';
 import {
   t,
   eventBus,
@@ -6,25 +5,26 @@ import {
   uiConfigService,
 } from '../../container.js';
 import { protectedProcedure } from '../../middleware/auth.js';
-import { uiConfigUpdateSchema } from '../../validations/schemas/ui.config.schemas.js';
+import {
+  uiConfigGetInputSchema,
+  uiConfigUpdateInputSchema,
+} from '../../validations/schemas/ui.config.schemas.js';
 import { handleServiceCall } from '../error.handler.js';
 
 export const uiConfigRouter = t.router({
-  getUiConfig: publicProcedure.query(() =>
-    handleServiceCall(() => {
-      return uiConfigService.getConfig();
-    }),
-  ),
+  getUiConfig: publicProcedure
+    .input(uiConfigGetInputSchema)
+    .query(({ input }) =>
+      handleServiceCall(() => {
+        return uiConfigService.getConfig(input.kioskId);
+      }),
+    ),
 
   update: protectedProcedure
-    .input(
-      z.object({
-        data: uiConfigUpdateSchema,
-      }),
-    )
+    .input(uiConfigUpdateInputSchema)
     .mutation(({ input }) =>
       handleServiceCall(() => {
-        const updated = uiConfigService.update(input.data);
+        const updated = uiConfigService.update(input.kioskId, input.data);
         eventBus.emit('ui-config', updated);
         return updated;
       }),
