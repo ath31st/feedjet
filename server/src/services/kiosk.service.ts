@@ -67,4 +67,11 @@ export class KioskService {
   deleteBySlug(slug: string): void {
     this.db.delete(kiosksTable).where(eq(kiosksTable.slug, slug)).run();
   }
+
+  ensureDefaultKiosk(): void {
+    if (!this.getAll().length) {
+      this.create({ name: 'Default', slug: 'default' });
+      Logger.log('Created default kiosk');
+    }
+  }
 }
