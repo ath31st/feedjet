@@ -1,5 +1,5 @@
 import { feedConfigTable } from '../db/schema.js';
-import { eq } from 'drizzle-orm';
+import { eq, desc } from 'drizzle-orm';
 import type { DbType } from '../container.js';
 import type {
   FeedConfig,
@@ -70,5 +70,14 @@ export class FeedConfigService {
     }
 
     return config;
+  }
+
+  findMaxCarouselSize(): number | undefined {
+    return this.db
+      .select({ carouselSize: feedConfigTable.carouselSize })
+      .from(feedConfigTable)
+      .orderBy(desc(feedConfigTable.carouselSize))
+      .limit(1)
+      .get()?.carouselSize;
   }
 }
