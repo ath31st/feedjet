@@ -16,14 +16,6 @@ export const router = createBrowserRouter([
     element: <RootLayout />,
     children: [
       {
-        path: '',
-        element: <KioskLayout />,
-        children: [
-          { index: true, element: <KioskPage /> },
-          { path: ':slug', element: <KioskPage /> },
-        ],
-      },
-      {
         element: <CommonLayout />,
         children: [
           {
@@ -37,9 +29,17 @@ export const router = createBrowserRouter([
           },
           { path: 'login', element: <LoginPage /> },
           { path: '401', element: <UnauthorizedPage /> },
-          { path: '*', element: <NotFoundPage /> },
         ],
       },
+      {
+        path: '',
+        element: <KioskLayout />,
+        children: [
+          { index: true, element: <KioskPage /> },
+          { path: ':slug', element: <KioskPage /> },
+        ],
+      },
+      { path: '*', element: <NotFoundPage /> },
     ],
   },
 ]);
