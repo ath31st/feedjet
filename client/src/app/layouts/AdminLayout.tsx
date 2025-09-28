@@ -1,12 +1,12 @@
 import { ToasterConfig } from '@/shared/ui/ToasterConfig';
-import { AdminInitializer } from '../init/AdminInitializer';
 import { Outlet } from 'react-router-dom';
+import { ThemeSwitcher } from '@/features/admin-theme-selector';
 
 export function AdminLayout() {
   return (
     <>
       <ToasterConfig />
-      <AdminInitializer />
+      <ThemeSwitcher />
       <Outlet />
     </>
   );
