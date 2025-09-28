@@ -4,12 +4,13 @@ import {
   type WidgetType,
 } from '@/entities/ui-config';
 
-export function useWidgetSelector() {
+export function useWidgetSelector(kioskId: number) {
   const { uiConfig, setConfig } = useUiConfigStore();
   const updateUiConfig = useUpdateUiConfig();
 
   const handleWidgetChange = async (selected: WidgetType[]) => {
     const updatedConfig = await updateUiConfig.mutateAsync({
+      kioskId,
       data: { rotatingWidgets: selected },
     });
     setConfig({

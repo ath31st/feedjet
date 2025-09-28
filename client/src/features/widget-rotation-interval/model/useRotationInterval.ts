@@ -1,6 +1,6 @@
 import { useUpdateUiConfig, useUiConfigStore } from '@/entities/ui-config';
 
-export function useRotationInterval(min = 10, max = 10000) {
+export function useRotationInterval(kioskId: number, min = 10, max = 10000) {
   const { uiConfig, setConfig } = useUiConfigStore();
   const updateConfig = useUpdateUiConfig();
 
@@ -11,6 +11,7 @@ export function useRotationInterval(min = 10, max = 10000) {
   const update = async (val: number) => {
     const clamped = Math.min(Math.max(val, min), max);
     const updatedConfig = await updateConfig.mutateAsync({
+      kioskId,
       data: { autoSwitchIntervalMs: clamped * 1000 },
     });
     setConfig({

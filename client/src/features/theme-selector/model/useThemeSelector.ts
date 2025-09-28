@@ -8,8 +8,9 @@ export function useThemeSelector() {
   const { uiConfig, setConfig } = useUiConfigStore();
   const updateUiConfig = useUpdateUiConfig();
 
-  const handleThemeChange = async (selected: Theme) => {
+  const handleThemeChange = async (kioskId: number, selected: Theme) => {
     const updatedConfig = await updateUiConfig.mutateAsync({
+      kioskId,
       data: { theme: selected },
     });
     setConfig({
