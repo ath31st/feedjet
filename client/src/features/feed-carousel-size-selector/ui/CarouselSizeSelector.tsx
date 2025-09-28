@@ -1,8 +1,12 @@
 import { useFeedConfigFields } from '@/entities/feed-config';
 import { NumberSliderSelector } from '@/shared/ui/NumberSliderSelector';
 
-export function CarouselSizeSelector() {
-  const { carouselSize, setCarouselSize } = useFeedConfigFields();
+interface NumberSliderSelectorProps {
+  kioskId: number;
+}
+
+export function CarouselSizeSelector({ kioskId }: NumberSliderSelectorProps) {
+  const { carouselSize, setCarouselSize } = useFeedConfigFields(kioskId);
   return (
     <NumberSliderSelector
       max={60}

@@ -4,7 +4,11 @@ import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { useThemeSelector } from '../model/useThemeSelector';
 import { themes } from '@shared/types/ui.config';
 
-export function ThemeSelector() {
+interface ThemeSelectorProps {
+  kioskId: number;
+}
+
+export function ThemeSelector({ kioskId }: ThemeSelectorProps) {
   const { theme, handleThemeChange } = useThemeSelector();
 
   if (!themes?.length) return <p>Темы недоступны</p>;
@@ -30,7 +34,7 @@ export function ThemeSelector() {
           {themes.map((t) => (
             <DropdownMenu.Item
               key={t}
-              onSelect={() => handleThemeChange(t)}
+              onSelect={() => handleThemeChange(kioskId, t)}
               className="cursor-pointer px-3 py-2 text-sm outline-none hover:bg-[var(--button-hover-bg)] data-[highlighted]:bg-[var(--hover-bg)]"
             >
               {t}
