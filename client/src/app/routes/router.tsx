@@ -18,7 +18,10 @@ export const router = createBrowserRouter([
       {
         path: '',
         element: <KioskLayout />,
-        children: [{ index: true, element: <KioskPage /> }],
+        children: [
+          { index: true, element: <KioskPage /> },
+          { path: ':slug', element: <KioskPage /> },
+        ],
       },
       {
         element: <CommonLayout />,
