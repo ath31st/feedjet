@@ -31,12 +31,12 @@ export function AdminPage() {
 
         <Tabs.Content value="settings" className="flex flex-col gap-6">
           <div className="mt-6 flex w-full gap-6">
-            <RssManagementWidget />
             <AppearanceSettingsWidget />
+            <FeedWidgetSettings />
           </div>
 
           <div className="flex w-full gap-6">
-            <FeedWidgetSettings />
+            <RssManagementWidget />
             <KioskControlWidget />
           </div>
         </Tabs.Content>
