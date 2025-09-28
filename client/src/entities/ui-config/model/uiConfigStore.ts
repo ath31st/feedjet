@@ -6,7 +6,7 @@ interface UiConfigState {
   uiConfig: UiConfig;
   error: string | null;
   loading: boolean;
-  fetchUiConfig: () => Promise<void>;
+  fetchUiConfig: (kioskId: number) => Promise<void>;
   setConfig: (config: UiConfig) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
@@ -27,10 +27,10 @@ export const useUiConfigStore = create<UiConfigState>()((set) => ({
   uiConfig: DEFAULT_CONFIG,
   error: null,
   loading: false,
-  fetchUiConfig: async () => {
+  fetchUiConfig: async (kioskId: number) => {
     set({ loading: true });
     try {
-      const data = await trpcClient.uiConfig.getUiConfig.query();
+      const data = await trpcClient.uiConfig.getUiConfig.query({ kioskId });
       set({
         uiConfig: {
           ...data,
