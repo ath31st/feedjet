@@ -2,7 +2,7 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { queryClient, trpcWithProxy } from '@/shared/api/trpc';
 import { toast } from 'sonner';
 
-export const useConfig = (kioskId: number) => {
+export const useGetUiConfig = (kioskId: number) => {
   return useQuery(trpcWithProxy.uiConfig.getUiConfig.queryOptions({ kioskId }));
 };
 
