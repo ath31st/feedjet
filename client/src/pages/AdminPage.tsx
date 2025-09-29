@@ -7,6 +7,7 @@ import * as Tabs from '@radix-ui/react-tabs';
 import { AdminTabTrigger } from '@/shared/ui/AdminTabTrigger';
 import { ScheduleManagementWidget } from '@/widgets/schedule-management';
 import { VideoContentManagementWidget } from '@/widgets/video-content-management';
+import { KioskManagement } from '@/widgets/kiosk-management';
 
 export function AdminPage() {
   return (
@@ -30,7 +31,8 @@ export function AdminPage() {
         </Tabs.List>
 
         <Tabs.Content value="settings" className="flex flex-col gap-6">
-          <div className="mt-6 flex w-full gap-6">
+          <KioskManagement />
+          <div className="flex w-full gap-6">
             <AppearanceSettingsWidget />
             <FeedWidgetSettings />
           </div>
