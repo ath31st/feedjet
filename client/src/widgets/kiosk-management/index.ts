@@ -1,0 +1,1 @@
+export { KioskManagement } from './KioskManagement';
