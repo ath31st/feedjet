@@ -15,7 +15,7 @@ export function useControlSse() {
     try {
       const msg = JSON.parse(e.data) as ControlEvent;
       if (msg.type === 'reload-kiosks') {
-        if (window.location.pathname === '/') {
+        if (window.location.pathname !== '/admin') {
           window.location.reload();
         }
       }
