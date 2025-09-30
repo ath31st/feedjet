@@ -27,6 +27,7 @@ export function AdminPage() {
         >
           <AdminTabTrigger value="settings">Настройки</AdminTabTrigger>
           <AdminTabTrigger value="schedule">Расписание</AdminTabTrigger>
+          <AdminTabTrigger value="rss">RSS</AdminTabTrigger>
           <AdminTabTrigger value="video">Видео</AdminTabTrigger>
         </Tabs.List>
 
@@ -38,9 +39,12 @@ export function AdminPage() {
           </div>
 
           <div className="flex w-full gap-6">
-            <RssManagementWidget />
             <KioskControlWidget />
           </div>
+        </Tabs.Content>
+
+        <Tabs.Content value="rss">
+          <RssManagementWidget />
         </Tabs.Content>
 
         <Tabs.Content value="schedule">
