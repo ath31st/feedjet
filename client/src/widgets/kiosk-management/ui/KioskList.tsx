@@ -1,14 +1,28 @@
-import { useDeleteKiosk, useGetAllKiosks } from '@/entities/kiosk';
+import {
+  useDeleteKiosk,
+  useGetAllKiosks,
+  useKioskStore,
+} from '@/entities/kiosk';
 import { LoadingThreeDotsJumping } from '@/shared/ui/LoadingThreeDotsJumping';
 import { KioskCard } from './KioskCard';
 import { ReloadKioskPageButton } from '@/features/reload-kiosk';
 
 export function KioskList() {
+  const { currentKiosk, setCurrentKiosk } = useKioskStore();
   const { data: kiosks, isLoading } = useGetAllKiosks();
   const deleteKiosk = useDeleteKiosk();
 
   const handleDelete = (id: number) => {
-    deleteKiosk.mutate({ kioskId: id });
+    deleteKiosk.mutate(
+      { kioskId: id },
+      {
+        onSuccess: () => {
+          if (currentKiosk?.id === id) {
+            setCurrentKiosk(null);
+          }
+        },
+      },
+    );
   };
 
   if (isLoading) return <LoadingThreeDotsJumping />;
