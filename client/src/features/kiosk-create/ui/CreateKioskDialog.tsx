@@ -28,6 +28,10 @@ export function CreateKioskDialog({
             </Dialog.Title>
           </div>
 
+          <Dialog.Description className="sr-only">
+            Форма для создания нового киоска
+          </Dialog.Description>
+
           <CreateKioskForm
             formData={formData}
             onChange={handleChange}

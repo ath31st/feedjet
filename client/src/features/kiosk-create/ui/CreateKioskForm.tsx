@@ -18,10 +18,11 @@ export function CreateKioskForm({
   return (
     <form onSubmit={onSubmit} className="space-y-4">
       <div>
-        <label htmlFor="name" className="mb-1 block font-medium text-sm">
+        <label htmlFor="kiosk-name" className="mb-1 block font-medium text-sm">
           Название *
         </label>
         <input
+          id="kiosk-name"
           type="text"
           required
           value={formData.name}
@@ -31,10 +32,11 @@ export function CreateKioskForm({
       </div>
 
       <div>
-        <label htmlFor="slug" className="mb-1 block font-medium text-sm">
+        <label htmlFor="kiosk-slug" className="mb-1 block font-medium text-sm">
           Slug *
         </label>
         <input
+          id="kiosk-slug"
           type="text"
           required
           value={formData.slug}
@@ -45,10 +47,14 @@ export function CreateKioskForm({
       </div>
 
       <div>
-        <label htmlFor="description" className="mb-1 block font-medium text-sm">
+        <label
+          htmlFor="kiosk-description"
+          className="mb-1 block font-medium text-sm"
+        >
           Описание
         </label>
         <textarea
+          id="kiosk-description"
           value={formData.description}
           onChange={(e) => onChange('description', e.target.value)}
           className="w-full rounded border px-2 py-1 text-sm"
@@ -57,10 +63,14 @@ export function CreateKioskForm({
       </div>
 
       <div>
-        <label htmlFor="location" className="mb-1 block font-medium text-sm">
+        <label
+          htmlFor="kiosk-location"
+          className="mb-1 block font-medium text-sm"
+        >
           Местоположение
         </label>
         <input
+          id="kiosk-location"
           type="text"
           value={formData.location}
           onChange={(e) => onChange('location', e.target.value)}
