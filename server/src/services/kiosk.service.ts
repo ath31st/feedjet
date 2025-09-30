@@ -69,7 +69,13 @@ export class KioskService {
   }
 
   ensureDefaultKiosk(): void {
-    if (!this.getAll().length) {
+    const kiosk = this.db
+      .select()
+      .from(kiosksTable)
+      .where(eq(kiosksTable.slug, 'default'))
+      .get();
+
+    if (!kiosk) {
       this.create({ name: 'Default', slug: 'default' });
       Logger.log('Created default kiosk');
     }
