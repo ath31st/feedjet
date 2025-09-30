@@ -1,47 +1,32 @@
 import { useState } from 'react';
-import {
-  useGetAllKiosks,
-  useKioskStore,
-  useCreateKiosk,
-} from '@/entities/kiosk';
+import { useCreateKiosk } from '@/entities/kiosk';
 import { CreateKioskDialog } from '@/features/kiosk-create';
-import { KioskSelector } from '@/features/kiosk-selector';
 import type { NewKiosk } from '@/entities/kiosk';
 import { IconButton } from '@/shared/ui/common/IconButton';
 import { PlusIcon } from '@radix-ui/react-icons';
+import { SettingsCard } from '@/shared/ui/SettingsCard';
 
 export function KioskManagement() {
-  const { setCurrentKiosk, currentKiosk } = useKioskStore();
-  const { data: kiosks = [] } = useGetAllKiosks();
   const createKioskMutation = useCreateKiosk();
-
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handleCreateKiosk = (data: NewKiosk) => {
     createKioskMutation.mutate(data, {
-      onSuccess: (newKiosk) => {
-        setCurrentKiosk(newKiosk);
+      onSuccess: () => {
         setIsDialogOpen(false);
       },
     });
   };
 
   return (
-    <>
-      <div className="flex items-center gap-4">
-        <KioskSelector
-          kiosks={kiosks}
-          activeKiosk={currentKiosk}
-          onChange={setCurrentKiosk}
-        />
-        <IconButton onClick={() => setIsDialogOpen(true)} icon={<PlusIcon />} />
-      </div>
+    <SettingsCard title="Управление киосками" className="mt-6 w-full">
+      <IconButton onClick={() => setIsDialogOpen(true)} icon={<PlusIcon />} />
 
       <CreateKioskDialog
         open={isDialogOpen}
         onClose={() => setIsDialogOpen(false)}
         onCreate={handleCreateKiosk}
       />
-    </>
+    </SettingsCard>
   );
 }

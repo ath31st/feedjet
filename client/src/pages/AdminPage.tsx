@@ -8,6 +8,7 @@ import { AdminTabTrigger } from '@/shared/ui/AdminTabTrigger';
 import { ScheduleManagementWidget } from '@/widgets/schedule-management';
 import { VideoContentManagementWidget } from '@/widgets/video-content-management';
 import { KioskManagement } from '@/widgets/kiosk-management';
+import { KioskSelectorWidget } from '@/widgets/kiosk-selector';
 
 export function AdminPage() {
   return (
@@ -29,10 +30,11 @@ export function AdminPage() {
           <AdminTabTrigger value="schedule">Расписание</AdminTabTrigger>
           <AdminTabTrigger value="rss">RSS</AdminTabTrigger>
           <AdminTabTrigger value="video">Видео</AdminTabTrigger>
+          <AdminTabTrigger value="kiosks">Киоски</AdminTabTrigger>
         </Tabs.List>
 
         <Tabs.Content value="settings" className="flex flex-col gap-6">
-          <KioskManagement />
+          <KioskSelectorWidget />
           <div className="flex w-full gap-6">
             <AppearanceSettingsWidget />
             <FeedWidgetSettings />
@@ -55,6 +57,10 @@ export function AdminPage() {
           <div className="mt-6 flex w-full gap-6">
             <VideoContentManagementWidget />
           </div>
+        </Tabs.Content>
+
+        <Tabs.Content value="kiosks">
+          <KioskManagement />
         </Tabs.Content>
       </Tabs.Root>
     </div>
