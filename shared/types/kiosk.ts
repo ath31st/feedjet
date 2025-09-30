@@ -5,8 +5,8 @@ export interface Kiosk {
   description?: string | null;
   location?: string | null;
   isActive: boolean;
-  //  createdAt: Date;
-  //  updatedAt: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface NewKiosk {
