@@ -2,7 +2,6 @@ import { LogoutButton } from '@/features/auth/ui/LogoutButton';
 import { RssManagementWidget } from '@/widgets/rss-management';
 import { AppearanceSettingsWidget } from '@/widgets/appearance-settings';
 import { FeedWidgetSettings } from '@/widgets/feed-widget-settings';
-import { KioskControlWidget } from '@/widgets/kiosk-control';
 import * as Tabs from '@radix-ui/react-tabs';
 import { AdminTabTrigger } from '@/shared/ui/AdminTabTrigger';
 import { ScheduleManagementWidget } from '@/widgets/schedule-management';
@@ -38,10 +37,6 @@ export function AdminPage() {
           <div className="flex w-full gap-6">
             <AppearanceSettingsWidget />
             <FeedWidgetSettings />
-          </div>
-
-          <div className="flex w-full gap-6">
-            <KioskControlWidget />
           </div>
         </Tabs.Content>
 

@@ -1,6 +1,7 @@
 import type { Kiosk } from '@/entities/kiosk';
 import { CommonButton } from '@/shared/ui/common/CommonButton';
 import { TrashIcon } from '@radix-ui/react-icons';
+import type { ReactNode } from 'react';
 
 interface KioskCardProps {
   kiosk: Omit<Kiosk, 'createdAt' | 'updatedAt'> & {
@@ -8,16 +9,22 @@ interface KioskCardProps {
     updatedAt: string;
   };
   onDelete: (id: number) => void;
+  actions?: ReactNode;
 }
 
-export function KioskCard({ kiosk, onDelete }: KioskCardProps) {
+export function KioskCard({ kiosk, onDelete, actions }: KioskCardProps) {
   return (
     <div className="rounded-xl border border-[var(--border)] p-4">
       <div className="mb-3 flex items-start justify-between">
         <h3 className="font-semibold text-lg">{kiosk.name}</h3>
-        <CommonButton type="button" onClick={() => onDelete(kiosk.id)}>
-          <TrashIcon />
-        </CommonButton>
+
+        <div className="flex items-center gap-2">
+          <CommonButton type="button" onClick={() => onDelete(kiosk.id)}>
+            <TrashIcon />
+          </CommonButton>
+
+          {actions}
+        </div>
       </div>
 
       <div className="space-y-2 text-[var(--card-text)] text-sm">

@@ -1,1 +1,1 @@
-export { KioskManagement } from './KioskManagement';
+export { KioskManagement } from './ui/KioskManagement';
