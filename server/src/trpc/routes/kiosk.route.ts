@@ -1,4 +1,4 @@
-import { t, kioskService, eventBus, publicProcedure } from '../../container.js';
+import { t, kioskService, publicProcedure } from '../../container.js';
 import { handleServiceCall } from '../error.handler.js';
 import {
   kioskIdInputSchema,
@@ -25,7 +25,6 @@ export const kioskRouter = t.router({
   create: protectedProcedure.input(newKioskSchema).mutation(({ input }) =>
     handleServiceCall(() => {
       const kiosk = kioskService.create(input);
-      eventBus.emit('kiosk-created', kiosk);
       return kiosk;
     }),
   ),
@@ -42,7 +41,6 @@ export const kioskRouter = t.router({
     .mutation(({ input }) =>
       handleServiceCall(() => {
         kioskService.deleteBySlug(input.slug);
-        eventBus.emit('kiosk-deleted', { slug: input.slug });
         return { success: true };
       }),
     ),
