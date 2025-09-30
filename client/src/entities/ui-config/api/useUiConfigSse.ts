@@ -4,8 +4,6 @@ import { useUiConfigStore } from '../model/uiConfigStore';
 import { SERVER_URL } from '@/shared/config/env';
 import { useKioskStore } from '@/entities/kiosk';
 
-const UI_CONFIG_SSE_URL = `${SERVER_URL}/sse/ui-config`;
-
 export function useUiConfigSse() {
   const setConfig = useUiConfigStore((s) => s.setConfig);
   const fetchUiConfig = useUiConfigStore((s) => s.fetchUiConfig);
@@ -17,6 +15,10 @@ export function useUiConfigSse() {
     }
   }, [fetchUiConfig, currentKiosk, loading]);
 
+  const sseUrl = currentKiosk
+    ? `${SERVER_URL}/sse/ui-config/${currentKiosk.id}`
+    : null;
+
   const onMessage = useCallback(
     (e: MessageEvent) => {
       try {
@@ -27,5 +29,5 @@ export function useUiConfigSse() {
     [setConfig],
   );
 
-  useEventSource(UI_CONFIG_SSE_URL, onMessage);
+  useEventSource(sseUrl, onMessage);
 }
