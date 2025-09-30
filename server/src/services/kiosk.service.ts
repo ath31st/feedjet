@@ -8,6 +8,7 @@ import Logger from '../utils/logger.js';
 import { eq, sql } from 'drizzle-orm';
 
 export class KioskService {
+  private readonly kioskLimit = 8;
   private readonly db: DbType;
   private readonly uiConfigService: UiConfigService;
   private readonly feedConfigService: FeedConfigService;
@@ -24,6 +25,7 @@ export class KioskService {
 
   create(data: NewKiosk): Kiosk {
     return this.db.transaction(() => {
+      this.checkKiosksLimit();
       this.validateUniqueConstraints(data);
 
       try {
@@ -45,6 +47,14 @@ export class KioskService {
         throw new KioskError(500, `Failed to create kiosk with configs`);
       }
     });
+  }
+
+  private checkKiosksLimit(): void {
+    const kiosksCount = this.getAll().length;
+
+    if (kiosksCount >= this.kioskLimit) {
+      throw new KioskError(400, 'Kiosks limit reached');
+    }
   }
 
   private validateUniqueConstraints(data: NewKiosk): void {
