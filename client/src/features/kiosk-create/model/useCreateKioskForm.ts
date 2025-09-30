@@ -14,7 +14,15 @@ export function useCreateKioskForm(
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onCreate(formData);
+
+    const trimmedData: NewKiosk = {
+      name: formData.name.trim(),
+      slug: formData.slug.trim(),
+      description: formData.description?.trim() || '',
+      location: formData.location?.trim() || '',
+    };
+
+    onCreate(trimmedData);
     setFormData({ name: '', slug: '', description: '', location: '' });
     onClose();
   };
