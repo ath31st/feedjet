@@ -13,7 +13,13 @@ export const kioskRouter = t.router({
   }),
 
   getBySlug: publicProcedure.input(kioskSlugInputSchema).query(({ input }) => {
-    return handleServiceCall(() => kioskService.getBySlug(input.slug));
+    return handleServiceCall(() => {
+      try {
+        return kioskService.getBySlug(input.slug);
+      } catch (_err) {
+        return kioskService.getBySlug('default');
+      }
+    });
   }),
 
   create: protectedProcedure.input(newKioskSchema).mutation(({ input }) =>
