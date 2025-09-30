@@ -14,7 +14,7 @@ export function useControlSse() {
   const onMessage = useCallback((e: MessageEvent) => {
     try {
       const msg = JSON.parse(e.data) as ControlEvent;
-      if (msg.type === 'reload-kiosks') {
+      if (msg.type === 'reload-kiosk') {
         window.location.reload();
       }
 

@@ -8,7 +8,7 @@ export const controlRouter = t.router({
     .input(kioskIdInputSchema)
     .mutation(({ input }) => {
       const event: ControlEvent = {
-        type: 'reload-kiosks',
+        type: 'reload-kiosk',
       };
       eventBus.emit(`control:${input.kioskId}`, event);
       return true;
