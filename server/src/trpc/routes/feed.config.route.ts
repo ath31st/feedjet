@@ -28,7 +28,7 @@ export const feedConfigRouter = t.router({
     .mutation(({ input }) =>
       handleServiceCall(() => {
         const updated = feedConfigService.update(input.kioskId, input.data);
-        eventBus.emit('feed-config', updated);
+        eventBus.emit(`feed-config:${updated.kioskId}`, updated);
         return updated;
       }),
     ),

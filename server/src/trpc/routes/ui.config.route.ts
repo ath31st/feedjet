@@ -25,7 +25,7 @@ export const uiConfigRouter = t.router({
     .mutation(({ input }) =>
       handleServiceCall(() => {
         const updated = uiConfigService.update(input.kioskId, input.data);
-        eventBus.emit('ui-config', updated);
+        eventBus.emit(`ui-config:${updated.kioskId}`, updated);
         return updated;
       }),
     ),
