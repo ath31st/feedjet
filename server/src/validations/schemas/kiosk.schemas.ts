@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const kioskIdSchema = z.number().int().positive();
+export const kioskIdSchema = z.number().int().positive().max(999999);
 export const kioskSlugSchema = z
   .string()
   .min(1)
@@ -10,7 +10,7 @@ export const kioskSlugSchema = z
   });
 
 export const newKioskSchema = z.object({
-  name: z.string().min(1).max(100),
+  name: z.string().min(1).max(10),
   slug: kioskSlugSchema,
   description: z.string().max(500).optional(),
   location: z.string().max(200).optional(),
