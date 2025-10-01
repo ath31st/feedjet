@@ -1,19 +1,36 @@
 import { CreateKioskDialog } from '@/features/kiosk-create';
-import { IconButton } from '@/shared/ui/common/IconButton';
-import { PlusIcon } from '@radix-ui/react-icons';
 import { SettingsCard } from '@/shared/ui/SettingsCard';
 import { KioskList } from './KioskList';
 import { useKioskManagement } from '../model/useKioskManagement';
 
 export function KioskManagement() {
-  const { isDialogOpen, setIsDialogOpen, handleCreateKiosk } =
-    useKioskManagement();
+  const {
+    isDialogOpen,
+    setIsDialogOpen,
+    handleCreateKiosk,
+    kiosksLength,
+    kioskLimit,
+    isLimitReached,
+  } = useKioskManagement();
 
   return (
     <SettingsCard title="Управление киосками" className="mt-6 w-full">
-      <KioskList />
+      <div className="flex w-full flex-col gap-6">
+        <KioskList />
 
-      <IconButton onClick={() => setIsDialogOpen(true)} icon={<PlusIcon />} />
+        <button
+          type="button"
+          onClick={() => !isLimitReached && setIsDialogOpen(true)}
+          disabled={isLimitReached}
+          className={`flex w-1/5 items-center justify-center gap-2 rounded-lg border border-[var(--border)] px-4 py-2 text-sm ${
+            isLimitReached
+              ? 'cursor-not-allowed bg-[var(--border)] text-[var(--button-text)]'
+              : 'cursor-pointer bg-[var(--button-bg)] text-[var(--button-text)] hover:bg-[var(--button-hover-bg)]'
+          }`}
+        >
+          Добавить киоск ({kiosksLength}/{kioskLimit})
+        </button>
+      </div>
 
       <CreateKioskDialog
         open={isDialogOpen}

@@ -1,9 +1,12 @@
-import { useCreateKiosk, type NewKiosk } from '@/entities/kiosk';
+import { useCreateKiosk, useGetAllKiosks, type NewKiosk } from '@/entities/kiosk';
 import { useState } from 'react';
 
 export function useKioskManagement() {
+  const kioskLimit = 8;
   const createKioskMutation = useCreateKiosk();
+  const { data: kiosks = [] } = useGetAllKiosks();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const isLimitReached = kiosks.length >= kioskLimit;
 
   const handleCreateKiosk = (data: NewKiosk) => {
     createKioskMutation.mutate(data, {
@@ -14,6 +17,9 @@ export function useKioskManagement() {
   };
 
   return {
+    isLimitReached,
+    kioskLimit,
+    kiosksLength: kiosks.length,
     isDialogOpen,
     setIsDialogOpen,
     handleCreateKiosk,
