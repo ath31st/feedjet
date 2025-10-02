@@ -3,6 +3,7 @@ export interface UiConfig {
   rotatingWidgets: WidgetType[];
   autoSwitchIntervalMs: number;
   theme: Theme;
+  kioskId: number;
   createdAt: Date;
   updatedAt: Date;
 }

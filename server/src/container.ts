@@ -11,19 +11,21 @@ import { AuthService } from './services/auth.service.js';
 import type { Context } from './trpc/context.js';
 import { EventEmitter } from 'node:events';
 import { UiConfigService } from './services/ui.config.service.js';
-import { ensureUiConfig } from './db/initialize.ui.config.js';
-import { ensureFeedConfig } from './db/initialize.feed.config.js';
 import { ScheduleEventService } from './services/schedule.event.service.js';
 import { ImageCacheService } from './services/image.cache.service.js';
 import { OpenWeatherAPI } from 'openweather-api-node';
 import { WeatherForecastService } from './services/weather.forecast.service.js';
 import { VideoStorageService } from './services/video.storage.service.js';
-import { cacheDir, dbPath, fileStorageDir, openWeatherApiKey } from './config/config.js';
+import {
+  cacheDir,
+  dbPath,
+  fileStorageDir,
+  openWeatherApiKey,
+} from './config/config.js';
+import { KioskService } from './services/kiosk.service.js';
 
 const sqlite = new Database(dbPath);
 export const db = drizzle(sqlite, { schema });
-ensureFeedConfig(db);
-ensureUiConfig(db);
 export type DbType = typeof db;
 
 export const imageCacheService = new ImageCacheService(cacheDir);
@@ -41,6 +43,12 @@ export const rssService = new RssService(db);
 export const feedConfigService = new FeedConfigService(db);
 export const uiConfigService = new UiConfigService(db);
 export const scheduleEventService = new ScheduleEventService(db);
+export const kioskService = new KioskService(
+  db,
+  uiConfigService,
+  feedConfigService,
+);
+kioskService.ensureDefaultKiosk();
 
 export const t = initTRPC.context<Context>().create();
 export const publicProcedure = t.procedure;

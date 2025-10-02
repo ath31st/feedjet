@@ -3,6 +3,7 @@ export interface FeedConfig {
   visibleCellCount: number;
   carouselSize: number;
   carouselIntervalMs: number;
+  kioskId: number;
   createdAt: Date;
   updatedAt: Date;
 }

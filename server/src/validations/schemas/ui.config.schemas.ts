@@ -1,5 +1,6 @@
 import z from 'zod';
 import { themes, widgetTypes } from '@shared/types/ui.config.js';
+import { kioskIdInputSchema, kioskIdSchema } from './kiosk.schemas.js';
 
 const widgetTypeSchema = z.enum(widgetTypes);
 export type WidgetTypeSchema = z.infer<typeof widgetTypeSchema>;
@@ -24,3 +25,9 @@ export const uiConfigUpdateSchema = z
   .refine((data) => Object.keys(data).length > 0, {
     message: 'At least one field must be provided to update',
   });
+
+export const uiConfigGetInputSchema = kioskIdInputSchema;
+export const uiConfigUpdateInputSchema = z.object({
+  kioskId: kioskIdSchema,
+  data: uiConfigUpdateSchema,
+});

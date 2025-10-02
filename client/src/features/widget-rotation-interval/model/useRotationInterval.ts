@@ -1,7 +1,7 @@
-import { useUpdateUiConfig, useUiConfigStore } from '@/entities/ui-config';
+import { useUpdateUiConfig, useGetUiConfig } from '@/entities/ui-config';
 
-export function useRotationInterval(min = 10, max = 10000) {
-  const { uiConfig, setConfig } = useUiConfigStore();
+export function useRotationInterval(kioskId: number, min = 10, max = 10000) {
+  const { data: uiConfig, isLoading } = useGetUiConfig(kioskId);
   const updateConfig = useUpdateUiConfig();
 
   const value = uiConfig?.autoSwitchIntervalMs
@@ -10,15 +10,13 @@ export function useRotationInterval(min = 10, max = 10000) {
 
   const update = async (val: number) => {
     const clamped = Math.min(Math.max(val, min), max);
-    const updatedConfig = await updateConfig.mutateAsync({
+    await updateConfig.mutateAsync({
+      kioskId,
       data: { autoSwitchIntervalMs: clamped * 1000 },
-    });
-    setConfig({
-      ...updatedConfig,
-      createdAt: new Date(updatedConfig.createdAt),
-      updatedAt: new Date(updatedConfig.updatedAt),
     });
   };
 
-  return { value, update };
+  const isLoadingState = isLoading || updateConfig.isPending;
+
+  return { value, update, isLoading: isLoadingState };
 }

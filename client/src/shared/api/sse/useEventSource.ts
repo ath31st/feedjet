@@ -6,7 +6,7 @@ type Opts = {
 };
 
 export function useEventSource(
-  url: string,
+  url: string | null,
   onMessage: (event: MessageEvent) => void,
   { reconnectInterval = 3000, maxAttempts = Infinity }: Opts = {},
 ) {
@@ -21,6 +21,12 @@ export function useEventSource(
   }, [onMessage]);
 
   useEffect(() => {
+    if (!url) {
+      esRef.current?.close();
+      esRef.current = null;
+      return;
+    }
+
     mountedRef.current = true;
     attemptsRef.current = 0;
 
@@ -31,6 +37,8 @@ export function useEventSource(
 
     const connect = () => {
       if (!mountedRef.current) return;
+      esRef.current?.close();
+
       const es = new EventSource(url);
       esRef.current = es;
 

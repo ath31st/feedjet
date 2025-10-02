@@ -1,8 +1,15 @@
 import { NumberSliderSelector } from '@/shared/ui/NumberSliderSelector';
 import { useFeedConfigFields } from '@/entities/feed-config';
 
-export function VisibleCellCountSelector() {
-  const { visibleCellCount, setVisibleCellCount } = useFeedConfigFields();
+interface NumberSliderSelectorProps {
+  kioskId: number;
+}
+
+export function VisibleCellCountSelector({
+  kioskId,
+}: NumberSliderSelectorProps) {
+  const { visibleCellCount, setVisibleCellCount } =
+    useFeedConfigFields(kioskId);
   return (
     <NumberSliderSelector
       max={10}

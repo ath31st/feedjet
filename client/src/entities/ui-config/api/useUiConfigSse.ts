@@ -2,16 +2,22 @@ import { useEffect, useCallback } from 'react';
 import { useEventSource } from '@/shared/api/sse/useEventSource';
 import { useUiConfigStore } from '../model/uiConfigStore';
 import { SERVER_URL } from '@/shared/config/env';
-
-const UI_CONFIG_SSE_URL = `${SERVER_URL}/sse/ui-config`;
+import { useKioskStore } from '@/entities/kiosk';
 
 export function useUiConfigSse() {
   const setConfig = useUiConfigStore((s) => s.setConfig);
   const fetchUiConfig = useUiConfigStore((s) => s.fetchUiConfig);
+  const { currentKiosk, loading } = useKioskStore();
 
   useEffect(() => {
-    fetchUiConfig();
-  }, [fetchUiConfig]);
+    if (currentKiosk && !loading) {
+      fetchUiConfig(currentKiosk.id);
+    }
+  }, [fetchUiConfig, currentKiosk, loading]);
+
+  const sseUrl = currentKiosk
+    ? `${SERVER_URL}/sse/ui-config/${currentKiosk.id}`
+    : null;
 
   const onMessage = useCallback(
     (e: MessageEvent) => {
@@ -23,5 +29,5 @@ export function useUiConfigSse() {
     [setConfig],
   );
 
-  useEventSource(UI_CONFIG_SSE_URL, onMessage);
+  useEventSource(sseUrl, onMessage);
 }

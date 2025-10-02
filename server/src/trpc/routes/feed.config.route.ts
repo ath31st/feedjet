@@ -1,6 +1,8 @@
 import { TRPCError } from '@trpc/server';
-import { z } from 'zod';
-import { feedConfigUpdateSchema } from '../../validations/schemas/feed.config.schemas.js';
+import {
+  feedConfigGetInputSchema,
+  feedConfigUpdateInputSchema,
+} from '../../validations/schemas/feed.config.schemas.js';
 import {
   t,
   feedConfigService,
@@ -11,20 +13,22 @@ import { protectedProcedure } from '../../middleware/auth.js';
 import { handleServiceCall } from '../error.handler.js';
 
 export const feedConfigRouter = t.router({
-  getConfig: publicProcedure.query(() => {
-    const config = feedConfigService.getConfig();
-    if (!config) {
-      throw new TRPCError({ code: 'NOT_FOUND', message: 'Config not found' });
-    }
-    return config;
-  }),
+  getConfig: publicProcedure
+    .input(feedConfigGetInputSchema)
+    .query(({ input }) => {
+      const config = feedConfigService.getConfig(input.kioskId);
+      if (!config) {
+        throw new TRPCError({ code: 'NOT_FOUND', message: 'Config not found' });
+      }
+      return config;
+    }),
 
   update: protectedProcedure
-    .input(z.object({ data: feedConfigUpdateSchema }))
+    .input(feedConfigUpdateInputSchema)
     .mutation(({ input }) =>
       handleServiceCall(() => {
-        const updated = feedConfigService.update(input.data);
-        eventBus.emit('feed-config', updated);
+        const updated = feedConfigService.update(input.kioskId, input.data);
+        eventBus.emit(`feed-config:${updated.kioskId}`, updated);
         return updated;
       }),
     ),

@@ -2,12 +2,17 @@ import * as ToggleGroup from '@radix-ui/react-toggle-group';
 import { widgetTypes, widgetLabels } from '@shared/types/ui.config';
 import { useWidgetSelector } from '../model/useWidgetSelector';
 
-export function WidgetSelector() {
-  const { rotatingWidgets, handleWidgetChange } = useWidgetSelector();
+interface WidgetSelectorProps {
+  kioskId: number;
+}
+
+export function WidgetSelector({ kioskId }: WidgetSelectorProps) {
+  const { rotatingWidgets, handleWidgetChange } = useWidgetSelector(kioskId);
 
   return (
     <div className="flex flex-col gap-1">
       <span className="text-[var(--text)]">Виджеты в ротации:</span>
+
       <ToggleGroup.Root
         type="multiple"
         className="flex justify-center gap-1 rounded-lg border border-[var(--border)] p-1"

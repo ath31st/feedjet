@@ -7,19 +7,36 @@ import { UiConfigError } from '../errors/ui.config.error.js';
 import Logger from '../utils/logger.js';
 
 export class UiConfigService {
-  private readonly configId: number = 1;
   private readonly db: DbType;
 
   constructor(db: DbType) {
     this.db = db;
   }
 
-  update(data: Partial<UpdateUiConfig>): UiConfig {
+  createDefaultConfig(kioskId: number): UiConfig {
+    try {
+      return this.db
+        .insert(uiConfigTable)
+        .values({
+          kioskId,
+          rotatingWidgets: ['feed', 'schedule'],
+          autoSwitchIntervalMs: 60000,
+          theme: 'dark',
+        })
+        .returning()
+        .get();
+    } catch (err) {
+      Logger.error(err);
+      throw new UiConfigError(500, 'Failed to create default ui config');
+    }
+  }
+
+  update(kioskId: number, data: Partial<UpdateUiConfig>): UiConfig {
     try {
       const updatedConfig = this.db
         .update(uiConfigTable)
         .set(data)
-        .where(eq(uiConfigTable.id, this.configId))
+        .where(eq(uiConfigTable.kioskId, kioskId))
         .returning()
         .get();
 
@@ -34,12 +51,12 @@ export class UiConfigService {
     }
   }
 
-  getConfig(): UiConfig {
+  getConfig(kioskId: number): UiConfig {
     try {
       const config = this.db
         .select()
         .from(uiConfigTable)
-        .where(eq(uiConfigTable.id, this.configId))
+        .where(eq(uiConfigTable.kioskId, kioskId))
         .get();
 
       if (!config) {

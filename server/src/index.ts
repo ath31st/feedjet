@@ -30,9 +30,9 @@ app.use(cors());
 app.use('/trpc', trpcMiddleware);
 app.use(express.json());
 app.get('/sse/feed', feedSseHandler);
-app.get('/sse/feed-config', feedConfigSseHandler);
-app.get('/sse/ui-config', uiConfigSseHandler);
-app.get('/sse/control', controlSseHandler);
+app.get('/sse/feed-config/:kioskId', feedConfigSseHandler);
+app.get('/sse/ui-config/:kioskId', uiConfigSseHandler);
+app.get('/sse/control/:kioskId', controlSseHandler);
 app.get('/sse/video', videoSseHandler);
 
 startRssCronJob();

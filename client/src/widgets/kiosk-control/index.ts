@@ -1,1 +1,0 @@
-export { KioskControlWidget } from './KioskControlWidget';

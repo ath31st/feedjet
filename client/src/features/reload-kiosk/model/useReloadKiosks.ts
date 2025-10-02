@@ -1,13 +1,13 @@
 import { useMutation } from '@tanstack/react-query';
 import { trpcWithProxy } from '@/shared/api/trpc/trpc';
 
-export function useReloadKioskPageButton() {
+export function useReloadKioskPageButton(kioskId: number) {
   const reload = useMutation(
     trpcWithProxy.control.reloadKiosks.mutationOptions(),
   );
 
   const handleReload = () => {
-    reload.mutate();
+    reload.mutate({ kioskId });
   };
 
   return {

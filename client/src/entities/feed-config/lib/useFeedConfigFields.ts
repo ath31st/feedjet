@@ -1,8 +1,12 @@
 import { useFeedConfig, useUpdateFeedConfig } from '..';
 import { useState, useEffect } from 'react';
 
-export function useFeedConfigFields(minVisible = 1, minTotal = 1) {
-  const { data: config } = useFeedConfig();
+export function useFeedConfigFields(
+  kioskId: number,
+  minVisible = 1,
+  minTotal = 1,
+) {
+  const { data: config } = useFeedConfig(kioskId);
   const update = useUpdateFeedConfig();
 
   const visible = config?.visibleCellCount ?? minVisible;
@@ -26,9 +30,12 @@ export function useFeedConfigFields(minVisible = 1, minTotal = 1) {
     setVisibleCellCount(v);
     if (carouselSize < v) {
       setCarouselSize(v);
-      update.mutate({ data: { visibleCellCount: v, carouselSize: v } });
+      update.mutate({
+        kioskId,
+        data: { visibleCellCount: v, carouselSize: v },
+      });
     } else {
-      update.mutate({ data: { visibleCellCount: v } });
+      update.mutate({ kioskId, data: { visibleCellCount: v } });
     }
   };
 
@@ -36,10 +43,13 @@ export function useFeedConfigFields(minVisible = 1, minTotal = 1) {
     if (visibleCellCount > v) {
       setVisibleCellCount(v);
       setCarouselSize(v);
-      update.mutate({ data: { visibleCellCount: v, carouselSize: v } });
+      update.mutate({
+        kioskId,
+        data: { visibleCellCount: v, carouselSize: v },
+      });
     } else {
       setCarouselSize(v);
-      update.mutate({ data: { carouselSize: v } });
+      update.mutate({ kioskId, data: { carouselSize: v } });
     }
   };
 

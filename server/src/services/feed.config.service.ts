@@ -1,5 +1,5 @@
 import { feedConfigTable } from '../db/schema.js';
-import { eq } from 'drizzle-orm';
+import { eq, desc } from 'drizzle-orm';
 import type { DbType } from '../container.js';
 import type {
   FeedConfig,
@@ -9,19 +9,41 @@ import { FeedConfigServiceError } from '../errors/feed.config.error.js';
 import Logger from '../utils/logger.js';
 
 export class FeedConfigService {
-  private readonly configId: number = 1;
   private readonly db: DbType;
 
   constructor(db: DbType) {
     this.db = db;
   }
 
-  update(data: Partial<UpdateFeedConfig>): FeedConfig {
+  createDefaultConfig(kioskId: number): FeedConfig {
+    try {
+      const defaultConfig = this.db
+        .insert(feedConfigTable)
+        .values({
+          kioskId,
+          visibleCellCount: 6,
+          carouselSize: 6,
+          carouselIntervalMs: 30000,
+        })
+        .returning()
+        .get();
+
+      return defaultConfig;
+    } catch (err) {
+      Logger.error(err);
+      throw new FeedConfigServiceError(
+        500,
+        'Failed to create default feed config',
+      );
+    }
+  }
+
+  update(kioskId: number, data: Partial<UpdateFeedConfig>): FeedConfig {
     try {
       const updatedConfig = this.db
         .update(feedConfigTable)
         .set(data)
-        .where(eq(feedConfigTable.id, this.configId))
+        .where(eq(feedConfigTable.kioskId, kioskId))
         .returning()
         .get();
 
@@ -36,11 +58,26 @@ export class FeedConfigService {
     }
   }
 
-  getConfig(): FeedConfig | undefined {
-    return this.db
+  getConfig(kioskId: number): FeedConfig {
+    const config = this.db
       .select()
       .from(feedConfigTable)
-      .where(eq(feedConfigTable.id, this.configId))
+      .where(eq(feedConfigTable.kioskId, kioskId))
       .get();
+
+    if (!config) {
+      throw new FeedConfigServiceError(404, 'Config not found');
+    }
+
+    return config;
+  }
+
+  findMaxCarouselSize(): number | undefined {
+    return this.db
+      .select({ carouselSize: feedConfigTable.carouselSize })
+      .from(feedConfigTable)
+      .orderBy(desc(feedConfigTable.carouselSize))
+      .limit(1)
+      .get()?.carouselSize;
   }
 }
