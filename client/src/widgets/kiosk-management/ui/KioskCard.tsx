@@ -31,23 +31,31 @@ export function KioskCard({ kiosk, onDelete, actions }: KioskCardProps) {
 
       <div className="space-y-2 text-[var(--card-text)] text-sm">
         <div>
-          <strong>Slug:</strong> {kiosk.slug}
+          <strong className="text-[var(--meta-text)]">Slug:</strong>{' '}
+          {kiosk.slug}
+        </div>
+
+        {kiosk.description && (
+          <div>
+            <strong className="text-[var(--meta-text)]">Описание:</strong>{' '}
+            {kiosk.description}
+          </div>
+        )}
+
+        {kiosk.location && (
+          <div>
+            <strong className="text-[var(--meta-text)]">Местоположение:</strong>{' '}
+            {kiosk.location}
+          </div>
+        )}
+
+        <div>
+          <strong className="text-[var(--meta-text)]">Статус:</strong>{' '}
+          {kiosk.isActive ? 'Активен' : 'Неактивен'}
         </div>
 
         <div>
-          <strong>Описание:</strong> {kiosk.description}
-        </div>
-
-        <div>
-          <strong>Местоположение:</strong> {kiosk.location}
-        </div>
-
-        <div>
-          <strong>Статус:</strong> {kiosk.isActive ? 'Активен' : 'Неактивен'}
-        </div>
-
-        <div>
-          <strong>Создан:</strong>{' '}
+          <strong className="text-[var(--meta-text)]">Создан:</strong>{' '}
           {new Date(kiosk.createdAt).toLocaleDateString()}
         </div>
       </div>
