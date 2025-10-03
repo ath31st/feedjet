@@ -4,10 +4,7 @@ import { TrashIcon } from '@radix-ui/react-icons';
 import type { ReactNode } from 'react';
 
 interface KioskCardProps {
-  kiosk: Omit<Kiosk, 'createdAt' | 'updatedAt'> & {
-    createdAt: string;
-    updatedAt: string;
-  };
+  kiosk: Kiosk;
   onDelete: (id: number) => void;
   actions?: ReactNode;
 }
