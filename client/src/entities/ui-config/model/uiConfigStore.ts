@@ -19,6 +19,7 @@ const DEFAULT_CONFIG: UiConfig = {
   theme: localStorage.getItem('theme') || 'dark',
   rotatingWidgets: ['feed', 'schedule'],
   autoSwitchIntervalMs: 30000,
+  kioskId: 0,
   createdAt: new Date(),
   updatedAt: new Date(),
 };
