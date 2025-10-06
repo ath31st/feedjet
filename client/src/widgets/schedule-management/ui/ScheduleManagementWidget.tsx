@@ -1,6 +1,6 @@
-import { ScheduleGrid } from './ui/ScheduleGrid';
-import { useWeekSelector } from './model/useWeekSelector';
-import { WeekSelector } from './ui/WeekSelector';
+import { ScheduleGrid } from './ScheduleGrid';
+import { useWeekSelector } from '../model/useWeekSelector';
+import { WeekSelector } from './WeekSelector';
 
 export function ScheduleManagementWidget() {
   const { weeks, weekStart, setWeekStart } = useWeekSelector();

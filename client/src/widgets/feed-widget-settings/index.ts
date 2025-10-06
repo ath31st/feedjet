@@ -1,1 +1,1 @@
-export { FeedWidgetSettings } from './FeedWidgetSettings';
+export { FeedWidgetSettings } from './ui/FeedWidgetSettings';

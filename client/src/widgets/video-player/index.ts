@@ -1,1 +1,1 @@
-export { VideoPlayerWidget } from './VideoPlayerWidget';
+export { VideoPlayerWidget } from './ui/VideoPlayerWidget';

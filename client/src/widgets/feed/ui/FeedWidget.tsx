@@ -1,4 +1,4 @@
-import { AnimatedFeedCard } from './ui/AnimatedFeedCard';
+import { AnimatedFeedCard } from './AnimatedFeedCard';
 import { useFeedCarouselStore, useRssFeedStore } from '@/entities/feed';
 import { useFeedConfigStore } from '@/entities/feed-config';
 import type { AnimationType } from '@/shared/lib/parseAnimationParam';

@@ -1,1 +1,1 @@
-export { KioskSelectorWidget } from './KioskSelectorWidget';
+export { KioskSelectorWidget } from './ui/KioskSelectorWidget';

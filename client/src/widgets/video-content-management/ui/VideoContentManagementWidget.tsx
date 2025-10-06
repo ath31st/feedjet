@@ -1,7 +1,7 @@
 import { SettingsCard } from '@/shared/ui/SettingsCard';
 import { VideoUpload } from '@/features/video-upload';
 import { VideoList } from '@/features/video-list';
-import { DiskUsageInfo } from './ui/DiskUsageInfo';
+import { DiskUsageInfo } from './DiskUsageInfo';
 
 export function VideoContentManagementWidget() {
   return (

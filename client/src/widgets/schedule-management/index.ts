@@ -1,1 +1,1 @@
-export { ScheduleManagementWidget } from './ScheduleManagementWidget';
+export { ScheduleManagementWidget } from './ui/ScheduleManagementWidget';

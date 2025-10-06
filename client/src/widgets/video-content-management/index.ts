@@ -1,1 +1,1 @@
-export { VideoContentManagementWidget } from './VideoContentManagementWidget';
+export { VideoContentManagementWidget } from './ui/VideoContentManagementWidget';

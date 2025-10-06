@@ -1,1 +1,1 @@
-export { AppearanceSettingsWidget } from './AppearanceSettingsWidget';
+export { AppearanceSettingsWidget } from './ui/AppearanceSettingsWidget';

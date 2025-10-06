@@ -1,1 +1,1 @@
-export { RssManagementWidget } from './RssManagementWidget';
+export { RssManagementWidget } from './ui/RssManagementWidget';

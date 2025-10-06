@@ -5,14 +5,14 @@ import { getPositionPercentByDateTime } from '@/shared/lib/getPositionPercentByD
 import { useIsXl } from '@/shared/lib/useIsXl';
 import { LoadingThreeDotsJumping } from '@/shared/ui/LoadingThreeDotsJumping';
 import { isRotate90 } from '@/shared/lib/parseRotateParam';
-import { ScheduleHeader } from './ui/ScheduleHeader';
-import { DaysColumn } from './ui/DaysColumn';
-import { TimeGrid } from './ui/TimeGrid';
-import { EventsList } from './ui/EventsList';
-import { useScheduleWithTimer } from './model/useScheduleWithTimer';
-import { useScheduleEnv } from './model/useScheduleWidgetEnv';
-import { DigitalClock } from './ui/DigitalClock';
-import { WeatherForecast } from './ui/WeatherForecast';
+import { ScheduleHeader } from './ScheduleHeader';
+import { DaysColumn } from './DaysColumn';
+import { TimeGrid } from './TimeGrid';
+import { EventsList } from './EventsList';
+import { useScheduleWithTimer } from '../model/useScheduleWithTimer';
+import { useScheduleEnv } from '../model/useScheduleWidgetEnv';
+import { DigitalClock } from './DigitalClock';
+import { WeatherForecast } from './WeatherForecast';
 import {
   useCurrentWeatherForecast,
   useDailyWeatherForecast,
