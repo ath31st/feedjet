@@ -20,7 +20,7 @@ const DEFAULT_CONFIG: FeedConfig = {
   id: 0,
   createdAt: new Date(),
   updatedAt: new Date(),
-  kioskId: 0
+  kioskId: 0,
 };
 
 export const useFeedConfigStore = create<FeedConfigState>()((set) => ({

@@ -8,4 +8,4 @@ export { useCurrentKiosk } from './lib/useCurrentKiosk';
 export type Kiosk = Omit<KioskApi, 'createdAt' | 'updatedAt'> & {
   createdAt: string;
   updatedAt: string;
-}
+};

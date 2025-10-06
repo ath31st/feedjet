@@ -1,4 +1,8 @@
-import { useCreateKiosk, useGetAllKiosks, type NewKiosk } from '@/entities/kiosk';
+import {
+  useCreateKiosk,
+  useGetAllKiosks,
+  type NewKiosk,
+} from '@/entities/kiosk';
 import { useState } from 'react';
 
 export function useKioskManagement() {

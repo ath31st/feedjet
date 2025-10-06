@@ -1,4 +1,4 @@
-import { useUploadVideo } from "@/entities/video";
+import { useUploadVideo } from '@/entities/video';
 
 export function useVideoUpload() {
   const { mutate: uploadFile, isPending } = useUploadVideo();
