@@ -1,6 +1,6 @@
 import { useEffect, useCallback } from 'react';
 import { useEventSource } from '@/shared/api/sse/useEventSource';
-import { useRssFeedStore } from '..';
+import { useRssFeedStore, type FeedItem } from '..';
 import { SERVER_URL } from '@/shared/config/env';
 
 const FEED_SSE_URL = `${SERVER_URL}/sse/feed`;
@@ -16,11 +16,11 @@ export function useRssFeedSse() {
   const onMessage = useCallback(
     (e: MessageEvent) => {
       try {
-        const items = JSON.parse(e.data) as Array<
-          import('@shared/types/feed').FeedItem
-        >;
+        const items = JSON.parse(e.data) as Array<FeedItem>;
         setFeeds(items);
-      } catch {}
+      } catch {
+        console.error(e);
+      }
     },
     [setFeeds],
   );
