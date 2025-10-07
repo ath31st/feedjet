@@ -1,10 +1,12 @@
-import { hours } from '@/shared/constant/hours';
-import { formatDateToMap } from '@/shared/lib/formatDateToMap';
-import { getDaysOfWeekByDate } from '@/shared/lib/getDaysOfWeekByDate';
-import { getPositionPercentByDateTime } from '@/shared/lib/getPositionPercentByDateTime';
-import { useIsXl } from '@/shared/lib/useIsXl';
+import { hours } from '@/shared/constant';
+import {
+  formatDateToMap,
+  getDaysOfWeekByDate,
+  getPositionPercentByDateTime,
+  useIsXl,
+  isRotate90,
+} from '@/shared/lib';
 import { LoadingThreeDotsJumping } from '@/shared/ui/LoadingThreeDotsJumping';
-import { isRotate90 } from '@/shared/lib/parseRotateParam';
 import { ScheduleHeader } from './ScheduleHeader';
 import { DaysColumn } from './DaysColumn';
 import { TimeGrid } from './TimeGrid';

@@ -9,7 +9,7 @@ import {
 import { createTRPCOptionsProxy } from '@trpc/tanstack-react-query';
 import type { AppRouter } from '@shared/trpc/router';
 import { toast } from 'sonner';
-import { SERVER_URL } from '@/shared/config/env';
+import { SERVER_URL } from '@/shared/config';
 
 export const queryClient = new QueryClient({
   defaultOptions: {

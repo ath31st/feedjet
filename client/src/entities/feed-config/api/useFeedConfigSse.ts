@@ -1,7 +1,7 @@
 import { useEffect, useCallback } from 'react';
 import { useEventSource } from '@/shared/api/sse/useEventSource';
 import { useFeedConfigStore } from '..';
-import { SERVER_URL } from '@/shared/config/env';
+import { SERVER_URL, SSE_URL } from '@/shared/config';
 import { useKioskStore } from '@/entities/kiosk';
 
 export function useFeedConfigSse() {
@@ -16,7 +16,7 @@ export function useFeedConfigSse() {
   }, [fetchFeedConfig, currentKiosk, loading]);
 
   const sseUrl = currentKiosk
-    ? `${SERVER_URL}/sse/feed-config/${currentKiosk.id}`
+    ? `${SERVER_URL}${SSE_URL.FEED_CONFIG(currentKiosk.id)}`
     : null;
 
   const onMessage = useCallback(

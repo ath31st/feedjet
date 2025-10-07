@@ -1,6 +1,6 @@
 import { useImage } from '@/entities/image';
 import noImageAvailableUrl from '@/shared/assets/images/no-image-available.jpg';
-import { SERVER_URL } from '@/shared/config/env';
+import { SERVER_URL } from '@/shared/config';
 
 export function useFeedImage(url: string, width?: number) {
   const { data, isLoading, isError } = useImage(url, width);

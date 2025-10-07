@@ -1,9 +1,7 @@
 import { useEffect, useCallback } from 'react';
 import { useEventSource } from '@/shared/api/sse/useEventSource';
 import { useRssFeedStore, type FeedItem } from '..';
-import { SERVER_URL } from '@/shared/config/env';
-
-const FEED_SSE_URL = `${SERVER_URL}/sse/feed`;
+import { SERVER_URL, SSE_URL } from '@/shared/config';
 
 export function useRssFeedSse() {
   const initStore = useRssFeedStore((s) => s.initStore);
@@ -25,5 +23,5 @@ export function useRssFeedSse() {
     [setFeeds],
   );
 
-  useEventSource(FEED_SSE_URL, onMessage);
+  useEventSource(`${SERVER_URL}${SSE_URL.FEED}`, onMessage);
 }

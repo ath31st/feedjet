@@ -1,4 +1,4 @@
-import { HEADER_TITLE, LAT, LOCATION_TITLE, LON } from '@/shared/config/env';
+import { HEADER_TITLE, LAT, LOCATION_TITLE, LON } from '@/shared/config';
 
 export function useScheduleEnv() {
   const lat = Number(LAT);
