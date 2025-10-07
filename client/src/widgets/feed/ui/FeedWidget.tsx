@@ -1,10 +1,11 @@
 import { AnimatedFeedCard } from './AnimatedFeedCard';
-import { useFeedCarouselStore, useRssFeedStore } from '@/entities/feed';
+import {
+  useFeedCarouselStore,
+  useRssFeedStore,
+  sortAndSliceFeeds,
+} from '@/entities/feed';
 import { useFeedConfigStore } from '@/entities/feed-config';
-import { sortAndSliceFeeds } from '@/entities/feed/lib/sortAndSliceFeeds';
-import type { AnimationType } from '@/shared/lib/parseAnimationParam';
-import { isRotate90 } from '@/shared/lib/parseRotateParam';
-import { useCarousel } from '@/shared/lib/useCarousel';
+import { isRotate90, useCarousel, type AnimationType } from '@/shared/lib';
 
 interface FeedCardProps {
   rotate: number;

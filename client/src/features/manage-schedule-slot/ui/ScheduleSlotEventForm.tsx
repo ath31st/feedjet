@@ -1,4 +1,4 @@
-import { CommonButton } from '@/shared/ui/common/CommonButton';
+import { CommonButton } from '@/shared/ui/common';
 import type { NewScheduleEvent, ScheduleEvent } from '@/entities/schedule';
 import { useScheduleSlotEventForm } from '../model/useScheduleSlotEventForm';
 import { CheckIcon, ResetIcon } from '@radix-ui/react-icons';

@@ -1,4 +1,4 @@
-import { CommonButton } from '@/shared/ui/common/CommonButton';
+import { CommonButton } from '@/shared/ui/common';
 import { useReloadKioskPageButton } from '../model/useReloadKiosks';
 import { ReloadIcon } from '@radix-ui/react-icons';
 

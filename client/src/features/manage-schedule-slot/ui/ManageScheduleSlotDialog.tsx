@@ -2,7 +2,7 @@ import * as Dialog from '@radix-ui/react-dialog';
 import type { ScheduleEvent, NewScheduleEvent } from '@/entities/schedule';
 import { ScheduleSlotEventForm } from './ScheduleSlotEventForm';
 import { ScheduleSlotEventList } from './ScheduleSlotEventList';
-import { CommonButton } from '@/shared/ui/common/CommonButton';
+import { CommonButton } from '@/shared/ui/common';
 import { format, parseISO } from 'date-fns';
 import { ru } from 'date-fns/locale';
 import { useManageScheduleSlotDialog } from '../model/useManageScheduleSlotDialog';

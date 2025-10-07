@@ -1,19 +1,19 @@
-import { LogoutButton } from '@/features/auth/ui/LogoutButton';
 import { RssManagementWidget } from '@/widgets/rss-management';
 import { AppearanceSettingsWidget } from '@/widgets/appearance-settings';
 import { FeedWidgetSettings } from '@/widgets/feed-widget-settings';
 import * as Tabs from '@radix-ui/react-tabs';
-import { AdminTabTrigger } from '@/shared/ui/AdminTabTrigger';
+import { AdminTabTrigger } from '@/shared/ui';
 import { ScheduleManagementWidget } from '@/widgets/schedule-management';
 import { VideoContentManagementWidget } from '@/widgets/video-content-management';
 import { KioskManagement } from '@/widgets/kiosk-management';
 import { KioskSelectorWidget } from '@/widgets/kiosk-selector';
+import { Logout } from '@/features/auth';
 
 export function AdminPage() {
   return (
     <div className="p-6">
       <div className="absolute top-6 right-12">
-        <LogoutButton />
+        <Logout />
       </div>
 
       <h1 className="mb-2 text-center font-bold text-2xl">

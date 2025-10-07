@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { SERVER_URL } from '@/shared/config/env';
+import { SERVER_URL } from '@/shared/config';
 import { useVideoStore } from '@/entities/video';
 
 export function useVideoPlayer() {

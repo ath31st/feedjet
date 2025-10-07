@@ -1,4 +1,4 @@
-import { CommonButton } from '@/shared/ui/common/CommonButton';
+import { CommonButton } from '@/shared/ui/common';
 import { useRssManagement } from '../model/useRssManagement';
 import { PlusIcon } from '@radix-ui/react-icons';
 

@@ -4,14 +4,14 @@ import {
   useUpdateIsActiveVideoWithMetadata,
   useVideoWithMetadataList,
 } from '@/entities/video';
-import { formatBytes } from '@/shared/lib/formatBytes';
+import { formatBytes } from '@/shared/lib';
 import { Cross1Icon, EyeOpenIcon } from '@radix-ui/react-icons';
 import { useState } from 'react';
 import { VideoPreviewDialog } from './VideoPreviewDialog';
 import { formatDuration } from '@/shared/lib/formatDuration';
-import { IconButton } from '@/shared/ui/common/IconButton';
+import { IconButton } from '@/shared/ui/common';
 import * as Switch from '@radix-ui/react-switch';
-import { SERVER_URL } from '@/shared/config/env';
+import { SERVER_URL } from '@/shared/config';
 
 export function VideoList() {
   const videos: VideoMetadata[] = useVideoWithMetadataList().data || [];

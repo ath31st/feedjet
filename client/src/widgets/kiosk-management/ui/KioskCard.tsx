@@ -1,5 +1,5 @@
 import type { Kiosk } from '@/entities/kiosk';
-import { CommonButton } from '@/shared/ui/common/CommonButton';
+import { CommonButton } from '@/shared/ui/common';
 import { TrashIcon } from '@radix-ui/react-icons';
 import type { ReactNode } from 'react';
 

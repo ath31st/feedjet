@@ -2,7 +2,7 @@ import * as Switch from '@radix-ui/react-switch';
 import { Cross1Icon } from '@radix-ui/react-icons';
 import { useRssManagement } from '../model/useRssManagement';
 import { LoadingThreeDotsJumping } from '@/shared/ui/LoadingThreeDotsJumping';
-import { IconButton } from '@/shared/ui/common/IconButton';
+import { IconButton } from '@/shared/ui/common';
 
 export function FeedList() {
   const { feeds, feedsLoading, handleDeleteFeed, handleUpdateFeed } =

@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { CommonButton } from '@/shared/ui/common/CommonButton';
+import { CommonButton } from '@/shared/ui/common';
 import { useVideoUpload } from '../model/useVideoUpload';
 
 export function VideoUpload() {

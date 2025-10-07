@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { trpcWithProxy } from '@/shared/api/trpc/trpc';
+import { trpcWithProxy } from '@/shared/api/trpc';
 
 export function useReloadKioskPageButton(kioskId: number) {
   const reload = useMutation(
