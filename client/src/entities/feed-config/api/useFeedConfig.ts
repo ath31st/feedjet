@@ -1,5 +1,5 @@
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { queryClient, trpcWithProxy } from '@/shared/api/trpc/trpc';
+import { queryClient, trpcWithProxy } from '@/shared/api';
 import { toast } from 'sonner';
 
 export const useFeedConfig = (kioskId: number) => {

@@ -1,4 +1,4 @@
-import { trpcClient } from '@/shared/api/trpc/trpc';
+import { trpcClient } from '@/shared/api';
 import { create } from 'zustand';
 import type { FeedItem } from '..';
 

@@ -1,5 +1,5 @@
 import { useEffect, useCallback } from 'react';
-import { useEventSource } from '@/shared/api/sse/useEventSource';
+import { useEventSource } from '@/shared/api';
 import { useRssFeedStore, type FeedItem } from '..';
 import { SERVER_URL, SSE_URL } from '@/shared/config';
 
