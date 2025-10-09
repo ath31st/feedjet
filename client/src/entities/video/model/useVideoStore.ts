@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import type { VideoMetadata } from '..';
-import { trpcClient } from '@/shared/api/trpc';
+import { trpcClient } from '@/shared/api';
 
 type VideoStore = {
   videos: VideoMetadata[];

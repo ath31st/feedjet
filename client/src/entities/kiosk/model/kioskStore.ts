@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import type { Kiosk } from '..';
-import { trpcClient } from '@/shared/api/trpc';
+import { trpcClient } from '@/shared/api';
 
 interface KioskState {
   currentKiosk: Kiosk | null;

@@ -1,4 +1,4 @@
-import { trpcWithProxy } from '@/shared/api/trpc';
+import { trpcWithProxy } from '@/shared/api';
 import { useQuery } from '@tanstack/react-query';
 
 export const useCurrentWeatherForecast = (lat: number, lon: number) => {

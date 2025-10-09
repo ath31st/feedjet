@@ -1,5 +1,5 @@
 import { useQuery, useMutation } from '@tanstack/react-query';
-import { trpcWithProxy, queryClient } from '@/shared/api/trpc';
+import { trpcWithProxy, queryClient } from '@/shared/api';
 import { toast } from 'sonner';
 
 export const useVideoWithMetadataList = () => {

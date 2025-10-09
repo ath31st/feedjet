@@ -1,6 +1,6 @@
 import type { FeedConfig } from '@shared/types/feed.config';
 import { create } from 'zustand';
-import { trpcClient } from '@/shared/api/trpc';
+import { trpcClient } from '@/shared/api';
 
 interface FeedConfigState {
   feedConfig: FeedConfig;
