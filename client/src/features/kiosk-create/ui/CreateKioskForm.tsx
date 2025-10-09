@@ -1,5 +1,5 @@
 import type { NewKiosk } from '@/entities/kiosk';
-import { CommonButton } from '@/shared/ui/common/CommonButton';
+import { CommonButton } from '@/shared/ui/common';
 import { CheckIcon, ResetIcon } from '@radix-ui/react-icons';
 
 interface CreateKioskFormProps {

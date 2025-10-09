@@ -1,4 +1,4 @@
-import { CommonButton } from '@/shared/ui/common/CommonButton';
+import { CommonButton } from '@/shared/ui/common';
 import { useLogout } from '../model/useAuth';
 import { ExitIcon } from '@radix-ui/react-icons';
 

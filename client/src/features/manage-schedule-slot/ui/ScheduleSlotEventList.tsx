@@ -1,5 +1,5 @@
 import type { ScheduleEvent } from '@/entities/schedule';
-import { IconButton } from '@/shared/ui/common/IconButton';
+import { IconButton } from '@/shared/ui/common';
 import { Cross1Icon, Pencil1Icon } from '@radix-ui/react-icons';
 
 interface ScheduleSlotEventListProps {

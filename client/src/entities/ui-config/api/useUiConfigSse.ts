@@ -1,7 +1,7 @@
 import { useEffect, useCallback } from 'react';
-import { useEventSource } from '@/shared/api/sse/useEventSource';
+import { useEventSource } from '@/shared/api';
 import { useUiConfigStore } from '../model/uiConfigStore';
-import { SERVER_URL } from '@/shared/config/env';
+import { SERVER_URL } from '@/shared/config';
 import { useKioskStore } from '@/entities/kiosk';
 
 export function useUiConfigSse() {

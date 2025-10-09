@@ -1,7 +1,7 @@
 import { useEffect, useCallback } from 'react';
-import { useEventSource } from '@/shared/api/sse/useEventSource';
+import { useEventSource } from '@/shared/api';
 import { useVideoStore } from '..';
-import { SERVER_URL } from '@/shared/config/env';
+import { SERVER_URL } from '@/shared/config';
 
 const VIDEO_SSE_URL = `${SERVER_URL}/sse/video`;
 

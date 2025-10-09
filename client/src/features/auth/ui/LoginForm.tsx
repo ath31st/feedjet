@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useLogin } from '../model/useAuth';
-import { CommonButton } from '@/shared/ui/common/CommonButton';
+import { CommonButton } from '@/shared/ui/common';
 
 interface LoginFormProps {
   onSuccess: () => void;

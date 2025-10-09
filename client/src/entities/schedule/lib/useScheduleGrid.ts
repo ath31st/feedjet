@@ -14,8 +14,8 @@ import {
   isWithinInterval,
 } from 'date-fns';
 import type { NewScheduleEvent, UpdateScheduleEvent } from '..';
-import { hours } from '@/shared/constant/hours';
-import { getDaysOfWeekByDate } from '@/shared/lib/getDaysOfWeekByDate';
+import { hours } from '@/shared/constant';
+import { getDaysOfWeekByDate } from '@/shared/lib';
 
 export function useScheduleGrid(weekStart: Date) {
   const days = getDaysOfWeekByDate(weekStart);

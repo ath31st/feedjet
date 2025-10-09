@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
-import { useEventSource } from '@/shared/api/sse/useEventSource';
-import { SERVER_URL } from '@/shared/config/env';
+import { useEventSource } from '@/shared/api';
+import { SERVER_URL } from '@/shared/config';
 import type { ControlEvent } from '..';
 import { useKioskStore } from '@/entities/kiosk';
 
