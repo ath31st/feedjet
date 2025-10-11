@@ -6,6 +6,7 @@ import {
 } from '@/entities/feed';
 import { useFeedConfigStore } from '@/entities/feed-config';
 import { isRotate90, useCarousel, type AnimationType } from '@/shared/lib';
+import { EmptyFeedState } from './EmptyFeedState';
 
 interface FeedCardProps {
   rotate: number;
@@ -25,6 +26,10 @@ export function FeedWidget({ rotate, animation }: FeedCardProps) {
     startIndex,
     setStartIndex,
   );
+
+  if (slicedFeedItems.length === 0) {
+    return <EmptyFeedState />;
+  }
 
   return (
     <div
