@@ -9,3 +9,4 @@ export * from './SettingsCard';
 export * from './StatusMessageCard';
 export * from './TextMarquee';
 export * from './ToasterConfig';
+export * from './TooltipWrapper';

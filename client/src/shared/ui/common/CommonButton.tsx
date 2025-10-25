@@ -1,4 +1,4 @@
-import * as Tooltip from '@radix-ui/react-tooltip';
+import { TooltipWrapper } from '../TooltipWrapper';
 
 interface CommonButtonProps {
   type: 'button' | 'submit' | 'reset' | undefined;
@@ -28,20 +28,5 @@ export function CommonButton({
 
   if (!tooltip) return button;
 
-  return (
-    <Tooltip.Provider delayDuration={200}>
-      <Tooltip.Root>
-        <Tooltip.Trigger asChild>{button}</Tooltip.Trigger>
-        <Tooltip.Portal>
-          <Tooltip.Content
-            sideOffset={2}
-            className="select-none rounded-lg bg-[var(--button-bg)] px-2 py-1 text-[var(--tooltip-text)] text-sm shadow-md"
-          >
-            {tooltip}
-            <Tooltip.Arrow className="fill-[var(--button-bg)]" />
-          </Tooltip.Content>
-        </Tooltip.Portal>
-      </Tooltip.Root>
-    </Tooltip.Provider>
-  );
+  return <TooltipWrapper tooltip={tooltip}>{button}</TooltipWrapper>;
 }

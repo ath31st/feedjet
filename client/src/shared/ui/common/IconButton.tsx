@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { TooltipWrapper } from '../TooltipWrapper';
 
 interface IconButtonProps {
   onClick: () => void;
@@ -6,6 +7,7 @@ interface IconButtonProps {
   disabled?: boolean;
   className?: string;
   ariaLabel?: string;
+  tooltip?: string;
 }
 
 export function IconButton({
@@ -14,8 +16,9 @@ export function IconButton({
   disabled = false,
   className = '',
   ariaLabel,
+  tooltip,
 }: IconButtonProps) {
-  return (
+  const button = (
     <button
       type="button"
       onClick={onClick}
@@ -26,4 +29,8 @@ export function IconButton({
       {icon}
     </button>
   );
+
+  if (!tooltip) return button;
+
+  return <TooltipWrapper tooltip={tooltip}>{button}</TooltipWrapper>;
 }
