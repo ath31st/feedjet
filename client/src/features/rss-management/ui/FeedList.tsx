@@ -33,6 +33,7 @@ export function FeedList() {
             <IconButton
               onClick={() => handleDeleteFeed(item.id)}
               ariaLabel="Удалить ленту"
+              tooltip="Удалить ленту"
               icon={<Cross1Icon className="h-4 w-4 cursor-pointer" />}
             />
           </div>

@@ -65,12 +65,14 @@ export function VideoList() {
                 <IconButton
                   disabled={isPending}
                   onClick={() => setOpenVideo(v)}
+                  tooltip="Открыть видео"
                   icon={<EyeOpenIcon className="h-4 w-4 cursor-pointer" />}
                 />
 
                 <IconButton
                   disabled={isPending}
                   onClick={() => handleRemoveVideo(v.fileName)}
+                  tooltip="Удалить видео"
                   icon={<Cross1Icon className="h-4 w-4 cursor-pointer" />}
                 />
               </div>

@@ -42,6 +42,7 @@ export function ScheduleSlotEventList({
               <IconButton
                 onClick={() => onEdit(event)}
                 ariaLabel="Редактировать событие"
+                tooltip="Редактировать событие"
                 icon={<Pencil1Icon className="h-4 w-4 cursor-pointer" />}
               />
             )}
@@ -49,6 +50,7 @@ export function ScheduleSlotEventList({
               <IconButton
                 onClick={() => onDelete(event.id)}
                 ariaLabel="Удалить событие"
+                tooltip="Удалить событие"
                 icon={<Cross1Icon className="h-4 w-4 cursor-pointer" />}
               />
             )}
