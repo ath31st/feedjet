@@ -49,6 +49,7 @@ export const kioskService = new KioskService(
   feedConfigService,
 );
 kioskService.ensureDefaultKiosk();
+videoStorageService.syncWithDisk();
 
 export const t = initTRPC.context<Context>().create();
 export const publicProcedure = t.procedure;

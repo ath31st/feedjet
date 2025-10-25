@@ -142,4 +142,24 @@ export class VideoStorageService extends FileStorageService {
       .where(eq(videosTable.fileName, fileName))
       .get();
   }
+
+  async syncWithDisk() {
+    const files = await this.listFiles();
+    const existing = new Set(
+      this.listVideosWithMetadata().map((v) => v.fileName),
+    );
+
+    for (const file of files) {
+      if (!existing.has(file)) {
+        const meta = await this.getVideoMetadata(file);
+        this.saveVideoMetadata(meta);
+      }
+    }
+
+    for (const video of this.listVideosWithMetadata()) {
+      if (!files.includes(video.fileName)) {
+        this.removeVideoMetadataByFileName(video.fileName);
+      }
+    }
+  }
 }
