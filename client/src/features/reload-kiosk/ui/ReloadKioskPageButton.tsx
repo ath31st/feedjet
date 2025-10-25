@@ -10,7 +10,12 @@ export function ReloadKioskPageButton({ kioskId }: ReloadKioskPageButtonProps) {
   const { handleReload, isPending } = useReloadKioskPageButton(kioskId);
 
   return (
-    <CommonButton type="button" onClick={handleReload} disabled={isPending}>
+    <CommonButton
+      type="button"
+      onClick={handleReload}
+      disabled={isPending}
+      tooltip="Перезагрузить киоск"
+    >
       <ReloadIcon />
     </CommonButton>
   );
