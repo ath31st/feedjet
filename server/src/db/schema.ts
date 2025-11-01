@@ -109,8 +109,8 @@ export const videosTable = sqliteTable('videos', {
 
 export const birthdaysTable = sqliteTable('birthdays', {
   id: integer('id').primaryKey({ autoIncrement: true }),
-  fullName: text('full_name').notNull(),
-  department: text('department'),
+  fullNameEnc: text('full_name').notNull(),
+  departmentEnc: text('department'),
   birthDate: integer('birth_date', { mode: 'timestamp' }).notNull(),
   createdAt: integer('created_at', { mode: 'timestamp' })
     .notNull()
