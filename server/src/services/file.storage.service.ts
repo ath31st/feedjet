@@ -37,7 +37,16 @@ export class FileStorageService {
 
   async remove(originalName: string) {
     const filePath = this.getFilePath(originalName);
-    await fs.unlink(filePath);
+    try {
+      await fs.unlink(filePath);
+    } catch (err: unknown) {
+      if (
+        err instanceof Error &&
+        (err as NodeJS.ErrnoException).code !== 'ENOENT'
+      ) {
+        throw err;
+      }
+    }
   }
 
   async exists(filePath: string): Promise<boolean> {
