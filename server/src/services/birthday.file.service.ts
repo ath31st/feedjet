@@ -62,7 +62,10 @@ export class BirthdayFileService extends FileStorageService {
     });
   }
 
-  private parseDate(dateStr: string, dateFormat: string): Date {
+  parseDate(
+    dateStr: string,
+    dateFormat: string = this.defaultDateFormat,
+  ): Date {
     const parsed = parse(dateStr, dateFormat, new Date());
 
     if (Number.isNaN(parsed.getTime())) {

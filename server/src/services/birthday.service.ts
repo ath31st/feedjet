@@ -18,6 +18,25 @@ export class BirthdayService {
     this.db = db;
   }
 
+  create(data: NewBirthday): Birthday {
+    try {
+      const inserted = this.db
+        .insert(birthdaysTable)
+        .values({
+          fullNameEnc: encrypt(data.fullName),
+          departmentEnc: data.department ? encrypt(data.department) : null,
+          birthDate: data.birthDate,
+        })
+        .returning()
+        .get() as unknown as BirthdayEncrypted;
+
+      return birthdayMapper.mapEncToDec(inserted);
+    } catch (err: unknown) {
+      Logger.error(err);
+      throw new BirthdayError(500, 'Failed to create birthday');
+    }
+  }
+
   getAll(): Birthday[] {
     const encBirthdays = this.db.select().from(birthdaysTable).all();
     return encBirthdays.map(birthdayMapper.mapEncToDec);
