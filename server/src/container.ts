@@ -23,6 +23,8 @@ import {
   openWeatherApiKey,
 } from './config/config.js';
 import { KioskService } from './services/kiosk.service.js';
+import { BirthdayService } from './services/birthday.service.js';
+import { BirthdayFileService } from './services/birthday.file.service.js';
 
 const sqlite = new Database(dbPath);
 export const db = drizzle(sqlite, { schema });
@@ -43,6 +45,11 @@ export const rssService = new RssService(db);
 export const feedConfigService = new FeedConfigService(db);
 export const uiConfigService = new UiConfigService(db);
 export const scheduleEventService = new ScheduleEventService(db);
+export const birthdayService = new BirthdayService(db);
+export const birthdayFileService = new BirthdayFileService(
+  birthdayService,
+  fileStorageDir,
+);
 export const kioskService = new KioskService(
   db,
   uiConfigService,
