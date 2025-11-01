@@ -106,3 +106,16 @@ export const videosTable = sqliteTable('videos', {
   isActive: integer('is_active', { mode: 'boolean' }).notNull().default(false),
   createdAt: integer('created_at').notNull().default(sql`(unixepoch())`),
 });
+
+export const birthdaysTable = sqliteTable('birthdays', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  fullName: text('full_name').notNull(),
+  department: text('department'),
+  birthDate: integer('birth_date', { mode: 'timestamp' }).notNull(),
+  createdAt: integer('created_at', { mode: 'timestamp' })
+    .notNull()
+    .default(sql`(unixepoch())`),
+  updatedAt: integer('updated_at', { mode: 'timestamp' })
+    .notNull()
+    .default(sql`(unixepoch())`),
+});
