@@ -8,6 +8,7 @@ import { VideoContentManagementWidget } from '@/widgets/video-content-management
 import { KioskManagement } from '@/widgets/kiosk-management';
 import { KioskSelectorWidget } from '@/widgets/kiosk-selector';
 import { Logout } from '@/features/auth';
+import { BirthdaysManagement } from '@/widgets/birthdays-management';
 
 export function AdminPage() {
   return (
@@ -29,6 +30,7 @@ export function AdminPage() {
           <AdminTabTrigger value="schedule">Расписание</AdminTabTrigger>
           <AdminTabTrigger value="rss">RSS</AdminTabTrigger>
           <AdminTabTrigger value="video">Видео</AdminTabTrigger>
+          <AdminTabTrigger value="birthdays">Дни рожд.</AdminTabTrigger>
           <AdminTabTrigger value="kiosks">Киоски</AdminTabTrigger>
         </Tabs.List>
 
@@ -52,6 +54,10 @@ export function AdminPage() {
           <div className="mt-6 flex w-full gap-6">
             <VideoContentManagementWidget />
           </div>
+        </Tabs.Content>
+
+        <Tabs.Content value="birthdays">
+          <BirthdaysManagement />
         </Tabs.Content>
 
         <Tabs.Content value="kiosks">
