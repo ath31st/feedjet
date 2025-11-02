@@ -8,12 +8,12 @@ import { useFeedConfigStore } from '@/entities/feed-config';
 import { isRotate90, useCarousel, type AnimationType } from '@/shared/lib';
 import { EmptyFeedState } from './EmptyFeedState';
 
-interface FeedCardProps {
+interface FeedWidgetProps {
   rotate: number;
   animation: AnimationType;
 }
 
-export function FeedWidget({ rotate, animation }: FeedCardProps) {
+export function FeedWidget({ rotate, animation }: FeedWidgetProps) {
   const { visibleCellCount, carouselIntervalMs, carouselSize } =
     useFeedConfigStore((s) => s.feedConfig);
   const feeds = useRssFeedStore((s) => s.feeds);
