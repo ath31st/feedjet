@@ -16,11 +16,11 @@ export const useUploadBirthdays = () => {
           queryKey: trpcWithProxy.birthday.birthdays.queryKey(),
         });
       },
-      onError: (err: unknown) => {
-        if (err instanceof Error) {
+      onError: (err: unknown, _variables, ctx) => {
+        if (ctx?.toastId)
+          toast.error('Ошибка при загрузке файла', { id: ctx.toastId });
+        else if (err instanceof Error)
           toast.error(err.message || 'Ошибка при загрузке файла');
-          return;
-        }
       },
       onMutate: (data: FormData) => {
         return { toastId: toast.loading(`Загрузка ${data.get('filename')}…`) };
