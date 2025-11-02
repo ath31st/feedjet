@@ -1,4 +1,3 @@
-import type { NewBirthday } from '@shared/types/birthdays.js';
 import {
   t,
   publicProcedure,
@@ -33,12 +32,7 @@ export const birthdayRouter = t.router({
   create: protectedProcedure
     .input(birthdayCreateSchema)
     .mutation(({ input }) => {
-      const date = birthdayFileService.parseDate(
-        input.birthDate,
-        input.dateFormat,
-      );
-      const newBirthday: NewBirthday = { ...input, birthDate: date };
-      const birthday = birthdayService.create(newBirthday);
+      const birthday = birthdayService.create(input);
       const birthdays = birthdayService.getAll();
 
       eventBus.emit('birthday', birthdays);

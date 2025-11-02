@@ -5,7 +5,7 @@ export const birthdayIdInputSchema = z.object({
   id: z.coerce.number().int().positive(),
 });
 
-const dateFormatSchema = z
+export const dateFormatSchema = z
   .string()
   .min(1)
   .max(300)
@@ -28,6 +28,5 @@ const dateFormatSchema = z
 export const birthdayCreateSchema = z.object({
   fullName: z.string().min(1).max(300),
   department: z.string().max(300).optional(),
-  birthDate: z.string().min(1).max(300),
-  dateFormat: dateFormatSchema,
+  birthDate: z.coerce.date(),
 });
