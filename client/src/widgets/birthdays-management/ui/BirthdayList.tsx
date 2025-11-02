@@ -1,13 +1,9 @@
-import { useDeleteBirthday, useGetAllBirthdays } from '@/entities/birthday';
 import { LoadingThreeDotsJumping } from '@/shared/ui';
 import { BirthdayCard } from './BirthdayCard';
+import { useBirthdayList } from '../model/useBirthdayList';
 
 export function BirthdayList() {
-  const { isLoading, data: birthdays } = useGetAllBirthdays();
-  const deleteBirthday = useDeleteBirthday();
-  const handleDelete = (id: number) => {
-    deleteBirthday.mutate({ id });
-  };
+  const { isLoading, birthdays, handleDelete } = useBirthdayList();
 
   if (isLoading) return <LoadingThreeDotsJumping />;
   if (!birthdays?.length) return <p>В базе данных нет дней рождения</p>;
