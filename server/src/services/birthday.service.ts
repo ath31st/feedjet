@@ -39,7 +39,17 @@ export class BirthdayService {
 
   getAll(): Birthday[] {
     const encBirthdays = this.db.select().from(birthdaysTable).all();
-    return encBirthdays.map(birthdayMapper.mapEncToDec);
+    return encBirthdays.map(birthdayMapper.mapEncToDec).sort((a, b) => {
+      const aMonth = a.birthDate.getMonth();
+      const bMonth = b.birthDate.getMonth();
+      if (aMonth !== bMonth) return aMonth - bMonth;
+
+      const aDay = a.birthDate.getDate();
+      const bDay = b.birthDate.getDate();
+      if (aDay !== bDay) return aDay - bDay;
+
+      return a.fullName.localeCompare(b.fullName);
+    });
   }
 
   getByDate(date: Date): Birthday[] {
