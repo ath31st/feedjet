@@ -28,7 +28,7 @@ export function CreateKioskForm({
           maxLength={10}
           value={formData.name}
           onChange={(e) => onChange('name', e.target.value)}
-          className="w-full rounded border px-2 py-1 text-sm"
+          className="w-full rounded-lg border border-[var(--border)] px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-[var(--border)]"
         />
         <div className="mt-1 text-[var(--meta-text)] text-xs">
           {formData.name.length}/10 символов
@@ -48,7 +48,7 @@ export function CreateKioskForm({
           title="Только латинские буквы в нижнем регистре, цифры и дефисы"
           value={formData.slug}
           onChange={(e) => onChange('slug', e.target.value.toLowerCase())}
-          className="w-full rounded border px-2 py-1 text-sm"
+          className="w-full rounded-lg border border-[var(--border)] px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-[var(--border)]"
           placeholder="например, main-hall"
         />
         <div className="mt-1 text-[var(--meta-text)] text-xs">
@@ -68,7 +68,7 @@ export function CreateKioskForm({
           maxLength={200}
           value={formData.description || ''}
           onChange={(e) => onChange('description', e.target.value)}
-          className="w-full rounded border px-2 py-1 text-sm"
+          className="w-full rounded-lg border border-[var(--border)] px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-[var(--border)]"
           rows={3}
         />
         <div className="mt-1 text-[var(--meta-text)] text-xs">
@@ -89,7 +89,7 @@ export function CreateKioskForm({
           maxLength={200}
           value={formData.location || ''}
           onChange={(e) => onChange('location', e.target.value)}
-          className="w-full rounded border px-2 py-1 text-sm"
+          className="w-full rounded-lg border border-[var(--border)] px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-[var(--border)]"
           placeholder="например, 1 этаж, холл"
         />
         <div className="mt-1 text-[var(--meta-text)] text-xs">

@@ -34,7 +34,7 @@ export function ScheduleSlotEventForm({
       <div>
         <label
           htmlFor="event-time"
-          className="mb-1 block text-muted-foreground text-xs"
+          className="mb-1 block text-muted-foreground text-sm"
         >
           Время
         </label>
@@ -46,7 +46,7 @@ export function ScheduleSlotEventForm({
           min={`${slotHour}:00`}
           max={`${slotHour}:59`}
           step={60}
-          className="w-full rounded border px-2 py-1 text-sm"
+          className="w-full rounded-lg border border-[var(--border)] bg-transparent px-2 py-1 focus:outline-none focus:ring-1 focus:ring-[var(--border)]"
           required
         />
       </div>
@@ -54,7 +54,7 @@ export function ScheduleSlotEventForm({
       <div>
         <label
           htmlFor="title"
-          className="mb-1 block text-muted-foreground text-xs"
+          className="mb-1 block text-muted-foreground text-sm"
         >
           Название
         </label>
@@ -62,7 +62,7 @@ export function ScheduleSlotEventForm({
           id="title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="w-full rounded border px-2 py-1 text-sm"
+          className="w-full rounded-lg border border-[var(--border)] px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-[var(--border)]"
           required
           rows={4}
         />
@@ -71,7 +71,7 @@ export function ScheduleSlotEventForm({
       <div>
         <label
           htmlFor="description"
-          className="mb-1 block text-muted-foreground text-xs"
+          className="mb-1 block text-muted-foreground text-sm"
         >
           Описание (необязательно)
         </label>
@@ -79,7 +79,7 @@ export function ScheduleSlotEventForm({
           id="description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          className="w-full resize-none rounded border px-2 py-1 text-sm"
+          className="w-full resize-none rounded-lg border border-[var(--border)] px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-[var(--border)]"
           rows={4}
         />
       </div>
