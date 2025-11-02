@@ -4,7 +4,7 @@ import type { Birthday, NewBirthday } from '@shared/types/birthdays.js';
 import { webReadableToNode } from '../utils/stream.js';
 import { BirthdayError } from '../errors/birthday.error.js';
 import Logger from '../utils/logger.js';
-import { parseOdtFile } from '../utils/odt.parser.js';
+import { parseOdtTable } from '../utils/odt.table.parser.js';
 import { parse, isValid } from 'date-fns';
 
 export class BirthdayFileService extends FileStorageService {
@@ -40,9 +40,8 @@ export class BirthdayFileService extends FileStorageService {
     buffer: Buffer,
     dateFormat: string = this.defaultDateFormat,
   ): Promise<NewBirthday[]> {
-    const text = await parseOdtFile(buffer);
+    const text = await parseOdtTable(buffer);
     const lines: string[] = text
-      .split('\n')
       .map((l: string) => l.trim())
       .filter(Boolean)
       .filter((l) => {
@@ -58,7 +57,14 @@ export class BirthdayFileService extends FileStorageService {
       const [lastName, firstName, middleName, ...deptParts] = rest;
       const department = deptParts.join(' ').trim() || undefined;
       const fullName = [lastName, firstName, middleName].join(' ');
-      return { fullName, department, birthDate };
+
+      const newBirthday: NewBirthday = {
+        fullName,
+        department,
+        birthDate,
+      };
+
+      return newBirthday;
     });
   }
 
