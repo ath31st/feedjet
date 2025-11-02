@@ -1,6 +1,7 @@
 import { BirthdayCreateForm } from '@/features/birthday-create';
 import { BirthdayFileUpload } from '@/features/birthday-file-upload';
 import { SettingsCard } from '@/shared/ui/SettingsCard';
+import { BirthdayList } from './BirthdayList';
 
 export function BirthdaysManagement() {
   return (
@@ -17,6 +18,11 @@ export function BirthdaysManagement() {
           className="w-full md:w-1/2"
         >
           <BirthdayCreateForm />
+        </SettingsCard>
+      </div>
+      <div className="w-full">
+        <SettingsCard title="Дни рождения" className="w-full">
+          <BirthdayList />
         </SettingsCard>
       </div>
     </div>
