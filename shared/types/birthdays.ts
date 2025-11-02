@@ -18,4 +18,5 @@ export interface NewBirthday {
   fullName: string;
   department?: string;
   birthDate: Date;
+  dateFormat?: string;
 }

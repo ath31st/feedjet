@@ -33,7 +33,10 @@ export const birthdayRouter = t.router({
   create: protectedProcedure
     .input(birthdayCreateSchema)
     .mutation(({ input }) => {
-      const date = birthdayFileService.parseDate(input.birthDate);
+      const date = birthdayFileService.parseDate(
+        input.birthDate,
+        input.dateFormat,
+      );
       const newBirthday: NewBirthday = { ...input, birthDate: date };
       const birthday = birthdayService.create(newBirthday);
       const birthdays = birthdayService.getAll();
