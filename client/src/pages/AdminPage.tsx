@@ -57,7 +57,9 @@ export function AdminPage() {
         </Tabs.Content>
 
         <Tabs.Content value="birthdays">
-          <BirthdaysManagement />
+          <div className="mt-6 flex w-full gap-6">
+            <BirthdaysManagement />
+          </div>
         </Tabs.Content>
 
         <Tabs.Content value="kiosks">
