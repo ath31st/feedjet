@@ -1,6 +1,6 @@
 import { IconButton } from '@/shared/ui/common';
 import { Cross1Icon } from '@radix-ui/react-icons';
-import type { Birthday } from '@shared/types/birthdays';
+import type { Birthday } from '@/entities/birthday';
 
 interface BirthdayCardProps {
   birthday: Birthday;
@@ -18,11 +18,9 @@ export function BirthdayCard({ birthday, onDelete }: BirthdayCardProps) {
         <span className="w-24 text-right">
           {new Date(birthday.birthDate).toLocaleDateString()}
         </span>
-        {birthday.department && (
-          <span className="w-34 truncate text-right">
-            {birthday.department}
-          </span>
-        )}
+
+        <span className="w-34 truncate text-right">{birthday.department}</span>
+
         <IconButton
           onClick={() => onDelete(birthday.id)}
           tooltip="Удалить день рождения"

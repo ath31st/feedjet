@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { NewBirthday } from '@shared/types/birthdays';
+import type { NewBirthday } from '@/entities/birthday';
 
 export function useCreateBirthdayForm(onCreate: (data: NewBirthday) => void) {
   const [formData, setFormData] = useState<NewBirthday>({
