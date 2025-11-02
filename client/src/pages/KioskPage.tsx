@@ -8,6 +8,7 @@ import { Rotator } from '@/shared/ui/Rotator';
 import { LoadingThreeDotsJumping } from '@/shared/ui/LoadingThreeDotsJumping';
 import { useKioskParams } from '@/features/kiosk-params';
 import { useKioskRotation } from '@/features/kiosk-rotation';
+import { BirthdayWidget } from '@/widgets/birthday';
 
 export function KioskPage() {
   const { uiConfig, loading } = useUiConfigStore();
@@ -21,6 +22,7 @@ export function KioskPage() {
     feed: <FeedWidget rotate={rotate} animation={animation} />,
     schedule: <ScheduleWidget rotate={rotate} />,
     video: <VideoPlayerWidget />,
+    birthday: <BirthdayWidget rotate={rotate} animation={animation} />,
   };
 
   const currentWidget = widgetMap[widgets[index]] ?? null;
