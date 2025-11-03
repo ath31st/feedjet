@@ -58,3 +58,9 @@ export const useDeleteBirthday = () => {
     }),
   );
 };
+
+export const useGetBirthdaysByMonth = (month: number) => {
+  return useQuery(
+    trpcWithProxy.birthday.birthdaysByMonth.queryOptions({ month }),
+  );
+};

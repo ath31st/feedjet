@@ -9,6 +9,7 @@ import { protectedProcedure } from '../../middleware/auth.js';
 import {
   birthdayCreateSchema,
   birthdayIdInputSchema,
+  birthdayMonthInputSchema,
 } from '../../validations/schemas/birthday.schemas.js';
 import { fileParamsSchema } from '../../validations/schemas/file.storage.validation.js';
 
@@ -24,10 +25,17 @@ export const birthdayRouter = t.router({
       return { ok: true, birthdays };
     }),
 
-  birthdays: publicProcedure.query(() => {
+  birthdays: protectedProcedure.query(() => {
     const birthdays = birthdayService.getAll();
     return birthdays;
   }),
+
+  birthdaysByMonth: publicProcedure
+    .input(birthdayMonthInputSchema)
+    .query(({ input }) => {
+      const birthdays = birthdayService.getByMonth(input.month);
+      return birthdays;
+    }),
 
   create: protectedProcedure
     .input(birthdayCreateSchema)

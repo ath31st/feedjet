@@ -5,6 +5,10 @@ export const birthdayIdInputSchema = z.object({
   id: z.coerce.number().int().positive(),
 });
 
+export const birthdayMonthInputSchema = z.object({
+  month: z.coerce.number().int().min(1).max(12),
+});
+
 export const dateFormatSchema = z
   .string()
   .min(1)

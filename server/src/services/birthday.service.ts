@@ -1,6 +1,6 @@
 import type { DbType } from '../container.js';
 import { birthdaysTable } from '../db/schema.js';
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 import type {
   BirthdayEncrypted,
   Birthday,
@@ -39,17 +39,23 @@ export class BirthdayService {
 
   getAll(): Birthday[] {
     const encBirthdays = this.db.select().from(birthdaysTable).all();
-    return encBirthdays.map(birthdayMapper.mapEncToDec).sort((a, b) => {
-      const aMonth = a.birthDate.getMonth();
-      const bMonth = b.birthDate.getMonth();
-      if (aMonth !== bMonth) return aMonth - bMonth;
+    return encBirthdays
+      .map(birthdayMapper.mapEncToDec)
+      .sort(this.birthdayComparator);
+  }
 
-      const aDay = a.birthDate.getDate();
-      const bDay = b.birthDate.getDate();
-      if (aDay !== bDay) return aDay - bDay;
+  getByMonth(month: number): Birthday[] {
+    const encBirthdays = this.db
+      .select()
+      .from(birthdaysTable)
+      .where(
+        sql`CAST(strftime('%m', ${birthdaysTable.birthDate}) AS INTEGER) = ${month}`,
+      )
+      .all();
 
-      return a.fullName.localeCompare(b.fullName);
-    });
+    return encBirthdays
+      .map(birthdayMapper.mapEncToDec)
+      .sort(this.birthdayComparator);
   }
 
   getByDate(date: Date): Birthday[] {
@@ -59,7 +65,9 @@ export class BirthdayService {
       .where(eq(birthdaysTable.birthDate, date))
       .all();
 
-    return encBirthdays.map(birthdayMapper.mapEncToDec);
+    return encBirthdays
+      .map(birthdayMapper.mapEncToDec)
+      .sort(this.birthdayComparator);
   }
 
   purge(): number {
@@ -92,5 +100,17 @@ export class BirthdayService {
   delete(id: number): number {
     return this.db.delete(birthdaysTable).where(eq(birthdaysTable.id, id)).run()
       .changes;
+  }
+
+  birthdayComparator(a: Birthday, b: Birthday): number {
+    const aMonth = a.birthDate.getMonth();
+    const bMonth = b.birthDate.getMonth();
+    if (aMonth !== bMonth) return aMonth - bMonth;
+
+    const aDay = a.birthDate.getDate();
+    const bDay = b.birthDate.getDate();
+    if (aDay !== bDay) return aDay - bDay;
+
+    return a.fullName.localeCompare(b.fullName);
   }
 }
