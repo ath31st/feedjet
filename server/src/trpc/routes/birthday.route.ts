@@ -18,9 +18,12 @@ export const birthdayRouter = t.router({
     .input(fileParamsSchema)
     .mutation(async ({ input }) => {
       const file = input.get('file') as File;
-      const filename = input.get('filename') as string;
+      const dateFormat = input.get('dateFormat') as string;
 
-      const birthdays = await birthdayFileService.handleUpload(file, filename);
+      const birthdays = await birthdayFileService.handleUpload(
+        file,
+        dateFormat,
+      );
 
       return { ok: true, birthdays };
     }),

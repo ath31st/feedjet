@@ -16,12 +16,9 @@ export class BirthdayFileService extends FileStorageService {
     this.birthdayService = birthdayService;
   }
 
-  private async uploadFile(
-    file: File,
-    filename: string,
-  ): Promise<{ path: string }> {
+  private async uploadFile(file: File): Promise<{ path: string }> {
     const nodeStream = webReadableToNode(file.stream());
-    const path = await this.saveStream(nodeStream, filename);
+    const path = await this.saveStream(nodeStream, file.name);
 
     return { path };
   }
@@ -81,13 +78,10 @@ export class BirthdayFileService extends FileStorageService {
     return parsed;
   }
 
-  async handleUpload(
-    file: File,
-    filename: string,
-    dateFormat?: string,
-  ): Promise<Birthday[]> {
+  async handleUpload(file: File, dateFormat?: string): Promise<Birthday[]> {
     try {
-      await this.uploadFile(file, filename);
+      await this.uploadFile(file);
+      const filename = file.name;
       const parsed = await this.parseUploadedFile(filename, dateFormat);
       const birthdays = this.birthdayService.purgeAndInsert(parsed);
 
@@ -101,7 +95,7 @@ export class BirthdayFileService extends FileStorageService {
       }
       throw new BirthdayError(500, 'Failed to upload or parse file');
     } finally {
-      await this.remove(filename);
+      await this.remove(file.name);
     }
   }
 }

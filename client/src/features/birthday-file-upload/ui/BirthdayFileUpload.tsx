@@ -16,7 +16,6 @@ export function BirthdayFileUpload() {
 
     const formData = new FormData();
     formData.set('file', file);
-    formData.set('filename', file.name);
 
     uploadFile(formData);
 
