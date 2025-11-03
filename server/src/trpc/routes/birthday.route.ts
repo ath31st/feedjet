@@ -22,7 +22,7 @@ export const birthdayRouter = t.router({
 
       const birthdays = await birthdayFileService.handleUpload(
         file,
-        dateFormat,
+        dateFormat ? dateFormat : undefined,
       );
 
       return { ok: true, birthdays };
