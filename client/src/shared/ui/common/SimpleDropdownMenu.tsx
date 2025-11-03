@@ -1,7 +1,6 @@
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 
 interface DropdownProps {
-  label: string;
   value: string;
   options: string[];
   onSelect: (value: string) => void;

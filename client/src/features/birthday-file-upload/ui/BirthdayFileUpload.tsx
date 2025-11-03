@@ -53,7 +53,6 @@ export function BirthdayFileUpload() {
         </div>
 
         <SimpleDropdownMenu
-          label="Формат даты:"
           value={dateFormat ?? 'Стандартный'}
           options={DATE_FORMATS.map((f) => f.label)}
           onSelect={(label) =>
