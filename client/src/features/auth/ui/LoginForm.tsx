@@ -39,7 +39,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
         value={login}
         onChange={(e) => setLogin(e.target.value)}
         required
-        className="rounded-xl border border-[var(--border)] bg-transparent px-4 py-2 focus:outline-none focus:ring-1 focus:ring-[var(--border)]"
+        className="rounded-lg border border-[var(--border)] bg-transparent px-4 py-2 focus:outline-none focus:ring-1 focus:ring-[var(--border)]"
       />
 
       <input
@@ -48,7 +48,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         required
-        className="rounded-xl border border-[var(--border)] bg-transparent px-4 py-2 focus:outline-none focus:ring-1 focus:ring-[var(--border)]"
+        className="rounded-lg border border-[var(--border)] bg-transparent px-4 py-2 focus:outline-none focus:ring-1 focus:ring-[var(--border)]"
       />
 
       <CommonButton type="submit">Войти</CommonButton>
