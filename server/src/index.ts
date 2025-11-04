@@ -4,7 +4,11 @@ import cors from 'cors';
 import Logger from './utils/logger.js';
 import { trpcMiddleware } from './trpc/index.js';
 import { startRssCronJob } from './cron/rss.cron.js';
-import { imageCacheService, videoStorageService } from './container.js';
+import {
+  birthdayFileService,
+  imageCacheService,
+  videoStorageService,
+} from './container.js';
 import { startImageCacheCleanupJob } from './cron/image.cache.cron.js';
 import {
   controlSseHandler,
@@ -25,7 +29,9 @@ app.use(
   }),
 );
 const videoStorageBaseDir = videoStorageService.getBaseDir();
-app.use('/video', express.static(videoStorageBaseDir));
+app.use('/videos', express.static(videoStorageBaseDir));
+const backgroundsStorageDir = birthdayFileService.getBaseDir();
+app.use('/backgrounds', express.static(backgroundsStorageDir));
 app.use(cors());
 app.use('/trpc', trpcMiddleware);
 app.use(express.json());

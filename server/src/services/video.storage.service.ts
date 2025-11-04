@@ -8,15 +8,31 @@ import { videosTable } from '../db/schema.js';
 import { eq } from 'drizzle-orm';
 import { VideoStorageServiceError } from '../errors/video.error.js';
 import { webReadableToNode } from '../utils/stream.js';
+import { promises as fs } from 'node:fs';
 
 const execFileAsync = promisify(execFile);
 
 export class VideoStorageService extends FileStorageService {
   private readonly db: DbType;
+  private readonly videosDir = 'videos';
 
   constructor(db: DbType, baseDir: string) {
     super(baseDir);
     this.db = db;
+    fs.mkdir(path.join(this.baseDir, this.videosDir), { recursive: true });
+  }
+
+  protected override getFilePath(fileName: string) {
+    return path.join(this.baseDir, this.videosDir, fileName);
+  }
+
+  override async listFiles() {
+    const dir = path.join(this.baseDir, this.videosDir);
+    return fs.readdir(dir);
+  }
+
+  override getBaseDir() {
+    return path.join(this.baseDir, this.videosDir);
   }
 
   async upload(

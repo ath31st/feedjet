@@ -6,14 +6,31 @@ import { BirthdayError } from '../errors/birthday.error.js';
 import Logger from '../utils/logger.js';
 import { parseOdtTable } from '../utils/odt.table.parser.js';
 import { parse, isValid } from 'date-fns';
+import { promises as fs } from 'node:fs';
+import path from 'node:path';
 
 export class BirthdayFileService extends FileStorageService {
   private readonly birthdayService: BirthdayService;
+  private readonly backgroundsDir = 'backgrounds';
   private readonly defaultDateFormat = 'dd.MM.yyyy';
 
   constructor(birthdayService: BirthdayService, baseDir: string) {
     super(baseDir);
     this.birthdayService = birthdayService;
+    fs.mkdir(path.join(this.baseDir, this.backgroundsDir), { recursive: true });
+  }
+
+  protected override getFilePath(fileName: string) {
+    return path.join(this.baseDir, this.backgroundsDir, fileName);
+  }
+
+  override async listFiles() {
+    const dir = path.join(this.baseDir, this.backgroundsDir);
+    return fs.readdir(dir);
+  }
+
+  override getBaseDir() {
+    return path.join(this.baseDir, this.backgroundsDir);
   }
 
   private async uploadFile(file: File): Promise<{ path: string }> {

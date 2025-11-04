@@ -3,7 +3,7 @@ import * as path from 'node:path';
 import { pipeline } from 'node:stream/promises';
 
 export class FileStorageService {
-  private baseDir: string;
+  protected baseDir: string;
 
   constructor(baseDir: string) {
     this.baseDir = baseDir;
