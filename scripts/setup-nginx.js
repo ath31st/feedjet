@@ -48,26 +48,30 @@ const absCacheDir = path.isAbsolute(cacheDirValue)
 
 // fileStorageDir
 match = content.match(/export\s+const\s+fileStorageDir\s*=\s*process\.env\.FILE_STORAGE_DIR\s*\?\?\s*['"`]([^'"`]+)['"`]/m);
-let videoDirValue = match ? match[1] : null;
+let fileStorageDirValue = match ? match[1] : null;
 
-if (!videoDirValue) {
+if (!fileStorageDirValue) {
   match = content.match(/export\s+const\s+fileStorageDir\s*=\s*['"`]([^'"`]+)['"`]/m);
-  if (match) videoDirValue = match[1];
+  if (match) fileStorageDirValue = match[1];
 }
 
-if (!videoDirValue) {
+if (!fileStorageDirValue) {
   match = content.match(/export\s+const\s+fileStorageDir\s*=\s*path\.resolve\(\s*['"`]([^'"`]+)['"`]\s*\)/m);
-  if (match) videoDirValue = match[1];
+  if (match) fileStorageDirValue = match[1];
 }
 
-if (!videoDirValue) {
+if (!fileStorageDirValue) {
   console.error('❌ Не удалось автоматически извлечь fileStorageDir из container.ts.');
   process.exit(1);
 }
 
-const absVideoDir = path.isAbsolute(videoDirValue)
-  ? videoDirValue
-  : path.resolve(serverRoot, videoDirValue);
+const absFileStorageDir = path.isAbsolute(fileStorageDirValue)
+  ? fileStorageDirValue
+  : path.resolve(serverRoot, fileStorageDirValue);
+
+const absVideosDir = path.join(absFileStorageDir, 'videos');
+const absImagesDir = path.join(absFileStorageDir, 'images');
+const absBackgroundsDir = path.join(absFileStorageDir, 'backgrounds');
 
 // certs
 if (!fs.existsSync(certsDir)) fs.mkdirSync(certsDir, { recursive: true });
@@ -105,7 +109,9 @@ const template = fs.readFileSync(nginxConfTemplate, 'utf-8');
 
 const nginxConf = template
   .replace(/{{\s*CACHE_DIR\s*}}/g, absCacheDir)
-  .replace(/{{\s*VIDEO_DIR\s*}}/g, absVideoDir)
+  .replace(/{{\s*VIDEO_DIR\s*}}/g, absVideosDir)
+  .replace(/{{\s*IMAGE_DIR\s*}}/g, absImagesDir)
+  .replace(/{{\s*BACKGROUND_DIR\s*}}/g, absBackgroundsDir)
   .replace(/{{\s*CERT_PATH\s*}}/g, crtPath)
   .replace(/{{\s*KEY_PATH\s*}}/g, keyPath);
 
@@ -113,6 +119,8 @@ fs.writeFileSync(nginxConfOutput, nginxConf, 'utf-8');
 
 console.log(`✅ nginx.conf обновлён: ${path.relative(projectRoot, nginxConfOutput)}`);
 console.log(`📁 cacheDir: ${absCacheDir}`);
-console.log(`📁 videoDir: ${absVideoDir}`);
+console.log(`📁 videoDir: ${absVideosDir}`);
+console.log(`📁 imageDir: ${absImagesDir}`);
+console.log(`📁 backgroundDir: ${absBackgroundsDir}`);
 console.log(`📄 certs: ${crtPath}, ${keyPath}`);
 console.log(`🚀 Запусти: sudo nginx -c "${nginxConfOutput}"`);

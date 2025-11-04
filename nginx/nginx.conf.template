@@ -70,5 +70,15 @@ http {
             alias {{VIDEO_DIR}}/;
             add_header Cache-Control "public";
         }
+
+        location /image/ {
+            alias {{IMAGE_DIR}}/;
+            add_header Cache-Control "public";
+        }
+
+        location /background/ {
+            alias {{BACKGROUND_DIR}}/;
+            add_header Cache-Control "public";
+        }
     }
 }
