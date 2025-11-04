@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { SERVER_URL } from '@/shared/config';
-import { useVideoStore } from '@/entities/video';
+import { buildVideoUrl, useVideoStore } from '@/entities/video';
 
 export function useVideoPlayer() {
   const { currentVideo, nextVideo } = useVideoStore();
@@ -15,8 +14,7 @@ export function useVideoPlayer() {
     vid.load();
 
     if (currentVideo) {
-      const url = `${SERVER_URL}/video/${currentVideo.fileName}`;
-      vid.src = url;
+      vid.src = buildVideoUrl(currentVideo.fileName);
       vid.load();
       vid.play().catch(() => {});
     }

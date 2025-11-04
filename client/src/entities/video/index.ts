@@ -8,4 +8,5 @@ export {
 
 export { useVideoStore } from './model/useVideoStore';
 export { useVideoSse } from './api/useVideoSse';
+export { buildVideoUrl } from './lib/buildVideoUrl';
 export type { VideoMetadata } from '@shared/types/video';

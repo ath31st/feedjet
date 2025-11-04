@@ -1,21 +1,20 @@
 import * as Dialog from '@radix-ui/react-dialog';
-import type { VideoMetadata } from '@/entities/video';
+import { buildVideoUrl, type VideoMetadata } from '@/entities/video';
 import { usePersistentVolume } from '../model/usePersistentVolume';
 
 interface VideoPreviewDialogProps {
   video: VideoMetadata | null;
   onClose: () => void;
-  serverUrl: string;
 }
 
 export function VideoPreviewDialog({
   video,
   onClose,
-  serverUrl,
 }: VideoPreviewDialogProps) {
   const videoRef = usePersistentVolume();
 
   if (!video) return null;
+  const videoUrl = buildVideoUrl(video.fileName);
 
   return (
     <Dialog.Root open={!!video} onOpenChange={onClose}>
@@ -31,7 +30,7 @@ export function VideoPreviewDialog({
 
           <video
             ref={videoRef}
-            src={`${serverUrl}/video/${video.fileName}`}
+            src={videoUrl}
             controls
             autoPlay
             className="h-auto max-h-[80vh] max-w-[80vw] rounded-lg"

@@ -11,7 +11,6 @@ import { VideoPreviewDialog } from './VideoPreviewDialog';
 import { formatDuration } from '@/shared/lib/formatDuration';
 import { IconButton } from '@/shared/ui/common';
 import * as Switch from '@radix-ui/react-switch';
-import { SERVER_URL } from '@/shared/config';
 
 export function VideoList() {
   const videos: VideoMetadata[] = useVideoWithMetadataList().data || [];
@@ -43,7 +42,7 @@ export function VideoList() {
               className="flex items-center justify-between rounded-lg border border-[var(--border)] px-4 py-2"
             >
               <div className="flex flex-col overflow-hidden">
-                <span className=" truncate">{v.name}</span>
+                <span className="truncate">{v.name}</span>
                 <span className="text-[var(--meta-text)] text-xs">
                   {formatDuration(v.duration)} · {v.width}x{v.height}px ·{' '}
                   {v.format} · {formatBytes(v.size)}
@@ -83,7 +82,6 @@ export function VideoList() {
       <VideoPreviewDialog
         video={openVideo}
         onClose={() => setOpenVideo(null)}
-        serverUrl={SERVER_URL}
       />
     </>
   );
