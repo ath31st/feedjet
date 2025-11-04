@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { buildVideoUrl, useVideoStore } from '@/entities/video';
 
 export function useVideoPlayer() {
-  const { currentVideo, nextVideo } = useVideoStore();
+  const { currentVideo, nextVideo, videos } = useVideoStore();
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -20,10 +20,22 @@ export function useVideoPlayer() {
     }
   }, [currentVideo]);
 
+  const handleEnded = () => {
+    if (videos.length <= 1) {
+      const vid = videoRef.current;
+      if (vid) {
+        vid.currentTime = 0;
+        vid.play().catch(() => {});
+      }
+    } else {
+      nextVideo();
+    }
+  };
+
   return {
     videoRef,
     currentVideo,
-    onEnded: nextVideo,
-    onError: nextVideo,
+    onEnded: handleEnded,
+    onError: handleEnded,
   };
 }
