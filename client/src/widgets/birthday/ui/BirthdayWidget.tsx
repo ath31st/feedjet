@@ -8,6 +8,8 @@ interface BirthdayWidgetProps {
 
 export function BirthdayWidget({ rotate, animation }: BirthdayWidgetProps) {
   const isLoading = false;
+  const isRotate = isRotate90(rotate);
+  console.log(isRotate);
 
   if (isLoading) {
     return (
