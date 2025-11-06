@@ -7,6 +7,7 @@ import {
 import { useFeedConfigStore } from '@/entities/feed-config';
 import { isRotate90, useCarousel, type AnimationType } from '@/shared/lib';
 import { EmptyFeedState } from './EmptyFeedState';
+import { Activity } from 'react';
 
 interface FeedWidgetProps {
   rotate: number;
@@ -38,13 +39,15 @@ export function FeedWidget({ rotate, animation }: FeedWidgetProps) {
       }`}
     >
       {visibleItems.map((item, index) => (
-        <AnimatedFeedCard
-          key={item.link}
-          item={item}
-          index={index}
-          cellsCount={visibleCellCount}
-          animation={animation}
-        />
+        <Activity key={item.link} mode="visible">
+          <AnimatedFeedCard
+            key={item.link}
+            item={item}
+            index={index}
+            cellsCount={visibleCellCount}
+            animation={animation}
+          />
+        </Activity>
       ))}
     </div>
   );

@@ -24,8 +24,8 @@ export function ScheduleSlotEventList({
           key={event.id}
           className="flex items-start justify-between gap-1 rounded-md border border-[var(--border)] bg-muted px-3 py-2 text-sm"
         >
-          <div className="flex flex-1 items-start gap-1">
-            <span className="w-10 text-muted-foreground text-xs">
+          <div className="flex flex-1 gap-1">
+            <span className="flex w-10 items-center text-muted-foreground text-xs">
               {event.startTime}
             </span>
             <div className="flex-1">
