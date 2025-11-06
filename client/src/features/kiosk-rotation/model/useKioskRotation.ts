@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useEffectEvent, useState } from 'react';
 
 interface UseKioskRotationProps {
   widgets: string[];
@@ -8,21 +8,21 @@ interface UseKioskRotationProps {
 export function useKioskRotation({ widgets, interval }: UseKioskRotationProps) {
   const [index, setIndex] = useState(0);
 
+  const onTick = useEffectEvent(() => {
+    setIndex((prev) => (prev + 1) % widgets.length);
+  });
+
   useEffect(() => {
     if (!interval || widgets.length < 2) return;
-
-    const id = setInterval(() => {
-      setIndex((prev) => (prev + 1) % widgets.length);
-    }, interval);
-
+    const id = setInterval(onTick, interval);
     return () => clearInterval(id);
-  }, [interval, widgets]);
+  }, [interval, widgets.length]);
 
   useEffect(() => {
-    if (index >= widgets.length) {
+    if (index >= widgets.length && widgets.length > 0) {
       setIndex(0);
     }
-  }, [widgets, index]);
+  }, [widgets.length, index]);
 
   return { index, setIndex };
 }
