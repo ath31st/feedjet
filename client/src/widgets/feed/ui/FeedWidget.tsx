@@ -38,17 +38,19 @@ export function FeedWidget({ rotate, animation }: FeedWidgetProps) {
         isRotate90(rotate) ? '' : 'xl:grid-cols-2'
       }`}
     >
-      {visibleItems.map((item, index) => (
-        <Activity key={item.link} mode="visible">
-          <AnimatedFeedCard
-            key={item.link}
-            item={item}
-            index={index}
-            cellsCount={visibleCellCount}
-            animation={animation}
-          />
-        </Activity>
-      ))}
+      {visibleItems.map((item, index) => {
+        const isVisible = index < visibleCellCount;
+        return (
+          <Activity key={item.link} mode={isVisible ? 'visible' : 'hidden'}>
+            <AnimatedFeedCard
+              item={item}
+              index={index}
+              cellsCount={visibleCellCount}
+              animation={animation}
+            />
+          </Activity>
+        );
+      })}
     </div>
   );
 }
