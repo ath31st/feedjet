@@ -1,5 +1,5 @@
 export * from './AdminTabTrigger';
-export * from './AnimatedSigmaBackground ';
+export * from './AnimatedSigmaBackground';
 export * from './LazyImage';
 export * from './LoadingThreeDotsJumping';
 export * from './NumberSliderSelector';

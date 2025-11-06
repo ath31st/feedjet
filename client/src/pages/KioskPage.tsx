@@ -1,31 +1,24 @@
-import { AnimatedSigmaBackground } from '@/shared/ui/AnimatedSigmaBackground ';
-import { FeedWidget } from '../widgets/feed';
-import { ScheduleWidget } from '@/widgets/schedule';
-import { VideoPlayerWidget } from '@/widgets/video-player';
+import { lazy, Suspense } from 'react';
+import { AnimatedSigmaBackground } from '@/shared/ui';
 import { useUiConfigStore } from '@/entities/ui-config';
-import { AnimatePresence, motion } from 'framer-motion';
 import { Rotator } from '@/shared/ui/Rotator';
-import { LoadingThreeDotsJumping } from '@/shared/ui/LoadingThreeDotsJumping';
+import { LoadingThreeDotsJumping } from '@/shared/ui';
 import { useKioskParams } from '@/features/kiosk-params';
 import { useKioskRotation } from '@/features/kiosk-rotation';
-import { BirthdayWidget } from '@/widgets/birthday';
+import { AnimatePresence, motion } from 'framer-motion';
+
+const FeedWidget = lazy(() => import('../widgets/feed'));
+const ScheduleWidget = lazy(() => import('@/widgets/schedule'));
+const VideoPlayerWidget = lazy(() => import('@/widgets/video-player'));
+const BirthdayWidget = lazy(() => import('@/widgets/birthday'));
 
 export function KioskPage() {
   const { uiConfig, loading } = useUiConfigStore();
   const widgets = uiConfig?.rotatingWidgets ?? [];
   const interval = uiConfig?.autoSwitchIntervalMs ?? 0;
-
   const { rotate, animation } = useKioskParams();
   const { index } = useKioskRotation({ widgets, interval });
-
-  const widgetMap: Record<string, React.ReactNode> = {
-    feed: <FeedWidget rotate={rotate} animation={animation} />,
-    schedule: <ScheduleWidget rotate={rotate} />,
-    video: <VideoPlayerWidget />,
-    birthday: <BirthdayWidget rotate={rotate} animation={animation} />,
-  };
-
-  const currentWidget = widgetMap[widgets[index]] ?? null;
+  const currentWidgetKey = widgets[index];
 
   if (loading) {
     return (
@@ -39,7 +32,7 @@ export function KioskPage() {
     <div className="h-screen w-screen">
       <AnimatePresence mode="wait">
         <motion.div
-          key={widgets[index]}
+          key={currentWidgetKey}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -47,7 +40,18 @@ export function KioskPage() {
         >
           <Rotator rotate={rotate}>
             <AnimatedSigmaBackground />
-            {currentWidget}
+            <Suspense fallback={null}>
+              {currentWidgetKey === 'feed' && (
+                <FeedWidget rotate={rotate} animation={animation} />
+              )}
+              {currentWidgetKey === 'schedule' && (
+                <ScheduleWidget rotate={rotate} />
+              )}
+              {currentWidgetKey === 'video' && <VideoPlayerWidget />}
+              {currentWidgetKey === 'birthday' && (
+                <BirthdayWidget rotate={rotate} animation={animation} />
+              )}
+            </Suspense>
           </Rotator>
         </motion.div>
       </AnimatePresence>

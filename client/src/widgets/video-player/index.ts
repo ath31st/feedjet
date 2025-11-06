@@ -1,1 +1,2 @@
-export { VideoPlayerWidget } from './ui/VideoPlayerWidget';
+import { VideoPlayerWidget } from './ui/VideoPlayerWidget';
+export default VideoPlayerWidget;

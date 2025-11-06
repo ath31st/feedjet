@@ -1,1 +1,2 @@
-export { FeedWidget } from './ui/FeedWidget';
+import { FeedWidget } from './ui/FeedWidget';
+export default FeedWidget;

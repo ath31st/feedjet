@@ -1,1 +1,2 @@
-export { BirthdayWidget } from './ui/BirthdayWidget';
+import { BirthdayWidget } from './ui/BirthdayWidget';
+export default BirthdayWidget;

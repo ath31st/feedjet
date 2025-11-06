@@ -18,7 +18,7 @@ export function BirthdayWidget({ rotate, animation }: BirthdayWidgetProps) {
   }
 
   return (
-    <div className=" flex h-full w-full items-center justify-center rounded-lg border-3 border-[var(--border)] border-dashed">
+    <div className="flex h-full w-full items-center justify-center rounded-lg border-3 border-[var(--border)] border-dashed">
       <div className="text-center">
         <p className="font-medium text-2xl">Birthday Widget Placeholder</p>
         <p className="mt-2 text-xl">
