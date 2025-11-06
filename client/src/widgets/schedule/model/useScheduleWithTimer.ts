@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useEffectEvent } from 'react';
 import { useFindScheduleEventsByDate } from '@/entities/schedule';
 import { getOnlyDateStr } from '@/shared/lib/getOnlyDateStr';
 
@@ -17,15 +17,17 @@ export function useScheduleWithTimer({
     refetch,
   } = useFindScheduleEventsByDate(getOnlyDateStr(todayDate));
 
+  const onTick = useEffectEvent(() => {
+    setNow(new Date());
+    refetch();
+    refetchCurrent();
+    refetchDaily();
+  });
+
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      setNow(new Date());
-      refetch();
-      refetchCurrent();
-      refetchDaily();
-    }, 60_000);
+    const intervalId = setInterval(onTick, 60_000);
     return () => clearInterval(intervalId);
-  }, [refetch, refetchCurrent, refetchDaily]);
+  }, []);
 
   return { now, events, isLoading };
 }
