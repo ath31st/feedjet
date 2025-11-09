@@ -49,7 +49,7 @@ export class BirthdayService {
       .select()
       .from(birthdaysTable)
       .where(
-        sql`CAST(strftime('%m', ${birthdaysTable.birthDate}) AS INTEGER) = ${month}`,
+        sql`CAST(strftime('%m', ${birthdaysTable.birthDate}, 'unixepoch', 'localtime') AS INTEGER) = ${month}`,
       )
       .all();
 
