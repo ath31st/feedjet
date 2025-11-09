@@ -4,6 +4,7 @@ import { LoadingThreeDotsJumping } from '@/shared/ui';
 import { useEffect, useState } from 'react';
 import { BirthdayCard } from './BirthdayCard';
 import { BirthdayGreeting } from './BirthdayGreeting';
+import { COMPANY_NAME } from '@/shared/config';
 
 interface BirthdayWidgetProps {
   rotate: number;
@@ -11,6 +12,7 @@ interface BirthdayWidgetProps {
 }
 
 export function BirthdayWidget({ rotate }: BirthdayWidgetProps) {
+  const companyName = COMPANY_NAME || 'Company Name';
   const isRotate = isRotate90(rotate);
   const [birthdays, setBirthdays] = useState<Birthday[]>([]);
   const currentMonth = new Date().getMonth() + 1;
@@ -21,7 +23,7 @@ export function BirthdayWidget({ rotate }: BirthdayWidgetProps) {
 
   useEffect(() => {
     setBirthdays(fetchedBirthdays || []);
-  });
+  }, [fetchedBirthdays]);
 
   if (isLoading) {
     return (
@@ -46,9 +48,10 @@ export function BirthdayWidget({ rotate }: BirthdayWidgetProps) {
   return (
     <div className="flex h-full w-full flex-col items-center rounded-lg border-3 border-[var(--border)] border-dashed">
       <div
-        className={`flex h-full flex-col items-center justify-center gap-20 w-[${widgetWidth}%]`}
+        className="flex h-full flex-col items-center justify-center gap-20"
+        style={{ width: `${widgetWidth}%` }}
       >
-        <BirthdayGreeting fontSizeXl={fontSizeXl} />
+        <BirthdayGreeting fontSizeXl={fontSizeXl} companyName={companyName} />
         <div className="flex w-full flex-col gap-6">
           {birthdays.map((birthday, index) => (
             <BirthdayCard
