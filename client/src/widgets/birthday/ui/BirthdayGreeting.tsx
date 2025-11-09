@@ -1,21 +1,36 @@
+import eagleUrl from '@/shared/assets/digital_eagle.svg';
+
 interface BirthdayGreetingProps {
-  fontSizeXl?: number;
+  isEffectiveXl?: boolean;
   companyName: string;
 }
 
 export function BirthdayGreeting({
-  fontSizeXl = 6,
+  isEffectiveXl,
   companyName,
 }: BirthdayGreetingProps) {
+  const fontSizeXl = isEffectiveXl ? 5 : 3;
+  const titleFontSize = isEffectiveXl ? 6 : 4;
+  const topOffset = isEffectiveXl ? 40 : 100;
+
   return (
     <div
       className={`flex w-full flex-col items-center justify-center text-${fontSizeXl}xl`}
     >
-      <h1
-        className={`absolute top-20 whitespace-nowrap font-bold text-${fontSizeXl + 1}xl`}
+      <div
+        className="absolute flex flex-row items-center justify-center gap-10"
+        style={{ top: `${topOffset}px` }}
       >
-        {companyName.toUpperCase()}
-      </h1>
+        <img
+          src={eagleUrl}
+          alt="Eagle"
+          className="h-full w-1/10 object-contain"
+          style={{ filter: 'drop-shadow(0 0 6px var(--border))' }}
+        />
+        <h1 className={`whitespace-nowrap font-bold text-${titleFontSize}xl`}>
+          {companyName.toUpperCase()}
+        </h1>
+      </div>
       <p className="whitespace-nowrap font-semibold">
         Уважаемые коллеги! Дорогие друзья!
       </p>

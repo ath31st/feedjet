@@ -1,5 +1,5 @@
 import { useGetBirthdaysByMonth, type Birthday } from '@/entities/birthday';
-import { isRotate90, type AnimationType } from '@/shared/lib';
+import { isRotate90, useIsXl, type AnimationType } from '@/shared/lib';
 import { LoadingThreeDotsJumping } from '@/shared/ui';
 import { useEffect, useState } from 'react';
 import { BirthdayCard } from './BirthdayCard';
@@ -13,13 +13,14 @@ interface BirthdayWidgetProps {
 
 export function BirthdayWidget({ rotate }: BirthdayWidgetProps) {
   const companyName = COMPANY_NAME || 'Company Name';
-  const isRotate = isRotate90(rotate);
   const [birthdays, setBirthdays] = useState<Birthday[]>([]);
   const currentMonth = new Date().getMonth() + 1;
   const { isLoading, data: fetchedBirthdays } =
     useGetBirthdaysByMonth(currentMonth);
-  const fontSizeXl = isRotate ? 3 : 5;
-  const widgetWidth = isRotate ? 90 : 80;
+  const isXl = useIsXl();
+  const isEffectiveXl = isRotate90(rotate) ? !isXl : isXl;
+  const fontSizeXl = isEffectiveXl ? 5 : 3;
+  const widgetWidth = isEffectiveXl ? 80 : 90;
 
   useEffect(() => {
     setBirthdays(fetchedBirthdays || []);
@@ -46,12 +47,15 @@ export function BirthdayWidget({ rotate }: BirthdayWidgetProps) {
   }
 
   return (
-    <div className="flex h-full w-full flex-col items-center rounded-lg border-3 border-[var(--border)] border-dashed">
+    <div className="flex h-full w-full flex-col items-center rounded-lg border-4 border-[var(--border)] bg-[var(--card-bg)]">
       <div
         className="flex h-full flex-col items-center justify-center gap-20"
         style={{ width: `${widgetWidth}%` }}
       >
-        <BirthdayGreeting fontSizeXl={fontSizeXl} companyName={companyName} />
+        <BirthdayGreeting
+          isEffectiveXl={isEffectiveXl}
+          companyName={companyName}
+        />
         <div className="flex w-full flex-col gap-6">
           {birthdays.map((birthday, index) => (
             <BirthdayCard
