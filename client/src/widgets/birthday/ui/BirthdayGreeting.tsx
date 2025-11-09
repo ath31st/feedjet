@@ -11,7 +11,7 @@ export function BirthdayGreeting({
 }: BirthdayGreetingProps) {
   const fontSizeXl = isEffectiveXl ? 5 : 3;
   const titleFontSize = isEffectiveXl ? 6 : 4;
-  const topOffset = isEffectiveXl ? 40 : 100;
+  const topOffset = isEffectiveXl ? 60 : 100;
 
   return (
     <div
