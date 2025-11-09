@@ -44,12 +44,14 @@ export function BirthdayWidget({ rotate, animation }: BirthdayWidgetProps) {
 
   return (
     <div className="flex h-full w-full items-center justify-center rounded-lg border-3 border-[var(--border)] border-dashed">
-      <div className={`w-[${cardWidth}%] flex flex-col gap-4`}>
-        {birthdays.map((birthday) => (
+      <div className={`w-[${cardWidth}%] flex flex-col gap-6`}>
+        {birthdays.map((birthday, index) => (
           <BirthdayCard
             key={birthday.id}
             birthday={birthday}
             fontSizeXl={fontSizeXl}
+            delay={index * 0.5}
+            duration={1.3}
           />
         ))}
       </div>
