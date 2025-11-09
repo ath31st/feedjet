@@ -13,14 +13,14 @@ const VideoPlayerWidget = lazy(() => import('@/widgets/video-player'));
 const BirthdayWidget = lazy(() => import('@/widgets/birthday'));
 
 export function KioskPage() {
-  const { uiConfig, loading } = useUiConfigStore();
+  const { uiConfig, loading, initialized } = useUiConfigStore();
   const widgets = uiConfig?.rotatingWidgets ?? [];
   const interval = uiConfig?.autoSwitchIntervalMs ?? 0;
   const { rotate, animation } = useKioskParams();
   const { index } = useKioskRotation({ widgets, interval });
   const currentWidgetKey = widgets[index];
 
-  if (loading) {
+  if (loading || !initialized) {
     return (
       <div className="flex h-screen w-screen items-center justify-center">
         <LoadingThreeDotsJumping />

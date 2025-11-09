@@ -6,6 +6,7 @@ interface UiConfigState {
   uiConfig: UiConfig;
   error: string | null;
   loading: boolean;
+  initialized: boolean;
   fetchUiConfig: (kioskId: number) => Promise<void>;
   setConfig: (config: UiConfig) => void;
   setLoading: (loading: boolean) => void;
@@ -28,6 +29,8 @@ export const useUiConfigStore = create<UiConfigState>()((set) => ({
   uiConfig: DEFAULT_CONFIG,
   error: null,
   loading: false,
+  initialized: false,
+
   fetchUiConfig: async (kioskId: number) => {
     set({ loading: true });
     try {
@@ -40,6 +43,7 @@ export const useUiConfigStore = create<UiConfigState>()((set) => ({
         },
         error: null,
         loading: false,
+        initialized: true,
       });
     } catch (err) {
       set({
@@ -52,7 +56,7 @@ export const useUiConfigStore = create<UiConfigState>()((set) => ({
     if (config.theme) {
       localStorage.setItem('theme', config.theme);
     }
-    set({ uiConfig: config });
+    set({ uiConfig: config, initialized: true });
   },
   setLoading: (loading) => set({ loading }),
   setError: (error) => set({ error }),
