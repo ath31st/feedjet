@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { BirthdayCard } from './BirthdayCard';
 import { BirthdayGreeting } from './BirthdayGreeting';
 import { COMPANY_NAME } from '@/shared/config';
+import { fontSizeBirthdayCard } from '../lib/fontSizeBirhtdayCard';
 
 interface BirthdayWidgetProps {
   rotate: number;
@@ -19,8 +20,16 @@ export function BirthdayWidget({ rotate }: BirthdayWidgetProps) {
     useGetBirthdaysByMonth(currentMonth);
   const isXl = useIsXl();
   const isEffectiveXl = isRotate90(rotate) ? !isXl : isXl;
-  const fontSizeXl = isEffectiveXl ? 5 : 3;
+  let fontSizeXl = isEffectiveXl ? 5 : 3;
+  if (isEffectiveXl) {
+    fontSizeXl = fontSizeBirthdayCard(birthdays.length);
+  }
   const widgetWidth = isEffectiveXl ? 80 : 90;
+  const isTwoColumns = birthdays.length > 12;
+  const midIndex = Math.ceil(birthdays.length / 2);
+  const [leftColumn, rightColumn] = isTwoColumns
+    ? [birthdays.slice(0, midIndex), birthdays.slice(midIndex)]
+    : [birthdays, []];
 
   useEffect(() => {
     setBirthdays(fetchedBirthdays || []);
@@ -49,24 +58,45 @@ export function BirthdayWidget({ rotate }: BirthdayWidgetProps) {
   return (
     <div className="flex h-full w-full flex-col items-center rounded-lg border-4 border-[var(--border)] bg-[var(--card-bg)]">
       <div
-        className="flex h-full flex-col items-center justify-center gap-20"
+        className="mt-6 flex h-full flex-col items-center justify-start gap-20"
         style={{ width: `${widgetWidth}%` }}
       >
         <BirthdayGreeting
           isEffectiveXl={isEffectiveXl}
           companyName={companyName}
         />
-        <div className="flex w-full flex-col gap-6">
-          {birthdays.map((birthday, index) => (
-            <BirthdayCard
-              key={birthday.id}
-              birthday={birthday}
-              fontSizeXl={fontSizeXl}
-              delay={index * 0.5}
-              duration={1.3}
-            />
-          ))}
-        </div>
+        {isTwoColumns ? (
+          <div className="grid w-full grid-cols-2 gap-20">
+            {[leftColumn, rightColumn].map((column, i) => (
+              <div
+                key={i === 0 ? 'left' : 'right'}
+                className="flex flex-col gap-4"
+              >
+                {column.map((birthday, index) => (
+                  <BirthdayCard
+                    key={birthday.id}
+                    birthday={birthday}
+                    fontSizeXl={fontSizeXl}
+                    delay={index * 0.5}
+                    duration={1.3}
+                  />
+                ))}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="flex w-full flex-col gap-4">
+            {birthdays.map((birthday, index) => (
+              <BirthdayCard
+                key={birthday.id}
+                birthday={birthday}
+                fontSizeXl={fontSizeXl}
+                delay={index * 0.5}
+                duration={1.3}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

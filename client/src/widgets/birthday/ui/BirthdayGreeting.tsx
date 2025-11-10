@@ -11,16 +11,12 @@ export function BirthdayGreeting({
 }: BirthdayGreetingProps) {
   const fontSizeXl = isEffectiveXl ? 5 : 3;
   const titleFontSize = isEffectiveXl ? 6 : 4;
-  const topOffset = isEffectiveXl ? 60 : 100;
 
   return (
     <div
-      className={`flex w-full flex-col items-center justify-center text-${fontSizeXl}xl`}
+      className={`flex w-full flex-col items-center justify-center gap-6 text-${fontSizeXl}xl`}
     >
-      <div
-        className="absolute flex flex-row items-center justify-center gap-10"
-        style={{ top: `${topOffset}px` }}
-      >
+      <div className="flex flex-row items-center justify-center gap-10">
         <img
           src={eagleUrl}
           alt="Eagle"
@@ -31,12 +27,10 @@ export function BirthdayGreeting({
           {companyName.toUpperCase()}
         </h1>
       </div>
-      <p className="whitespace-nowrap font-semibold">
-        Уважаемые коллеги! Дорогие друзья!
-      </p>
-      <p className="whitespace-nowrap">
-        От лица коллектива поздравляем вас с днем рождения!
-      </p>
+      <div className="flex flex-col items-center whitespace-nowrap">
+        <p>Уважаемые коллеги! Дорогие друзья!</p>
+        <p>От лица коллектива поздравляем вас с днем рождения!</p>
+      </div>
     </div>
   );
 }
