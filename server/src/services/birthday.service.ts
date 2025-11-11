@@ -6,10 +6,10 @@ import type {
   Birthday,
   NewBirthday,
 } from '@shared/types/birthdays.js';
-import Logger from '../utils/logger.js';
 import { encrypt } from '../utils/crypto.js';
 import { BirthdayError } from '../errors/birthday.error.js';
 import { birthdayMapper } from '../mappers/birthday.mapper.js';
+import logger from '../utils/pino.logger.js';
 
 export class BirthdayService {
   private readonly db: DbType;
@@ -32,7 +32,7 @@ export class BirthdayService {
 
       return birthdayMapper.mapEncToDec(inserted);
     } catch (err: unknown) {
-      Logger.error(err);
+      logger.error({ err }, 'Failed to create birthday');
       throw new BirthdayError(500, 'Failed to create birthday');
     }
   }
@@ -92,7 +92,7 @@ export class BirthdayService {
 
       return inserted.map(birthdayMapper.mapEncToDec);
     } catch (err: unknown) {
-      Logger.error(err);
+      logger.error({ err }, 'Failed to insert birthdays');
       throw new BirthdayError(500, 'Failed to insert birthdays');
     }
   }

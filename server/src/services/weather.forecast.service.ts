@@ -1,8 +1,8 @@
 import type { OpenWeatherAPI } from 'openweather-api-node';
-import Logger from '../utils/logger.js';
 import { weatherForecastMapper } from '../mappers/weather.forecast.mapper.js';
 import type { WeatherForecast } from '@shared/types/weather.forecast.js';
 import { LRUCache } from 'lru-cache';
+import logger from '../utils/pino.logger.js';
 
 export class WeatherForecastService {
   private readonly client: OpenWeatherAPI;
@@ -46,7 +46,7 @@ export class WeatherForecastService {
 
       return mapped;
     } catch (e) {
-      Logger.error('Failed fetch current weather', e);
+      logger.error({ e }, 'Failed fetch current weather');
       return null;
     }
   }
@@ -70,7 +70,7 @@ export class WeatherForecastService {
 
       return mappedData;
     } catch (e) {
-      Logger.error('Failed fetch forecast', e);
+      logger.error({ e }, 'Failed fetch forecast');
       return [];
     }
   }

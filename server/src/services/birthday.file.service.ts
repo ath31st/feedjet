@@ -3,11 +3,11 @@ import type { BirthdayService } from './birthday.service.js';
 import type { Birthday, NewBirthday } from '@shared/types/birthdays.js';
 import { webReadableToNode } from '../utils/stream.js';
 import { BirthdayError } from '../errors/birthday.error.js';
-import Logger from '../utils/logger.js';
 import { parseOdtTable } from '../utils/odt.table.parser.js';
 import { parse, isValid } from 'date-fns';
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
+import logger from '../utils/pino.logger.js';
 
 export class BirthdayFileService extends FileStorageService {
   private readonly birthdayService: BirthdayService;
@@ -106,7 +106,7 @@ export class BirthdayFileService extends FileStorageService {
 
       return birthdays;
     } catch (err: unknown) {
-      Logger.error(err);
+      logger.error({ err }, 'Failed to upload or parse file');
       if (err instanceof BirthdayError) {
         throw err;
       }

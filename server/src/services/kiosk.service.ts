@@ -4,8 +4,8 @@ import type { FeedConfigService } from './feed.config.service.js';
 import type { UiConfigService } from './ui.config.service.js';
 import { kiosksTable } from '../db/schema.js';
 import { KioskError } from '../errors/kiosk.error.js';
-import Logger from '../utils/logger.js';
 import { eq, sql } from 'drizzle-orm';
+import logger from '../utils/pino.logger.js';
 
 export class KioskService {
   private readonly kioskLimit = 8;
@@ -43,7 +43,7 @@ export class KioskService {
         if (error instanceof KioskError) {
           throw error;
         }
-        Logger.error(error);
+        logger.error({ error }, 'Failed to create kiosk with configs');
         throw new KioskError(500, `Failed to create kiosk with configs`);
       }
     });
@@ -120,7 +120,7 @@ export class KioskService {
 
     if (!kiosk) {
       this.create({ name: 'Default', slug: 'default' });
-      Logger.log('Created default kiosk');
+      logger.info({ kiosk }, 'Created default kiosk');
     }
   }
 }

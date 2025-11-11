@@ -1,10 +1,10 @@
 import type Parser from 'rss-parser';
 import type { RawFeedItem } from '../types/feed.js';
 import type { FeedItem } from '@shared/types/feed.ts';
-import Logger from '../utils/logger.js';
 import { sortFeedItemsByDateDescending } from '../utils/feed.items.sorting.js';
 import type { RssFeed } from '@shared/types/rss.js';
 import { feedItemMapper } from '../mappers/feed.item.mapper.js';
+import logger from '../utils/pino.logger.js';
 
 export class RssParser {
   private readonly maxItems = Number(process.env.MAX_ITEMS) || 10;
@@ -31,7 +31,10 @@ export class RssParser {
       try {
         return await this.parse(rssFeed.url);
       } catch (error) {
-        Logger.error(`Failed to parse RSS feed: ${rssFeed.url}`, error);
+        logger.error(
+          { error, rssFeedId: rssFeed.id, url: rssFeed.url },
+          'Failed to parse RSS feed',
+        );
         return [];
       }
     });

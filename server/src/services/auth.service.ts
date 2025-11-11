@@ -3,8 +3,8 @@ import type { UserService } from './user.service.js';
 import bcrypt from 'bcrypt';
 import { userMapper } from '../mappers/user.mapper.js';
 import jwt, { type JwtPayload } from 'jsonwebtoken';
-import Logger from '../utils/logger.js';
 import { AuthError } from '../errors/auth.error.js';
+import logger from '../utils/pino.logger.js';
 
 export class AuthService {
   private readonly userService: UserService;
@@ -31,7 +31,7 @@ export class AuthService {
     try {
       return jwt.verify(token, this.jwtSecret) as JwtPayload;
     } catch (error) {
-      Logger.error('Invalid access token:', error);
+      logger.error({ error }, 'Invalid access token:');
       throw new AuthError('Invalid token');
     }
   };

@@ -9,8 +9,8 @@ import type {
 } from '@shared/types/user.js';
 import bcrypt from 'bcrypt';
 import { UserServiceError } from '../errors/user.error.js';
-import Logger from '../utils/logger.js';
 import { userMapper } from '../mappers/user.mapper.js';
+import logger from '../utils/pino.logger.js';
 
 export class UserService {
   private readonly saltRounds = 10;
@@ -51,7 +51,7 @@ export class UserService {
         throw new UserServiceError(409, 'User with same login already exists');
       }
 
-      Logger.error(err);
+      logger.error({ err, data }, 'Failed to create user');
       throw new UserServiceError(500, 'Failed to create user');
     }
   }
@@ -79,7 +79,7 @@ export class UserService {
         throw new UserServiceError(409, 'User with same login already exists');
       }
 
-      Logger.error(err);
+      logger.error({ err, data }, 'Failed to update user');
       throw new UserServiceError(500, 'Failed to create user');
     }
   }
@@ -97,7 +97,7 @@ export class UserService {
 
       return count;
     } catch (err) {
-      Logger.error(err);
+      logger.error({ err }, 'Failed to delete user');
       throw new UserServiceError(500, 'Failed to delete user');
     }
   }

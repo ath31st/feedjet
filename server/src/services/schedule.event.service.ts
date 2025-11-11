@@ -7,7 +7,7 @@ import type {
   UpdateScheduleEvent,
 } from '@shared/types/schedule.event.js';
 import { ScheduleEventError } from '../errors/schedule.event.error.js';
-import Logger from '../utils/logger.js';
+import logger from '../utils/pino.logger.js';
 
 export class ScheduleEventService {
   private readonly db: DbType;
@@ -30,7 +30,7 @@ export class ScheduleEventService {
 
       return event;
     } catch (err) {
-      Logger.error(err);
+      logger.error({ err }, 'Failed to fetch event by id');
       throw new ScheduleEventError(500, 'Failed to fetch event by id');
     }
   }
@@ -48,7 +48,7 @@ export class ScheduleEventService {
         )
         .all();
     } catch (err) {
-      Logger.error(err);
+      logger.error({ err }, 'Failed to fetch events by date range');
       throw new ScheduleEventError(500, 'Failed to fetch events by date range');
     }
   }
@@ -61,7 +61,7 @@ export class ScheduleEventService {
         .where(eq(scheduleEventsTable.date, date))
         .all();
     } catch (err) {
-      Logger.error(err);
+      logger.error({ err }, 'Failed to fetch events by date');
       throw new ScheduleEventError(500, 'Failed to fetch events by date');
     }
   }
@@ -70,7 +70,7 @@ export class ScheduleEventService {
     try {
       return this.db.insert(scheduleEventsTable).values(data).returning().get();
     } catch (err: unknown) {
-      Logger.error(err);
+      logger.error({ err, data }, 'Failed to create schedule event');
       throw new ScheduleEventError(500, 'Failed to create schedule event');
     }
   }
@@ -90,7 +90,7 @@ export class ScheduleEventService {
 
       return updatedEvent;
     } catch (err) {
-      Logger.error(err);
+      logger.error({ err, data }, 'Failed to update schedule event');
       throw new ScheduleEventError(500, 'Failed to update schedule event');
     }
   }
@@ -102,7 +102,7 @@ export class ScheduleEventService {
         .where(eq(scheduleEventsTable.id, id))
         .run().changes;
     } catch (err) {
-      Logger.error(err);
+      logger.error({ err }, 'Failed to delete schedule event');
       throw new ScheduleEventError(500, 'Failed to delete schedule event');
     }
   }

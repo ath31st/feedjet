@@ -6,7 +6,7 @@ import type {
   UpdateFeedConfig,
 } from '@shared/types/feed.config.js';
 import { FeedConfigServiceError } from '../errors/feed.config.error.js';
-import Logger from '../utils/logger.js';
+import logger from '../utils/pino.logger.js';
 
 export class FeedConfigService {
   private readonly db: DbType;
@@ -30,7 +30,7 @@ export class FeedConfigService {
 
       return defaultConfig;
     } catch (err) {
-      Logger.error(err);
+      logger.error({ err }, 'Failed to create default feed config');
       throw new FeedConfigServiceError(
         500,
         'Failed to create default feed config',
@@ -53,7 +53,7 @@ export class FeedConfigService {
 
       return updatedConfig;
     } catch (err) {
-      Logger.error(err);
+      logger.error({ err }, 'Failed to update feed config');
       throw new FeedConfigServiceError(500, 'Failed to update feed config');
     }
   }

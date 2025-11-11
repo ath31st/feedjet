@@ -1,5 +1,4 @@
 import { createExpressMiddleware } from '@trpc/server/adapters/express';
-import Logger from '../utils/logger.js';
 import { userRouter } from './routes/user.route.js';
 import { t } from '../container.js';
 import { rssRouter } from './routes/rss.route.js';
@@ -15,6 +14,7 @@ import { weatherForecastRouter } from './routes/weather.forecast.route.js';
 import { videoStorageRouter } from './routes/video.storage.route.js';
 import { kioskRouter } from './routes/kiosk.route.js';
 import { birthdayRouter } from './routes/birthday.route.js';
+import logger from '../utils/pino.logger.js';
 
 const appRouter = t.router({
   user: userRouter,
@@ -38,6 +38,6 @@ export const trpcMiddleware = createExpressMiddleware({
   router: appRouter,
   createContext,
   onError: ({ error }) => {
-    Logger.error('tRPC error:', error);
+    logger.error({ error }, 'TRPC error');
   },
 });

@@ -4,7 +4,7 @@ import type { DbType } from '../container.js';
 import type { UiConfig, UpdateUiConfig } from '@shared/types/ui.config.js';
 import { themes, widgetTypes } from '@shared/types/ui.config.js';
 import { UiConfigError } from '../errors/ui.config.error.js';
-import Logger from '../utils/logger.js';
+import logger from '../utils/pino.logger.js';
 
 export class UiConfigService {
   private readonly db: DbType;
@@ -26,7 +26,7 @@ export class UiConfigService {
         .returning()
         .get();
     } catch (err) {
-      Logger.error(err);
+      logger.error({ err }, 'Failed to create default ui config');
       throw new UiConfigError(500, 'Failed to create default ui config');
     }
   }
@@ -46,7 +46,7 @@ export class UiConfigService {
 
       return updatedConfig;
     } catch (err) {
-      Logger.error(err);
+      logger.error({ err, data }, 'Failed to update ui config');
       throw new UiConfigError(500, 'Failed to update ui config');
     }
   }
@@ -65,7 +65,7 @@ export class UiConfigService {
 
       return config;
     } catch (err) {
-      Logger.error(err);
+      logger.error({ err }, 'Failed to fetch ui config');
       throw new UiConfigError(500, 'Failed to fetch ui config');
     }
   }

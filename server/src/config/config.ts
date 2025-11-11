@@ -1,42 +1,42 @@
 import path from 'node:path';
 import fs from 'node:fs';
-import Logger from '../utils/logger.js';
+import logger from '../utils/pino.logger.js';
 
 export const dbPath = process.env.DB_FILE_NAME ?? '';
-Logger.info(`Database file: ${dbPath}`);
+logger.info({ dbPath }, 'Database file path');
 
 if (!dbPath || dbPath === '') {
-  Logger.error('Error: DB_FILE_NAME environment variable is not set');
+  logger.error('Error: DB_FILE_NAME environment variable is not set');
   process.exit(1);
 }
 
 const resolvedPath = path.resolve(dbPath);
 if (!fs.existsSync(resolvedPath)) {
-  Logger.error(`Error: Database file ${dbPath} does not exist`);
+  logger.error({ resolvedPath }, 'Database file does not exist');
   process.exit(1);
 }
 
 export const cacheDir = process.env.CACHE_DIR ?? './.image-cache';
 if (cacheDir) {
   fs.mkdirSync(cacheDir, { recursive: true });
-  Logger.info(`Image cache directory: ${cacheDir}`);
+  logger.info({ cacheDir }, 'Image cache directory created');
 }
 
 export const fileStorageDir = process.env.FILE_STORAGE_DIR ?? './file-storage';
 if (fileStorageDir) {
   fs.mkdirSync(fileStorageDir, { recursive: true });
-  Logger.info(`File storage directory: ${fileStorageDir}`);
+  logger.info({ fileStorageDir }, 'File storage directory created');
 }
 
 export const openWeatherApiKey = process.env.OPEN_WEATHER_API_KEY;
 if (!openWeatherApiKey) {
-  Logger.error('Error: OPEN_WEATHER_API_KEY environment variable is not set');
+  logger.error('Error: OPEN_WEATHER_API_KEY environment variable is not set');
   process.exit(1);
 }
 
 const dataEncryptionKey = process.env.DATA_ENCRYPTION_KEY ?? '';
 if (!dataEncryptionKey) {
-  Logger.error('Error: DATA_ENCRYPTION_KEY environment variable is not set');
+  logger.error('Error: DATA_ENCRYPTION_KEY environment variable is not set');
   process.exit(1);
 }
 
@@ -55,11 +55,11 @@ try {
     );
   }
 } catch (err: unknown) {
-  Logger.error(`Error parsing DATA_ENCRYPTION_KEY: ${(err as Error).message}`);
+  logger.error({ err }, 'Error parsing DATA_ENCRYPTION_KEY');
   process.exit(1);
 }
 
-Logger.info('Data encryption key loaded successfully');
+logger.info('Data encryption key loaded successfully');
 
 export const cryptoConfig = {
   ALGO: 'aes-256-gcm' as const,
