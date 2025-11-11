@@ -100,13 +100,31 @@ export class BirthdayFileService extends FileStorageService {
       await this.uploadFile(file);
       const filename = file.name;
       const parsed = await this.parseUploadedFile(filename, dateFormat);
+
+      logger.debug(
+        { fileName: filename, parsedCount: parsed.length },
+        'Parsed birthdays from file',
+      );
+
       const birthdays = this.birthdayService.purgeAndInsert(parsed);
 
+      logger.info(
+        { fileName: filename, inserted: birthdays.length },
+        'Birthdays inserted successfully',
+      );
+
       await this.remove(filename);
+      logger.debug(
+        { fileName: filename },
+        'Temporary file removed after processing',
+      );
 
       return birthdays;
     } catch (err: unknown) {
-      logger.error({ err }, 'Failed to upload or parse file');
+      logger.error(
+        { err, fileName: file.name },
+        'Failed to upload or parse file',
+      );
       if (err instanceof BirthdayError) {
         throw err;
       }

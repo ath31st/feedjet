@@ -17,21 +17,41 @@ export class AuthService {
 
   login(login: string, password: string): { token: string; user: User } | null {
     const user = this.userService.findByLogin(login);
-    if (!user || !this.comparePassword(password, user.password)) {
+
+    if (!user) {
+      logger.warn({ login }, 'Login attempt with unknown user');
+      return null;
+    }
+
+    if (!this.comparePassword(password, user.password)) {
+      logger.warn(
+        { login, userId: user.id },
+        'Login attempt failed: invalid password',
+      );
       return null;
     }
 
     const dto = userMapper.toDTO(user);
     const token = this.generateToken(dto);
 
+    logger.info({ login, userId: user.id }, 'User logged in successfully');
+
     return { token, user: dto };
   }
 
   validateAccessToken = (token: string): JwtPayload => {
     try {
-      return jwt.verify(token, this.jwtSecret) as JwtPayload;
+      const payload = jwt.verify(token, this.jwtSecret) as JwtPayload;
+      logger.debug(
+        { userId: payload.userId },
+        'Access token validated successfully',
+      );
+      return payload;
     } catch (error) {
-      logger.error({ error }, 'Invalid access token:');
+      logger.error(
+        { error, token: `${token.slice(0, 8)}...` },
+        'Invalid access token',
+      );
       throw new AuthError('Invalid token');
     }
   };

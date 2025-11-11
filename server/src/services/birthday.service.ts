@@ -19,6 +19,8 @@ export class BirthdayService {
   }
 
   create(data: NewBirthday): Birthday {
+    logger.debug({ data }, 'Creating birthday entry');
+
     try {
       const inserted = this.db
         .insert(birthdaysTable)
@@ -30,9 +32,11 @@ export class BirthdayService {
         .returning()
         .get() as unknown as BirthdayEncrypted;
 
-      return birthdayMapper.mapEncToDec(inserted);
+      const result = birthdayMapper.mapEncToDec(inserted);
+      logger.info({ birthday: result }, 'Birthday created successfully');
+      return result;
     } catch (err: unknown) {
-      logger.error({ err }, 'Failed to create birthday');
+      logger.error({ err, data }, 'Failed to create birthday');
       throw new BirthdayError(500, 'Failed to create birthday');
     }
   }
@@ -75,8 +79,11 @@ export class BirthdayService {
   }
 
   purgeAndInsert(data: NewBirthday[]): Birthday[] {
+    logger.info({ count: data.length }, 'Purging and inserting birthdays');
+
     try {
-      this.purge();
+      const deleted = this.purge();
+      logger.debug({ deleted }, 'Purged old birthdays');
 
       const inserted = data.map((b) => {
         return this.db
@@ -90,16 +97,31 @@ export class BirthdayService {
           .get() as unknown as BirthdayEncrypted;
       });
 
-      return inserted.map(birthdayMapper.mapEncToDec);
+      const result = inserted.map(birthdayMapper.mapEncToDec);
+      logger.info(
+        { insertedCount: result.length },
+        'Birthdays inserted successfully',
+      );
+      return result;
     } catch (err: unknown) {
-      logger.error({ err }, 'Failed to insert birthdays');
+      logger.error(
+        { err, dataCount: data.length },
+        'Failed to insert birthdays',
+      );
       throw new BirthdayError(500, 'Failed to insert birthdays');
     }
   }
 
   delete(id: number): number {
-    return this.db.delete(birthdaysTable).where(eq(birthdaysTable.id, id)).run()
-      .changes;
+    logger.debug({ id }, 'Deleting birthday entry');
+
+    const changes = this.db
+      .delete(birthdaysTable)
+      .where(eq(birthdaysTable.id, id))
+      .run().changes;
+
+    logger.info({ id, deleted: changes }, 'Birthday deleted');
+    return changes;
   }
 
   birthdayComparator(a: Birthday, b: Birthday): number {
