@@ -24,6 +24,8 @@ export class KioskService {
   }
 
   create(data: NewKiosk): Kiosk {
+    logger.debug({ data }, 'Creating kiosk with configs');
+
     return this.db.transaction(() => {
       this.checkKiosksLimit();
       this.validateUniqueConstraints(data);
@@ -38,12 +40,13 @@ export class KioskService {
         this.uiConfigService.createDefaultConfig(kiosk.id);
         this.feedConfigService.createDefaultConfig(kiosk.id);
 
+        logger.info({ kiosk }, 'Kiosk created with default configs');
         return kiosk;
       } catch (error: unknown) {
         if (error instanceof KioskError) {
           throw error;
         }
-        logger.error({ error }, 'Failed to create kiosk with configs');
+        logger.error({ error, data }, 'Failed to create kiosk with configs');
         throw new KioskError(500, `Failed to create kiosk with configs`);
       }
     });
@@ -65,6 +68,7 @@ export class KioskService {
       .get();
 
     if (existingByName) {
+      logger.warn({ name: data.name }, 'Kiosk name already exists');
       throw new KioskError(
         409,
         `Kiosk with name '${data.name}' already exists`,
@@ -78,6 +82,7 @@ export class KioskService {
       .get();
 
     if (existingBySlug) {
+      logger.warn({ slug: data.slug }, 'Kiosk slug already exists');
       throw new KioskError(
         409,
         `Kiosk with slug '${data.slug}' already exists`,
@@ -93,6 +98,7 @@ export class KioskService {
       .get();
 
     if (!kiosk) {
+      logger.warn({ slug }, 'Kiosk not found');
       throw new KioskError(404, 'Kiosk not found');
     }
 
@@ -105,10 +111,12 @@ export class KioskService {
 
   delete(kioskId: number): void {
     this.db.delete(kiosksTable).where(eq(kiosksTable.id, kioskId)).run();
+    logger.info({ kioskId }, 'Kiosk deleted');
   }
 
   deleteBySlug(slug: string): void {
     this.db.delete(kiosksTable).where(eq(kiosksTable.slug, slug)).run();
+    logger.info({ slug }, 'Kiosk deleted');
   }
 
   ensureDefaultKiosk(): void {
@@ -120,7 +128,6 @@ export class KioskService {
 
     if (!kiosk) {
       this.create({ name: 'Default', slug: 'default' });
-      logger.info({ kiosk }, 'Created default kiosk');
     }
   }
 }

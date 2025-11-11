@@ -9,6 +9,7 @@ import { eq } from 'drizzle-orm';
 import { VideoStorageServiceError } from '../errors/video.error.js';
 import { webReadableToNode } from '../utils/stream.js';
 import { promises as fs } from 'node:fs';
+import logger from '../utils/pino.logger.js';
 
 const execFileAsync = promisify(execFile);
 
@@ -50,24 +51,32 @@ export class VideoStorageService extends FileStorageService {
     meta = await this.getVideoMetadata(filename);
     const savedFileName = this.saveVideoMetadata(meta);
 
+    logger.info({ savedPath, savedFileName }, 'Video uploaded');
     return { path: savedPath, savedFileName };
   }
 
   async update(fileName: string, isActive: boolean): Promise<boolean> {
+    logger.debug({ fileName, isActive }, 'Updating video');
+
     const filePath = this.getFilePath(fileName);
     const fileExists = await this.exists(filePath);
 
     if (!fileExists) {
       this.removeVideoMetadataByFileName(fileName);
+      logger.warn({ fileName }, 'File not found on disk');
       throw new VideoStorageServiceError(404, 'File not found on disk');
     }
 
-    return this.updateIsActive(fileName, isActive);
+    const result = this.updateIsActive(fileName, isActive);
+
+    logger.info({ fileName, isActive }, 'Video updated successfully');
+    return result;
   }
 
   async delete(fileName: string) {
     this.removeVideoMetadataByFileName(fileName);
     await super.remove(fileName);
+    logger.info({ fileName }, 'Video deleted successfully');
   }
 
   async getVideoMetadata(fileName: string): Promise<VideoMetadata> {
@@ -123,32 +132,61 @@ export class VideoStorageService extends FileStorageService {
   }
 
   saveVideoMetadata(meta: VideoMetadata): string {
-    const { fileName } = this.db
-      .insert(videosTable)
-      .values(meta)
-      .returning({ fileName: videosTable.fileName })
-      .get();
+    logger.debug({ meta }, 'Saving video metadata');
 
-    return fileName;
+    try {
+      const { fileName } = this.db
+        .insert(videosTable)
+        .values(meta)
+        .returning({ fileName: videosTable.fileName })
+        .get();
+
+      logger.info({ fileName }, 'Video metadata saved successfully');
+      return fileName;
+    } catch (error) {
+      logger.error({ error }, 'Error saving video metadata');
+      throw new VideoStorageServiceError(500, 'Error saving video metadata');
+    }
   }
 
   updateIsActive(fileName: string, isActive: boolean): boolean {
-    const meta = this.db
-      .update(videosTable)
-      .set({ isActive })
-      .where(eq(videosTable.fileName, fileName))
-      .returning()
-      .get();
+    logger.debug({ fileName, isActive }, 'Updating video metadata');
 
-    if (!meta) {
-      throw new VideoStorageServiceError(404, 'Video not found');
+    try {
+      const meta = this.db
+        .update(videosTable)
+        .set({ isActive })
+        .where(eq(videosTable.fileName, fileName))
+        .returning()
+        .get();
+
+      if (!meta) {
+        logger.warn({ fileName }, 'Video not found');
+        throw new VideoStorageServiceError(404, 'Video not found');
+      }
+
+      logger.info(
+        { fileName, isActive },
+        'Video metadata updated successfully',
+      );
+      return meta.isActive;
+    } catch (error) {
+      logger.error({ error }, 'Error updating video metadata');
+      throw new VideoStorageServiceError(500, 'Error updating video metadata');
     }
-
-    return meta.isActive;
   }
 
   removeVideoMetadataByFileName(fileName: string) {
-    this.db.delete(videosTable).where(eq(videosTable.fileName, fileName)).run();
+    try {
+      this.db
+        .delete(videosTable)
+        .where(eq(videosTable.fileName, fileName))
+        .run();
+      logger.info({ fileName }, 'Video metadata removed successfully');
+    } catch (error) {
+      logger.error({ error }, 'Error removing video metadata');
+      throw new VideoStorageServiceError(500, 'Error removing video metadata');
+    }
   }
 
   findVideoMetadataByFileName(fileName: string): VideoMetadata | undefined {

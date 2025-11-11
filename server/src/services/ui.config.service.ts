@@ -14,8 +14,10 @@ export class UiConfigService {
   }
 
   createDefaultConfig(kioskId: number): UiConfig {
+    logger.debug({ kioskId }, 'Creating default ui config');
+
     try {
-      return this.db
+      const defaultConfig = this.db
         .insert(uiConfigTable)
         .values({
           kioskId,
@@ -25,13 +27,18 @@ export class UiConfigService {
         })
         .returning()
         .get();
+
+      logger.info({ kioskId, defaultConfig }, 'Default ui config created');
+      return defaultConfig;
     } catch (err) {
-      logger.error({ err }, 'Failed to create default ui config');
+      logger.error({ err, kioskId }, 'Failed to create default ui config');
       throw new UiConfigError(500, 'Failed to create default ui config');
     }
   }
 
   update(kioskId: number, data: Partial<UpdateUiConfig>): UiConfig {
+    logger.debug({ kioskId, data }, 'Updating ui config');
+
     try {
       const updatedConfig = this.db
         .update(uiConfigTable)
@@ -41,9 +48,11 @@ export class UiConfigService {
         .get();
 
       if (!updatedConfig) {
+        logger.warn({ kioskId, data }, 'Ui config not found for update');
         throw new UiConfigError(404, 'Config not found');
       }
 
+      logger.info({ kioskId, updatedConfig }, 'Ui config updated successfully');
       return updatedConfig;
     } catch (err) {
       logger.error({ err, data }, 'Failed to update ui config');
@@ -60,6 +69,7 @@ export class UiConfigService {
         .get();
 
       if (!config) {
+        logger.warn({ kioskId }, 'Ui config not found');
         throw new UiConfigError(404, 'Config not found');
       }
 

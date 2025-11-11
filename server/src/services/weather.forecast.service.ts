@@ -33,6 +33,7 @@ export class WeatherForecastService {
 
   async getCurrent(lat: number, lon: number): Promise<WeatherForecast | null> {
     const key = this.getCacheKey(lat, lon);
+
     if (this.currentCache.has(key)) {
       return this.currentCache.get(key) ?? null;
     }
@@ -44,15 +45,17 @@ export class WeatherForecastService {
 
       this.currentCache.set(key, mapped);
 
+      logger.info({ mapped, lat, lon }, 'Fetched current weather');
       return mapped;
     } catch (e) {
-      logger.error({ e }, 'Failed fetch current weather');
+      logger.error({ e, lat, lon }, 'Failed fetch current weather');
       return null;
     }
   }
 
   async getDailyForecast(lat: number, lon: number): Promise<WeatherForecast[]> {
     const key = this.getCacheKey(lat, lon);
+
     if (this.dailyCache.has(key)) {
       return this.dailyCache.get(key) ?? [];
     }
@@ -68,9 +71,10 @@ export class WeatherForecastService {
 
       this.dailyCache.set(key, mappedData);
 
+      logger.info({ mappedData, lat, lon }, 'Fetched forecast');
       return mappedData;
     } catch (e) {
-      logger.error({ e }, 'Failed fetch forecast');
+      logger.error({ e, lat, lon }, 'Failed fetch forecast');
       return [];
     }
   }

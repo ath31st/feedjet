@@ -4,6 +4,7 @@ import { promises as fs } from 'node:fs';
 import sharp from 'sharp';
 import { FileStorageError } from '../errors/file.storage.error.js';
 import type { ImageMetadata } from '@shared/types/image.js';
+import logger from '../utils/pino.logger.js';
 
 export class ImageStorageService extends FileStorageService {
   private readonly imageDir = 'images';
@@ -55,6 +56,7 @@ export class ImageStorageService extends FileStorageService {
   async getImageMetadata(fileName: string): Promise<ImageMetadata> {
     const filePath = this.getFilePath(fileName);
     if (!(await this.exists(filePath))) {
+      logger.error({ fileName }, 'File not found');
       throw new FileStorageError(404, 'File not found');
     }
 

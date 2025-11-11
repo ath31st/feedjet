@@ -16,11 +16,17 @@ export class RssParser {
 
   async parse(url: string): Promise<FeedItem[]> {
     const feed = await this.parser.parseURL(url);
-    if (!feed.items) return [];
+    if (!feed.items) {
+      logger.warn({ url }, 'Feed has no items');
+      return [];
+    }
 
-    return feed.items
+    const items = feed.items
       .map((item) => feedItemMapper.mapToFeedItem(item as RawFeedItem))
       .filter((item) => item != null);
+
+    logger.debug({ url, count: items.length }, 'Parsed feed successfully');
+    return items;
   }
 
   async parseLatestFeedIitems(
@@ -41,6 +47,10 @@ export class RssParser {
 
     const itemsArrays = await Promise.all(promises);
     const feedItems: FeedItem[] = itemsArrays.flat();
+    logger.info(
+      { totalFeeds: rssFeeds.length, totalItems: feedItems.length },
+      'Aggregated feed items',
+    );
 
     const sortedItems = sortFeedItemsByDateDescending(feedItems);
     return sortedItems.slice(0, limit || this.maxItems);

@@ -2,6 +2,7 @@ import sharp from 'sharp';
 import axios from 'axios';
 import fs from 'node:fs/promises';
 import { createHash } from 'node:crypto';
+import logger from '../utils/pino.logger.js';
 
 export class ImageCacheService {
   private cacheDir: string;
@@ -29,6 +30,7 @@ export class ImageCacheService {
     const key = `${url}|${width}`;
     const existing = this.processingMap.get(key);
     if (existing) {
+      logger.trace({ url, width }, 'Image processing already in progress');
       return existing;
     }
 
@@ -45,21 +47,32 @@ export class ImageCacheService {
 
     try {
       const buf = await fs.readFile(cachePath);
+      logger.debug({ cachePath }, 'Cache hit for image');
       return { buffer: buf, fileName };
-    } catch {}
+    } catch {
+      logger.trace({ cachePath }, 'Cache miss, downloading image');
+    }
 
-    const resp = await axios.get<ArrayBuffer>(url, {
-      responseType: 'arraybuffer',
-      timeout: 5000,
-    });
-    const buffer = Buffer.from(resp.data);
+    try {
+      const resp = await axios.get<ArrayBuffer>(url, {
+        responseType: 'arraybuffer',
+        timeout: 5000,
+      });
+      logger.debug({ url, width }, 'Image downloaded successfully');
 
-    const webpBuffer = await sharp(buffer)
-      .resize({ width, withoutEnlargement: true })
-      .webp({ quality: 80 })
-      .toBuffer();
+      const buffer = Buffer.from(resp.data);
+      const webpBuffer = await sharp(buffer)
+        .resize({ width, withoutEnlargement: true })
+        .webp({ quality: 80 })
+        .toBuffer();
 
-    await fs.writeFile(cachePath, webpBuffer);
-    return { buffer: webpBuffer, fileName };
+      await fs.writeFile(cachePath, webpBuffer);
+      logger.info({ url, width, cachePath }, 'Image processed and cached');
+
+      return { buffer: webpBuffer, fileName };
+    } catch (err) {
+      logger.error({ err, url, width }, 'Failed to process image');
+      throw err;
+    }
   }
 }
