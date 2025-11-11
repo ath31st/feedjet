@@ -1,10 +1,13 @@
 import { join } from 'node:path';
 import pino from 'pino';
 
+const logLevel = process.env.LOG_LEVEL || 'info';
+
 const transport = pino.transport({
   targets: [
     {
       target: 'pino-pretty',
+      level: logLevel,
       options: {
         colorize: true,
         translateTime: 'yyyy-mm-dd HH:MM:ss',
@@ -13,6 +16,7 @@ const transport = pino.transport({
     },
     {
       target: 'pino-roll',
+      level: logLevel,
       options: {
         file: join('logs', 'app.log'),
         frequency: 'daily',
@@ -25,7 +29,7 @@ const transport = pino.transport({
 
 const logger = pino(
   {
-    level: process.env.LOG_LEVEL || 'info',
+    level: logLevel,
     base: undefined,
     timestamp: pino.stdTimeFunctions.isoTime,
   },
