@@ -4,12 +4,13 @@ import bcrypt from 'bcrypt';
 import { userMapper } from '../mappers/user.mapper.js';
 import jwt, { type JwtPayload } from 'jsonwebtoken';
 import { AuthError } from '../errors/auth.error.js';
-import logger from '../utils/pino.logger.js';
+import { createServiceLogger } from '../utils/pino.logger.js';
 
 export class AuthService {
   private readonly userService: UserService;
   private readonly jwtSecret = process.env.JWT_SECRET || 'secret';
   private readonly jwtExpiresIn = process.env.JWT_EXPIRES_IN || '1d';
+  private readonly logger = createServiceLogger('authService');
 
   constructor(userService: UserService) {
     this.userService = userService;
@@ -19,13 +20,16 @@ export class AuthService {
     const user = this.userService.findByLogin(login);
 
     if (!user) {
-      logger.warn({ login }, 'Login attempt with unknown user');
+      this.logger.warn(
+        { login, fn: 'login' },
+        'Login attempt with unknown user',
+      );
       return null;
     }
 
     if (!this.comparePassword(password, user.password)) {
-      logger.warn(
-        { login, userId: user.id },
+      this.logger.warn(
+        { login, userId: user.id, fn: 'login' },
         'Login attempt failed: invalid password',
       );
       return null;
@@ -34,7 +38,10 @@ export class AuthService {
     const dto = userMapper.toDTO(user);
     const token = this.generateToken(dto);
 
-    logger.info({ login, userId: user.id }, 'User logged in successfully');
+    this.logger.info(
+      { login, userId: user.id, fn: 'login' },
+      'User logged in successfully',
+    );
 
     return { token, user: dto };
   }
@@ -42,13 +49,13 @@ export class AuthService {
   validateAccessToken = (token: string): JwtPayload => {
     try {
       const payload = jwt.verify(token, this.jwtSecret) as JwtPayload;
-      logger.debug(
-        { userId: payload.userId },
+      this.logger.debug(
+        { userId: payload.userId, fn: 'validateAccessToken' },
         'Access token validated successfully',
       );
       return payload;
     } catch (error) {
-      logger.error(
+      this.logger.error(
         { error, token: `${token.slice(0, 8)}...` },
         'Invalid access token',
       );

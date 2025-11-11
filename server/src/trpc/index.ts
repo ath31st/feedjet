@@ -14,7 +14,9 @@ import { weatherForecastRouter } from './routes/weather.forecast.route.js';
 import { videoStorageRouter } from './routes/video.storage.route.js';
 import { kioskRouter } from './routes/kiosk.route.js';
 import { birthdayRouter } from './routes/birthday.route.js';
-import logger from '../utils/pino.logger.js';
+import { createServiceLogger } from '../utils/pino.logger.js';
+
+const logger = createServiceLogger('trpc');
 
 const appRouter = t.router({
   user: userRouter,
@@ -38,6 +40,6 @@ export const trpcMiddleware = createExpressMiddleware({
   router: appRouter,
   createContext,
   onError: ({ error }) => {
-    logger.error({ error }, 'TRPC error');
+    logger.error({ error, fn: 'createExpressMiddleware' }, 'TRPC error');
   },
 });

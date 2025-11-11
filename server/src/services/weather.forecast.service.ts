@@ -2,10 +2,11 @@ import type { OpenWeatherAPI } from 'openweather-api-node';
 import { weatherForecastMapper } from '../mappers/weather.forecast.mapper.js';
 import type { WeatherForecast } from '@shared/types/weather.forecast.js';
 import { LRUCache } from 'lru-cache';
-import logger from '../utils/pino.logger.js';
+import { createServiceLogger } from '../utils/pino.logger.js';
 
 export class WeatherForecastService {
   private readonly client: OpenWeatherAPI;
+  private readonly logger = createServiceLogger('weatherForecastService');
   private readonly limit = 8;
   private readonly currentCacheTtl = 5 * 60 * 1000;
   private readonly dailyCacheTtl = 30 * 60 * 1000;
@@ -45,10 +46,16 @@ export class WeatherForecastService {
 
       this.currentCache.set(key, mapped);
 
-      logger.info({ mapped, lat, lon }, 'Fetched current weather');
+      this.logger.info(
+        { mapped, lat, lon, fn: 'getCurrent' },
+        'Fetched current weather',
+      );
       return mapped;
     } catch (e) {
-      logger.error({ e, lat, lon }, 'Failed fetch current weather');
+      this.logger.error(
+        { e, lat, lon, fn: 'getCurrent' },
+        'Failed fetch current weather',
+      );
       return null;
     }
   }
@@ -71,10 +78,16 @@ export class WeatherForecastService {
 
       this.dailyCache.set(key, mappedData);
 
-      logger.info({ mappedData, lat, lon }, 'Fetched forecast');
+      this.logger.info(
+        { mappedData, lat, lon, fn: 'getDailyForecast' },
+        'Fetched forecast',
+      );
       return mappedData;
     } catch (e) {
-      logger.error({ e, lat, lon }, 'Failed fetch forecast');
+      this.logger.error(
+        { e, lat, lon, fn: 'getDailyForecast' },
+        'Failed fetch forecast',
+      );
       return [];
     }
   }

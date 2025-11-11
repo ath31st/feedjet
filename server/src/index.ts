@@ -16,7 +16,9 @@ import {
   uiConfigSseHandler,
   videoSseHandler,
 } from './sse/sse.handlers.js';
-import logger from './utils/pino.logger.js';
+import { createServiceLogger } from './utils/pino.logger.js';
+
+const logger = createServiceLogger('main');
 
 const app = express();
 const port = process.env.PORT || 3000;

@@ -3,10 +3,11 @@ import { rssFeedsTable } from '../db/schema.js';
 import { eq } from 'drizzle-orm';
 import type { NewRssFeed, RssFeed, UpdateRssFeed } from '@shared/types/rss.js';
 import { RssServiceError } from '../errors/rss.error.js';
-import logger from '../utils/pino.logger.js';
+import { createServiceLogger } from '../utils/pino.logger.js';
 
 export class RssService {
   private readonly db: DbType;
+  private readonly logger = createServiceLogger('rssService');
 
   constructor(db: DbType) {
     this.db = db;
@@ -32,7 +33,7 @@ export class RssService {
       .get();
 
     if (!rss) {
-      logger.warn({ id }, 'RSS feed not found');
+      this.logger.warn({ id, fn: 'findById' }, 'RSS feed not found');
       throw new RssServiceError(404, 'RSS feed not found');
     }
 
@@ -40,25 +41,34 @@ export class RssService {
   }
 
   create(data: NewRssFeed): RssFeed {
-    logger.debug({ data }, 'Creating RSS feed');
+    this.logger.debug({ data, fn: 'create' }, 'Creating RSS feed');
 
     try {
       const rss = this.db.insert(rssFeedsTable).values(data).returning().get();
-      logger.info({ id: rss.id, url: rss.url }, 'Created RSS feed');
+      this.logger.info(
+        { id: rss.id, url: rss.url, fn: 'create' },
+        'Created RSS feed',
+      );
       return rss;
     } catch (err: unknown) {
       if ((err as Error).message.includes('UNIQUE')) {
-        logger.warn({ err, data }, 'RSS feed already exists');
+        this.logger.warn(
+          { err, data, fn: 'create' },
+          'RSS feed already exists',
+        );
         throw new RssServiceError(409, 'RSS feed already exists');
       }
 
-      logger.error({ err, data }, 'Failed to create RSS feed');
+      this.logger.error(
+        { err, data, fn: 'create' },
+        'Failed to create RSS feed',
+      );
       throw new RssServiceError(500, 'Failed to create RSS feed');
     }
   }
 
   update(id: number, data: Partial<UpdateRssFeed>): RssFeed {
-    logger.debug({ id, data }, 'Updating RSS feed');
+    this.logger.debug({ id, data, fn: 'update' }, 'Updating RSS feed');
 
     try {
       const updatedRss = this.db
@@ -69,19 +79,28 @@ export class RssService {
         .get();
 
       if (!updatedRss) {
-        logger.warn({ id, data }, 'RSS feed not found for update');
+        this.logger.warn(
+          { id, data, fn: 'update' },
+          'RSS feed not found for update',
+        );
         throw new RssServiceError(404, 'RSS feed not found');
       }
 
-      logger.info({ id, url: updatedRss.url }, 'RSS feed updated successfully');
+      this.logger.info(
+        { id, url: updatedRss.url, fn: 'update' },
+        'RSS feed updated successfully',
+      );
       return updatedRss;
     } catch (err: unknown) {
       if ((err as Error).message.includes('UNIQUE')) {
-        logger.warn({ err, id, data }, 'Duplicate URL');
+        this.logger.warn({ err, id, data, fn: 'update' }, 'Duplicate URL');
         throw new RssServiceError(409, 'Duplicate URL');
       }
 
-      logger.error({ err, id, data }, 'Failed to update RSS feed');
+      this.logger.error(
+        { err, id, data, fn: 'update' },
+        'Failed to update RSS feed',
+      );
       throw new RssServiceError(500, 'Update failed');
     }
   }
@@ -93,9 +112,12 @@ export class RssService {
       .run().changes;
 
     if (changes > 0) {
-      logger.info({ id }, 'Deleted RSS feed');
+      this.logger.info({ id, fn: 'delete' }, 'Deleted RSS feed');
     } else {
-      logger.warn({ id }, 'Attempted to delete non-existing RSS feed');
+      this.logger.warn(
+        { id, fn: 'delete' },
+        'Attempted to delete non-existing RSS feed',
+      );
     }
 
     return changes;

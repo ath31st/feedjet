@@ -6,17 +6,21 @@ import type {
   UpdateFeedConfig,
 } from '@shared/types/feed.config.js';
 import { FeedConfigServiceError } from '../errors/feed.config.error.js';
-import logger from '../utils/pino.logger.js';
+import { createServiceLogger } from '../utils/pino.logger.js';
 
 export class FeedConfigService {
   private readonly db: DbType;
+  private readonly logger = createServiceLogger('feedConfigService');
 
   constructor(db: DbType) {
     this.db = db;
   }
 
   createDefaultConfig(kioskId: number): FeedConfig {
-    logger.debug({ kioskId }, 'Creating default feed config');
+    this.logger.debug(
+      { kioskId, fn: 'createDefaultConfig' },
+      'Creating default feed config',
+    );
 
     try {
       const defaultConfig = this.db
@@ -30,10 +34,16 @@ export class FeedConfigService {
         .returning()
         .get();
 
-      logger.info({ kioskId, defaultConfig }, 'Default feed config created');
+      this.logger.info(
+        { kioskId, defaultConfig, fn: 'createDefaultConfig' },
+        'Default feed config created',
+      );
       return defaultConfig;
     } catch (err) {
-      logger.error({ err, kioskId }, 'Failed to create default feed config');
+      this.logger.error(
+        { err, kioskId, fn: 'createDefaultConfig' },
+        'Failed to create default feed config',
+      );
       throw new FeedConfigServiceError(
         500,
         'Failed to create default feed config',
@@ -42,7 +52,7 @@ export class FeedConfigService {
   }
 
   update(kioskId: number, data: Partial<UpdateFeedConfig>): FeedConfig {
-    logger.debug({ kioskId, data }, 'Updating feed config');
+    this.logger.debug({ kioskId, data, fn: 'update' }, 'Updating feed config');
 
     try {
       const updatedConfig = this.db
@@ -53,17 +63,23 @@ export class FeedConfigService {
         .get();
 
       if (!updatedConfig) {
-        logger.warn({ kioskId, data }, 'Feed config not found for update');
+        this.logger.warn(
+          { kioskId, data, fn: 'update' },
+          'Feed config not found for update',
+        );
         throw new FeedConfigServiceError(404, 'Config not found');
       }
 
-      logger.info(
-        { kioskId, updatedConfig },
+      this.logger.info(
+        { kioskId, updatedConfig, fn: 'update' },
         'Feed config updated successfully',
       );
       return updatedConfig;
     } catch (err) {
-      logger.error({ err, kioskId, data }, 'Failed to update feed config');
+      this.logger.error(
+        { err, kioskId, data, fn: 'update' },
+        'Failed to update feed config',
+      );
       throw new FeedConfigServiceError(500, 'Failed to update feed config');
     }
   }
@@ -76,7 +92,7 @@ export class FeedConfigService {
       .get();
 
     if (!config) {
-      logger.warn({ kioskId }, 'Feed config not found');
+      this.logger.warn({ kioskId, fn: 'getConfig' }, 'Feed config not found');
       throw new FeedConfigServiceError(404, 'Config not found');
     }
 

@@ -1,6 +1,8 @@
 import path from 'node:path';
 import fs from 'node:fs';
-import logger from '../utils/pino.logger.js';
+import { createServiceLogger } from '../utils/pino.logger.js';
+
+const logger = createServiceLogger('config');
 
 export const dbPath = process.env.DB_FILE_NAME ?? '';
 logger.info({ dbPath }, 'Database file path');

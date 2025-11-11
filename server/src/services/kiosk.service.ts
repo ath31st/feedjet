@@ -5,13 +5,14 @@ import type { UiConfigService } from './ui.config.service.js';
 import { kiosksTable } from '../db/schema.js';
 import { KioskError } from '../errors/kiosk.error.js';
 import { eq, sql } from 'drizzle-orm';
-import logger from '../utils/pino.logger.js';
+import { createServiceLogger } from '../utils/pino.logger.js';
 
 export class KioskService {
   private readonly kioskLimit = 8;
   private readonly db: DbType;
   private readonly uiConfigService: UiConfigService;
   private readonly feedConfigService: FeedConfigService;
+  private readonly logger = createServiceLogger('kioskService');
 
   constructor(
     db: DbType,
@@ -24,7 +25,7 @@ export class KioskService {
   }
 
   create(data: NewKiosk): Kiosk {
-    logger.debug({ data }, 'Creating kiosk with configs');
+    this.logger.debug({ data, fn: 'create' }, 'Creating kiosk with configs');
 
     return this.db.transaction(() => {
       this.checkKiosksLimit();
@@ -40,13 +41,19 @@ export class KioskService {
         this.uiConfigService.createDefaultConfig(kiosk.id);
         this.feedConfigService.createDefaultConfig(kiosk.id);
 
-        logger.info({ kiosk }, 'Kiosk created with default configs');
+        this.logger.info(
+          { kiosk, fn: 'create' },
+          'Kiosk created with default configs',
+        );
         return kiosk;
       } catch (error: unknown) {
         if (error instanceof KioskError) {
           throw error;
         }
-        logger.error({ error, data }, 'Failed to create kiosk with configs');
+        this.logger.error(
+          { error, data, fn: 'create' },
+          'Failed to create kiosk with configs',
+        );
         throw new KioskError(500, `Failed to create kiosk with configs`);
       }
     });
@@ -56,6 +63,10 @@ export class KioskService {
     const kiosksCount = this.getAll().length;
 
     if (kiosksCount >= this.kioskLimit) {
+      this.logger.warn(
+        { kiosksCount, fn: 'checkKiosksLimit' },
+        'Kiosks limit reached',
+      );
       throw new KioskError(400, 'Kiosks limit reached');
     }
   }
@@ -68,7 +79,10 @@ export class KioskService {
       .get();
 
     if (existingByName) {
-      logger.warn({ name: data.name }, 'Kiosk name already exists');
+      this.logger.warn(
+        { name: data.name, fn: 'validateUniqueConstraints' },
+        'Kiosk name already exists',
+      );
       throw new KioskError(
         409,
         `Kiosk with name '${data.name}' already exists`,
@@ -82,7 +96,10 @@ export class KioskService {
       .get();
 
     if (existingBySlug) {
-      logger.warn({ slug: data.slug }, 'Kiosk slug already exists');
+      this.logger.warn(
+        { slug: data.slug, fn: 'validateUniqueConstraints' },
+        'Kiosk slug already exists',
+      );
       throw new KioskError(
         409,
         `Kiosk with slug '${data.slug}' already exists`,
@@ -98,7 +115,7 @@ export class KioskService {
       .get();
 
     if (!kiosk) {
-      logger.warn({ slug }, 'Kiosk not found');
+      this.logger.warn({ slug, fn: 'getBySlug' }, 'Kiosk not found');
       throw new KioskError(404, 'Kiosk not found');
     }
 
@@ -111,12 +128,12 @@ export class KioskService {
 
   delete(kioskId: number): void {
     this.db.delete(kiosksTable).where(eq(kiosksTable.id, kioskId)).run();
-    logger.info({ kioskId }, 'Kiosk deleted');
+    this.logger.info({ kioskId, fn: 'delete' }, 'Kiosk deleted');
   }
 
   deleteBySlug(slug: string): void {
     this.db.delete(kiosksTable).where(eq(kiosksTable.slug, slug)).run();
-    logger.info({ slug }, 'Kiosk deleted');
+    this.logger.info({ slug, fn: 'deleteBySlug' }, 'Kiosk deleted');
   }
 
   ensureDefaultKiosk(): void {

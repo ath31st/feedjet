@@ -10,11 +10,12 @@ import type {
 import bcrypt from 'bcrypt';
 import { UserServiceError } from '../errors/user.error.js';
 import { userMapper } from '../mappers/user.mapper.js';
-import logger from '../utils/pino.logger.js';
+import { createServiceLogger } from '../utils/pino.logger.js';
 
 export class UserService {
   private readonly saltRounds = 10;
   private readonly db: DbType;
+  private readonly logger = createServiceLogger('userService');
 
   constructor(db: DbType) {
     this.db = db;
@@ -41,7 +42,7 @@ export class UserService {
   }
 
   create(data: NewUser): User {
-    logger.debug({ data }, 'Creating user');
+    this.logger.debug({ data, fn: 'create' }, 'Creating user');
 
     data.password = this.hashPassword(data.password);
 
@@ -49,21 +50,27 @@ export class UserService {
       const user = this.db.insert(usersTable).values(data).returning().get();
       const dto = userMapper.toDTO(user);
 
-      logger.info({ id: user.id, login: user.login }, 'Created user');
+      this.logger.info(
+        { id: user.id, login: user.login, fn: 'create' },
+        'Created user',
+      );
       return dto;
     } catch (err: unknown) {
       if ((err as Error).message.includes('UNIQUE')) {
-        logger.warn({ err, data }, 'User with same login already exists');
+        this.logger.warn(
+          { err, data, fn: 'create' },
+          'User with same login already exists',
+        );
         throw new UserServiceError(409, 'User with same login already exists');
       }
 
-      logger.error({ err, data }, 'Failed to create user');
+      this.logger.error({ err, data, fn: 'create' }, 'Failed to create user');
       throw new UserServiceError(500, 'Failed to create user');
     }
   }
 
   update(id: number, data: Partial<UserUpdate>): User {
-    logger.debug({ id, data }, 'Updating user');
+    this.logger.debug({ id, data, fn: 'update' }, 'Updating user');
 
     if (data.password) {
       data.password = this.hashPassword(data.password);
@@ -78,22 +85,28 @@ export class UserService {
         .get();
 
       if (!updatedUser) {
-        logger.warn({ id, data }, 'User not found for update');
+        this.logger.warn(
+          { id, data, fn: 'update' },
+          'User not found for update',
+        );
         throw new UserServiceError(404, 'User not found');
       }
 
-      logger.info(
-        { id, login: updatedUser.login },
+      this.logger.info(
+        { id, login: updatedUser.login, fn: 'update' },
         'User updated successfully',
       );
       return userMapper.toDTO(updatedUser);
     } catch (err: unknown) {
       if ((err as Error).message.includes('UNIQUE')) {
-        logger.warn({ err, data }, 'User with same login already exists');
+        this.logger.warn(
+          { err, data, fn: 'update' },
+          'User with same login already exists',
+        );
         throw new UserServiceError(409, 'User with same login already exists');
       }
 
-      logger.error({ err, data }, 'Failed to update user');
+      this.logger.error({ err, data, fn: 'update' }, 'Failed to update user');
       throw new UserServiceError(500, 'Failed to create user');
     }
   }
@@ -106,14 +119,17 @@ export class UserService {
         .run().changes;
 
       if (count === 0) {
-        logger.warn({ id }, 'Attempted to delete non-existing user');
+        this.logger.warn(
+          { id, fn: 'delete' },
+          'Attempted to delete non-existing user',
+        );
         throw new UserServiceError(404, 'User not found');
       }
 
-      logger.info({ id }, 'Deleted user');
+      this.logger.info({ id, fn: 'delete' }, 'Deleted user');
       return count;
     } catch (err) {
-      logger.error({ err }, 'Failed to delete user');
+      this.logger.error({ err, id, fn: 'delete' }, 'Failed to delete user');
       throw new UserServiceError(500, 'Failed to delete user');
     }
   }

@@ -7,12 +7,13 @@ import { parseOdtTable } from '../utils/odt.table.parser.js';
 import { parse, isValid } from 'date-fns';
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
-import logger from '../utils/pino.logger.js';
+import { createServiceLogger } from '../utils/pino.logger.js';
 
 export class BirthdayFileService extends FileStorageService {
   private readonly birthdayService: BirthdayService;
   private readonly backgroundsDir = 'backgrounds';
   private readonly defaultDateFormat = 'dd.MM.yyyy';
+  private readonly logger = createServiceLogger('birthdayFileService');
 
   constructor(birthdayService: BirthdayService, baseDir: string) {
     super(baseDir);
@@ -89,6 +90,10 @@ export class BirthdayFileService extends FileStorageService {
     const parsed = parse(dateStr, dateFormat, new Date());
 
     if (Number.isNaN(parsed.getTime())) {
+      this.logger.warn(
+        { dateStr, dateFormat, fn: 'parseDate' },
+        'Invalid date',
+      );
       throw new BirthdayError(400, `Invalid date: ${dateStr}`);
     }
 
@@ -101,28 +106,28 @@ export class BirthdayFileService extends FileStorageService {
       const filename = file.name;
       const parsed = await this.parseUploadedFile(filename, dateFormat);
 
-      logger.debug(
-        { fileName: filename, parsedCount: parsed.length },
+      this.logger.debug(
+        { fileName: filename, parsedCount: parsed.length, fn: 'handleUpload' },
         'Parsed birthdays from file',
       );
 
       const birthdays = this.birthdayService.purgeAndInsert(parsed);
 
-      logger.info(
-        { fileName: filename, inserted: birthdays.length },
+      this.logger.info(
+        { fileName: filename, inserted: birthdays.length, fn: 'handleUpload' },
         'Birthdays inserted successfully',
       );
 
       await this.remove(filename);
-      logger.debug(
-        { fileName: filename },
+      this.logger.debug(
+        { fileName: filename, fn: 'handleUpload' },
         'Temporary file removed after processing',
       );
 
       return birthdays;
     } catch (err: unknown) {
-      logger.error(
-        { err, fileName: file.name },
+      this.logger.error(
+        { err, fileName: file.name, fn: 'handleUpload' },
         'Failed to upload or parse file',
       );
       if (err instanceof BirthdayError) {

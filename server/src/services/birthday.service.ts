@@ -9,17 +9,18 @@ import type {
 import { encrypt } from '../utils/crypto.js';
 import { BirthdayError } from '../errors/birthday.error.js';
 import { birthdayMapper } from '../mappers/birthday.mapper.js';
-import logger from '../utils/pino.logger.js';
+import { createServiceLogger } from '../utils/pino.logger.js';
 
 export class BirthdayService {
   private readonly db: DbType;
+  private readonly logger = createServiceLogger('birthdayService');
 
   constructor(db: DbType) {
     this.db = db;
   }
 
   create(data: NewBirthday): Birthday {
-    logger.debug({ data }, 'Creating birthday entry');
+    this.logger.debug({ data, fn: 'create' }, 'Creating birthday entry');
 
     try {
       const inserted = this.db
@@ -33,10 +34,16 @@ export class BirthdayService {
         .get() as unknown as BirthdayEncrypted;
 
       const result = birthdayMapper.mapEncToDec(inserted);
-      logger.info({ birthday: result }, 'Birthday created successfully');
+      this.logger.info(
+        { birthday: result, fn: 'create' },
+        'Birthday created successfully',
+      );
       return result;
     } catch (err: unknown) {
-      logger.error({ err, data }, 'Failed to create birthday');
+      this.logger.error(
+        { err, data, fn: 'create' },
+        'Failed to create birthday',
+      );
       throw new BirthdayError(500, 'Failed to create birthday');
     }
   }
@@ -79,11 +86,17 @@ export class BirthdayService {
   }
 
   purgeAndInsert(data: NewBirthday[]): Birthday[] {
-    logger.info({ count: data.length }, 'Purging and inserting birthdays');
+    this.logger.info(
+      { count: data.length, fn: 'purgeAndInsert' },
+      'Purging and inserting birthdays',
+    );
 
     try {
       const deleted = this.purge();
-      logger.debug({ deleted }, 'Purged old birthdays');
+      this.logger.debug(
+        { deleted, fn: 'purgeAndInsert' },
+        'Purged old birthdays',
+      );
 
       const inserted = data.map((b) => {
         return this.db
@@ -98,14 +111,14 @@ export class BirthdayService {
       });
 
       const result = inserted.map(birthdayMapper.mapEncToDec);
-      logger.info(
-        { insertedCount: result.length },
+      this.logger.info(
+        { insertedCount: result.length, fn: 'purgeAndInsert' },
         'Birthdays inserted successfully',
       );
       return result;
     } catch (err: unknown) {
-      logger.error(
-        { err, dataCount: data.length },
+      this.logger.error(
+        { err, dataCount: data.length, fn: 'purgeAndInsert' },
         'Failed to insert birthdays',
       );
       throw new BirthdayError(500, 'Failed to insert birthdays');
@@ -113,14 +126,17 @@ export class BirthdayService {
   }
 
   delete(id: number): number {
-    logger.debug({ id }, 'Deleting birthday entry');
+    this.logger.debug({ id, fn: 'delete' }, 'Deleting birthday entry');
 
     const changes = this.db
       .delete(birthdaysTable)
       .where(eq(birthdaysTable.id, id))
       .run().changes;
 
-    logger.info({ id, deleted: changes }, 'Birthday deleted');
+    this.logger.info(
+      { id, deleted: changes, fn: 'delete' },
+      'Birthday deleted',
+    );
     return changes;
   }
 

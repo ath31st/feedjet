@@ -2,7 +2,7 @@ import sharp from 'sharp';
 import axios from 'axios';
 import fs from 'node:fs/promises';
 import { createHash } from 'node:crypto';
-import logger from '../utils/pino.logger.js';
+import { createServiceLogger } from '../utils/pino.logger.js';
 
 export class ImageCacheService {
   private cacheDir: string;
@@ -10,6 +10,7 @@ export class ImageCacheService {
     string,
     Promise<{ buffer: Buffer; fileName: string }>
   >();
+  private readonly logger = createServiceLogger('imageCacheService');
 
   constructor(cacheDir: string) {
     this.cacheDir = cacheDir;
@@ -30,7 +31,10 @@ export class ImageCacheService {
     const key = `${url}|${width}`;
     const existing = this.processingMap.get(key);
     if (existing) {
-      logger.trace({ url, width }, 'Image processing already in progress');
+      this.logger.trace(
+        { url, width, fn: 'process' },
+        'Image processing already in progress',
+      );
       return existing;
     }
 
@@ -47,10 +51,16 @@ export class ImageCacheService {
 
     try {
       const buf = await fs.readFile(cachePath);
-      logger.debug({ cachePath }, 'Cache hit for image');
+      this.logger.debug(
+        { cachePath, fn: 'processInternal' },
+        'Cache hit for image',
+      );
       return { buffer: buf, fileName };
     } catch {
-      logger.trace({ cachePath }, 'Cache miss, downloading image');
+      this.logger.trace(
+        { cachePath, fn: 'processInternal' },
+        'Cache miss, downloading image',
+      );
     }
 
     try {
@@ -58,7 +68,10 @@ export class ImageCacheService {
         responseType: 'arraybuffer',
         timeout: 5000,
       });
-      logger.debug({ url, width }, 'Image downloaded successfully');
+      this.logger.debug(
+        { url, width, fn: 'processInternal' },
+        'Image downloaded successfully',
+      );
 
       const buffer = Buffer.from(resp.data);
       const webpBuffer = await sharp(buffer)
@@ -67,11 +80,17 @@ export class ImageCacheService {
         .toBuffer();
 
       await fs.writeFile(cachePath, webpBuffer);
-      logger.info({ url, width, cachePath }, 'Image processed and cached');
+      this.logger.info(
+        { url, width, cachePath, fn: 'processInternal' },
+        'Image processed and cached',
+      );
 
       return { buffer: webpBuffer, fileName };
     } catch (err) {
-      logger.error({ err, url, width }, 'Failed to process image');
+      this.logger.error(
+        { err, url, width, fn: 'processInternal' },
+        'Failed to process image',
+      );
       throw err;
     }
   }

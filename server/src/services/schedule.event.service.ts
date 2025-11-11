@@ -7,10 +7,11 @@ import type {
   UpdateScheduleEvent,
 } from '@shared/types/schedule.event.js';
 import { ScheduleEventError } from '../errors/schedule.event.error.js';
-import logger from '../utils/pino.logger.js';
+import { createServiceLogger } from '../utils/pino.logger.js';
 
 export class ScheduleEventService {
   private readonly db: DbType;
+  private readonly logger = createServiceLogger('scheduleEventService');
 
   constructor(db: DbType) {
     this.db = db;
@@ -25,13 +26,16 @@ export class ScheduleEventService {
         .get();
 
       if (!event) {
-        logger.warn({ id }, 'Event not found');
+        this.logger.warn({ id, fn: 'findById' }, 'Event not found');
         throw new ScheduleEventError(404, 'Event not found');
       }
 
       return event;
     } catch (err) {
-      logger.error({ err, id }, 'Failed to fetch event by id');
+      this.logger.error(
+        { err, id, fn: 'findById' },
+        'Failed to fetch event by id',
+      );
       throw new ScheduleEventError(500, 'Failed to fetch event by id');
     }
   }
@@ -49,8 +53,8 @@ export class ScheduleEventService {
         )
         .all();
     } catch (err) {
-      logger.error(
-        { err, startDate, endDate },
+      this.logger.error(
+        { err, startDate, endDate, fn: 'findByDateRange' },
         'Failed to fetch events by date range',
       );
       throw new ScheduleEventError(500, 'Failed to fetch events by date range');
@@ -65,13 +69,16 @@ export class ScheduleEventService {
         .where(eq(scheduleEventsTable.date, date))
         .all();
     } catch (err) {
-      logger.error({ err, date }, 'Failed to fetch events by date');
+      this.logger.error(
+        { err, date, fn: 'findByDate' },
+        'Failed to fetch events by date',
+      );
       throw new ScheduleEventError(500, 'Failed to fetch events by date');
     }
   }
 
   create(data: NewScheduleEvent): ScheduleEvent {
-    logger.debug({ data }, 'Creating schedule event');
+    this.logger.debug({ data, fn: 'create' }, 'Creating schedule event');
 
     try {
       const event = this.db
@@ -80,16 +87,22 @@ export class ScheduleEventService {
         .returning()
         .get();
 
-      logger.info({ id: event.id, date: event.date }, 'Created schedule event');
+      this.logger.info(
+        { id: event.id, date: event.date, fn: 'create' },
+        'Created schedule event',
+      );
       return event;
     } catch (err: unknown) {
-      logger.error({ err, data }, 'Failed to create schedule event');
+      this.logger.error(
+        { err, data, fn: 'create' },
+        'Failed to create schedule event',
+      );
       throw new ScheduleEventError(500, 'Failed to create schedule event');
     }
   }
 
   update(id: number, data: Partial<UpdateScheduleEvent>): ScheduleEvent {
-    logger.debug({ id, data }, 'Updating schedule event');
+    this.logger.debug({ id, data, fn: 'update' }, 'Updating schedule event');
 
     try {
       const updatedEvent = this.db
@@ -100,17 +113,23 @@ export class ScheduleEventService {
         .get();
 
       if (!updatedEvent) {
-        logger.warn({ id, data }, 'Event not found for update');
+        this.logger.warn(
+          { id, data, fn: 'update' },
+          'Event not found for update',
+        );
         throw new ScheduleEventError(404, 'Event not found');
       }
 
-      logger.info(
-        { id, date: updatedEvent.date },
+      this.logger.info(
+        { id, date: updatedEvent.date, fn: 'update' },
         'Event updated successfully',
       );
       return updatedEvent;
     } catch (err) {
-      logger.error({ err, data }, 'Failed to update schedule event');
+      this.logger.error(
+        { err, data, fn: 'update' },
+        'Failed to update schedule event',
+      );
       throw new ScheduleEventError(500, 'Failed to update schedule event');
     }
   }
@@ -123,14 +142,20 @@ export class ScheduleEventService {
         .run().changes;
 
       if (changes > 0) {
-        logger.info({ id }, 'Deleted schedule event');
+        this.logger.info({ id, fn: 'delete' }, 'Deleted schedule event');
       } else {
-        logger.warn({ id }, 'Attempted to delete non-existing schedule event');
+        this.logger.warn(
+          { id, fn: 'delete' },
+          'Attempted to delete non-existing schedule event',
+        );
       }
 
       return changes;
     } catch (err) {
-      logger.error({ err, id }, 'Failed to delete schedule event');
+      this.logger.error(
+        { err, id, fn: 'delete' },
+        'Failed to delete schedule event',
+      );
       throw new ScheduleEventError(500, 'Failed to delete schedule event');
     }
   }

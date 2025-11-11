@@ -4,7 +4,7 @@ import { promises as fs } from 'node:fs';
 import sharp from 'sharp';
 import { FileStorageError } from '../errors/file.storage.error.js';
 import type { ImageMetadata } from '@shared/types/image.js';
-import logger from '../utils/pino.logger.js';
+import { createServiceLogger } from '../utils/pino.logger.js';
 
 export class ImageStorageService extends FileStorageService {
   private readonly imageDir = 'images';
@@ -15,6 +15,7 @@ export class ImageStorageService extends FileStorageService {
     '.webp',
     '.gif',
   ];
+  private readonly logger = createServiceLogger('imageStorageService');
 
   constructor(baseDir: string) {
     super(baseDir);
@@ -41,6 +42,10 @@ export class ImageStorageService extends FileStorageService {
 
   async saveImageBuffer(buffer: Buffer, fileName: string) {
     if (!this.isImageFile(fileName)) {
+      this.logger.error(
+        { fileName, fn: 'saveImageBuffer' },
+        'Unsupported file type',
+      );
       throw new FileStorageError(400, 'Unsupported file type');
     }
     return this.saveBuffer(buffer, fileName);
@@ -48,6 +53,10 @@ export class ImageStorageService extends FileStorageService {
 
   async saveImageStream(stream: NodeJS.ReadableStream, fileName: string) {
     if (!this.isImageFile(fileName)) {
+      this.logger.error(
+        { fileName, fn: 'saveImageStream' },
+        'Unsupported file type',
+      );
       throw new FileStorageError(400, 'Unsupported file type');
     }
     return this.saveStream(stream, fileName);
@@ -56,7 +65,7 @@ export class ImageStorageService extends FileStorageService {
   async getImageMetadata(fileName: string): Promise<ImageMetadata> {
     const filePath = this.getFilePath(fileName);
     if (!(await this.exists(filePath))) {
-      logger.error({ fileName }, 'File not found');
+      this.logger.error({ fileName, fn: 'getImageMetadata' }, 'File not found');
       throw new FileStorageError(404, 'File not found');
     }
 

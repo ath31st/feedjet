@@ -36,4 +36,6 @@ const logger = pino(
   transport,
 );
 
-export default logger;
+export function createServiceLogger(serviceName: string) {
+  return logger.child({ source: serviceName });
+}

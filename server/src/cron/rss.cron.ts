@@ -5,24 +5,32 @@ import {
   rssService,
   feedConfigService,
 } from '../container.js';
-import logger from '../utils/pino.logger.js';
+import { createServiceLogger } from '../utils/pino.logger.js';
+
+const logger = createServiceLogger('rssCron');
 
 export const startRssCronJob = () => {
   const cronSchedule = process.env.CRON_SCHEDULE;
 
   if (!cronSchedule) {
-    logger.info('CRON_SCHEDULE is not set. Scheduled task will not run.');
+    logger.info(
+      { fn: 'startRssCronJob' },
+      'CRON_SCHEDULE is not set. Scheduled task will not run.',
+    );
     return;
   }
 
   cron.schedule(cronSchedule, async () => {
-    logger.info('Running scheduled task to fetch rss feeds.');
+    logger.info(
+      { fn: 'startRssCronJob' },
+      'Running scheduled task to fetch rss feeds.',
+    );
 
     const rssFeeds = rssService.getActive();
 
     if (rssFeeds.length === 0) {
       logger.info(
-        { rssFeedsCount: rssFeeds.length },
+        { rssFeedsCount: rssFeeds.length, fn: 'startRssCronJob' },
         'No active RSS feeds found',
       );
       return;
@@ -30,18 +38,28 @@ export const startRssCronJob = () => {
 
     const limit = feedConfigService.findMaxCarouselSize();
     if (!limit) {
-      logger.warn('Feed config (carouselSize) not found, skipping RSS fetch.');
+      logger.warn(
+        { fn: 'startRssCronJob' },
+        'Feed config (carouselSize) not found, skipping RSS fetch.',
+      );
       return;
     }
 
     const latestItems = await rssParser.parseLatestFeedIitems(rssFeeds, limit);
 
     if (latestItems.length === 0) {
-      logger.info('No feed items fetched.');
+      logger.info({ fn: 'startRssCronJob' }, 'No feed items fetched.');
       return;
     }
 
-    logger.info(`Sending ${latestItems.length} latest items via eventBus.`);
+    logger.info(
+      {
+        rssFeedsCount: rssFeeds.length,
+        feedItemsCount: latestItems.length,
+        fn: 'startRssCronJob',
+      },
+      'Sended feed items to event bus',
+    );
     eventBus.emit('feed', latestItems);
   });
 };
