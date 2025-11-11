@@ -47,5 +47,8 @@ startRssCronJob();
 startImageCacheCleanupJob();
 
 app.listen(port, () => {
-  logger.info(`🚀 Server is running at http://localhost:${port}`);
+  logger.info(
+    { fn: 'main', port },
+    `🚀 Server is running at http://localhost:${port}`,
+  );
 });
