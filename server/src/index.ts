@@ -16,7 +16,6 @@ import {
   uiConfigSseHandler,
   videoSseHandler,
 } from './sse/sse.handlers.js';
-import { pinoHttp } from 'pino-http';
 import logger from './utils/pino.logger.js';
 
 const app = express();
@@ -36,7 +35,6 @@ app.use('/backgrounds', express.static(backgroundsStorageDir));
 app.use(cors());
 app.use('/trpc', trpcMiddleware);
 app.use(express.json());
-app.use(pinoHttp({ logger: logger }));
 app.get('/sse/feed', feedSseHandler);
 app.get('/sse/feed-config/:kioskId', feedConfigSseHandler);
 app.get('/sse/ui-config/:kioskId', uiConfigSseHandler);
