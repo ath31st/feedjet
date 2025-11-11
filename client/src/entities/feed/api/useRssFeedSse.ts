@@ -1,15 +1,10 @@
-import { useEffect, useCallback } from 'react';
+import { useCallback } from 'react';
 import { useEventSource } from '@/shared/api';
 import { useRssFeedStore, type FeedItem } from '..';
 import { SERVER_URL, SSE_URL } from '@/shared/config';
 
 export function useRssFeedSse() {
-  const initStore = useRssFeedStore((s) => s.initStore);
   const setFeeds = useRssFeedStore((s) => s.setFeeds);
-
-  useEffect(() => {
-    initStore();
-  }, [initStore]);
 
   const onMessage = useCallback(
     (e: MessageEvent) => {
