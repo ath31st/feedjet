@@ -18,10 +18,15 @@ const transport = pino.transport({
       target: 'pino-roll',
       level: logLevel,
       options: {
-        file: join('logs', 'app.log'),
+        file: join('logs', 'app'),
+        dateFormat: 'yyyy-MM-dd',
         frequency: 'daily',
+        extension: '.log',
         mkdir: true,
-        maxFiles: 7,
+        symlink: true,
+        limit: {
+          count: 7,
+        },
       },
     },
   ],
