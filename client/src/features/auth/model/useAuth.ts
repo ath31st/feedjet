@@ -20,6 +20,13 @@ export const useLogin = () => {
           queryKey: trpcWithProxy.auth.me.queryKey(),
         });
       },
+      onError(err: unknown) {
+        if (err instanceof Error) {
+          console.log(err);
+          toast.error(`Ошибка при входе: ${err.message}`);
+          return;
+        }
+      },
     }),
   });
 };
