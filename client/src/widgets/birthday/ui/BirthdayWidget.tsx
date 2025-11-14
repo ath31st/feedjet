@@ -56,9 +56,15 @@ export function BirthdayWidget({ rotate }: BirthdayWidgetProps) {
   }
 
   return (
-    <div className="flex h-full w-full flex-col items-center rounded-lg border-4 border-[var(--border)] bg-[var(--card-bg)]">
+    <div
+      //className="relative z-10 flex h-full w-full flex-col items-center rounded-lg border-4 border-[var(--border)] bg-[var(--card-bg)] bg-center bg-cover bg-no-repeat"
+      className="relative flex h-full w-full flex-col items-center rounded-lg border-4 border-[var(--border)] bg-[var(--card-bg)] bg-center bg-cover bg-no-repeat"
+      style={{
+        backgroundImage: 'url("/src/shared/assets/images/background.jpg")',
+      }}
+    >
       <div
-        className="mt-6 flex h-full flex-col items-center justify-start gap-20"
+        className="mt-6 flex h-full flex-col items-center justify-start gap-10"
         style={{ width: `${widgetWidth}%` }}
       >
         <BirthdayGreeting
@@ -66,7 +72,7 @@ export function BirthdayWidget({ rotate }: BirthdayWidgetProps) {
           companyName={companyName}
         />
         {isTwoColumns ? (
-          <div className="grid w-full grid-cols-2 gap-20">
+          <div className="grid h-full w-full grid-cols-2 justify-center gap-20">
             {[leftColumn, rightColumn].map((column, i) => (
               <div
                 key={i === 0 ? 'left' : 'right'}
@@ -85,7 +91,7 @@ export function BirthdayWidget({ rotate }: BirthdayWidgetProps) {
             ))}
           </div>
         ) : (
-          <div className="flex w-full flex-col gap-4">
+          <div className="flex h-full w-full flex-col justify-center gap-4">
             {birthdays.map((birthday, index) => (
               <BirthdayCard
                 key={birthday.id}
