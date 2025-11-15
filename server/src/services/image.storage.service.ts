@@ -4,7 +4,6 @@ import { promises as fs } from 'node:fs';
 import sharp from 'sharp';
 import { FileStorageError } from '../errors/file.storage.error.js';
 import type { ImageMetadata } from '@shared/types/image.js';
-import { createServiceLogger } from '../utils/pino.logger.js';
 
 export class ImageStorageService extends FileStorageService {
   private readonly imageDir = 'images';
@@ -15,10 +14,9 @@ export class ImageStorageService extends FileStorageService {
     '.webp',
     '.gif',
   ];
-  private readonly logger = createServiceLogger('imageStorageService');
 
-  constructor(baseDir: string) {
-    super(baseDir);
+  constructor(baseDir: string, loggerName: string = 'imageStorageService') {
+    super(baseDir, loggerName);
     fs.mkdir(path.join(this.baseDir, this.imageDir), { recursive: true });
   }
 

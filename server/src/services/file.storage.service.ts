@@ -1,12 +1,15 @@
 import { promises as fs, createWriteStream } from 'node:fs';
 import * as path from 'node:path';
 import { pipeline } from 'node:stream/promises';
+import { createServiceLogger } from '../utils/pino.logger.js';
 
 export class FileStorageService {
   protected baseDir: string;
+  protected logger;
 
-  constructor(baseDir: string) {
+  constructor(baseDir: string, loggerName: string = 'fileStorageService') {
     this.baseDir = baseDir;
+    this.logger = createServiceLogger(loggerName);
   }
 
   protected getFilePath(fileName: string) {
