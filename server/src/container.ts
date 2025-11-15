@@ -25,7 +25,7 @@ import {
 import { KioskService } from './services/kiosk.service.js';
 import { BirthdayService } from './services/birthday.service.js';
 import { BirthdayFileService } from './services/birthday.file.service.js';
-import { BirthdayBackgroundService } from './services/bithday.background.service.js';
+import { BirthdayBackgroundService } from './services/birthday.background.service.js';
 
 const sqlite = new Database(dbPath);
 export const db = drizzle(sqlite, { schema });
