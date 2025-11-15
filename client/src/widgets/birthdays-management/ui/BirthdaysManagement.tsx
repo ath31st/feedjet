@@ -2,6 +2,7 @@ import { BirthdayCreateForm } from '@/features/birthday-create';
 import { BirthdayFileUpload } from '@/features/birthday-file-upload';
 import { SettingsCard } from '@/shared/ui/SettingsCard';
 import { BirthdayList } from './BirthdayList';
+import { BirthdayBackgrounds } from './BirthdayBackgrounds';
 
 export function BirthdaysManagement() {
   return (
@@ -20,6 +21,13 @@ export function BirthdaysManagement() {
           <BirthdayCreateForm />
         </SettingsCard>
       </div>
+
+      <div className="w-full">
+        <SettingsCard title="Фон" className="w-full">
+          <BirthdayBackgrounds />
+        </SettingsCard>
+      </div>
+
       <div className="w-full">
         <SettingsCard title="Дни рождения" className="w-full">
           <BirthdayList />
