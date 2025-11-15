@@ -5,33 +5,18 @@ import { webReadableToNode } from '../utils/stream.js';
 import { BirthdayError } from '../errors/birthday.error.js';
 import { parseOdtTable } from '../utils/odt.table.parser.js';
 import { parse, isValid } from 'date-fns';
-import { promises as fs } from 'node:fs';
-import path from 'node:path';
-import { createServiceLogger } from '../utils/pino.logger.js';
 
 export class BirthdayFileService extends FileStorageService {
   private readonly birthdayService: BirthdayService;
-  private readonly backgroundsDir = 'backgrounds';
   private readonly defaultDateFormat = 'dd.MM.yyyy';
-  private readonly logger = createServiceLogger('birthdayFileService');
 
-  constructor(birthdayService: BirthdayService, baseDir: string) {
-    super(baseDir);
+  constructor(
+    birthdayService: BirthdayService,
+    baseDir: string,
+    loggerName: string = 'birthdayFileService',
+  ) {
+    super(baseDir, loggerName);
     this.birthdayService = birthdayService;
-    fs.mkdir(path.join(this.baseDir, this.backgroundsDir), { recursive: true });
-  }
-
-  protected override getFilePath(fileName: string) {
-    return path.join(this.baseDir, this.backgroundsDir, fileName);
-  }
-
-  override async listFiles() {
-    const dir = path.join(this.baseDir, this.backgroundsDir);
-    return fs.readdir(dir);
-  }
-
-  override getBaseDir() {
-    return path.join(this.baseDir, this.backgroundsDir);
   }
 
   private async uploadFile(file: File): Promise<{ path: string }> {
