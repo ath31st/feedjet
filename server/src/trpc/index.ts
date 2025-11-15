@@ -15,6 +15,7 @@ import { videoStorageRouter } from './routes/video.storage.route.js';
 import { kioskRouter } from './routes/kiosk.route.js';
 import { birthdayRouter } from './routes/birthday.route.js';
 import { createServiceLogger } from '../utils/pino.logger.js';
+import { birthdayBackgroundRouter } from './routes/birthday.background.route.js';
 
 const logger = createServiceLogger('trpc');
 
@@ -32,6 +33,7 @@ const appRouter = t.router({
   videoFile: videoStorageRouter,
   kiosk: kioskRouter,
   birthday: birthdayRouter,
+  birthdayBackground: birthdayBackgroundRouter,
 });
 
 export type AppRouter = typeof appRouter;

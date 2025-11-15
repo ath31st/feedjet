@@ -24,6 +24,16 @@ export class BirthdayBackgroundService extends ImageStorageService {
     return path.join(this.baseDir, this.backgroundsDir);
   }
 
+  async getBackgroundByMonth(month: number) {
+    const files = await this.listFiles();
+
+    const targetFile = files.find((f) =>
+      f.startsWith(month.toString().padStart(2, '0')),
+    );
+
+    return targetFile;
+  }
+
   async uploadBackgroundByMonth(month: number, file: File) {
     if (month < 1 || month > 12) {
       throw new Error('Invalid month');
