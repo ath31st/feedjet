@@ -32,5 +32,12 @@ export const dateFormatSchema = z
 export const birthdayCreateSchema = z.object({
   fullName: z.string().min(1).max(300),
   department: z.string().max(300).optional(),
-  birthDate: z.coerce.date(),
+  birthDate: z.coerce
+    .date()
+    .refine((date) => date.getTime() < Date.now(), {
+      message: 'Date cannot be in the future',
+    })
+    .refine((date) => date.getTime() > new Date('1900-01-01').getTime(), {
+      message: 'Date cannot be before 1900',
+    }),
 });

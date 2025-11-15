@@ -30,8 +30,8 @@ export function BirthdayCreateForm() {
       <div className="flex flex-row gap-2">
         <input
           type="date"
-          value={formData.birthDate.toISOString().split('T')[0]}
-          onChange={(e) => handleChange('birthDate', new Date(e.target.value))}
+          value={formData.birthDate}
+          onChange={(e) => handleChange('birthDate', e.target.value)}
           className="flex-1 rounded-lg border border-[var(--border)] bg-transparent px-3 py-2 focus:outline-none focus:ring-1 focus:ring-[var(--border)]"
           required
         />
