@@ -2,6 +2,10 @@ import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import { ImageStorageService } from './image.storage.service.js';
 import { webReadableToNode } from '../utils/stream.js';
+import {
+  type BirthdayBackground,
+  MONTHS,
+} from '@shared/types/birthday.background.js';
 
 export class BirthdayBackgroundService extends ImageStorageService {
   private readonly backgroundsDir = 'backgrounds';
@@ -69,15 +73,20 @@ export class BirthdayBackgroundService extends ImageStorageService {
     }
   }
 
-  async listBackgrounds(): Promise<Record<number, string | null>> {
+  async listBackgrounds(): Promise<BirthdayBackground[]> {
     const files = await this.listFiles();
-    const result: Record<number, string | null> = {};
+    const result: BirthdayBackground[] = [];
 
     for (let i = 1; i <= 12; i++) {
-      const f = files.find((file) =>
-        file.startsWith(i.toString().padStart(2, '0')),
-      );
-      result[i] = f || null;
+      const fileName =
+        files.find((file) => file.startsWith(i.toString().padStart(2, '0'))) ||
+        null;
+
+      result.push({
+        fileName,
+        monthNumber: i,
+        monthName: MONTHS[i],
+      });
     }
 
     return result;
