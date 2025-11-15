@@ -9,17 +9,19 @@ import { eq } from 'drizzle-orm';
 import { VideoStorageServiceError } from '../errors/video.error.js';
 import { webReadableToNode } from '../utils/stream.js';
 import { promises as fs } from 'node:fs';
-import { createServiceLogger } from '../utils/pino.logger.js';
 
 const execFileAsync = promisify(execFile);
 
 export class VideoStorageService extends FileStorageService {
   private readonly db: DbType;
   private readonly videosDir = 'videos';
-  private readonly logger = createServiceLogger('videoStorageService');
 
-  constructor(db: DbType, baseDir: string) {
-    super(baseDir);
+  constructor(
+    db: DbType,
+    baseDir: string,
+    loggerName: string = 'videoStorageService',
+  ) {
+    super(baseDir, loggerName);
     this.db = db;
     fs.mkdir(path.join(this.baseDir, this.videosDir), { recursive: true });
   }
