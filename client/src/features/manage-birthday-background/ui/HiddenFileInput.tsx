@@ -10,7 +10,7 @@ export const HiddenFileInput = forwardRef<
 >(({ onChange }, ref) => (
   <input
     type="file"
-    accept="image/*"
+    accept=".jpg,.jpeg,.png,.webp,.bmp"
     ref={ref}
     data-month=""
     className="hidden"

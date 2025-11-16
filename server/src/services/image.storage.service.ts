@@ -12,7 +12,7 @@ export class ImageStorageService extends FileStorageService {
     '.jpeg',
     '.png',
     '.webp',
-    '.gif',
+    '.bmp',
   ];
 
   constructor(baseDir: string, loggerName: string = 'imageStorageService') {
