@@ -9,7 +9,7 @@ import { useRef, useState } from 'react';
 import { IconButton } from '@/shared/ui/common';
 import { Cross1Icon, ResetIcon, UpdateIcon } from '@radix-ui/react-icons';
 
-export function BirthdayBackgrounds() {
+export function ManageBirthdayBackground() {
   const { data: backgrounds, isLoading } = useGetBackgrounds();
   const { mutate: deleteBackground } = useDeleteBackground();
   const { mutate: uploadBackground } = useUploadBackground();
