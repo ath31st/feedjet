@@ -1,5 +1,5 @@
 export interface BirthdayBackground {
-  fileName?: string | null;
+  fileName: string | null;
   monthNumber: number;
   monthName: string;
 }
