@@ -16,22 +16,21 @@ export function BirthdayCard({
   return (
     <div className={`w-full text-${fontSizeXl}xl flex justify-between`}>
       <span
+        className="inline-block opacity-0"
         style={{
-          display: 'inline-block',
-          opacity: 0,
           animation: `slide-in-left ${duration}s ease-out forwards`,
           animationDelay: `${delay}s`,
+          textShadow: 'var(--text-shadow)',
         }}
       >
         {birthday.fullName}
       </span>
       <span
+        className="inline-block opacity-0"
         style={{
-          display: 'inline-block',
-          opacity: 0,
           animation: `slide-in-right ${duration}s ease-out forwards`,
-          color: 'var(--meta-text)',
           animationDelay: `${delay}s`,
+          textShadow: 'var(--text-shadow)',
         }}
       >
         {new Date(birthday.birthDate).toLocaleDateString()}

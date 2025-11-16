@@ -10,6 +10,8 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --text-shadow: 3px 2px 4px rgba(0, 0, 0, 0.6);
 }
 
 [data-theme="light"] {
