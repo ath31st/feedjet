@@ -25,7 +25,7 @@ export function BackgroundPreviewDialog({
 }: BackgroundPreviewDialogProps) {
   const current = backgrounds.find((b) => b.monthNumber === previewMonth);
   const previewUrl = current?.fileName
-    ? buildBackgroundUrl(current.fileName)
+    ? `${buildBackgroundUrl(current.fileName)}?v=${current.mtime}`
     : null;
 
   return (
