@@ -2,6 +2,8 @@ export interface BirthdayBackground {
   fileName: string | null;
   monthNumber: number;
   monthName: string;
+  thumbnail: string | null;
+  mtime: number | null;
 }
 
 export const MONTHS: Record<number, string> = {

@@ -50,6 +50,12 @@ export class BirthdayBackgroundService extends ImageStorageService {
 
     const savedPath = await this.saveImageStream(nodeStream, targetFileName);
 
+    const resizedBuffer = await this.resizeImage(targetFileName, null, 150);
+    if (resizedBuffer) {
+      const previewFileName = `${month.toString().padStart(2, '0')}_thumbnail${ext}`;
+      await this.saveImageBuffer(resizedBuffer, previewFileName);
+    }
+
     this.logger.info(
       { savedPath, fn: 'uploadBackgroundByMonth' },
       'Background uploaded successfully',
@@ -60,16 +66,18 @@ export class BirthdayBackgroundService extends ImageStorageService {
 
   async removeBackgroundByMonth(month: number) {
     const files = await this.listFiles();
-    const targetFile = files.find((f) =>
+    const targetFiles = files.filter((f) =>
       f.startsWith(month.toString().padStart(2, '0')),
     );
 
-    if (targetFile) {
-      await this.remove(targetFile);
-      this.logger.info(
-        { fileName: targetFile, fn: 'removeBackgroundByMonth' },
-        'Background deleted successfully',
-      );
+    if (targetFiles) {
+      for (const targetFile of targetFiles) {
+        await this.remove(targetFile);
+        this.logger.info(
+          { fileName: targetFile, fn: 'removeBackgroundByMonth' },
+          'Background deleted successfully',
+        );
+      }
     }
   }
 
@@ -78,14 +86,21 @@ export class BirthdayBackgroundService extends ImageStorageService {
     const result: BirthdayBackground[] = [];
 
     for (let i = 1; i <= 12; i++) {
-      const fileName =
-        files.find((file) => file.startsWith(i.toString().padStart(2, '0'))) ||
-        null;
+      const monthPrefix = i.toString().padStart(2, '0');
+      const fileNames = files.filter((file) => file.startsWith(monthPrefix));
+
+      let stats = null;
+      const mainFile = fileNames[0] || null;
+      if (mainFile) {
+        stats = await this.getFileStats(mainFile);
+      }
 
       result.push({
-        fileName,
+        fileName: mainFile,
         monthNumber: i,
         monthName: MONTHS[i],
+        thumbnail: fileNames[1] || null,
+        mtime: stats?.mtime.getTime() || null,
       });
     }
 

@@ -82,4 +82,36 @@ export class ImageStorageService extends FileStorageService {
       createdAt: fileStats.birthtime.getTime(),
     };
   }
+
+  /**
+   * Changes the size of the image on disk.
+   * @param fileName - file name
+   * @param width - new width (if null, proportionally scaled by height)
+   * @param height - new height (if null, proportionally scaled by width)
+   * @param overwrite - if true, the original file will be overwritten
+   * @returns Promise<Buffer | undefined> - buffer of resized image
+   */
+  async resizeImage(
+    fileName: string,
+    width: number | null,
+    height: number | null,
+    overwrite = false,
+  ): Promise<Buffer | undefined> {
+    const filePath = this.getFilePath(fileName);
+
+    if (!(await this.exists(filePath))) {
+      this.logger.error({ fileName, fn: 'resizeImage' }, 'File not found');
+      throw new FileStorageError(404, 'File not found');
+    }
+
+    const image = sharp(filePath);
+    const resized = image.resize(width || undefined, height || undefined);
+
+    if (overwrite) {
+      await resized.toFile(filePath);
+      return;
+    } else {
+      return resized.toBuffer();
+    }
+  }
 }
