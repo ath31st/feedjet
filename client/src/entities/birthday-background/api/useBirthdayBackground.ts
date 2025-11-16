@@ -2,11 +2,13 @@ import { queryClient, trpcWithProxy } from '@/shared/api';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
-export const useUploadBirthdays = () => {
+export const useUploadBackground = () => {
   return useMutation(
     trpcWithProxy.birthdayBackground.uploadBackground.mutationOptions({
-      onSuccess: () => {
-        toast.success('Фон успешно загружен');
+      onSuccess: (_data, _, ctx) => {
+        toast.success('Фон успешно загружен', {
+          id: ctx?.toastId,
+        });
         queryClient.invalidateQueries({
           queryKey: trpcWithProxy.birthdayBackground.backgrounds.queryKey(),
         });
@@ -18,7 +20,9 @@ export const useUploadBirthdays = () => {
           toast.error(err.message || 'Ошибка при загрузке фона');
       },
       onMutate: (data: FormData) => {
-        return { toastId: toast.loading(`Загрузка ${data.get('filename')}…`) };
+        const file = data.get('file') as File | null;
+        const toastId = toast.loading(`Загрузка ${file?.name ?? 'файла'}…`);
+        return { toastId };
       },
     }),
   );
@@ -28,7 +32,7 @@ export const useGetBackgrounds = () => {
   return useQuery(trpcWithProxy.birthdayBackground.backgrounds.queryOptions());
 };
 
-export const useDeleteBirthday = () => {
+export const useDeleteBackground = () => {
   return useMutation(
     trpcWithProxy.birthdayBackground.delete.mutationOptions({
       onSuccess() {
