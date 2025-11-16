@@ -35,7 +35,7 @@ export class BirthdayBackgroundService extends ImageStorageService {
       f.startsWith(month.toString().padStart(2, '0')),
     );
 
-    return targetFile;
+    return targetFile ?? null;
   }
 
   async uploadBackgroundByMonth(month: number, file: File) {
