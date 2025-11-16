@@ -6,6 +6,10 @@ import { BirthdayCard } from './BirthdayCard';
 import { BirthdayGreeting } from './BirthdayGreeting';
 import { COMPANY_NAME } from '@/shared/config';
 import { fontSizeBirthdayCard } from '../lib/fontSizeBirhtdayCard';
+import {
+  buildBackgroundUrl,
+  useGetBackgroundByMonth,
+} from '@/entities/birthday-background';
 
 interface BirthdayWidgetProps {
   rotate: number;
@@ -18,6 +22,10 @@ export function BirthdayWidget({ rotate }: BirthdayWidgetProps) {
   const currentMonth = new Date().getMonth() + 1;
   const { isLoading, data: fetchedBirthdays } =
     useGetBirthdaysByMonth(currentMonth);
+  const { data: backgroundFileName } = useGetBackgroundByMonth(currentMonth);
+  const backgroundUrl = backgroundFileName
+    ? buildBackgroundUrl(backgroundFileName)
+    : null;
   const isXl = useIsXl();
   const isEffectiveXl = isRotate90(rotate) ? !isXl : isXl;
   let fontSizeXl = isEffectiveXl ? 5 : 3;
@@ -57,10 +65,13 @@ export function BirthdayWidget({ rotate }: BirthdayWidgetProps) {
 
   return (
     <div
-      //className="relative z-10 flex h-full w-full flex-col items-center rounded-lg border-4 border-[var(--border)] bg-[var(--card-bg)] bg-center bg-cover bg-no-repeat"
-      className="relative flex h-full w-full flex-col items-center rounded-lg border-4 border-[var(--border)] bg-[var(--card-bg)] bg-center bg-cover bg-no-repeat"
+      className={
+        backgroundUrl
+          ? 'fixed inset-0 z-10 flex flex-col items-center bg-center bg-cover bg-no-repeat p-4'
+          : 'flex h-full w-full flex-col items-center rounded-lg border-4 border-[var(--border)] bg-[var(--card-bg)] bg-center bg-cover bg-no-repeat'
+      }
       style={{
-        backgroundImage: 'url("/src/shared/assets/images/background.jpg")',
+        backgroundImage: backgroundUrl ? `url(${backgroundUrl})` : undefined,
       }}
     >
       <div
