@@ -15,7 +15,9 @@ export function BackgroundGrid({
   return (
     <div className="grid grid-cols-6 gap-4">
       {backgrounds.map(({ monthNumber, monthName, fileName }) => {
-        const url = fileName ? buildBackgroundUrl(fileName) : null;
+        const url = fileName
+          ? `${buildBackgroundUrl(fileName)}?v=${Date.now()}`
+          : null;
         return (
           <div key={monthNumber} className="flex flex-col gap-1">
             <div className="text-[var(--meta-text)] text-sm">{monthName}</div>
