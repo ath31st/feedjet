@@ -66,17 +66,17 @@ http {
             add_header Cache-Control "public";
         }
 
-        location /video/ {
+        location /videos/ {
             alias {{VIDEO_DIR}}/;
             add_header Cache-Control "public";
         }
 
-        location /image/ {
+        location /images/ {
             alias {{IMAGE_DIR}}/;
             add_header Cache-Control "public";
         }
 
-        location /background/ {
+        location /backgrounds/ {
             alias {{BACKGROUND_DIR}}/;
             add_header Cache-Control "public";
         }
