@@ -46,7 +46,7 @@ export function ScheduleWidget({ rotate }: ScheduleWidgetProps) {
     refetchDaily,
   });
   const daysOfWeek = getDaysOfWeekByDate(now);
-  const startHour = parseInt(hours[0]);
+  const startHour = parseInt(hours[0], 10);
   const formatedDaysOfWeek = daysOfWeek.map(formatDateToMap);
   const todayIndex = daysOfWeek.findIndex((d) => d.getDate() === now.getDate());
   const positionPercent = getPositionPercentByDateTime(
