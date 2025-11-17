@@ -1,15 +1,10 @@
-import { useGetBirthdaysByMonth, type Birthday } from '@/entities/birthday';
-import { isRotate90, useIsXl, type AnimationType } from '@/shared/lib';
+import type { AnimationType } from '@/shared/lib';
 import { LoadingThreeDotsJumping } from '@/shared/ui';
-import { useEffect, useState } from 'react';
 import { BirthdayCard } from './BirthdayCard';
 import { BirthdayGreeting } from './BirthdayGreeting';
 import { COMPANY_NAME } from '@/shared/config';
-import { fontSizeBirthdayCard } from '../lib/fontSizeBirhtdayCard';
-import {
-  buildBackgroundUrl,
-  useGetBackgroundByMonth,
-} from '@/entities/birthday-background';
+import { useBirthdayWidgetModel } from '../model/useBirthdayWidget';
+import { calcFontSize, calcWidgetWidth } from '../lib/selectors';
 
 interface BirthdayWidgetProps {
   rotate: number;
@@ -17,31 +12,17 @@ interface BirthdayWidgetProps {
 }
 
 export function BirthdayWidget({ rotate }: BirthdayWidgetProps) {
-  const companyName = COMPANY_NAME || 'Company Name';
-  const [birthdays, setBirthdays] = useState<Birthday[]>([]);
-  const currentMonth = new Date().getMonth() + 1;
-  const { isLoading, data: fetchedBirthdays } =
-    useGetBirthdaysByMonth(currentMonth);
-  const { data: backgroundFileName } = useGetBackgroundByMonth(currentMonth);
-  const backgroundUrl = backgroundFileName
-    ? buildBackgroundUrl(backgroundFileName)
-    : null;
-  const isXl = useIsXl();
-  const isEffectiveXl = isRotate90(rotate) ? !isXl : isXl;
-  let fontSizeXl = isEffectiveXl ? 5 : 3;
-  if (isEffectiveXl) {
-    fontSizeXl = fontSizeBirthdayCard(birthdays.length);
-  }
-  const widgetWidth = isEffectiveXl ? 80 : 90;
-  const isTwoColumns = birthdays.length > 12;
-  const midIndex = Math.ceil(birthdays.length / 2);
-  const [leftColumn, rightColumn] = isTwoColumns
-    ? [birthdays.slice(0, midIndex), birthdays.slice(midIndex)]
-    : [birthdays, []];
+  const {
+    isLoading,
+    birthdays,
+    backgroundUrl,
+    isEffectiveXl,
+    isTwoColumns,
+    columns,
+  } = useBirthdayWidgetModel(rotate);
 
-  useEffect(() => {
-    setBirthdays(fetchedBirthdays || []);
-  }, [fetchedBirthdays]);
+  const fontSizeXl = calcFontSize(isEffectiveXl, birthdays.length);
+  const widgetWidth = calcWidgetWidth(isEffectiveXl);
 
   if (isLoading) {
     return (
@@ -80,11 +61,11 @@ export function BirthdayWidget({ rotate }: BirthdayWidgetProps) {
       >
         <BirthdayGreeting
           isEffectiveXl={isEffectiveXl}
-          companyName={companyName}
+          companyName={COMPANY_NAME}
         />
         {isTwoColumns ? (
           <div className="grid h-full w-full grid-cols-2 justify-center gap-20">
-            {[leftColumn, rightColumn].map((column, i) => (
+            {columns.map((column, i) => (
               <div
                 key={i === 0 ? 'left' : 'right'}
                 className="flex flex-col gap-4"
