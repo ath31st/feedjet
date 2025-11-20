@@ -1,4 +1,4 @@
-import type { KioskHeartbeat } from '../types/kiosk.heartbeat.js';
+import type { KioskHeartbeat } from '../../../shared/types/kiosk.heartbeat.js';
 import { createServiceLogger } from '../utils/pino.logger.js';
 
 export class KioskHeartbeatService {

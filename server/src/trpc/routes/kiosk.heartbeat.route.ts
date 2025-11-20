@@ -17,9 +17,9 @@ export const kioskHeartbeatRouter = t.router({
 
   getActiveHeartbeats: protectedProcedure
     .input(z.object({ timeoutMs: z.number().int().positive() }))
-    .query(({ input }) => {
+    .query(({ input }) =>
       handleServiceCall(() => {
         return kioskHeartbeatService.getActiveKiosks(input.timeoutMs);
-      });
-    }),
+      }),
+    ),
 });
