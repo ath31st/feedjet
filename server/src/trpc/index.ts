@@ -16,6 +16,7 @@ import { kioskRouter } from './routes/kiosk.route.js';
 import { birthdayRouter } from './routes/birthday.route.js';
 import { createServiceLogger } from '../utils/pino.logger.js';
 import { birthdayBackgroundRouter } from './routes/birthday.background.route.js';
+import { kioskHeartbeatRouter } from './routes/kiosk.heartbeat.route.js';
 
 const logger = createServiceLogger('trpc');
 
@@ -32,6 +33,7 @@ const appRouter = t.router({
   weather: weatherForecastRouter,
   videoFile: videoStorageRouter,
   kiosk: kioskRouter,
+  kioskHeartbeat: kioskHeartbeatRouter,
   birthday: birthdayRouter,
   birthdayBackground: birthdayBackgroundRouter,
 });
