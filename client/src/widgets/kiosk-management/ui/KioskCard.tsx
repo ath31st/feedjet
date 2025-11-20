@@ -1,10 +1,11 @@
-import type { Kiosk } from '@/entities/kiosk';
+import type { KioskWithHeartbeats } from '@/entities/kiosk';
 import { CommonButton } from '@/shared/ui/common';
 import { TrashIcon } from '@radix-ui/react-icons';
 import type { ReactNode } from 'react';
+import { HeartbeatCard } from './HeartbeatCard';
 
 interface KioskCardProps {
-  kiosk: Kiosk;
+  kiosk: KioskWithHeartbeats;
   onDelete: (id: number) => void;
   actions?: ReactNode;
 }
@@ -55,6 +56,22 @@ export function KioskCard({ kiosk, onDelete, actions }: KioskCardProps) {
           <strong className="text-[var(--meta-text)]">Создан:</strong>{' '}
           {new Date(kiosk.createdAt).toLocaleDateString()}
         </div>
+
+        {kiosk.heartbeats.length > 0 && (
+          <div>
+            <strong className="text-[var(--meta-text)]">
+              Подключенные устройства:
+            </strong>
+
+            {kiosk.heartbeats.map((hb) => (
+              <HeartbeatCard
+                key={hb.ip}
+                ip={hb.ip}
+                lastHeartbeat={hb.lastHeartbeat}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
