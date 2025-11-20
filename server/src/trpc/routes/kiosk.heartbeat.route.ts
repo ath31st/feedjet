@@ -1,22 +1,17 @@
 import { t, kioskHeartbeatService, publicProcedure } from '../../container.js';
 import { handleServiceCall } from '../error.handler.js';
-import {
-  kioskIdInputSchema,
-  kioskSlugInputSchema,
-} from '../../validations/schemas/kiosk.schemas.js';
+import { kioskSlugInputSchema } from '../../validations/schemas/kiosk.schemas.js';
 import { protectedProcedure } from '../../middleware/auth.js';
 import z from 'zod';
+import { normalizeIp } from '../../utils/normalizeIp.js';
 
 export const kioskHeartbeatRouter = t.router({
   heartbeat: publicProcedure
-    .input(kioskSlugInputSchema.and(kioskIdInputSchema))
+    .input(kioskSlugInputSchema)
     .mutation(({ input, ctx }) =>
       handleServiceCall(() => {
-        return kioskHeartbeatService.registerHeartbeat(
-          input.kioskId,
-          input.slug,
-          ctx.req.socket.remoteAddress as string,
-        );
+        const ip = normalizeIp(ctx.req.socket.remoteAddress);
+        return kioskHeartbeatService.registerHeartbeat(input.slug, ip);
       }),
     ),
 

@@ -5,16 +5,15 @@ export class KioskHeartbeatService {
   private readonly kiosks = new Map<string, KioskHeartbeat>();
   private readonly logger = createServiceLogger('kioskHeartbeatService');
 
-  registerHeartbeat(kioskId: number, slug: string, ip: string) {
+  registerHeartbeat(slug: string, ip: string) {
     const kioskHeartbeat: KioskHeartbeat = {
-      kioskId,
       slug,
       ip,
       lastHeartbeat: new Date(),
     };
 
     this.logger.debug(
-      { kioskId, slug, ip, fn: 'registerHeartbeat' },
+      { slug, ip, fn: 'registerHeartbeat' },
       'Registered kiosk heartbeat',
     );
 
