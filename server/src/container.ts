@@ -26,6 +26,7 @@ import { KioskService } from './services/kiosk.service.js';
 import { BirthdayService } from './services/birthday.service.js';
 import { BirthdayFileService } from './services/birthday.file.service.js';
 import { BirthdayBackgroundService } from './services/birthday.background.service.js';
+import { KioskHeartbeatService } from './services/kiosk.heartbeat.service.js';
 
 const sqlite = new Database(dbPath);
 export const db = drizzle(sqlite, { schema });
@@ -61,6 +62,7 @@ export const kioskService = new KioskService(
 );
 kioskService.ensureDefaultKiosk();
 videoStorageService.syncWithDisk();
+export const kioskHeartbeatService = new KioskHeartbeatService();
 
 export const t = initTRPC.context<Context>().create();
 export const publicProcedure = t.procedure;
