@@ -23,7 +23,7 @@ export function BirthdaysManagement() {
       </div>
 
       <div className="w-full">
-        <SettingsCard title="Фон" className="w-full">
+        <SettingsCard title="Фон поздравления" className="w-full">
           <ManageBirthdayBackground />
         </SettingsCard>
       </div>
