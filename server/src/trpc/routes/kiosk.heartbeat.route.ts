@@ -3,14 +3,14 @@ import { handleServiceCall } from '../error.handler.js';
 import { kioskSlugInputSchema } from '../../validations/schemas/kiosk.schemas.js';
 import { protectedProcedure } from '../../middleware/auth.js';
 import z from 'zod';
-import { normalizeIp } from '../../utils/normalizeIp.js';
+import { extractRealIp } from '../../utils/extractRealIp.js';
 
 export const kioskHeartbeatRouter = t.router({
   heartbeat: publicProcedure
     .input(kioskSlugInputSchema)
     .mutation(({ input, ctx }) =>
       handleServiceCall(() => {
-        const ip = normalizeIp(ctx.req.socket.remoteAddress);
+        const ip = extractRealIp(ctx.req);
         return kioskHeartbeatService.registerHeartbeat(input.slug, ip);
       }),
     ),
