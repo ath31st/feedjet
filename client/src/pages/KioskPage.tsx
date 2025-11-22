@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react';
-import { AnimatedSigmaBackground } from '@/shared/ui';
+import { AnimatedSigmaBackground, StaticBackground } from '@/shared/ui';
 import { useUiConfigStore } from '@/entities/ui-config';
 import { Rotator } from '@/shared/ui/Rotator';
 import { LoadingThreeDotsJumping } from '@/shared/ui';
@@ -39,7 +39,12 @@ export function KioskPage() {
           transition={{ duration: 1.0 }}
         >
           <Rotator rotate={rotate}>
-            <AnimatedSigmaBackground />
+            {animation === 'full' ? (
+              <AnimatedSigmaBackground />
+            ) : (
+              <StaticBackground />
+            )}
+
             <Suspense fallback={null}>
               {currentWidgetKey === 'feed' && (
                 <FeedWidget rotate={rotate} animation={animation} />
