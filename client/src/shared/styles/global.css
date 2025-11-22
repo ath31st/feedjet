@@ -19,19 +19,19 @@
 
   --background: hsl(var(--hue), 20%, 78%);
   --text: hsl(var(--hue), 35%, 15%);
-  --card-bg: hsl(var(--hue), 40%, 100%);
+  --card-bg: hsl(var(--hue), 20%, 83%);
   --card-text: hsl(var(--hue), 35%, 15%);
   --category-text: hsl(var(--hue), 20%, 60%);
   --description-text: hsl(var(--hue), 25%, 35%);
-  --meta-text: hsl(var(--hue), 25%, 70%);
-  --button-bg: hsl(var(--hue), 30%, 90%);
+  --meta-text: hsl(var(--hue), 25%, 50%);
+  --button-bg: hsl(var(--hue), 30%, 80%);
   --button-text: hsl(var(--hue), 35%, 15%);
-  --button-hover-bg: hsl(var(--hue), 30%, 85%);
-  --border: hsl(var(--hue), 25%, 60%);
+  --button-hover-bg: hsl(var(--hue), 30%, 75%);
+  --border: hsl(var(--hue), 5%, 60%);
 }
 
 [data-theme="dark"] {
-  --hue: 220;
+  --hue: 210;
 
   --background: hsl(var(--hue), 30%, 10%);
   --text: hsl(var(--hue), 35%, 90%);
