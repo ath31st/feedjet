@@ -41,7 +41,7 @@ if (!cacheDirValue) {
 }
 
 const containerDir = path.dirname(configTsPath);
-const serverRoot = path.resolve(containerDir, '..');
+const serverRoot = path.resolve(containerDir, '../..');
 const absCacheDir = path.isAbsolute(cacheDirValue)
   ? cacheDirValue
   : path.resolve(serverRoot, cacheDirValue);
