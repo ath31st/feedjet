@@ -5,6 +5,7 @@ import {
   getPositionPercentByDateTime,
   useIsXl,
   isRotate90,
+  useEnv,
 } from '@/shared/lib';
 import { LoadingThreeDotsJumping } from '@/shared/ui/LoadingThreeDotsJumping';
 import { ScheduleHeader } from './ScheduleHeader';
@@ -12,7 +13,6 @@ import { DaysColumn } from './DaysColumn';
 import { TimeGrid } from './TimeGrid';
 import { EventsList } from './EventsList';
 import { useScheduleWithTimer } from '../model/useScheduleWithTimer';
-import { useScheduleEnv } from '../model/useScheduleWidgetEnv';
 import { DigitalClock } from './DigitalClock';
 import { WeatherForecast } from './WeatherForecast';
 import {
@@ -25,22 +25,17 @@ interface ScheduleWidgetProps {
 }
 
 export function ScheduleWidget({ rotate }: ScheduleWidgetProps) {
-  const {
-    scheduleHeaderTitle,
-    scheduleLocationTitle,
-    scheduleLocationLon,
-    scheduleLocationLat,
-  } = useScheduleEnv();
+  const { headerTitle, locationTitle, locationLon, locationLat } = useEnv();
   const {
     data: dailyForecast,
     isLoading: isLoadingDaily,
     refetch: refetchDaily,
-  } = useDailyWeatherForecast(scheduleLocationLat, scheduleLocationLon);
+  } = useDailyWeatherForecast(locationLat, locationLon);
   const {
     data: currentWeather,
     isLoading: isLoadingCurrent,
     refetch: refetchCurrent,
-  } = useCurrentWeatherForecast(scheduleLocationLat, scheduleLocationLon);
+  } = useCurrentWeatherForecast(locationLat, locationLon);
   const { now, events, isLoading } = useScheduleWithTimer({
     refetchCurrent,
     refetchDaily,
@@ -68,10 +63,7 @@ export function ScheduleWidget({ rotate }: ScheduleWidgetProps) {
 
   return (
     <div className="flex h-full w-full flex-col">
-      <ScheduleHeader
-        isEffectiveXl={isEffectiveXl}
-        title={scheduleHeaderTitle}
-      />
+      <ScheduleHeader isEffectiveXl={isEffectiveXl} title={headerTitle} />
 
       <div
         className="mx-auto flex w-full flex-1 border-t-2"
@@ -101,7 +93,7 @@ export function ScheduleWidget({ rotate }: ScheduleWidgetProps) {
             <div className="flex h-full w-1/2 flex-col gap-4 px-4 py-10">
               <DigitalClock />
               <WeatherForecast
-                locationTitle={scheduleLocationTitle}
+                locationTitle={locationTitle}
                 dailyForecast={dailyForecast ?? []}
                 currentWeather={currentWeather ?? null}
                 isLoadingDaily={isLoadingDaily}
@@ -116,7 +108,7 @@ export function ScheduleWidget({ rotate }: ScheduleWidgetProps) {
         <div className="flex h-1/7 flex-row gap-4 border-[var(--border)] border-t-2 px-4">
           <DigitalClock />
           <WeatherForecast
-            locationTitle={scheduleLocationTitle}
+            locationTitle={locationTitle}
             dailyForecast={dailyForecast ?? []}
             currentWeather={currentWeather ?? null}
             isLoadingDaily={isLoadingDaily}
