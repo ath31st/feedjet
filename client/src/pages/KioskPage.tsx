@@ -7,10 +7,11 @@ import { useKioskParams } from '@/features/kiosk-params';
 import { useKioskRotation } from '@/features/kiosk-rotation';
 import { AnimatePresence, motion } from 'framer-motion';
 
-const FeedWidget = lazy(() => import('../widgets/feed'));
+const FeedWidget = lazy(() => import('@/widgets/feed'));
 const ScheduleWidget = lazy(() => import('@/widgets/schedule'));
 const VideoPlayerWidget = lazy(() => import('@/widgets/video-player'));
 const BirthdayWidget = lazy(() => import('@/widgets/birthday'));
+const InfoWidget = lazy(() => import('@/widgets/info'));
 
 export function KioskPage() {
   const { uiConfig, loading, initialized } = useUiConfigStore();
@@ -56,6 +57,7 @@ export function KioskPage() {
               {currentWidgetKey === 'birthday' && (
                 <BirthdayWidget rotate={rotate} animation={animation} />
               )}
+              {currentWidgetKey === 'info' && <InfoWidget rotate={rotate} />}
             </Suspense>
           </Rotator>
         </motion.div>

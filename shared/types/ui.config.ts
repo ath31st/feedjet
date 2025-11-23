@@ -23,7 +23,7 @@ export interface UpdateUiConfig {
 export const themes = ['dark', 'light', 'green', 'blue', 'sepia'];
 export type Theme = (typeof themes)[number];
 
-export const widgetTypes = ['schedule', 'video', 'feed', 'birthday'];
+export const widgetTypes = ['schedule', 'video', 'feed', 'birthday', 'info'];
 export type WidgetType = (typeof widgetTypes)[number];
 
 export const widgetLabels: Record<WidgetType, string> = {
@@ -31,4 +31,5 @@ export const widgetLabels: Record<WidgetType, string> = {
   video: 'Видео',
   feed: 'Новости',
   birthday: 'Дни рожд.',
+  info: 'Информация',
 };
