@@ -2,7 +2,7 @@ import textureUrl from '../assets/texture.png';
 
 export function StaticBackground() {
   return (
-    <div className="-z-1 pointer-events-none absolute inset-0 overflow-hidden">
+    <div className="-z-1 pointer-events-none fixed inset-0 overflow-hidden">
       <div
         className="absolute inset-0"
         style={{
