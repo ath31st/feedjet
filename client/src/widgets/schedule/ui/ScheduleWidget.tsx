@@ -13,12 +13,12 @@ import { DaysColumn } from './DaysColumn';
 import { TimeGrid } from './TimeGrid';
 import { EventsList } from './EventsList';
 import { useScheduleWithTimer } from '../model/useScheduleWithTimer';
-import { DigitalClock } from './DigitalClock';
 import { WeatherForecast } from './WeatherForecast';
 import {
   useCurrentWeatherForecast,
   useDailyWeatherForecast,
 } from '@/entities/weather-forecast';
+import { DigitalClock } from '@/shared/ui';
 
 interface ScheduleWidgetProps {
   rotate: number;
@@ -52,6 +52,7 @@ export function ScheduleWidget({ rotate }: ScheduleWidgetProps) {
   const isXl = useIsXl();
   const isEffectiveXl = isRotate90(rotate) ? !isXl : isXl;
   const effectiveSpeed = isRotate90(rotate) ? 1 : 50;
+  const fontXlSize = 8;
 
   if (isLoading) {
     return (
@@ -91,7 +92,7 @@ export function ScheduleWidget({ rotate }: ScheduleWidgetProps) {
           <>
             <div className="h-full border border-[var(--border)]" />
             <div className="flex h-full w-1/2 flex-col gap-4 px-4 py-10">
-              <DigitalClock />
+              <DigitalClock fontXlSize={fontXlSize} />
               <WeatherForecast
                 locationTitle={locationTitle}
                 dailyForecast={dailyForecast ?? []}
@@ -106,7 +107,7 @@ export function ScheduleWidget({ rotate }: ScheduleWidgetProps) {
 
       {!isEffectiveXl && (
         <div className="flex h-1/7 flex-row gap-4 border-[var(--border)] border-t-2 px-4">
-          <DigitalClock />
+          <DigitalClock fontXlSize={fontXlSize} />
           <WeatherForecast
             locationTitle={locationTitle}
             dailyForecast={dailyForecast ?? []}

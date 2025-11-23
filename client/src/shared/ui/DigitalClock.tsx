@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
-
-export function DigitalClock() {
+interface DigitalClockProps {
+  fontXlSize: number;
+}
+export function DigitalClock({ fontXlSize }: DigitalClockProps) {
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
@@ -13,11 +15,15 @@ export function DigitalClock() {
   const seconds = time.getSeconds().toString().padStart(2, '0');
 
   return (
-    <div className="flex flex-1 flex-col items-center justify-center font-bold text-8xl tracking-wide">
+    <div
+      className={`flex flex-1 flex-col items-center justify-center font-bold text-${fontXlSize}xl tracking-wide`}
+    >
       <div>
         {hours}:{minutes}
       </div>
-      <div className="text-6xl text-[var(--meta-text)]">{seconds}</div>
+      <div className={`text-${fontXlSize - 2}xl text-[var(--meta-text)]`}>
+        {seconds}
+      </div>
     </div>
   );
 }
