@@ -35,7 +35,7 @@ export function WeatherForecast({
   }
 
   return (
-    <div className="flex h-full flex-1 gap-10 px-4 py-4">
+    <div className="flex h-full flex-1 gap-10 py-10">
       <div className="flex h-full w-1/2 flex-col items-center justify-center gap-2 text-[var(--meta-text)]">
         <div className="text-center text-5xl">
           Погода в {locationTitle || 'Lorem ipsum'}
@@ -51,14 +51,14 @@ export function WeatherForecast({
           </div>
         </div>
 
-        <div className="flex h-full flex-col justify-center gap-2 text-2xl">
+        <div className="flex h-full flex-col justify-center gap-2 text-3xl">
           <div>Ощущается как {Math.round(currentWeather.feelsLike)}°C</div>
           <div>Влажность: {currentWeather.humidity}%</div>
           <div>Давление: {currentWeather.pressure} мм рт. ст.</div>
         </div>
       </div>
 
-      <div className="flex h-full flex-col justify-center text-4xl text-[var(--card-text)]">
+      <div className="flex h-full flex-1 flex-col items-center justify-center text-4xl text-[var(--card-text)]">
         {dailyForecast
           .slice(0, 6)
           .map(({ time, temperature, iconUrl, description }) => (

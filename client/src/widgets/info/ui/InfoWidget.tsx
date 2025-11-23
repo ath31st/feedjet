@@ -7,6 +7,7 @@ import {
 import { WeatherForecast } from './WeatherForecast';
 import { InfoHeader } from './InfoHeader';
 import { DigitalClock } from '@/shared/ui';
+import { InfoDate } from './InfoDate';
 
 interface InfoWidgetProps {
   rotate: number;
@@ -44,23 +45,13 @@ export function InfoWidget({ rotate }: InfoWidgetProps) {
 
       <div className="flex w-full flex-1">
         {isEffectiveXl ? (
-          <div className="flex h-full w-full flex-row gap-4 px-4 py-10">
-            <div className="flex flex-1 flex-col">
-              <div className="text-center font-semibold text-6xl leading-tight">
-                {new Date().toLocaleDateString('ru-RU', {
-                  day: 'numeric',
-                  month: 'long',
-                  year: 'numeric',
-                })}
-                <div className="text-5xl text-[var(--meta-text)]">
-                  {new Date().toLocaleDateString('ru-RU', { weekday: 'long' })}
-                </div>
-              </div>
-
+          <div className="flex h-full w-full flex-row px-12">
+            <div className="flex w-2/5 flex-col py-10">
+              <InfoDate date={new Date()} />
               <DigitalClock fontXlSize={fonstXlSize} />
             </div>
 
-            <div className="h-full border border-[var(--border)]"></div>
+            <div className="mr-10 h-full border border-[var(--border)]"></div>
 
             <WeatherForecast
               locationTitle={locationTitle}
@@ -71,8 +62,12 @@ export function InfoWidget({ rotate }: InfoWidgetProps) {
             />
           </div>
         ) : (
-          <div className="flex w-full flex-col gap-4">
+          <div className="flex h-full w-full flex-col px-4 py-10">
+            <InfoDate date={new Date()} />
             <DigitalClock fontXlSize={fonstXlSize} />
+
+            <div className="mb-10 w-full border border-[var(--border)]"></div>
+
             <WeatherForecast
               locationTitle={locationTitle}
               dailyForecast={dailyForecast ?? []}

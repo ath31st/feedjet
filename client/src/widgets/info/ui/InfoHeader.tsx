@@ -9,7 +9,7 @@ export function InfoHeader({ isEffectiveXl, title }: InfoHeaderProps) {
   return (
     <>
       {isEffectiveXl ? (
-        <div className="flex h-1/4 items-center justify-center px-18 py-4">
+        <div className="flex h-1/4 items-center justify-center px-12 py-4">
           <img
             src={eagleUrl}
             alt="Eagle"
