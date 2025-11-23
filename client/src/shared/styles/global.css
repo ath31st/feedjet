@@ -51,7 +51,7 @@
 
   --background: hsl(var(--hue), 30%, 10%);
   --text: hsl(var(--hue), 35%, 90%);
-  --card-bg: hsl(var(--hue), 25%, 15%);
+  --card-bg: hsl(var(--hue), 30%, 15%);
   --card-text: hsl(var(--hue), 35%, 90%);
   --category-text: hsl(var(--hue), 60%, 60%);
   --description-text: hsl(var(--hue), 45%, 75%);
@@ -67,7 +67,7 @@
 
   --background: hsl(var(--hue), 30%, 10%);
   --text: hsl(var(--hue), 35%, 90%);
-  --card-bg: hsl(var(--hue), 25%, 15%);
+  --card-bg: hsl(var(--hue), 35%, 15%);
   --card-text: hsl(var(--hue), 35%, 90%);
   --category-text: hsl(var(--hue), 60%, 60%);
   --description-text: hsl(var(--hue), 45%, 75%);
@@ -83,7 +83,7 @@
 
   --background: hsl(var(--hue), 30%, 10%);
   --text: hsl(var(--hue), 35%, 90%);
-  --card-bg: hsl(var(--hue), 25%, 15%);
+  --card-bg: hsl(var(--hue), 30%, 15%);
   --card-text: hsl(var(--hue), 35%, 90%);
   --category-text: hsl(var(--hue), 50%, 60%);
   --description-text: hsl(var(--hue), 40%, 75%);
