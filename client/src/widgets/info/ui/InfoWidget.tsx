@@ -26,6 +26,7 @@ export function InfoWidget({ rotate }: InfoWidgetProps) {
   } = useCurrentWeatherForecast(locationLat, locationLon);
   const isXl = useIsXl();
   const isEffectiveXl = isRotate90(rotate) ? !isXl : isXl;
+  const fonstXlSize = 9;
 
   if (isLoadingDaily || isLoadingCurrent) {
     return (
@@ -38,31 +39,38 @@ export function InfoWidget({ rotate }: InfoWidgetProps) {
   return (
     <div className="flex h-full w-full flex-col">
       <InfoHeader isEffectiveXl={isEffectiveXl} title={companyName} />
-
-      <div
-        className="mx-auto flex w-full flex-1 border-t-2"
-        style={{ borderColor: 'var(--border)' }}
-      >
+      <div className="w-full border border-[var(--border)]"></div>
+      <div className="flex w-full flex-1">
         {isEffectiveXl && (
-          <>
-            <div className="h-full border border-[var(--border)]" />
-            <div className="flex h-full w-1/2 flex-col gap-4 px-4 py-10">
-              <DigitalClock fontXlSize={8} />
-              <WeatherForecast
-                locationTitle={locationTitle}
-                dailyForecast={dailyForecast ?? []}
-                currentWeather={currentWeather ?? null}
-                isLoadingDaily={isLoadingDaily}
-                isLoadingCurrent={isLoadingCurrent}
-              />
+          <div className="flex h-full w-full flex-row gap-4 px-4 py-10">
+            <div className="flex flex-1 flex-col">
+              <div className="text-center font-semibold text-7xl leading-tight">
+                {new Date().toLocaleDateString('ru-RU', {
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric',
+                })}
+                <div className="text-6xl text-[var(--meta-text)]">
+                  {new Date().toLocaleDateString('ru-RU', { weekday: 'long' })}
+                </div>
+              </div>
+
+              <DigitalClock fontXlSize={fonstXlSize} />
             </div>
-          </>
+            <WeatherForecast
+              locationTitle={locationTitle}
+              dailyForecast={dailyForecast ?? []}
+              currentWeather={currentWeather ?? null}
+              isLoadingDaily={isLoadingDaily}
+              isLoadingCurrent={isLoadingCurrent}
+            />
+          </div>
         )}
       </div>
 
       {!isEffectiveXl && (
-        <div className="flex h-1/7 flex-row gap-4 border-[var(--border)] border-t-2 px-4">
-          <DigitalClock fontXlSize={8} />
+        <div className="flex h-1/7 flex-row gap-4 px-4">
+          <DigitalClock fontXlSize={fonstXlSize} />
           <WeatherForecast
             locationTitle={locationTitle}
             dailyForecast={dailyForecast ?? []}

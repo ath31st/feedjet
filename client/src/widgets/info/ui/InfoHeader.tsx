@@ -17,7 +17,7 @@ export function InfoHeader({ isEffectiveXl, title }: InfoHeaderProps) {
         style={{ filter: 'drop-shadow(0 0 6px var(--border))' }}
       />
       <h1
-        className={`w-${isEffectiveXl ? '4/5' : '2/3'} overflow-hidden text-center font-semibold text-4xl uppercase`}
+        className={`w-${isEffectiveXl ? '4/5' : '2/3'} overflow-hidden text-center font-semibold text-5xl uppercase`}
       >
         {title ||
           'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt'}

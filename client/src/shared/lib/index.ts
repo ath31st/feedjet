@@ -14,3 +14,4 @@ export * from './getTextSizeByCells';
 export * from './useIsXl';
 export * from './isValidUrl';
 export * from './useEnv';
+export * from './geRemFromTailwindXl';
