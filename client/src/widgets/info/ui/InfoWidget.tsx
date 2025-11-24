@@ -8,6 +8,7 @@ import { WeatherForecast } from './WeatherForecast';
 import { InfoHeader } from './InfoHeader';
 import { DigitalClock } from '@/shared/ui';
 import { InfoDate } from './InfoDate';
+import { useAutoWeatherRefetch } from '../model/useAutoWeatherRefetch';
 
 interface InfoWidgetProps {
   rotate: number;
@@ -29,6 +30,11 @@ export function InfoWidget({ rotate }: InfoWidgetProps) {
   const isEffectiveXl = isRotate90(rotate) ? !isXl : isXl;
   const fonstXlSize = 9;
 
+  useAutoWeatherRefetch({
+    refetchDaily,
+    refetchCurrent,
+  });
+
   if (isLoadingDaily || isLoadingCurrent) {
     return (
       <div className="flex h-screen w-screen items-center justify-center">
@@ -41,7 +47,7 @@ export function InfoWidget({ rotate }: InfoWidgetProps) {
     <div className="flex h-full w-full flex-col">
       <InfoHeader isEffectiveXl={isEffectiveXl} title={companyName} />
 
-      <div className="w-full border border-[var(--border)]"></div>
+      <div className="mt-6 w-full border border-[var(--border)]"></div>
 
       <div className="flex w-full flex-1">
         {isEffectiveXl ? (
