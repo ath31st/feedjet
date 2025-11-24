@@ -17,7 +17,6 @@ import {
   videoSseHandler,
 } from './sse/sse.handlers.js';
 import { createServiceLogger } from './utils/pino.logger.js';
-import { startKioskHeartbeatCronJob } from './cron/kiosk.heartbeat.cron.js';
 
 const logger = createServiceLogger('main');
 
@@ -46,7 +45,6 @@ app.get('/sse/video', videoSseHandler);
 
 startRssCronJob();
 startImageCacheCleanupJob();
-startKioskHeartbeatCronJob();
 
 app.listen(port, () => {
   logger.info(

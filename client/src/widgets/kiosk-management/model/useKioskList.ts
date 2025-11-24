@@ -6,10 +6,9 @@ import {
 import { useGetActiveHeartbeats } from '@/features/kiosk-heartbeat';
 
 export function useKioskList() {
-  const DAILY_MS = 24 * 60 * 60 * 1000;
   const { currentKiosk, setCurrentKiosk } = useKioskStore();
   const { data: kiosks, isLoading } = useGetAllKiosks();
-  const { data: heartbeats = [] } = useGetActiveHeartbeats(DAILY_MS);
+  const { data: heartbeats = [] } = useGetActiveHeartbeats();
   const deleteKiosk = useDeleteKiosk();
 
   const kiosksWithHeartbeats = kiosks?.map((kiosk) => ({

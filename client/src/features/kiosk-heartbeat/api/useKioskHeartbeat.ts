@@ -5,10 +5,8 @@ export const useSendHeartbeat = () => {
   return useMutation(trpcWithProxy.kioskHeartbeat.heartbeat.mutationOptions());
 };
 
-export const useGetActiveHeartbeats = (timeoutMs: number) => {
+export const useGetActiveHeartbeats = () => {
   return useQuery(
-    trpcWithProxy.kioskHeartbeat.getActiveHeartbeats.queryOptions({
-      timeoutMs,
-    }),
+    trpcWithProxy.kioskHeartbeat.getActiveHeartbeats.queryOptions(),
   );
 };
