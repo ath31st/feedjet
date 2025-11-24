@@ -2,7 +2,7 @@ export function NotFoundPage() {
   return (
     <div className="flex min-h-screen items-center justify-center">
       <div
-        className="rounded-xl border-2 4k:p-28 p-12 text-2xl"
+        className="rounded-lg border-2 4k:p-28 p-12 text-2xl"
         style={{
           borderColor: 'var(--border)',
           backgroundColor: 'var(--card-bg)',

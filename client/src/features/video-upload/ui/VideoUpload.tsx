@@ -53,7 +53,7 @@ export function VideoUpload() {
 
       {/** biome-ignore lint/a11y/noStaticElementInteractions: no need to add a11y  */}
       <div
-        className={`flex h-30 items-center justify-center rounded border-2 border-dashed ${
+        className={`flex h-30 items-center justify-center rounded-lg border-2 border-dashed ${
           dragOver
             ? 'border-[var(--border)] bg-[var(--button-hover-bg)]'
             : 'border-[var(--border)]'

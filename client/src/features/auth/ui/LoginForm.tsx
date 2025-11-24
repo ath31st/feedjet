@@ -24,14 +24,14 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex w-1/3 max-w-x flex-col gap-6 4k:rounded-4xl rounded-xl 4k:p-28 p-12 4k:text-4xl text-base"
+      className="flex w-1/3 max-w-x flex-col gap-6 rounded-lg p-12 text-base"
       style={{
         borderColor: 'var(--border)',
         backgroundColor: 'var(--card-bg)',
         color: 'var(--text)',
       }}
     >
-      <h1 className="text-center 4k:text-8xl text-4xl">Вход</h1>
+      <h1 className="text-center text-4xl">Вход</h1>
 
       <input
         type="text"

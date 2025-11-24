@@ -12,7 +12,7 @@ interface KioskCardProps {
 
 export function KioskCard({ kiosk, onDelete, actions }: KioskCardProps) {
   return (
-    <div className="rounded-xl border border-[var(--border)] p-4">
+    <div className="rounded-lg border border-[var(--border)] p-4">
       <div className="mb-3 flex items-start justify-between">
         <h3 className="font-semibold text-lg">{kiosk.name}</h3>
 

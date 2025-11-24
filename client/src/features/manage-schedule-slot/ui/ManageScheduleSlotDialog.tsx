@@ -42,7 +42,7 @@ export function ManageScheduleSlotDialog({
     <Dialog.Root open={open} onOpenChange={onClose}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/50" />
-        <Dialog.Content className="-translate-x-1/2 -translate-y-1/2 fixed top-1/2 left-1/2 w-[500px] max-w-[90vw] rounded-md bg-[var(--card-bg)] p-5 shadow-xl">
+        <Dialog.Content className="-translate-x-1/2 -translate-y-1/2 fixed top-1/2 left-1/2 w-[500px] max-w-[90vw] rounded-lg bg-[var(--card-bg)] p-5 shadow-xl">
           <Dialog.Title className="mb-4 font-semibold text-lg">
             {format(parseISO(date), 'd MMMM yyyy', { locale: ru })} {startTime}
           </Dialog.Title>

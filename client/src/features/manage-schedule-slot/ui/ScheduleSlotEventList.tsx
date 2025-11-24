@@ -22,7 +22,7 @@ export function ScheduleSlotEventList({
       {events.map((event) => (
         <li
           key={event.id}
-          className="flex items-start justify-between gap-1 rounded-md border border-[var(--border)] bg-muted px-3 py-2 text-sm"
+          className="flex items-start justify-between gap-1 rounded-lg border border-[var(--border)] bg-muted px-3 py-2 text-sm"
         >
           <div className="flex flex-1 gap-1">
             <span className="flex w-10 items-center text-muted-foreground text-xs">

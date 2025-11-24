@@ -4,7 +4,7 @@ export function UnauthorizedPage() {
   return (
     <div className="flex min-h-screen items-center justify-center">
       <div
-        className="flex flex-col items-center gap-8 rounded-xl p-12"
+        className="flex flex-col items-center gap-8 rounded-lg p-12"
         style={{
           borderColor: 'var(--border)',
           backgroundColor: 'var(--card-bg)',
