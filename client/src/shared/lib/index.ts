@@ -15,3 +15,4 @@ export * from './useIsXl';
 export * from './isValidUrl';
 export * from './useEnv';
 export * from './geRemFromTailwindXl';
+export * from './formatSecondsToTime';
