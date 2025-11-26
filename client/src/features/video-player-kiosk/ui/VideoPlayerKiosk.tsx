@@ -11,7 +11,6 @@ export function VideoPlayerKiosk() {
       ref={videoRef}
       className="relative z-10 h-full w-full"
       autoPlay
-      muted
       playsInline
       onEnded={onEnded}
       onError={onError}
