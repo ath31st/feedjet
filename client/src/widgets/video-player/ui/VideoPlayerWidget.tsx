@@ -12,10 +12,12 @@ export function VideoPlayerWidget({
   isSingleVideoWidget,
 }: VideoPlayerWidgetProps) {
   return (
-    <VideoPlayerKiosk
-      onVideoStart={onVideoStart}
-      onVideoEnd={onVideoEnd}
-      isSingleVideoWidget={isSingleVideoWidget}
-    />
+    <div className="fixed inset-0 z-50">
+      <VideoPlayerKiosk
+        onVideoStart={onVideoStart}
+        onVideoEnd={onVideoEnd}
+        isSingleVideoWidget={isSingleVideoWidget}
+      />
+    </div>
   );
 }
