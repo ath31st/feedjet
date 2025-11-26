@@ -16,7 +16,7 @@ export function SimpleDropdownMenu({
       <DropdownMenu.Trigger asChild>
         <button
           type="button"
-          className="rounded-lg border border-[var(--border)] bg-[var(--card-bg)] px-3 py-2 text-left focus:outline-none"
+          className="cursor-pointer rounded-lg border border-[var(--border)] bg-[var(--card-bg)] px-3 py-2 text-left focus:outline-none"
         >
           {value}
         </button>
