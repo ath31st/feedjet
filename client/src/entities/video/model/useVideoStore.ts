@@ -10,6 +10,7 @@ type VideoStore = {
   initStore: () => Promise<void>;
   setVideos: (videos: VideoMetadata[]) => void;
   setCurrentVideo: (video: VideoMetadata | null) => void;
+  resetPlaylist: () => void;
   nextVideo: () => void;
 };
 
@@ -49,16 +50,28 @@ export const useVideoStore = create<VideoStore>((set) => ({
   setCurrentVideo: (video) => set({ currentVideo: video }),
   nextVideo: () =>
     set((state) => {
-      if (!state.videos.length) return { currentVideo: null };
-      if (!state.currentVideo) return { currentVideo: state.videos[0] };
+      if (!state.currentVideo || !state.videos.length) {
+        return { currentVideo: null };
+      }
 
       const index = state.videos.findIndex(
         (v) => v.fileName === state.currentVideo?.fileName,
       );
-      const nextIndex = (index + 1) % state.videos.length;
 
-      return {
-        currentVideo: state.videos[nextIndex],
-      };
+      if (index === -1) {
+        return { currentVideo: null };
+      }
+
+      const nextIndex = index + 1;
+
+      if (nextIndex >= state.videos.length) {
+        return { currentVideo: null };
+      }
+
+      return { currentVideo: state.videos[nextIndex] };
     }),
+  resetPlaylist: () =>
+    set((state) => ({
+      currentVideo: state.videos.length > 0 ? state.videos[0] : null,
+    })),
 }));

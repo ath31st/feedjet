@@ -7,16 +7,29 @@ interface UseKioskRotationProps {
 
 export function useKioskRotation({ widgets, interval }: UseKioskRotationProps) {
   const [index, setIndex] = useState(0);
+  const [isRotationLocked, setIsRotationLocked] = useState(false);
+
+  const lockRotation = useEffectEvent(() => {
+    setIsRotationLocked(true);
+  });
+
+  const unlockRotation = useEffectEvent(() => {
+    setIsRotationLocked(false);
+    setIndex((prev) => (prev + 1) % widgets.length);
+  });
 
   const onTick = useEffectEvent(() => {
+    if (isRotationLocked) {
+      return;
+    }
     setIndex((prev) => (prev + 1) % widgets.length);
   });
 
   useEffect(() => {
-    if (!interval || widgets.length < 2) return;
+    if (!interval || widgets.length < 2 || isRotationLocked) return;
     const id = setInterval(onTick, interval);
     return () => clearInterval(id);
-  }, [interval, widgets.length]);
+  }, [interval, widgets.length, isRotationLocked]);
 
   useEffect(() => {
     if (index >= widgets.length && widgets.length > 0) {
@@ -24,5 +37,14 @@ export function useKioskRotation({ widgets, interval }: UseKioskRotationProps) {
     }
   }, [widgets.length, index]);
 
-  return { index, setIndex };
+  const isSingleVideoWidget = widgets.length === 1 && widgets[0] === 'video';
+
+  return {
+    index,
+    setIndex,
+    lockRotation,
+    unlockRotation,
+    isRotationLocked,
+    isSingleVideoWidget,
+  };
 }

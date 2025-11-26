@@ -18,7 +18,11 @@ export function KioskPage() {
   const widgets = uiConfig?.rotatingWidgets ?? [];
   const interval = uiConfig?.autoSwitchIntervalMs ?? 0;
   const { rotate, animation } = useKioskParams();
-  const { index } = useKioskRotation({ widgets, interval });
+  const { index, lockRotation, unlockRotation, isSingleVideoWidget } =
+    useKioskRotation({
+      widgets,
+      interval,
+    });
   const currentWidgetKey = widgets[index];
 
   if (loading || !initialized) {
@@ -53,7 +57,13 @@ export function KioskPage() {
               {currentWidgetKey === 'schedule' && (
                 <ScheduleWidget rotate={rotate} />
               )}
-              {currentWidgetKey === 'video' && <VideoPlayerWidget />}
+              {currentWidgetKey === 'video' && (
+                <VideoPlayerWidget
+                  onVideoStart={lockRotation}
+                  onVideoEnd={unlockRotation}
+                  isSingleVideoWidget={isSingleVideoWidget}
+                />
+              )}
               {currentWidgetKey === 'birthday' && (
                 <BirthdayWidget rotate={rotate} animation={animation} />
               )}

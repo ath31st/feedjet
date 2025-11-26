@@ -1,16 +1,32 @@
-import { EmptyVideoPlaylist } from './EmptyVideoPlaylist';
 import { useVideoPlayer } from '../model/useVideoPlayer';
 
-export function VideoPlayerKiosk() {
-  const { videoRef, currentVideo, onEnded, onError } = useVideoPlayer();
+interface VideoPlayerKioskProps {
+  onVideoStart: () => void;
+  onVideoEnd: () => void;
+  isSingleVideoWidget: boolean;
+}
 
-  if (!currentVideo) return <EmptyVideoPlaylist />;
+export function VideoPlayerKiosk({
+  onVideoStart,
+  onVideoEnd,
+  isSingleVideoWidget,
+}: VideoPlayerKioskProps) {
+  const { videoRef, currentVideo, onEnded, onError } = useVideoPlayer({
+    onVideoStart,
+    onVideoEnd,
+    isSingleVideoWidget,
+  });
+
+  if (!currentVideo) {
+    return null;
+  }
 
   return (
     <video
       ref={videoRef}
       className="relative z-10 h-full w-full"
       autoPlay
+      muted
       playsInline
       onEnded={onEnded}
       onError={onError}
