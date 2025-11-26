@@ -19,7 +19,7 @@ export function WidgetRotationInterval({
   const { value, update } = useRotationInterval(kioskId, props.min, props.max);
   return (
     <RotationInterval
-      label="Интервал смены виджетов (в секундах):"
+      label="Интервал смены виджетов:"
       inputId="widget-rotation-interval"
       value={value}
       update={update}

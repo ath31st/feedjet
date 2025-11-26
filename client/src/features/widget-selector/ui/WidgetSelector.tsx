@@ -15,7 +15,7 @@ export function WidgetSelector({ kioskId }: WidgetSelectorProps) {
 
       <ToggleGroup.Root
         type="multiple"
-        className="flex justify-center gap-1 rounded-lg border border-[var(--border)] p-1"
+        className="grid grid-cols-4 gap-1 rounded-lg border border-[var(--border)] p-1"
         value={rotatingWidgets}
         onValueChange={(next) => {
           if (next.length === 0) return;
@@ -26,7 +26,7 @@ export function WidgetSelector({ kioskId }: WidgetSelectorProps) {
           <ToggleGroup.Item
             key={t}
             value={t}
-            className="w-24 cursor-pointer rounded-lg px-2 py-1 text-sm hover:bg-[var(--button-hover-bg)] data-[state=on]:bg-[var(--button-bg)]"
+            className="cursor-pointer rounded-lg px-2 py-1 hover:bg-[var(--button-hover-bg)] data-[state=on]:bg-[var(--button-bg)]"
           >
             {widgetLabels[t]}
           </ToggleGroup.Item>

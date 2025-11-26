@@ -19,7 +19,7 @@ export function FeedRotationInterval({
   const { value, update } = useRotationInterval(kioskId, props.min, props.max);
   return (
     <RotationInterval
-      label="Интервал смены ленты (в секундах):"
+      label={`Интервал "вращения" ленты:`}
       inputId="feed-rotation-interval"
       value={value}
       update={update}
