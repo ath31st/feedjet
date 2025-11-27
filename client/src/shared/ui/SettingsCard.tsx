@@ -13,12 +13,11 @@ export function SettingsCard({
 }: SettingsCardProps) {
   return (
     <section
-      className={`rounded-lg bg-[var(--card-bg)] p-6 shadow-2xl ${className}`}
+      className={`hover:-translate-y-1 relative transform rounded-lg bg-[var(--card-bg)] p-6 shadow-2xl transition-transform duration-400 ${className}`}
     >
-      {/* {title && <h2 className="mb-4 font-semibold text-xl">{title}</h2>} */}
       {title && (
         <h2
-          className="mb-4 inline-block w-full rounded-lg px-2 py-2 font-semibold text-xl"
+          className="absolute top-0 left-0 w-full rounded-t-lg px-6 py-2 font-semibold text-xl"
           style={{
             background:
               'linear-gradient(to right, var(--button-bg), var(--card-bg) 90%)',
@@ -27,7 +26,7 @@ export function SettingsCard({
           {title}
         </h2>
       )}
-      {children}
+      <div className={title ? 'mt-10' : ''}>{children}</div>
     </section>
   );
 }
