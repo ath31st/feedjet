@@ -1,7 +1,8 @@
-import { themes, themesFull, type Theme } from '@/entities/ui-config';
+import { themesFull, type Theme } from '@/entities/ui-config';
 import { useThemeSelector } from '../model/useThemeSelector';
 import * as ToggleGroup from '@radix-ui/react-toggle-group';
 import { TooltipWrapper } from '@/shared/ui';
+import { getColorFromHex } from '@/shared/lib';
 
 interface ThemeSelectorProps {
   kioskId: number;
@@ -10,7 +11,7 @@ interface ThemeSelectorProps {
 export function ThemeSelector({ kioskId }: ThemeSelectorProps) {
   const { theme, handleThemeChange } = useThemeSelector(kioskId);
 
-  if (!themes?.length) return <p>Темы недоступны</p>;
+  if (!themesFull?.length) return <p>Темы недоступны</p>;
 
   return (
     <div className="flex flex-col gap-1">
@@ -29,10 +30,14 @@ export function ThemeSelector({ kioskId }: ThemeSelectorProps) {
           <ToggleGroup.Item
             key={t.name}
             value={t.name}
-            className="cursor-pointer rounded-lg px-2 py-1 hover:bg-[var(--button-hover-bg)] data-[state=on]:bg-[var(--button-bg)]"
+            style={{
+              backgroundColor: t.color,
+              color: getColorFromHex(t.color),
+            }}
+            className="cursor-pointer rounded-lg px-2 py-1 transition-colors duration-200 hover:bg-[var(--button-hover-bg)] hover:text-[var(--text)] data-[state=on]:bg-[var(--button-bg)] data-[state=on]:text-[var(--text)]"
           >
             <TooltipWrapper tooltip={t.label}>
-              <span>{t.name}</span>
+              <span className="font-medium text-xs">{t.name}</span>
             </TooltipWrapper>
           </ToggleGroup.Item>
         ))}
