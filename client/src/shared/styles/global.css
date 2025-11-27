@@ -158,54 +158,21 @@
   --border: hsl(var(--hue), 40%, 45%);
 }
 
-[data-theme="oled"] {
-  --hue: 220;
+[data-theme="flame"] {
+  --hue: 15;
 
-  --background: hsl(var(--hue), 10%, 5%);
-  --text: hsl(var(--hue), 10%, 95%);
-  --card-bg: hsl(var(--hue), 10%, 12%);
-  --card-text: hsl(var(--hue), 10%, 95%);
-  --category-text: hsl(var(--hue), 20%, 70%);
-  --description-text: hsl(var(--hue), 10%, 80%);
-  --meta-text: hsl(var(--hue), 10%, 50%);
-  --button-bg: hsl(var(--hue), 15%, 25%);
-  --button-text: hsl(var(--hue), 10%, 95%);
-  --button-hover-bg: hsl(var(--hue), 15%, 35%);
-  --border: hsl(var(--hue), 10%, 30%);
-}
-
-[data-theme="amber"] {
-  --hue: 35;
-
-  --background: hsl(var(--hue), 30%, 10%);
-  --text: hsl(var(--hue), 45%, 90%);
-  --card-bg: hsl(var(--hue), 25%, 15%);
-  --card-text: hsl(var(--hue), 45%, 90%);
-  --category-text: hsl(var(--hue), 60%, 60%);
-  --description-text: hsl(var(--hue), 40%, 75%);
-  --meta-text: hsl(var(--hue), 35%, 55%);
-  --button-bg: hsl(var(--hue), 65%, 25%);
-  --button-text: hsl(var(--hue), 45%, 90%);
-  --button-hover-bg: hsl(var(--hue), 65%, 35%);
+  --background: hsl(var(--hue), 40%, 10%);
+  --text: hsl(var(--hue), 35%, 90%);
+  --card-bg: hsl(var(--hue), 35%, 16%);
+  --card-text: hsl(var(--hue), 35%, 90%);
+  --category-text: hsl(var(--hue), 70%, 65%); /* Насыщенный оранжевый */
+  --description-text: hsl(var(--hue), 50%, 75%);
+  --meta-text: hsl(var(--hue), 40%, 55%);
+  --button-bg: hsl(var(--hue), 60%, 30%);
+  --button-text: hsl(var(--hue), 35%, 90%);
+  --button-hover-bg: hsl(var(--hue), 60%, 40%);
   --border: hsl(var(--hue), 50%, 45%);
 }
-
-[data-theme="rose"] {
-  --hue: 330;
-
-  --background: hsl(var(--hue), 25%, 12%);
-  --text: hsl(var(--hue), 25%, 95%);
-  --card-bg: hsl(var(--hue), 20%, 18%);
-  --card-text: hsl(var(--hue), 25%, 95%);
-  --category-text: hsl(var(--hue), 50%, 70%);
-  --description-text: hsl(var(--hue), 35%, 80%);
-  --meta-text: hsl(var(--hue), 25%, 60%);
-  --button-bg: hsl(var(--hue), 50%, 30%);
-  --button-text: hsl(var(--hue), 25%, 95%);
-  --button-hover-bg: hsl(var(--hue), 50%, 40%);
-  --border: hsl(var(--hue), 40%, 50%);
-}
-
 [data-theme="indigo"] {
   --hue: 245;
 
@@ -240,22 +207,6 @@
   --border: hsl(var(--hue), 70%, 35%);
 }
 
-[data-theme="fuchsia"] {
-  --hue: 300;
-
-  --background: hsl(var(--hue), 35%, 12%);
-  --text: hsl(var(--hue), 30%, 95%);
-  --card-bg: hsl(var(--hue), 30%, 18%);
-  --card-text: hsl(var(--hue), 30%, 95%);
-  --category-text: hsl(var(--hue), 70%, 75%);
-  --description-text: hsl(var(--hue), 40%, 85%);
-  --meta-text: hsl(var(--hue), 30%, 65%);
-  --button-bg: hsl(var(--hue), 65%, 30%);
-  --button-text: hsl(var(--hue), 30%, 95%);
-  --button-hover-bg: hsl(var(--hue), 65%, 40%);
-  --border: hsl(var(--hue), 50%, 50%);
-}
-
 [data-theme="glacier"] {
   --hue: 200;
 
@@ -270,6 +221,234 @@
   --button-text: hsl(var(--hue), 20%, 95%);
   --button-hover-bg: hsl(var(--hue), 30%, 45%);
   --border: hsl(var(--hue), 25%, 50%);
+}
+
+[data-theme="gold"] {
+  --primary-hue: 0;
+  --accent-hue: 45;
+
+  --background: hsl(var(--primary-hue), 10%, 6%);
+  --text: hsl(var(--accent-hue), 50%, 85%);
+  --card-bg: hsl(var(--primary-hue), 10%, 12%);
+  --card-text: hsl(var(--accent-hue), 50%, 85%);
+
+  --category-text: hsl(var(--accent-hue), 90%, 60%);
+  --description-text: hsl(var(--accent-hue), 30%, 70%);
+  --meta-text: hsl(var(--accent-hue), 20%, 55%);
+
+  --button-bg: hsl(var(--accent-hue), 80%, 30%);
+  --button-text: hsl(var(--primary-hue), 0%, 95%);
+  --button-hover-bg: hsl(var(--accent-hue), 80%, 40%);
+  --border: hsl(var(--accent-hue), 70%, 50%);
+}
+
+[data-theme="silver"] {
+  --primary-hue: 220;
+  --accent-hue: 220;
+
+  --background: hsl(var(--primary-hue), 15%, 8%);
+  --text: hsl(var(--accent-hue), 5%, 95%);
+  --card-bg: hsl(var(--primary-hue), 15%, 15%);
+  --card-text: hsl(var(--accent-hue), 5%, 95%);
+
+  --category-text: hsl(var(--accent-hue), 15%, 85%);
+  --description-text: hsl(var(--accent-hue), 10%, 70%);
+  --meta-text: hsl(var(--accent-hue), 5%, 50%);
+
+  --button-bg: hsl(var(--primary-hue), 15%, 25%);
+  --button-text: hsl(var(--accent-hue), 5%, 95%);
+  --button-hover-bg: hsl(var(--primary-hue), 15%, 35%);
+  --border: hsl(var(--accent-hue), 5%, 60%);
+}
+
+[data-theme="electric"] {
+  --primary-hue: 210;
+  --accent-hue: 190;
+
+  --background: hsl(var(--primary-hue), 30%, 5%);
+  --text: hsl(var(--accent-hue), 95%, 70%);
+  --card-bg: hsl(var(--primary-hue), 35%, 10%);
+  --card-text: hsl(var(--accent-hue), 95%, 70%);
+
+  --category-text: hsl(var(--accent-hue), 100%, 50%);
+  --description-text: hsl(var(--primary-hue), 25%, 60%);
+  --meta-text: hsl(var(--primary-hue), 20%, 40%);
+
+  --button-bg: hsl(var(--accent-hue), 85%, 20%);
+  --button-text: hsl(var(--accent-hue), 95%, 85%);
+  --button-hover-bg: hsl(var(--accent-hue), 85%, 30%);
+  --border: hsl(var(--accent-hue), 80%, 40%);
+}
+
+[data-theme="cyborg"] {
+  --primary-hue: 210;
+  --accent-hue: 100;
+
+  --background: hsl(var(--primary-hue), 15%, 10%);
+  --text: hsl(var(--accent-hue), 50%, 85%);
+  --card-bg: hsl(var(--primary-hue), 15%, 18%);
+  --card-text: hsl(var(--accent-hue), 50%, 85%);
+
+  --category-text: hsl(var(--accent-hue), 90%, 60%);
+  --description-text: hsl(var(--primary-hue), 10%, 65%);
+  --meta-text: hsl(var(--primary-hue), 10%, 45%);
+
+  --button-bg: hsl(var(--accent-hue), 80%, 20%);
+  --button-text: hsl(var(--primary-hue), 10%, 95%);
+  --button-hover-bg: hsl(var(--accent-hue), 80%, 30%);
+  --border: hsl(var(--accent-hue), 70%, 40%);
+}
+
+[data-theme="moss"] {
+  --primary-hue: 80;
+  --accent-hue: 50;
+
+  --background: hsl(var(--primary-hue), 30%, 12%);
+  --text: hsl(var(--accent-hue), 50%, 90%);
+  --card-bg: hsl(var(--primary-hue), 25%, 18%);
+  --card-text: hsl(var(--accent-hue), 50%, 90%);
+
+  --category-text: hsl(var(--accent-hue), 80%, 65%);
+  --description-text: hsl(var(--primary-hue), 20%, 70%);
+  --meta-text: hsl(var(--primary-hue), 15%, 50%);
+
+  --button-bg: hsl(var(--accent-hue), 70%, 25%);
+  --button-text: hsl(var(--primary-hue), 30%, 95%);
+  --button-hover-bg: hsl(var(--accent-hue), 70%, 35%);
+  --border: hsl(var(--accent-hue), 60%, 45%);
+}
+
+[data-theme="charcoal"] {
+  --primary-hue: 210;
+  --accent-hue: 10;
+
+  --background: hsl(var(--primary-hue), 20%, 8%);
+  --text: hsl(var(--accent-hue), 40%, 90%);
+  --card-bg: hsl(var(--primary-hue), 15%, 15%);
+  --card-text: hsl(var(--accent-hue), 40%, 90%);
+
+  --category-text: hsl(var(--accent-hue), 70%, 60%);
+  --description-text: hsl(var(--primary-hue), 15%, 70%);
+  --meta-text: hsl(var(--primary-hue), 10%, 45%);
+
+  --button-bg: hsl(var(--accent-hue), 60%, 25%);
+  --button-text: hsl(var(--primary-hue), 20%, 95%);
+  --button-hover-bg: hsl(var(--accent-hue), 60%, 35%);
+  --border: hsl(var(--accent-hue), 50%, 40%);
+}
+
+[data-theme="lavender"] {
+  --primary-hue: 250;
+  --accent-hue: 280;
+
+  --background: hsl(var(--primary-hue), 20%, 5%);
+  --text: hsl(var(--accent-hue), 35%, 85%);
+  --card-bg: hsl(var(--primary-hue), 15%, 12%);
+  --card-text: hsl(var(--accent-hue), 35%, 85%);
+
+  --category-text: hsl(var(--accent-hue), 60%, 60%);
+  --description-text: hsl(var(--primary-hue), 15%, 60%);
+  --meta-text: hsl(var(--primary-hue), 10%, 40%);
+
+  --button-bg: hsl(var(--accent-hue), 50%, 20%);
+  --button-text: hsl(var(--primary-hue), 20%, 95%);
+  --button-hover-bg: hsl(var(--accent-hue), 50%, 30%);
+  --border: hsl(var(--accent-hue), 40%, 40%);
+}
+
+[data-theme="jade"] {
+  --primary-hue: 180;
+  --accent-hue: 40;
+
+  --background: hsl(var(--primary-hue), 45%, 10%);
+  --text: hsl(var(--accent-hue), 40%, 80%);
+  --card-bg: hsl(var(--primary-hue), 40%, 16%);
+  --card-text: hsl(var(--accent-hue), 40%, 80%);
+
+  --category-text: hsl(var(--accent-hue), 65%, 60%);
+  --description-text: hsl(var(--primary-hue), 35%, 60%);
+  --meta-text: hsl(var(--primary-hue), 30%, 40%);
+
+  --button-bg: hsl(var(--accent-hue), 50%, 25%);
+  --button-text: hsl(var(--primary-hue), 45%, 95%);
+  --button-hover-bg: hsl(var(--accent-hue), 50%, 35%);
+  --border: hsl(var(--accent-hue), 40%, 45%);
+}
+
+[data-theme="ash"] {
+  --primary-hue: 220;
+  --accent-hue: 355;
+
+  --background: hsl(var(--primary-hue), 10%, 12%);
+  --text: hsl(var(--primary-hue), 5%, 90%);
+  --card-bg: hsl(var(--primary-hue), 8%, 18%);
+  --card-text: hsl(var(--primary-hue), 5%, 90%);
+
+  --category-text: hsl(var(--accent-hue), 60%, 55%);
+  --description-text: hsl(var(--primary-hue), 5%, 60%);
+  --meta-text: hsl(var(--primary-hue), 5%, 40%);
+
+  --button-bg: hsl(var(--accent-hue), 50%, 20%);
+  --button-text: hsl(var(--primary-hue), 10%, 95%);
+  --button-hover-bg: hsl(var(--accent-hue), 50%, 30%);
+  --border: hsl(var(--accent-hue), 40%, 40%);
+}
+
+[data-theme="forest-fire"] {
+  --primary-hue: 60;
+  --accent-hue: 25;
+
+  --background: hsl(var(--primary-hue), 10%, 10%);
+  --text: hsl(var(--accent-hue), 50%, 80%);
+  --card-bg: hsl(var(--primary-hue), 8%, 17%);
+  --card-text: hsl(var(--accent-hue), 50%, 80%);
+
+  --category-text: hsl(var(--accent-hue), 70%, 60%);
+  --description-text: hsl(var(--primary-hue), 10%, 55%);
+  --meta-text: hsl(var(--primary-hue), 5%, 35%);
+
+  --button-bg: hsl(var(--accent-hue), 60%, 25%);
+  --button-text: hsl(var(--primary-hue), 10%, 95%);
+  --button-hover-bg: hsl(var(--accent-hue), 60%, 35%);
+  --border: hsl(var(--accent-hue), 50%, 45%);
+}
+
+[data-theme="volcano"] {
+  --primary-hue: 10;
+  --accent-hue: 350;
+
+  --background: hsl(var(--primary-hue), 35%, 10%);
+  --text: hsl(var(--accent-hue), 50%, 85%);
+  --card-bg: hsl(var(--primary-hue), 30%, 16%);
+  --card-text: hsl(var(--accent-hue), 50%, 85%);
+
+  --category-text: hsl(var(--accent-hue), 80%, 60%);
+  --description-text: hsl(var(--primary-hue), 25%, 60%);
+  --meta-text: hsl(var(--primary-hue), 20%, 40%);
+
+  --button-bg: hsl(var(--accent-hue), 70%, 25%);
+  --button-text: hsl(var(--primary-hue), 35%, 95%);
+  --button-hover-bg: hsl(var(--accent-hue), 70%, 35%);
+  --border: hsl(var(--accent-hue), 60%, 40%);
+}
+
+[data-theme="neon-mint"] {
+  --primary-hue: 170;
+  --accent-hue: 140;
+
+  --background: hsl(var(--primary-hue), 30%, 12%);
+  --text: hsl(var(--accent-hue), 60%, 75%);
+  --card-bg: hsl(var(--primary-hue), 25%, 18%);
+  --card-text: hsl(var(--accent-hue), 60%, 75%);
+
+  --category-text: hsl(var(--accent-hue), 80%, 55%);
+  --description-text: hsl(var(--primary-hue), 20%, 60%);
+  --meta-text: hsl(var(--primary-hue), 15%, 40%);
+
+  --button-bg: hsl(var(--accent-hue), 70%, 20%);
+  --button-text: hsl(var(--primary-hue), 30%, 95%);
+  --button-hover-bg: hsl(var(--accent-hue), 70%, 30%);
+  --border: hsl(var(--accent-hue), 60%, 40%);
 }
 
 body {

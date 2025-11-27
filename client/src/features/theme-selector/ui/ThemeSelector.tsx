@@ -1,6 +1,7 @@
 import { themes, themesFull, type Theme } from '@/entities/ui-config';
 import { useThemeSelector } from '../model/useThemeSelector';
 import * as ToggleGroup from '@radix-ui/react-toggle-group';
+import { TooltipWrapper } from '@/shared/ui';
 
 interface ThemeSelectorProps {
   kioskId: number;
@@ -30,7 +31,9 @@ export function ThemeSelector({ kioskId }: ThemeSelectorProps) {
             value={t.name}
             className="cursor-pointer rounded-lg px-2 py-1 hover:bg-[var(--button-hover-bg)] data-[state=on]:bg-[var(--button-bg)]"
           >
-            {t.name}
+            <TooltipWrapper tooltip={t.label}>
+              <span>{t.name}</span>
+            </TooltipWrapper>
           </ToggleGroup.Item>
         ))}
       </ToggleGroup.Root>
