@@ -1,5 +1,5 @@
+import { themes, themesFull, type Theme } from '@/entities/ui-config';
 import { useThemeSelector } from '../model/useThemeSelector';
-import { themes } from '@shared/types/ui.config';
 import * as ToggleGroup from '@radix-ui/react-toggle-group';
 
 interface ThemeSelectorProps {
@@ -21,16 +21,16 @@ export function ThemeSelector({ kioskId }: ThemeSelectorProps) {
         value={theme}
         onValueChange={(next) => {
           if (!next) return;
-          handleThemeChange(kioskId, next);
+          handleThemeChange(kioskId, next as Theme);
         }}
       >
-        {themes.map((t) => (
+        {themesFull.map((t) => (
           <ToggleGroup.Item
-            key={t}
-            value={t}
+            key={t.name}
+            value={t.name}
             className="cursor-pointer rounded-lg px-2 py-1 hover:bg-[var(--button-hover-bg)] data-[state=on]:bg-[var(--button-bg)]"
           >
-            {t}
+            {t.name}
           </ToggleGroup.Item>
         ))}
       </ToggleGroup.Root>
