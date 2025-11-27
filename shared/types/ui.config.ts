@@ -20,7 +20,24 @@ export interface UpdateUiConfig {
   autoSwitchIntervalMs?: number;
 }
 
-export const themes = ['dark', 'light', 'green', 'blue', 'sepia'];
+export const themes = [
+  'dark',
+  'light',
+  'green',
+  'blue',
+  'sepia',
+  'sepia-light',
+  'purple',
+  'red',
+  'teal',
+  'oled',
+  'amber',
+  'rose',
+  'indigo',
+  'terminal',
+  'fuchsia',
+  'glacier',
+];
 export type Theme = (typeof themes)[number];
 
 export const widgetTypes = ['schedule', 'video', 'feed', 'birthday', 'info'];
