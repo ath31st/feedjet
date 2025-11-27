@@ -71,11 +71,13 @@ export function RotationInterval({
           <MinusIcon className="" />
         </CommonButton>
 
-        <SimpleDropdownMenu
-          value={currentStepKey}
-          options={stepKeys}
-          onSelect={handleStepChange}
-        />
+        <div className="min-w-[100px]">
+          <SimpleDropdownMenu
+            value={currentStepKey}
+            options={stepKeys}
+            onSelect={handleStepChange}
+          />
+        </div>
 
         <CommonButton
           type="button"

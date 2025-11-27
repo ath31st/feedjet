@@ -1,4 +1,5 @@
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
+import { useLayoutEffect, useRef, useState } from 'react';
 
 interface DropdownProps {
   value: string;
@@ -11,12 +12,22 @@ export function SimpleDropdownMenu({
   options,
   onSelect,
 }: DropdownProps) {
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const [width, setWidth] = useState(0);
+
+  useLayoutEffect(() => {
+    if (triggerRef.current) {
+      setWidth(triggerRef.current.offsetWidth);
+    }
+  }, []);
+
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>
         <button
+          ref={triggerRef}
           type="button"
-          className="cursor-pointer rounded-lg border border-[var(--border)] bg-[var(--card-bg)] px-3 py-2 text-left focus:outline-none"
+          className="w-full cursor-pointer rounded-lg border border-[var(--border)] bg-[var(--card-bg)] px-3 py-2 text-left focus:outline-none"
         >
           {value}
         </button>
@@ -26,7 +37,8 @@ export function SimpleDropdownMenu({
         <DropdownMenu.Content
           align="start"
           sideOffset={4}
-          className="z-50 min-w-[8rem] overflow-hidden rounded-lg border border-[var(--border)] bg-[var(--card-bg)] shadow-md"
+          style={{ width }}
+          className="z-50 overflow-hidden rounded-lg border border-[var(--border)] bg-[var(--card-bg)] shadow-md"
         >
           {options.map((opt) => (
             <DropdownMenu.Item
