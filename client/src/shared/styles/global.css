@@ -62,6 +62,22 @@
   --border: hsl(var(--hue), 45%, 50%);
 }
 
+[data-theme="sepia-light"] {
+  --hue: 30;
+
+  --background: hsl(var(--hue), 40%, 15%);
+  --text: hsl(var(--hue), 35%, 90%);
+  --card-bg: hsl(var(--hue), 40%, 20%);
+  --card-text: hsl(var(--hue), 35%, 90%);
+  --category-text: hsl(var(--hue), 60%, 60%);
+  --description-text: hsl(var(--hue), 45%, 75%);
+  --meta-text: hsl(var(--hue), 60%, 55%);
+  --button-bg: hsl(var(--hue), 55%, 30%);
+  --button-text: hsl(var(--hue), 35%, 90%);
+  --button-hover-bg: hsl(var(--hue), 55%, 40%);
+  --border: hsl(var(--hue), 55%, 50%);
+}
+
 [data-theme="blue"] {
   --hue: 220;
 
@@ -92,6 +108,168 @@
   --button-text: hsl(var(--hue), 35%, 90%);
   --button-hover-bg: hsl(var(--hue), 45%, 35%);
   --border: hsl(var(--hue), 45%, 50%);
+}
+
+[data-theme="purple"] {
+  --hue: 270;
+
+  --background: hsl(var(--hue), 40%, 10%);
+  --text: hsl(var(--hue), 35%, 90%);
+  --card-bg: hsl(var(--hue), 35%, 16%);
+  --card-text: hsl(var(--hue), 35%, 90%);
+  --category-text: hsl(var(--hue), 60%, 70%);
+  --description-text: hsl(var(--hue), 45%, 80%);
+  --meta-text: hsl(var(--hue), 40%, 60%);
+  --button-bg: hsl(var(--hue), 55%, 30%);
+  --button-text: hsl(var(--hue), 35%, 90%);
+  --button-hover-bg: hsl(var(--hue), 55%, 40%);
+  --border: hsl(var(--hue), 50%, 45%);
+}
+
+[data-theme="red"] {
+  --hue: 350;
+
+  --background: hsl(var(--hue), 35%, 10%);
+  --text: hsl(var(--hue), 20%, 90%);
+  --card-bg: hsl(var(--hue), 30%, 15%);
+  --card-text: hsl(var(--hue), 20%, 90%);
+  --category-text: hsl(var(--hue), 60%, 65%);
+  --description-text: hsl(var(--hue), 40%, 80%);
+  --meta-text: hsl(var(--hue), 30%, 55%);
+  --button-bg: hsl(var(--hue), 60%, 25%);
+  --button-text: hsl(var(--hue), 20%, 90%);
+  --button-hover-bg: hsl(var(--hue), 60%, 35%);
+  --border: hsl(var(--hue), 50%, 40%);
+}
+
+[data-theme="teal"] {
+  --hue: 180;
+
+  --background: hsl(var(--hue), 35%, 9%);
+  --text: hsl(var(--hue), 30%, 90%);
+  --card-bg: hsl(var(--hue), 30%, 14%);
+  --card-text: hsl(var(--hue), 30%, 90%);
+  --category-text: hsl(var(--hue), 50%, 65%);
+  --description-text: hsl(var(--hue), 35%, 80%);
+  --meta-text: hsl(var(--hue), 25%, 55%);
+  --button-bg: hsl(var(--hue), 50%, 25%);
+  --button-text: hsl(var(--hue), 30%, 90%);
+  --button-hover-bg: hsl(var(--hue), 50%, 35%);
+  --border: hsl(var(--hue), 40%, 45%);
+}
+
+[data-theme="oled"] {
+  --hue: 220;
+
+  --background: hsl(var(--hue), 10%, 5%);
+  --text: hsl(var(--hue), 10%, 95%);
+  --card-bg: hsl(var(--hue), 10%, 12%);
+  --card-text: hsl(var(--hue), 10%, 95%);
+  --category-text: hsl(var(--hue), 20%, 70%);
+  --description-text: hsl(var(--hue), 10%, 80%);
+  --meta-text: hsl(var(--hue), 10%, 50%);
+  --button-bg: hsl(var(--hue), 15%, 25%);
+  --button-text: hsl(var(--hue), 10%, 95%);
+  --button-hover-bg: hsl(var(--hue), 15%, 35%);
+  --border: hsl(var(--hue), 10%, 30%);
+}
+
+[data-theme="amber"] {
+  --hue: 35;
+
+  --background: hsl(var(--hue), 30%, 10%);
+  --text: hsl(var(--hue), 45%, 90%);
+  --card-bg: hsl(var(--hue), 25%, 15%);
+  --card-text: hsl(var(--hue), 45%, 90%);
+  --category-text: hsl(var(--hue), 60%, 60%);
+  --description-text: hsl(var(--hue), 40%, 75%);
+  --meta-text: hsl(var(--hue), 35%, 55%);
+  --button-bg: hsl(var(--hue), 65%, 25%);
+  --button-text: hsl(var(--hue), 45%, 90%);
+  --button-hover-bg: hsl(var(--hue), 65%, 35%);
+  --border: hsl(var(--hue), 50%, 45%);
+}
+
+[data-theme="rose"] {
+  --hue: 330;
+
+  --background: hsl(var(--hue), 25%, 12%);
+  --text: hsl(var(--hue), 25%, 95%);
+  --card-bg: hsl(var(--hue), 20%, 18%);
+  --card-text: hsl(var(--hue), 25%, 95%);
+  --category-text: hsl(var(--hue), 50%, 70%);
+  --description-text: hsl(var(--hue), 35%, 80%);
+  --meta-text: hsl(var(--hue), 25%, 60%);
+  --button-bg: hsl(var(--hue), 50%, 30%);
+  --button-text: hsl(var(--hue), 25%, 95%);
+  --button-hover-bg: hsl(var(--hue), 50%, 40%);
+  --border: hsl(var(--hue), 40%, 50%);
+}
+
+[data-theme="indigo"] {
+  --hue: 245;
+
+  --background: hsl(var(--hue), 40%, 10%);
+  --text: hsl(var(--hue), 35%, 90%);
+  --card-bg: hsl(var(--hue), 35%, 16%);
+  --card-text: hsl(var(--hue), 35%, 90%);
+  --category-text: hsl(var(--hue), 60%, 75%);
+  --description-text: hsl(var(--hue), 40%, 80%);
+  --meta-text: hsl(var(--hue), 30%, 60%);
+  --button-bg: hsl(var(--hue), 55%, 35%);
+  --button-text: hsl(var(--hue), 35%, 90%);
+  --button-hover-bg: hsl(var(--hue), 55%, 45%);
+  --border: hsl(var(--hue), 45%, 50%);
+}
+
+[data-theme="terminal"] {
+  --hue: 120;
+
+  --background: hsl(var(--hue), 20%, 5%);
+  --text: hsl(var(--hue), 80%, 75%);
+
+  --card-bg: hsl(var(--hue), 25%, 10%);
+  --card-text: hsl(var(--hue), 80%, 75%);
+  --category-text: hsl(var(--hue), 90%, 65%);
+  --description-text: hsl(var(--hue), 60%, 60%);
+  --meta-text: hsl(var(--hue), 50%, 45%);
+
+  --button-bg: hsl(var(--hue), 80%, 20%);
+  --button-text: hsl(var(--hue), 80%, 80%);
+  --button-hover-bg: hsl(var(--hue), 80%, 30%);
+  --border: hsl(var(--hue), 70%, 35%);
+}
+
+[data-theme="fuchsia"] {
+  --hue: 300;
+
+  --background: hsl(var(--hue), 35%, 12%);
+  --text: hsl(var(--hue), 30%, 95%);
+  --card-bg: hsl(var(--hue), 30%, 18%);
+  --card-text: hsl(var(--hue), 30%, 95%);
+  --category-text: hsl(var(--hue), 70%, 75%);
+  --description-text: hsl(var(--hue), 40%, 85%);
+  --meta-text: hsl(var(--hue), 30%, 65%);
+  --button-bg: hsl(var(--hue), 65%, 30%);
+  --button-text: hsl(var(--hue), 30%, 95%);
+  --button-hover-bg: hsl(var(--hue), 65%, 40%);
+  --border: hsl(var(--hue), 50%, 50%);
+}
+
+[data-theme="glacier"] {
+  --hue: 200;
+
+  --background: hsl(var(--hue), 25%, 15%);
+  --text: hsl(var(--hue), 20%, 95%);
+  --card-bg: hsl(var(--hue), 20%, 22%);
+  --card-text: hsl(var(--hue), 20%, 95%);
+  --category-text: hsl(var(--hue), 40%, 70%);
+  --description-text: hsl(var(--hue), 20%, 80%);
+  --meta-text: hsl(var(--hue), 15%, 60%);
+  --button-bg: hsl(var(--hue), 30%, 35%);
+  --button-text: hsl(var(--hue), 20%, 95%);
+  --button-hover-bg: hsl(var(--hue), 30%, 45%);
+  --border: hsl(var(--hue), 25%, 50%);
 }
 
 body {
