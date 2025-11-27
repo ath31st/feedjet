@@ -3,6 +3,7 @@ import { useThemeSelector } from '../model/useThemeSelector';
 import * as ToggleGroup from '@radix-ui/react-toggle-group';
 import { TooltipWrapper } from '@/shared/ui';
 import { getColorFromHex } from '@/shared/lib';
+import { CheckIcon } from '@radix-ui/react-icons';
 
 interface ThemeSelectorProps {
   kioskId: number;
@@ -34,10 +35,19 @@ export function ThemeSelector({ kioskId }: ThemeSelectorProps) {
               backgroundColor: t.color,
               color: getColorFromHex(t.color),
             }}
-            className="cursor-pointer rounded-lg px-2 py-1 transition-colors duration-200 hover:bg-[var(--button-hover-bg)] hover:text-[var(--text)] data-[state=on]:bg-[var(--button-bg)] data-[state=on]:text-[var(--text)]"
+            className="cursor-pointer rounded-lg px-2 py-2 transition-colors duration-200 hover:bg-[var(--button-hover-bg)] hover:text-[var(--text)] hover:opacity-70 data-[state=on]:bg-[var(--button-bg)] data-[state=on]:text-[var(--text)]"
           >
             <TooltipWrapper tooltip={t.label}>
-              <span className="font-medium text-xs">{t.name}</span>
+              <div className="flex items-center justify-center gap-1">
+                {t.name === theme && (
+                  <CheckIcon
+                    className="h-4 w-4 rounded-full border"
+                    style={{ color: getColorFromHex(t.color) }}
+                  />
+                )}
+
+                <span className="font-medium text-xs">{t.name}</span>
+              </div>
             </TooltipWrapper>
           </ToggleGroup.Item>
         ))}
