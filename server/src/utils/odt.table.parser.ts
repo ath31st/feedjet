@@ -35,6 +35,7 @@ export async function parseOdtTable(buffer: Buffer): Promise<string[]> {
     ignoreAttributes: false,
     attributeNamePrefix: '',
     removeNSPrefix: true,
+    trimValues: false,
   });
 
   const parsed = parser.parse(xml) as ParsedXml;
