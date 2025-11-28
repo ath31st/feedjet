@@ -11,6 +11,7 @@ import {
   birthdayDateRangeInputSchema,
   birthdayIdInputSchema,
   birthdayMonthInputSchema,
+  birthdayUpdateSchema,
 } from '../../validations/schemas/birthday.schemas.js';
 import { fileParamsSchema } from '../../validations/schemas/file.storage.validation.js';
 
@@ -41,10 +42,10 @@ export const birthdayRouter = t.router({
       return birthdays;
     }),
 
-  birthdaysByDateRange: publicProcedure
+  birthdaysDayMonthRange: publicProcedure
     .input(birthdayDateRangeInputSchema)
     .query(({ input }) => {
-      const birthdays = birthdayService.getByDateRange(
+      const birthdays = birthdayService.getByDayMonthRange(
         input.startDate,
         input.endDate,
       );
@@ -55,6 +56,21 @@ export const birthdayRouter = t.router({
     .input(birthdayCreateSchema)
     .mutation(({ input }) => {
       const birthday = birthdayService.create(input);
+      const birthdays = birthdayService.getAll();
+
+      eventBus.emit('birthday', birthdays);
+
+      return { ok: true, birthday };
+    }),
+
+  update: protectedProcedure
+    .input(birthdayUpdateSchema)
+    .mutation(({ input }) => {
+      const birthday = birthdayService.update(input.id, {
+        fullName: input.fullName,
+        department: input.department,
+        birthDate: input.birthDate,
+      });
       const birthdays = birthdayService.getAll();
 
       eventBus.emit('birthday', birthdays);

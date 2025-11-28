@@ -47,4 +47,9 @@ export const birthdayDateRangeInputSchema = z.object({
   endDate: z.coerce.date(),
 });
 
-export const birthdayUpdateSchema = birthdayCreateSchema.partial();
+export const birthdayUpdateSchema = z.object({
+  id: z.coerce.number().int().positive(),
+  fullName: z.string().min(1).max(300).optional(),
+  department: z.string().max(300).optional(),
+  birthDate: z.date().optional(),
+});

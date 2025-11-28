@@ -1,6 +1,6 @@
 import type { DbType } from '../container.js';
 import { birthdaysTable } from '../db/schema.js';
-import { eq, sql, gte, lte, and } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 import type {
   BirthdayEncrypted,
   Birthday,
@@ -81,17 +81,29 @@ export class BirthdayService {
       .sort(this.birthdayComparator);
   }
 
-  getByDateRange(start: Date, end: Date): Birthday[] {
-    const encBirthdays = this.db
-      .select()
-      .from(birthdaysTable)
-      .where(
-        and(
-          gte(birthdaysTable.birthDate, start),
-          lte(birthdaysTable.birthDate, end),
-        ),
-      )
-      .all();
+  getByDayMonthRange(start: Date, end: Date): Birthday[] {
+    const startStr = `${String(start.getMonth() + 1).padStart(2, '0')}-${String(
+      start.getDate(),
+    ).padStart(2, '0')}`;
+
+    const endStr = `${String(end.getMonth() + 1).padStart(2, '0')}-${String(
+      end.getDate(),
+    ).padStart(2, '0')}`;
+
+    const mdExpr = sql`strftime('%m-%d', ${birthdaysTable.birthDate}, 'unixepoch', 'localtime')`;
+
+    const encBirthdays =
+      startStr <= endStr
+        ? this.db
+            .select()
+            .from(birthdaysTable)
+            .where(sql`${mdExpr} >= ${startStr} AND ${mdExpr} <= ${endStr}`)
+            .all()
+        : this.db
+            .select()
+            .from(birthdaysTable)
+            .where(sql`${mdExpr} >= ${startStr} OR ${mdExpr} <= ${endStr}`)
+            .all();
 
     return encBirthdays
       .map(birthdayMapper.mapEncToDec)
@@ -139,6 +151,45 @@ export class BirthdayService {
         'Failed to insert birthdays',
       );
       throw new BirthdayError(500, 'Failed to insert birthdays');
+    }
+  }
+
+  update(id: number, data: Partial<NewBirthday>): Birthday {
+    this.logger.debug({ id, data, fn: 'update' }, 'Updating birthday entry');
+
+    try {
+      const updateData: Record<string, unknown> = {};
+
+      if (data.fullName !== undefined) {
+        updateData.fullNameEnc = encrypt(data.fullName);
+      }
+
+      if (data.department !== undefined) {
+        updateData.departmentEnc = data.department
+          ? encrypt(data.department)
+          : null;
+      }
+
+      if (data.birthDate !== undefined) {
+        updateData.birthDate = data.birthDate;
+      }
+
+      const updated = this.db
+        .update(birthdaysTable)
+        .set(updateData)
+        .where(eq(birthdaysTable.id, id))
+        .returning()
+        .get() as unknown as BirthdayEncrypted;
+
+      const result = birthdayMapper.mapEncToDec(updated);
+      this.logger.info({ id, fn: 'update' }, 'Birthday updated successfully');
+      return result;
+    } catch (err: unknown) {
+      this.logger.error(
+        { err, id, data, fn: 'update' },
+        'Failed to update birthday',
+      );
+      throw new BirthdayError(500, 'Failed to update birthday');
     }
   }
 
