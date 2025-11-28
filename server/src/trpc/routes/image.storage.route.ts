@@ -1,24 +1,24 @@
 import {
-  videoStorageService,
   t,
   publicProcedure,
   eventBus,
+  imageStorageService,
 } from '../../container.js';
 import { protectedProcedure } from '../../middleware/auth.js';
 import {
   fileDeleteParamsSchema,
   fileParamsSchema,
 } from '../../validations/schemas/file.storage.validation.js';
-import { updateVideoMetadataSchema } from '../../validations/schemas/video.schemas.js';
+import { updateImageMetadataSchema } from '../../validations/schemas/image.schemas.js';
 
-export const videoStorageRouter = t.router({
+export const imageStorageRouter = t.router({
   uploadFile: protectedProcedure
     .input(fileParamsSchema)
     .mutation(async ({ input }) => {
       const file = input.get('file') as File;
       const filename = input.get('filename') as string;
 
-      const { path, savedFileName } = await videoStorageService.upload(
+      const { path, savedFileName } = await imageStorageService.upload(
         file,
         filename,
       );
@@ -27,24 +27,24 @@ export const videoStorageRouter = t.router({
     }),
 
   listFiles: protectedProcedure.query(() => {
-    const videos = videoStorageService.listVideosWithMetadata();
-    return videos;
+    const images = imageStorageService.listImageMetadata();
+    return images;
   }),
 
-  listActiveVideos: publicProcedure.query(() => {
-    const videos = videoStorageService.listActiveVideos();
-    return videos;
+  listActiveImages: publicProcedure.query(() => {
+    const images = imageStorageService.listActiveImages();
+    return images;
   }),
 
   updateIsActive: protectedProcedure
-    .input(updateVideoMetadataSchema)
+    .input(updateImageMetadataSchema)
     .mutation(async ({ input }) => {
-      const result = await videoStorageService.update(
+      const result = await imageStorageService.update(
         input.filename,
         input.isActive,
       );
-      const activeVideos = videoStorageService.listActiveVideos();
-      eventBus.emit('video', activeVideos);
+      const activeImages = imageStorageService.listActiveImages();
+      eventBus.emit('image', activeImages);
 
       return result;
     }),
@@ -52,14 +52,14 @@ export const videoStorageRouter = t.router({
   deleteFile: protectedProcedure
     .input(fileDeleteParamsSchema)
     .mutation(async ({ input }) => {
-      await videoStorageService.delete(input.filename);
-      const activeVideos = videoStorageService.listActiveVideos();
-      eventBus.emit('video', activeVideos);
+      await imageStorageService.delete(input.filename);
+      const activeImages = imageStorageService.listActiveImages();
+      eventBus.emit('image', activeImages);
 
       return { ok: true };
     }),
 
   getDiskUsage: protectedProcedure.query(async () => {
-    return videoStorageService.getDiskUsage();
+    return imageStorageService.getDiskUsage();
   }),
 });
