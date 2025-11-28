@@ -46,6 +46,19 @@ export const useCreateBirthday = () => {
   );
 };
 
+export const useUpdateBirthday = () => {
+  return useMutation(
+    trpcWithProxy.birthday.update.mutationOptions({
+      onSuccess() {
+        toast.success('День рождения успешно обновлен');
+        queryClient.invalidateQueries({
+          queryKey: trpcWithProxy.birthday.birthdays.queryKey(),
+        });
+      },
+    }),
+  );
+};
+
 export const useDeleteBirthday = () => {
   return useMutation(
     trpcWithProxy.birthday.delete.mutationOptions({
@@ -62,5 +75,14 @@ export const useDeleteBirthday = () => {
 export const useGetBirthdaysByMonth = (month: number) => {
   return useQuery(
     trpcWithProxy.birthday.birthdaysByMonth.queryOptions({ month }),
+  );
+};
+
+export const useGetBirthdaysByDayMonthRange = (start: Date, end: Date) => {
+  return useQuery(
+    trpcWithProxy.birthday.birthdaysDayMonthRange.queryOptions({
+      startDate: start,
+      endDate: end,
+    }),
   );
 };

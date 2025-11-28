@@ -10,12 +10,10 @@ export function BirthdayGreeting({
   companyName,
 }: BirthdayGreetingProps) {
   const fontSizeXl = isEffectiveXl ? 5 : 3;
-  const titleFontSize = isEffectiveXl ? 6 : 4;
+  const titleFontSize = isEffectiveXl ? 6 : 3;
 
   return (
-    <div
-      className={`flex w-full flex-col items-center justify-center gap-6 text-${fontSizeXl}xl`}
-    >
+    <div className="flex w-full flex-col items-center justify-center">
       <div className="flex flex-row items-center justify-center gap-10">
         <img
           src={eagleUrl}
@@ -43,9 +41,10 @@ export function BirthdayGreeting({
           }}
         />
       </div>
-      <div className="flex flex-col items-center whitespace-nowrap text-shadow-[var(--text-shadow)]">
-        <p>Уважаемые коллеги! Дорогие друзья!</p>
-        <p>От лица коллектива поздравляем вас с днем рождения!</p>
+      <div
+        className={`flex flex-col items-center whitespace-nowrap text-shadow-[var(--text-shadow)] uppercase text-${fontSizeXl}xl`}
+      >
+        <p>Поздравляет с днем рождения</p>
       </div>
     </div>
   );
