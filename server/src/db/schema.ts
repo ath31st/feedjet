@@ -119,3 +119,18 @@ export const birthdaysTable = sqliteTable('birthdays', {
     .notNull()
     .default(sql`(unixepoch())`),
 });
+
+export const imagesTable = sqliteTable('images', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  name: text('name').notNull(),
+  fileName: text('file_name').unique().notNull(),
+  format: text('format').notNull(),
+  width: integer('width').notNull(),
+  height: integer('height').notNull(),
+  size: integer('size').notNull(),
+  order: integer('order').notNull(),
+  isActive: integer('is_active', { mode: 'boolean' }).notNull().default(false),
+  thumbnail: text('thumbnail').notNull(),
+  mtime: integer('mtime').notNull(),
+  createdAt: integer('created_at').notNull().default(sql`(unixepoch())`),
+});
