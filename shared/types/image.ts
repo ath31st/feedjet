@@ -5,5 +5,9 @@ export interface ImageMetadata {
   height: number;
   format: string;
   size: number;
+  order: number;
+  isActive: boolean;
   createdAt: number;
+  thumbnail: string;
+  mtime: number;
 }
