@@ -13,7 +13,8 @@ export function SettingsCard({
 }: SettingsCardProps) {
   return (
     <section
-      className={`hover:-translate-y-1 relative transform rounded-lg bg-[var(--card-bg)] p-6 shadow-2xl transition-transform duration-400 ${className}`}
+      className={`hover:-translate-y-1 relative z-0 transform rounded-lg bg-(--card-bg) p-6 shadow-2xl transition-all duration-400 before:absolute before:inset-0 before:z-1 before:rounded-lg before:border-(--border) before:border-1 before:opacity-0 before:transition-opacity before:duration-400 hover:before:opacity-100 ${className}
+  `}
     >
       {title && (
         <h2

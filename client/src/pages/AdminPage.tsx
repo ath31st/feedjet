@@ -23,7 +23,7 @@ export function AdminPage() {
 
       <Tabs.Root defaultValue="settings" className="w-full">
         <Tabs.List
-          className="flex border-(--border) border-b-4"
+          className="flex border-(--border) border-b-2"
           aria-label="Управление админ-панелью"
         >
           <AdminTabTrigger value="settings">Настройки</AdminTabTrigger>
