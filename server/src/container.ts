@@ -27,6 +27,7 @@ import { BirthdayService } from './services/birthday.service.js';
 import { BirthdayFileService } from './services/birthday.file.service.js';
 import { BirthdayBackgroundService } from './services/birthday.background.service.js';
 import { KioskHeartbeatService } from './services/kiosk.heartbeat.service.js';
+import { ImageStorageService } from './services/image.storage.service.js';
 
 const sqlite = new Database(dbPath);
 export const db = drizzle(sqlite, { schema });
@@ -34,6 +35,7 @@ export type DbType = typeof db;
 
 export const imageCacheService = new ImageCacheService(cacheDir);
 export const videoStorageService = new VideoStorageService(db, fileStorageDir);
+export const imageStorageService = new ImageStorageService(db, fileStorageDir);
 
 const openWeatherClient = new OpenWeatherAPI({ key: openWeatherApiKey });
 export const weatherForecastService = new WeatherForecastService(
@@ -53,6 +55,7 @@ export const birthdayFileService = new BirthdayFileService(
   fileStorageDir,
 );
 export const birthdayBackgroundService = new BirthdayBackgroundService(
+  db,
   fileStorageDir,
 );
 export const kioskService = new KioskService(
@@ -62,6 +65,7 @@ export const kioskService = new KioskService(
 );
 kioskService.ensureDefaultKiosk();
 videoStorageService.syncWithDisk();
+//imageStorageService.syncWithDisk();
 export const kioskHeartbeatService = new KioskHeartbeatService();
 
 export const t = initTRPC.context<Context>().create();
