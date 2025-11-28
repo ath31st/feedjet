@@ -1,6 +1,6 @@
 import type { DbType } from '../container.js';
 import { birthdaysTable } from '../db/schema.js';
-import { eq, sql } from 'drizzle-orm';
+import { eq, sql, gte, lte, and } from 'drizzle-orm';
 import type {
   BirthdayEncrypted,
   Birthday,
@@ -74,6 +74,23 @@ export class BirthdayService {
       .select()
       .from(birthdaysTable)
       .where(eq(birthdaysTable.birthDate, date))
+      .all();
+
+    return encBirthdays
+      .map(birthdayMapper.mapEncToDec)
+      .sort(this.birthdayComparator);
+  }
+
+  getByDateRange(start: Date, end: Date): Birthday[] {
+    const encBirthdays = this.db
+      .select()
+      .from(birthdaysTable)
+      .where(
+        and(
+          gte(birthdaysTable.birthDate, start),
+          lte(birthdaysTable.birthDate, end),
+        ),
+      )
       .all();
 
     return encBirthdays

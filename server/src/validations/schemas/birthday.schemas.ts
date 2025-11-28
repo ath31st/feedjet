@@ -41,3 +41,10 @@ export const birthdayCreateSchema = z.object({
       message: 'Date cannot be before 1900',
     }),
 });
+
+export const birthdayDateRangeInputSchema = z.object({
+  startDate: z.coerce.date(),
+  endDate: z.coerce.date(),
+});
+
+export const birthdayUpdateSchema = birthdayCreateSchema.partial();

@@ -8,6 +8,7 @@ import {
 import { protectedProcedure } from '../../middleware/auth.js';
 import {
   birthdayCreateSchema,
+  birthdayDateRangeInputSchema,
   birthdayIdInputSchema,
   birthdayMonthInputSchema,
 } from '../../validations/schemas/birthday.schemas.js';
@@ -37,6 +38,16 @@ export const birthdayRouter = t.router({
     .input(birthdayMonthInputSchema)
     .query(({ input }) => {
       const birthdays = birthdayService.getByMonth(input.month);
+      return birthdays;
+    }),
+
+  birthdaysByDateRange: publicProcedure
+    .input(birthdayDateRangeInputSchema)
+    .query(({ input }) => {
+      const birthdays = birthdayService.getByDateRange(
+        input.startDate,
+        input.endDate,
+      );
       return birthdays;
     }),
 
