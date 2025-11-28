@@ -45,7 +45,8 @@ export function VideoList() {
                 <span className="truncate">{v.name}</span>
                 <span className="text-[var(--meta-text)] text-xs">
                   {formatDuration(v.duration)} · {v.width}x{v.height}px ·{' '}
-                  {v.format} · {formatBytes(v.size)}
+                  {v.format} · {formatBytes(v.size)} ·{' '}
+                  {new Date(v.createdAt).toLocaleDateString()}
                 </span>
               </div>
 
