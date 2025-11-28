@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { UiConfig } from '..';
+import type { Theme, UiConfig } from '..';
 import { trpcClient } from '@/shared/api';
 
 interface UiConfigState {
@@ -17,7 +17,7 @@ interface UiConfigState {
 
 const DEFAULT_CONFIG: UiConfig = {
   id: 0,
-  theme: localStorage.getItem('theme') || 'dark',
+  theme: (localStorage.getItem('theme') as Theme) || ('dark' as Theme),
   rotatingWidgets: ['feed', 'schedule'],
   autoSwitchIntervalMs: 30000,
   kioskId: 0,
