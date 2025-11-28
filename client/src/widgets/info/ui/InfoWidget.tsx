@@ -47,7 +47,7 @@ export function InfoWidget({ rotate }: InfoWidgetProps) {
     <div className="flex h-full w-full flex-col">
       <InfoHeader isEffectiveXl={isEffectiveXl} title={companyName} />
 
-      <div className="mt-6 w-full border border-[var(--border)]"></div>
+      <div className="mt-6 w-full border-2 border-[var(--border)]"></div>
 
       <div className="flex w-full flex-1">
         {isEffectiveXl ? (
@@ -57,7 +57,7 @@ export function InfoWidget({ rotate }: InfoWidgetProps) {
               <DigitalClock fontXlSize={fonstXlSize} />
             </div>
 
-            <div className="mr-10 h-full border border-[var(--border)]"></div>
+            <div className="mr-10 h-full border-2 border-[var(--border)]"></div>
 
             <WeatherForecast
               locationTitle={locationTitle}
@@ -72,7 +72,7 @@ export function InfoWidget({ rotate }: InfoWidgetProps) {
             <InfoDate date={new Date()} />
             <DigitalClock fontXlSize={fonstXlSize} />
 
-            <div className="mb-10 w-full border border-[var(--border)]"></div>
+            <div className="mb-10 w-full border-2 border-[var(--border)]"></div>
 
             <WeatherForecast
               locationTitle={locationTitle}

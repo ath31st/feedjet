@@ -17,13 +17,13 @@ export function AdminPage() {
         <Logout />
       </div>
 
-      <h1 className="mb-2 text-center font-bold text-2xl">
+      <h1 className="mb-4 text-center font-bold text-3xl">
         Панель администратора
       </h1>
 
       <Tabs.Root defaultValue="settings" className="w-full">
         <Tabs.List
-          className="flex border-[color:var(--border)] border-b-2"
+          className="flex border-(--border) border-b-4"
           aria-label="Управление админ-панелью"
         >
           <AdminTabTrigger value="settings">Настройки</AdminTabTrigger>

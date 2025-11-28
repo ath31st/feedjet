@@ -22,7 +22,7 @@ export function KioskSelector({
             onClick={() => onChange(k)}
             className={`relative w-38 px-6 py-2 font-medium text-md outline-none transition-colors hover:text-[color:var(--border)] ${
               isActive
-                ? 'text-[color:var(--text)] hover:text-[color:var(--text)]'
+                ? 'text-[var(--text)] hover:text-[var(--text)]'
                 : 'text-muted-foreground'
             }`}
           >
@@ -31,7 +31,7 @@ export function KioskSelector({
                 className="pointer-events-none absolute top-0 right-0 left-0 h-full"
                 style={{
                   background:
-                    'linear-gradient(to bottom, color-mix(in srgb, var(--border) 20%, transparent) 0%, transparent 80%)',
+                    'linear-gradient(to bottom, color-mix(in srgb, var(--border) 30%, transparent) 0%, transparent 100%)',
                 }}
               />
             )}
