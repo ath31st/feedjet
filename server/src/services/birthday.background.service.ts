@@ -6,12 +6,17 @@ import {
   type BirthdayBackground,
   MONTHS,
 } from '@shared/types/birthday.background.js';
+import type { DbType } from '../container.js';
 
 export class BirthdayBackgroundService extends ImageStorageService {
   private readonly backgroundsDir = 'backgrounds';
 
-  constructor(baseDir: string, loggerName: string = 'birthdayFileService') {
-    super(baseDir, loggerName);
+  constructor(
+    db: DbType,
+    baseDir: string,
+    loggerName: string = 'birthdayBackgroundService',
+  ) {
+    super(db, baseDir, loggerName);
     fs.mkdir(path.join(this.baseDir, this.backgroundsDir), { recursive: true });
   }
 
