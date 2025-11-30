@@ -15,7 +15,7 @@ export function ImageContentManagementWidget() {
         </SettingsCard>
       </div>
       <div className="flex w-full flex-row gap-6">
-        <SettingsCard title="Доступные изображения" className="w-full">
+        <SettingsCard title="Загруженные изображения" className="w-full">
           <ImageList />
         </SettingsCard>
       </div>

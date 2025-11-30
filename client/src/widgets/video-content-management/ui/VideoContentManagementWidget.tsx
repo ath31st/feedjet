@@ -15,7 +15,7 @@ export function VideoContentManagementWidget() {
         </SettingsCard>
       </div>
       <div className="flex w-full flex-row gap-6">
-        <SettingsCard title="Доступные видео" className="w-full">
+        <SettingsCard title="Загруженные видео" className="w-full">
           <VideoList />
         </SettingsCard>
       </div>
