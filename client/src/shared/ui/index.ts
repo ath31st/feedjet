@@ -12,4 +12,5 @@ export * from './ToasterConfig';
 export * from './TooltipWrapper';
 export * from './StaticBackground';
 export * from './DigitalClock';
+export * from './FileUpload';
 export { DiskUsageView } from './disk-usage-view/DiskUsageView';
