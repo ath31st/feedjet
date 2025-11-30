@@ -3,6 +3,7 @@ import { Cross1Icon } from '@radix-ui/react-icons';
 import { IconButton } from '@/shared/ui/common';
 import * as Switch from '@radix-ui/react-switch';
 import {
+  buildImageUrl,
   useImageMetadataList,
   useRemoveImageFile,
   useUpdateIsActiveImageMetadata,
@@ -37,34 +38,45 @@ export function ImageList() {
         .map((v) => (
           <div
             key={v.fileName}
-            className="flex items-center justify-between rounded-lg border border-[var(--border)] px-4 py-2"
+            className="flex items-center gap-2 rounded-lg border border-(--border)"
           >
-            <div className="flex flex-col overflow-hidden">
-              <span className="truncate">{v.name}</span>
-              <span className="text-[var(--meta-text)] text-xs">
-                {v.width}x{v.height}px · {v.format} · {formatBytes(v.size)} ·{' '}
-                {new Date(v.createdAt).toLocaleDateString()}
-              </span>
-            </div>
+            <img
+              src={`${buildImageUrl(v.thumbnail)}?v=${v.mtime}`}
+              alt=""
+              className="w-40 rounded-lg object-contain"
+            />
+            <div className="flex w-[calc(100%-170px)] justify-between">
+              <div className="flex flex-1 flex-col overflow-hidden text-(--meta-text) text-xs">
+                <span title={v.name} className="truncate text-(--text) text-sm">
+                  {v.name}
+                </span>
+                <span>
+                  {v.width}x{v.height}px
+                </span>
+                <span>{v.format}</span>
+                <span>{formatBytes(v.size)}</span>
+                <span>{new Date(v.createdAt).toLocaleDateString()}</span>
+              </div>
 
-            <div className="ml-2 flex flex-shrink-0 items-center gap-2">
-              <Switch.Root
-                checked={v.isActive}
-                disabled={isActivePending}
-                onCheckedChange={(checked) =>
-                  updateIsActive({ filename: v.fileName, isActive: checked })
-                }
-                className="relative h-5 w-10 shrink-0 cursor-pointer rounded-full border border-[var(--border)] transition-colors data-[state=checked]:bg-[var(--button-bg)]"
-              >
-                <Switch.Thumb className="block h-4 w-4 translate-x-[1px] rounded-full bg-[var(--text)] transition-transform data-[state=checked]:translate-x-[21px]" />
-              </Switch.Root>
+              <div className="flex flex-shrink-0 items-center gap-2">
+                <Switch.Root
+                  checked={v.isActive}
+                  disabled={isActivePending}
+                  onCheckedChange={(checked) =>
+                    updateIsActive({ filename: v.fileName, isActive: checked })
+                  }
+                  className="relative h-5 w-10 shrink-0 cursor-pointer rounded-full border border-[var(--border)] transition-colors data-[state=checked]:bg-[var(--button-bg)]"
+                >
+                  <Switch.Thumb className="block h-4 w-4 translate-x-[1px] rounded-full bg-[var(--text)] transition-transform data-[state=checked]:translate-x-[21px]" />
+                </Switch.Root>
 
-              <IconButton
-                disabled={isPending}
-                onClick={() => handleRemoveImage(v.fileName)}
-                tooltip="Удалить изображение"
-                icon={<Cross1Icon className="h-4 w-4 cursor-pointer" />}
-              />
+                <IconButton
+                  disabled={isPending}
+                  onClick={() => handleRemoveImage(v.fileName)}
+                  tooltip="Удалить изображение"
+                  icon={<Cross1Icon className="h-4 w-4 cursor-pointer" />}
+                />
+              </div>
             </div>
           </div>
         ))}
