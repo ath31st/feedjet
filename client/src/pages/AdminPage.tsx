@@ -9,6 +9,7 @@ import { KioskManagement } from '@/widgets/kiosk-management';
 import { KioskSelectorWidget } from '@/widgets/kiosk-selector';
 import { Logout } from '@/features/auth';
 import { BirthdaysManagement } from '@/widgets/birthdays-management';
+import { ImageContentManagementWidget } from '@/widgets/image-content-management';
 
 export function AdminPage() {
   return (
@@ -30,6 +31,7 @@ export function AdminPage() {
           <AdminTabTrigger value="schedule">Расписание</AdminTabTrigger>
           <AdminTabTrigger value="rss">RSS</AdminTabTrigger>
           <AdminTabTrigger value="video">Видео</AdminTabTrigger>
+          <AdminTabTrigger value="image">Изображения</AdminTabTrigger>
           <AdminTabTrigger value="birthdays">Дни рожд.</AdminTabTrigger>
           <AdminTabTrigger value="kiosks">Киоски</AdminTabTrigger>
         </Tabs.List>
@@ -53,6 +55,12 @@ export function AdminPage() {
         <Tabs.Content value="video">
           <div className="mt-6 flex w-full gap-6">
             <VideoContentManagementWidget />
+          </div>
+        </Tabs.Content>
+
+        <Tabs.Content value="image">
+          <div className="mt-6 flex w-full gap-6">
+            <ImageContentManagementWidget />
           </div>
         </Tabs.Content>
 
