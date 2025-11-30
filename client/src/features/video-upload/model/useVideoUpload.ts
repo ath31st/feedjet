@@ -3,7 +3,7 @@ import { useUploadVideo } from '@/entities/video';
 export function useVideoUpload() {
   const { mutate: uploadFile, isPending } = useUploadVideo();
 
-  const uploadFiles = (files: File[]) => {
+  const upload = (files: File[]) => {
     if (!files.length) return;
 
     files.forEach((file) => {
@@ -15,5 +15,5 @@ export function useVideoUpload() {
     });
   };
 
-  return { uploadFiles, isPending };
+  return { upload, isPending };
 }
