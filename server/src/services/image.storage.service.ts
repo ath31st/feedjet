@@ -166,7 +166,7 @@ export class ImageStorageService extends FileStorageService {
       isActive: false,
       fileName,
       createdAt: fileStats.birthtime.getTime(),
-      thumbnail: `${name}_thumbnail`,
+      thumbnail: `${name}_thumbnail${path.extname(fileName)}`,
       mtime: fileStats.mtime.getTime(),
     };
   }

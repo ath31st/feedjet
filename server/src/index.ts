@@ -6,6 +6,7 @@ import { startRssCronJob } from './cron/rss.cron.js';
 import {
   birthdayBackgroundService,
   imageCacheService,
+  imageStorageService,
   videoStorageService,
 } from './container.js';
 import { startImageCacheCleanupJob } from './cron/image.cache.cron.js';
@@ -32,6 +33,8 @@ app.use(
 );
 const videoStorageBaseDir = videoStorageService.getBaseDir();
 app.use('/videos', express.static(videoStorageBaseDir));
+const imageStorageBaseDir = imageStorageService.getBaseDir();
+app.use('/images', express.static(imageStorageBaseDir));
 const backgroundStorageDir = birthdayBackgroundService.getBaseDir();
 app.use('/backgrounds', express.static(backgroundStorageDir));
 app.use(cors());
