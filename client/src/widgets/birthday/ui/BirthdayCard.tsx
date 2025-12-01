@@ -33,7 +33,10 @@ export function BirthdayCard({
           textShadow: 'var(--text-shadow)',
         }}
       >
-        {new Date(birthday.birthDate).toLocaleDateString()}
+        {new Date(birthday.birthDate).toLocaleDateString('ru-RU', {
+          day: '2-digit',
+          month: 'long',
+        })}
       </span>
     </div>
   );
