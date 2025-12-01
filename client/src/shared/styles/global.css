@@ -165,7 +165,7 @@
   --text: hsl(var(--hue), 35%, 90%);
   --card-bg: hsl(var(--hue), 35%, 16%);
   --card-text: hsl(var(--hue), 35%, 90%);
-  --category-text: hsl(var(--hue), 70%, 65%); /* Насыщенный оранжевый */
+  --category-text: hsl(var(--hue), 70%, 65%);
   --description-text: hsl(var(--hue), 50%, 75%);
   --meta-text: hsl(var(--hue), 40%, 55%);
   --button-bg: hsl(var(--hue), 60%, 30%);
