@@ -16,13 +16,15 @@ export function PopoverHint({ content, trigger, className }: PopoverHintProps) {
         )}
       </Popover.Trigger>
 
-      <Popover.Content
-        align="start"
-        sideOffset={4}
-        className={`z-50 max-w-xs rounded-lg border border-[var(--border)] bg-[var(--card-bg)] p-3 text-sm ${className ?? ''}`}
-      >
-        {content}
-      </Popover.Content>
+      <Popover.Portal>
+        <Popover.Content
+          align="start"
+          sideOffset={4}
+          className={`z-50 max-w-xs rounded-lg border border-[var(--border)] bg-[var(--card-bg)] p-3 text-sm ${className ?? ''}`}
+        >
+          {content}
+        </Popover.Content>
+      </Popover.Portal>
     </Popover.Root>
   );
 }
