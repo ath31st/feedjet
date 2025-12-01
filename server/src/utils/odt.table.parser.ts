@@ -55,8 +55,9 @@ export async function parseOdtTable(buffer: Buffer): Promise<string[]> {
 
   for (const row of rowArray) {
     const cells = row['table-cell'];
+
     if (!cells) continue;
-    console.log(cells);
+
     const cellArray: TableCell[] = Array.isArray(cells) ? cells : [cells];
     const values: string[] = [];
 
