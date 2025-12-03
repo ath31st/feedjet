@@ -10,14 +10,8 @@ import {
   videoStorageService,
 } from './container.js';
 import { startImageCacheCleanupJob } from './cron/image.cache.cron.js';
-import {
-  controlSseHandler,
-  feedConfigSseHandler,
-  feedSseHandler,
-  uiConfigSseHandler,
-  videoSseHandler,
-} from './sse/sse.handlers.js';
 import { createServiceLogger } from './utils/pino.logger.js';
+import { unifiedSseHandler } from './sse/unified.sse.handlers.js';
 
 const logger = createServiceLogger('main');
 
@@ -40,11 +34,7 @@ app.use('/backgrounds', express.static(backgroundStorageDir));
 app.use(cors());
 app.use('/trpc', trpcMiddleware);
 app.use(express.json());
-app.get('/sse/feed', feedSseHandler);
-app.get('/sse/feed-config/:kioskId', feedConfigSseHandler);
-app.get('/sse/ui-config/:kioskId', uiConfigSseHandler);
-app.get('/sse/control/:kioskId', controlSseHandler);
-app.get('/sse/video', videoSseHandler);
+app.get('/sse/stream/:kioskId', unifiedSseHandler);
 
 startRssCronJob();
 startImageCacheCleanupJob();
