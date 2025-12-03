@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useUiConfigStore } from '../model/uiConfigStore';
+import { useUiConfigStore } from '@/entities/ui-config/model/uiConfigStore';
 import { useKioskStore } from '@/entities/kiosk';
 
 export function useUiConfigStoreInit() {

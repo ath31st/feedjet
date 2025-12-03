@@ -1,6 +1,6 @@
-import { useFeedConfigStoreInit } from '@/entities/feed-config';
-import { useUiConfigStoreInit } from '@/entities/ui-config';
-import { useVideoStoreInit } from '@/entities/video';
+import { useFeedConfigStoreInit } from './useFeedConfigStoreInit';
+import { useUiConfigStoreInit } from './useUiConfigStoreInit';
+import { useVideoStoreInit } from './useVideoStoreInit';
 import { useKioskInitialization } from './useKioskInitialization';
 import { useSseStream } from './useSseStream';
 

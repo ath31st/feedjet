@@ -1,4 +1,3 @@
-export { useFeedConfigStoreInit } from './api/useFeedConfigStoreInit';
 export { useFeedConfigStore } from './model/feedConfigStrore';
 export type { FeedConfig } from '@shared/types/feed.config';
 export { useFeedConfigFields } from './lib/useFeedConfigFields';

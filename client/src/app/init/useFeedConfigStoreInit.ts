@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useFeedConfigStore } from '..';
+import { useFeedConfigStore } from '@/entities/feed-config';
 import { useKioskStore } from '@/entities/kiosk';
 
 export function useFeedConfigStoreInit() {
