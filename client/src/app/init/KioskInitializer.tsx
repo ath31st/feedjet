@@ -1,17 +1,16 @@
-import { useRssFeedSse } from '@/entities/feed';
-import { useFeedConfigSse } from '@/entities/feed-config';
-import { useUiConfigSse } from '@/entities/ui-config';
-import { useVideoSse } from '@/entities/video';
-import { useControlSse } from '@/features/kiosk-control';
+import { useFeedConfigStoreInit } from '@/entities/feed-config';
+import { useUiConfigStoreInit } from '@/entities/ui-config';
+import { useVideoStoreInit } from '@/entities/video';
 import { useKioskInitialization } from './useKioskInitialization';
+import { useSseStream } from './useSseStream';
 
 export function KioskInitializer() {
   useKioskInitialization();
 
-  useUiConfigSse();
-  useFeedConfigSse();
-  useRssFeedSse();
-  useControlSse();
-  useVideoSse();
+  useSseStream();
+
+  useUiConfigStoreInit();
+  useFeedConfigStoreInit();
+  useVideoStoreInit();
   return null;
 }
