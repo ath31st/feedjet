@@ -22,11 +22,11 @@ export function BirthdayGreeting({
           style={{
             transform: 'scaleX(-1)',
             filter:
-              'drop-shadow(0 0 4px var(--border)) drop-shadow(0 0 10px var(--border)) brightness(1.2)',
+              'drop-shadow(0 0 0px var(--without-theme)) drop-shadow(0 0 10px var(--without-theme)) brightness(1.2)',
           }}
         />
         <h1
-          className={`whitespace-nowrap font-bold text-${titleFontSize}xl`}
+          className={`whitespace-nowrap font-bold text-(--without-theme) text-${titleFontSize}xl`}
           style={{ textShadow: 'var(--text-shadow)' }}
         >
           {companyName.toUpperCase()}
@@ -37,14 +37,14 @@ export function BirthdayGreeting({
           className="h-full w-1/10 object-contain"
           style={{
             filter:
-              'drop-shadow(0 0 4px var(--border)) drop-shadow(0 0 10px var(--border)) brightness(1.2)',
+              'drop-shadow(0 0 0px var(--without-theme)) drop-shadow(0 0 10px var(--without-theme)) brightness(1.2)',
           }}
         />
       </div>
       <div
         className={`flex flex-col items-center whitespace-nowrap text-shadow-[var(--text-shadow)] uppercase text-${fontSizeXl}xl`}
       >
-        <p>Поздравляет с днем рождения</p>
+        <p className="text-(--without-theme)">Поздравляет с днем рождения</p>
       </div>
     </div>
   );

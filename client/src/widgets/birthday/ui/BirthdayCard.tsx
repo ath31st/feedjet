@@ -14,7 +14,10 @@ export function BirthdayCard({
   duration = 1,
 }: BirthdayCardProps) {
   return (
-    <div className={`w-full text-${fontSizeXl}xl flex justify-between`}>
+    <div
+      className={`w-full text-${fontSizeXl}xl flex justify-between text-(--without-theme)`}
+      style={{ textShadow: 'var(--text-shadow)' }}
+    >
       <span
         className="inline-block opacity-0"
         style={{

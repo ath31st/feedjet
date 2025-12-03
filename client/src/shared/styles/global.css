@@ -12,6 +12,7 @@
   -moz-osx-font-smoothing: grayscale;
 
   --text-shadow: 3px 2px 4px rgba(0, 0, 0, 0.6);
+  --without-theme: white;
 }
 
 [data-theme="light"] {
