@@ -14,7 +14,7 @@ export function KioskManagement() {
   } = useKioskManagement();
 
   return (
-    <SettingsCard title="Конфигурации киосков" className="mt-6 w-full">
+    <SettingsCard title="Конфигурации киосков" className="w-full">
       <div className="flex w-full flex-col gap-6">
         <KioskList />
 

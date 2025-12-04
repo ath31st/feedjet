@@ -10,7 +10,7 @@ export function WeekSelector({
   onChange,
 }: WeekSelectorProps) {
   return (
-    <div className="flex border-transparent border-b">
+    <div className="flex w-full items-center justify-center">
       {weeks.map((w) => {
         const isActive = weekStart.getTime() === w.date.getTime();
         return (

@@ -12,7 +12,9 @@ export function KioskSelector({
   onChange,
 }: KioskSelectorProps) {
   return (
-    <div className="flex border-transparent border-b">
+    <div className="relative flex flex-col">
+      <div className="-top-6 absolute bottom-0 left-38 w-[2px] bg-(--border)" />
+
       {kiosks.map((k) => {
         const isActive = k.slug === activeKiosk?.slug;
         return (
@@ -20,9 +22,9 @@ export function KioskSelector({
             key={k.slug}
             type="button"
             onClick={() => onChange(k)}
-            className={`relative w-38 px-6 py-2 font-medium text-md outline-none transition-colors hover:text-[color:var(--border)] ${
+            className={`relative w-38 cursor-pointer px-6 py-2 font-medium text-md outline-none transition-colors hover:text-(--button-hover-bg) hover:text-var(--border) ${
               isActive
-                ? 'text-[var(--text)] hover:text-[var(--text)]'
+                ? 'text-(--text) hover:text-(--text)'
                 : 'text-muted-foreground'
             }`}
           >
@@ -31,7 +33,7 @@ export function KioskSelector({
                 className="pointer-events-none absolute top-0 right-0 left-0 h-full"
                 style={{
                   background:
-                    'linear-gradient(to bottom, color-mix(in srgb, var(--border) 30%, transparent) 0%, transparent 100%)',
+                    'linear-gradient(to left, color-mix(in srgb, var(--border) 30%, transparent) 40%, transparent 100%)',
                 }}
               />
             )}

@@ -36,43 +36,42 @@ export function AdminPage() {
           <AdminTabTrigger value="kiosks">Киоски</AdminTabTrigger>
         </Tabs.List>
 
-        <Tabs.Content value="settings" className="flex flex-col gap-6">
+        <div className="mt-6 flex w-full flex-row gap-6">
           <KioskSelectorWidget />
-          <div className="flex w-full gap-6">
-            <AppearanceSettingsWidget />
-            <FeedWidgetSettings />
+
+          <div className="w-full">
+            <Tabs.Content value="settings" className="flex flex-col gap-6">
+              <div className="flex w-full gap-6">
+                <AppearanceSettingsWidget />
+                <FeedWidgetSettings />
+              </div>
+            </Tabs.Content>
+
+            <Tabs.Content value="rss">
+              <RssManagementWidget />
+            </Tabs.Content>
+
+            <Tabs.Content className="-mt-6" value="schedule">
+              <ScheduleManagementWidget />
+            </Tabs.Content>
+
+            <Tabs.Content value="video">
+              <VideoContentManagementWidget />
+            </Tabs.Content>
+
+            <Tabs.Content value="image">
+              <ImageContentManagementWidget />
+            </Tabs.Content>
+
+            <Tabs.Content value="birthdays">
+              <BirthdaysManagement />
+            </Tabs.Content>
+
+            <Tabs.Content value="kiosks">
+              <KioskManagement />
+            </Tabs.Content>
           </div>
-        </Tabs.Content>
-
-        <Tabs.Content value="rss">
-          <RssManagementWidget />
-        </Tabs.Content>
-
-        <Tabs.Content value="schedule">
-          <ScheduleManagementWidget />
-        </Tabs.Content>
-
-        <Tabs.Content value="video">
-          <div className="mt-6 flex w-full gap-6">
-            <VideoContentManagementWidget />
-          </div>
-        </Tabs.Content>
-
-        <Tabs.Content value="image">
-          <div className="mt-6 flex w-full gap-6">
-            <ImageContentManagementWidget />
-          </div>
-        </Tabs.Content>
-
-        <Tabs.Content value="birthdays">
-          <div className="mt-6 flex w-full gap-6">
-            <BirthdaysManagement />
-          </div>
-        </Tabs.Content>
-
-        <Tabs.Content value="kiosks">
-          <KioskManagement />
-        </Tabs.Content>
+        </div>
       </Tabs.Root>
     </div>
   );
