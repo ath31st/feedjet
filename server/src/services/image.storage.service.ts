@@ -3,12 +3,16 @@ import path from 'node:path';
 import { promises as fs } from 'node:fs';
 import sharp from 'sharp';
 import { FileStorageError } from '../errors/file.storage.error.js';
-import type { ImageMetadata } from '@shared/types/image.js';
+import type {
+  AdminImageInfo,
+  ImageMetadata,
+  KioskImageInfo,
+} from '@shared/types/image.js';
 import { webReadableToNode } from '../utils/stream.js';
 import { ImageStorageServiceError } from '../errors/image.error.js';
 import type { DbType } from '../container.js';
-import { imagesTable } from '../db/schema.js';
-import { eq } from 'drizzle-orm';
+import { imagesTable, kioskImagesTable } from '../db/schema.js';
+import { and, eq } from 'drizzle-orm';
 
 export class ImageStorageService extends FileStorageService {
   private readonly db: DbType;
@@ -82,8 +86,27 @@ export class ImageStorageService extends FileStorageService {
     return { path: savedPath, savedFileName };
   }
 
-  async update(fileName: string, isActive: boolean): Promise<boolean> {
-    this.logger.debug({ fileName, isActive, fn: 'update' }, 'Updating image');
+  async update(
+    fileName: string,
+    kioskId: number,
+    isActive: boolean,
+    order: number,
+  ): Promise<boolean> {
+    this.logger.debug(
+      { fileName, kioskId, order, isActive, fn: 'update' },
+      'Updating image',
+    );
+
+    const imageId = this.db
+      .select()
+      .from(imagesTable)
+      .where(eq(imagesTable.fileName, fileName))
+      .get()?.id;
+
+    if (!imageId) {
+      this.logger.warn({ fileName, fn: 'update' }, 'Image not found');
+      throw new ImageStorageServiceError(404, 'Image not found');
+    }
 
     const filePath = this.getFilePath(fileName);
     const fileExists = await this.exists(filePath);
@@ -94,7 +117,12 @@ export class ImageStorageService extends FileStorageService {
       throw new ImageStorageServiceError(404, 'File not found on disk');
     }
 
-    const result = this.updateIsActive(fileName, isActive);
+    const result = this.updateKioskImageStatus(
+      imageId,
+      kioskId,
+      isActive,
+      order,
+    );
 
     this.logger.info(
       { fileName, isActive, fn: 'update' },
@@ -162,8 +190,6 @@ export class ImageStorageService extends FileStorageService {
       height: metadata.height ?? 0,
       format: metadata.format ?? 'unknown',
       size: fileStats.size,
-      order: 0,
-      isActive: false,
       fileName,
       createdAt: fileStats.birthtime.getTime(),
       thumbnail: `${name}_thumbnail${path.extname(fileName)}`,
@@ -203,15 +229,43 @@ export class ImageStorageService extends FileStorageService {
     }
   }
 
-  listImageMetadata(): ImageMetadata[] {
+  private listImageMetadata(): ImageMetadata[] {
     return this.db.select().from(imagesTable).all();
   }
 
-  listActiveImages(): ImageMetadata[] {
+  listAdminImages(kioskId: number): AdminImageInfo[] {
     return this.db
-      .select()
+      .select({
+        ...this.imageSelect(),
+        isActive: kioskImagesTable.isActive,
+        order: kioskImagesTable.order,
+      })
       .from(imagesTable)
-      .where(eq(imagesTable.isActive, true))
+      .leftJoin(
+        kioskImagesTable,
+        and(
+          eq(imagesTable.id, kioskImagesTable.imageId),
+          eq(kioskImagesTable.kioskId, kioskId),
+        ),
+      )
+      .all();
+  }
+
+  listActiveImagesByKiosk(kioskId: number): KioskImageInfo[] {
+    return this.db
+      .select({
+        ...this.imageSelect(),
+        isActive: kioskImagesTable.isActive,
+        order: kioskImagesTable.order,
+      })
+      .from(imagesTable)
+      .innerJoin(kioskImagesTable, eq(imagesTable.id, kioskImagesTable.imageId))
+      .where(
+        and(
+          eq(kioskImagesTable.kioskId, kioskId),
+          eq(kioskImagesTable.isActive, true),
+        ),
+      )
       .all();
   }
 
@@ -242,36 +296,42 @@ export class ImageStorageService extends FileStorageService {
     }
   }
 
-  updateIsActive(fileName: string, isActive: boolean): boolean {
+  updateKioskImageStatus(
+    imageId: number,
+    kioskId: number,
+    isActive: boolean,
+    order: number,
+  ): boolean {
     this.logger.debug(
-      { fileName, isActive, fn: 'updateIsActive' },
-      'Updating image metadata',
+      { imageId, kioskId, isActive, order, fn: 'updateKioskImageStatus' },
+      'Upserting kiosk image metadata',
     );
 
     try {
-      const meta = this.db
-        .update(imagesTable)
-        .set({ isActive })
-        .where(eq(imagesTable.fileName, fileName))
-        .returning()
-        .get();
-
-      if (!meta) {
-        this.logger.warn({ fileName, fn: 'updateIsActive' }, 'Image not found');
-        throw new ImageStorageServiceError(404, 'Image not found');
-      }
+      this.db
+        .insert(kioskImagesTable)
+        .values({ imageId, kioskId, isActive, order })
+        .onConflictDoUpdate({
+          target: [kioskImagesTable.kioskId, kioskImagesTable.imageId],
+          set: { isActive, order },
+        })
+        .run();
 
       this.logger.info(
-        { fileName, isActive, fn: 'updateIsActive' },
-        'Image metadata updated successfully',
+        { imageId, kioskId, isActive, order, fn: 'updateKioskImageStatus' },
+        'Kiosk image metadata upserted successfully',
       );
-      return meta.isActive;
+
+      return isActive;
     } catch (error) {
       this.logger.error(
-        { error, fn: 'updateIsActive' },
-        'Error updating image metadata',
+        { error, fn: 'updateKioskImageStatus' },
+        'Error upserting kiosk image metadata',
       );
-      throw new ImageStorageServiceError(500, 'Error updating image metadata');
+      throw new ImageStorageServiceError(
+        500,
+        'Error upserting kiosk image metadata',
+      );
     }
   }
 
@@ -320,5 +380,20 @@ export class ImageStorageService extends FileStorageService {
         this.removeImageMetadataByFileName(video.fileName);
       }
     }
+  }
+
+  private imageSelect() {
+    return {
+      id: imagesTable.id,
+      name: imagesTable.name,
+      fileName: imagesTable.fileName,
+      format: imagesTable.format,
+      width: imagesTable.width,
+      height: imagesTable.height,
+      size: imagesTable.size,
+      createdAt: imagesTable.createdAt,
+      thumbnail: imagesTable.thumbnail,
+      mtime: imagesTable.mtime,
+    };
   }
 }
