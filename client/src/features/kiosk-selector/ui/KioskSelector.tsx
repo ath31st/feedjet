@@ -37,7 +37,7 @@ export function KioskSelector({
                 }}
               />
             )}
-            <span className="relative z-10">{k.name}</span>
+            <span className="relative">{k.name}</span>
           </button>
         );
       })}
