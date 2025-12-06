@@ -3,7 +3,13 @@ import { ImageList } from '@/features/image-list';
 import { DiskUsageInfo } from '@/features/disk-usage-info';
 import { ImageUpload } from '@/features/image-upload';
 
-export function ImageContentManagementWidget() {
+interface ImageContentManagementWidgetProps {
+  kioskId: number;
+}
+
+export function ImageContentManagementWidget({
+  kioskId,
+}: ImageContentManagementWidgetProps) {
   return (
     <div className="flex w-full flex-col gap-6">
       <div className="flex w-full flex-row gap-6">
@@ -16,7 +22,7 @@ export function ImageContentManagementWidget() {
       </div>
       <div className="flex w-full flex-row gap-6">
         <SettingsCard title="Загруженные изображения" className="w-full">
-          <ImageList />
+          <ImageList kioskId={kioskId} />
         </SettingsCard>
       </div>
     </div>

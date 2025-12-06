@@ -10,8 +10,11 @@ import { KioskSelectorWidget } from '@/widgets/kiosk-selector';
 import { Logout } from '@/features/auth';
 import { BirthdaysManagement } from '@/widgets/birthdays-management';
 import { ImageContentManagementWidget } from '@/widgets/image-content-management';
+import { useKioskStore } from '@/entities/kiosk';
 
 export function AdminPage() {
+  const kioskId = useKioskStore((s) => s.currentKiosk.id);
+
   return (
     <div className="p-6">
       <div className="absolute top-6 right-12">
@@ -68,7 +71,7 @@ export function AdminPage() {
             </Tabs.Content>
 
             <Tabs.Content value="image">
-              <ImageContentManagementWidget />
+              <ImageContentManagementWidget kioskId={kioskId} />
             </Tabs.Content>
 
             <Tabs.Content value="birthdays">

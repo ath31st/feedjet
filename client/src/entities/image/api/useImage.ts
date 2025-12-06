@@ -2,12 +2,14 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { trpcWithProxy, queryClient } from '@/shared/api';
 import { toast } from 'sonner';
 
-export const useImageMetadataList = () => {
-  return useQuery(trpcWithProxy.image.listFiles.queryOptions());
+export const useImageMetadataList = (kioskId: number) => {
+  return useQuery(trpcWithProxy.image.listFiles.queryOptions({ kioskId }));
 };
 
-export const useActiveImageList = () => {
-  return useQuery(trpcWithProxy.image.listActiveImages.queryOptions());
+export const useActiveImageList = (kioskId: number) => {
+  return useQuery(
+    trpcWithProxy.image.listActiveImages.queryOptions({ kioskId }),
+  );
 };
 
 export const useDiskUsage = () => {
@@ -65,7 +67,7 @@ export const useUploadImage = () => {
 
 export const useUpdateIsActiveImageMetadata = () => {
   return useMutation(
-    trpcWithProxy.image.updateIsActive.mutationOptions({
+    trpcWithProxy.image.updateImageStatus.mutationOptions({
       onSuccess: (data) => {
         toast.success(
           `Файл ${data ? 'добавлен в список отображения' : 'удален из списка отображения'}`,

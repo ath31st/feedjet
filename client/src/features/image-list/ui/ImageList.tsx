@@ -9,14 +9,18 @@ import {
   useUpdateIsActiveImageMetadata,
 } from '@/entities/image';
 
-export function ImageList() {
-  const { data: images = [], isLoading } = useImageMetadataList();
+interface ImageListProps {
+  kioskId: number;
+}
+
+export function ImageList({ kioskId }: ImageListProps) {
+  const { data: images = [], isLoading } = useImageMetadataList(kioskId);
   const { mutate: removeImage, isPending } = useRemoveImageFile();
   const { mutate: updateIsActive, isPending: isActivePending } =
     useUpdateIsActiveImageMetadata();
 
   const handleRemoveImage = (imageName: string) => {
-    removeImage({ filename: imageName });
+    removeImage({ filename: imageName, kioskId });
   };
 
   if (isLoading) {
@@ -60,10 +64,15 @@ export function ImageList() {
 
               <div className="flex flex-shrink-0 items-center gap-2">
                 <Switch.Root
-                  checked={v.isActive}
+                  checked={v.isActive ?? false}
                   disabled={isActivePending}
                   onCheckedChange={(checked) =>
-                    updateIsActive({ filename: v.fileName, isActive: checked })
+                    updateIsActive({
+                      kioskId,
+                      fileName: v.fileName,
+                      isActive: checked,
+                      order: v.order ?? 0,
+                    })
                   }
                   className="relative h-5 w-10 shrink-0 cursor-pointer rounded-full border border-[var(--border)] transition-colors data-[state=checked]:bg-[var(--button-bg)]"
                 >
