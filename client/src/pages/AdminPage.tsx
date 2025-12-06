@@ -27,13 +27,21 @@ export function AdminPage() {
           className="flex border-(--border) border-b-2"
           aria-label="Управление админ-панелью"
         >
-          <AdminTabTrigger value="settings">Настройки</AdminTabTrigger>
-          <AdminTabTrigger value="schedule">Расписание</AdminTabTrigger>
-          <AdminTabTrigger value="rss">RSS</AdminTabTrigger>
-          <AdminTabTrigger value="video">Видео</AdminTabTrigger>
-          <AdminTabTrigger value="image">Изображения</AdminTabTrigger>
-          <AdminTabTrigger value="birthdays">Дни рожд.</AdminTabTrigger>
-          <AdminTabTrigger value="kiosks">Киоски</AdminTabTrigger>
+          <div className="ml-44">
+            <AdminTabTrigger value="settings">
+              Настройки виджетов
+            </AdminTabTrigger>
+            <AdminTabTrigger value="schedule">
+              Расписание мероприятий
+            </AdminTabTrigger>
+            <AdminTabTrigger value="rss">RSS ленты новостей</AdminTabTrigger>
+            <AdminTabTrigger value="video">Видео контент</AdminTabTrigger>
+            <AdminTabTrigger value="image">Изображения</AdminTabTrigger>
+            <AdminTabTrigger value="birthdays">Дни рождения</AdminTabTrigger>
+            <AdminTabTrigger value="kiosks">
+              Конфигурации киосков
+            </AdminTabTrigger>
+          </div>
         </Tabs.List>
 
         <div className="mt-6 flex w-full flex-row gap-6">
