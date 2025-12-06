@@ -5,9 +5,17 @@ export interface ImageMetadata {
   height: number;
   format: string;
   size: number;
-  order: number;
-  isActive: boolean;
   createdAt: number;
   thumbnail: string;
   mtime: number;
+}
+
+export interface AdminImageInfo extends ImageMetadata {
+  isActive: boolean | null;
+  order: number | null;
+}
+
+export interface KioskImageInfo extends ImageMetadata {
+  isActive: boolean;
+  order: number;
 }
