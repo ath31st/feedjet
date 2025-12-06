@@ -3,18 +3,27 @@ import type { Kiosk } from '..';
 import { trpcClient } from '@/shared/api';
 
 interface KioskState {
-  currentKiosk: Kiosk | null;
+  currentKiosk: Kiosk;
   loading: boolean;
   error: string | null;
 
   fetchKioskBySlug: (slug: string) => Promise<void>;
-  setCurrentKiosk: (kiosk: Kiosk | null) => void;
+  setCurrentKiosk: (kiosk: Kiosk) => void;
+  init: () => Promise<void>;
   clearError: () => void;
-  reset: () => void;
 }
 
+const stubKiosk: Kiosk = {
+  id: -1,
+  name: 'Loading...',
+  slug: '',
+  isActive: false,
+  createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
+};
+
 export const useKioskStore = create<KioskState>()((set, _get) => ({
-  currentKiosk: null,
+  currentKiosk: stubKiosk,
   loading: false,
   error: null,
 
@@ -35,15 +44,23 @@ export const useKioskStore = create<KioskState>()((set, _get) => ({
     set({ currentKiosk: kiosk });
   },
 
-  clearError: () => {
-    set({ error: null });
+  init: async () => {
+    set({ loading: true, error: null });
+    try {
+      const kiosks = await trpcClient.kiosk.getAll.query();
+      const defaultKiosk =
+        kiosks.find((k) => k.name === 'Default') ?? kiosks[0] ?? null;
+      set({ currentKiosk: defaultKiosk, loading: false });
+    } catch (err) {
+      set({
+        error:
+          err instanceof Error ? err.message : 'Failed to initialize kiosk',
+        loading: false,
+      });
+    }
   },
 
-  reset: () => {
-    set({
-      currentKiosk: null,
-      loading: false,
-      error: null,
-    });
+  clearError: () => {
+    set({ error: null });
   },
 }));
