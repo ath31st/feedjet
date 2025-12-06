@@ -10,6 +10,7 @@ import {
   fileParamsSchema,
 } from '../../validations/schemas/file.storage.validation.js';
 import { updateImageMetadataSchema } from '../../validations/schemas/image.schemas.js';
+import { kioskIdInputSchema } from '../../validations/schemas/kiosk.schemas.js';
 
 export const imageStorageRouter = t.router({
   uploadFile: protectedProcedure
@@ -26,34 +27,42 @@ export const imageStorageRouter = t.router({
       return { ok: true, path, filename: savedFileName };
     }),
 
-  listFiles: protectedProcedure.query(() => {
-    const images = imageStorageService.listImageMetadata();
+  listFiles: protectedProcedure.input(kioskIdInputSchema).query(({ input }) => {
+    const images = imageStorageService.listAdminImages(input.kioskId);
     return images;
   }),
 
-  listActiveImages: publicProcedure.query(() => {
-    const images = imageStorageService.listActiveImages();
-    return images;
-  }),
+  listActiveImages: publicProcedure
+    .input(kioskIdInputSchema)
+    .query(({ input }) => {
+      const images = imageStorageService.listActiveImagesByKiosk(input.kioskId);
+      return images;
+    }),
 
-  updateIsActive: protectedProcedure
+  updateImageStatus: protectedProcedure
     .input(updateImageMetadataSchema)
     .mutation(async ({ input }) => {
       const result = await imageStorageService.update(
-        input.filename,
+        input.fileName,
+        input.kioskId,
         input.isActive,
+        input.order,
       );
-      const activeImages = imageStorageService.listActiveImages();
+      const activeImages = imageStorageService.listActiveImagesByKiosk(
+        input.kioskId,
+      );
       eventBus.emit('image', activeImages);
 
       return result;
     }),
 
   deleteFile: protectedProcedure
-    .input(fileDeleteParamsSchema)
+    .input(fileDeleteParamsSchema.and(kioskIdInputSchema))
     .mutation(async ({ input }) => {
       await imageStorageService.delete(input.filename);
-      const activeImages = imageStorageService.listActiveImages();
+      const activeImages = imageStorageService.listActiveImagesByKiosk(
+        input.kioskId,
+      );
       eventBus.emit('image', activeImages);
 
       return { ok: true };
