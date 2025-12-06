@@ -7,6 +7,10 @@ export const unifiedSseHandler = createUnifiedSseHandler((kioskId) => {
   const subs: SseSubscription[] = [
     { eventName: 'feed', messageType: 'feed' },
     { eventName: 'video', messageType: 'video' },
+    {
+      eventName: 'keepalive',
+      messageType: 'keepalive',
+    },
   ];
 
   if (kioskId) {

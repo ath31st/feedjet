@@ -12,6 +12,7 @@ import {
 import { startImageCacheCleanupJob } from './cron/image.cache.cron.js';
 import { createServiceLogger } from './utils/pino.logger.js';
 import { unifiedSseHandler } from './sse/unified.sse.handlers.js';
+import { startSseKeepAliveCron } from './cron/sse.keep.alive.cron.js';
 
 const logger = createServiceLogger('main');
 
@@ -38,6 +39,7 @@ app.get('/sse/stream/:kioskId', unifiedSseHandler);
 
 startRssCronJob();
 startImageCacheCleanupJob();
+startSseKeepAliveCron();
 
 app.listen(port, () => {
   logger.info(
