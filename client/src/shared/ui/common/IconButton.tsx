@@ -24,7 +24,7 @@ export function IconButton({
       onClick={onClick}
       disabled={disabled}
       aria-label={ariaLabel}
-      className={`rounded-lg p-1 hover:bg-[var(--button-hover-bg)] ${className}`}
+      className={`cursor-pointer rounded-lg p-1 hover:bg-(--button-hover-bg) ${className}`}
     >
       {icon}
     </button>

@@ -94,7 +94,7 @@ export function ImageList({ kioskId }: ImageListProps) {
                     ref={p.innerRef}
                     {...p.draggableProps}
                     {...p.dragHandleProps}
-                    className={`flex items-center gap-2 rounded-lg border border-(--border) bg-[var(--bg)] p-1 ${
+                    className={`flex cursor-grab items-center gap-2 rounded-lg border border-(--border) p-1 ${
                       snap.isDragging ? 'opacity-70 shadow-lg' : ''
                     }`}
                   >
