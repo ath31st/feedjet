@@ -14,3 +14,4 @@ export * from './StaticBackground';
 export * from './DigitalClock';
 export * from './FileUpload';
 export { DiskUsageView } from './disk-usage-view/DiskUsageView';
+export { DndSortableList } from './DndSortableList';

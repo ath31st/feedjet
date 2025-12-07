@@ -3,9 +3,9 @@ import {
   useRemoveImageFile,
   useUpdateImageOrder,
   useUpdateIsActiveImage,
+  type AdminImageInfo,
 } from '@/entities/image';
 import { useEffect, useState } from 'react';
-import type { DropResult } from '@hello-pangea/dnd';
 
 export function useImageList(kioskId: number) {
   const { data: images = [], isLoading } = useImageMetadataList(kioskId);
@@ -28,24 +28,14 @@ export function useImageList(kioskId: number) {
     updateIsActive({ kioskId, fileName, isActive });
   };
 
-  const handleDragEnd = (result: DropResult) => {
-    if (!result.destination) return;
+  const handleReorder = (newItems: AdminImageInfo[]) => {
+    const normalized = newItems.map((item, idx) => ({ ...item, order: idx }));
+    setOrdered(normalized);
 
-    const newItems = Array.from(ordered);
-    const [moved] = newItems.splice(result.source.index, 1);
-    newItems.splice(result.destination.index, 0, moved);
-
-    const updates = newItems.map((item, idx) => ({
+    const updates = normalized.map((item) => ({
       fileName: item.fileName,
-      order: idx,
+      order: item.order,
     }));
-
-    setOrdered(
-      newItems.map((i, idx) => ({
-        ...i,
-        order: idx,
-      })),
-    );
 
     updateOrder({ kioskId, updates });
   };
@@ -57,6 +47,6 @@ export function useImageList(kioskId: number) {
     isUpdatingActive,
     handleRemove,
     handleToggleActive,
-    handleDragEnd,
+    handleReorder,
   };
 }
