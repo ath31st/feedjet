@@ -8,6 +8,7 @@ import { useUiConfigStore, type UiConfig } from '@/entities/ui-config';
 import { useVideoStore, type VideoMetadata } from '@/entities/video';
 import { useFeedConfigStore, type FeedConfig } from '@/entities/feed-config';
 import type { ControlEvent } from '@shared/types/control.event';
+import { useImageStore, type KioskImageInfo } from '@/entities/image';
 
 export function useSseStream() {
   const { currentKiosk } = useKioskStore();
@@ -17,6 +18,7 @@ export function useSseStream() {
   const setFeeds = useRssFeedStore((s) => s.setFeeds);
   const setUiConfig = useUiConfigStore((s) => s.setConfig);
   const setVideo = useVideoStore((s) => s.setVideos);
+  const setImages = useImageStore((s) => s.setImages);
   const setFeedConfig = useFeedConfigStore((s) => s.setConfig);
 
   const onMessage = useCallback(
@@ -54,6 +56,15 @@ export function useSseStream() {
             setVideo(payload as Array<VideoMetadata>);
             break;
 
+          case 'image':
+            console.log('SSE: Received IMAGE');
+            setImages(payload as Array<KioskImageInfo>);
+            break;
+
+          case 'keepalive':
+            console.log('SSE: Received KEEPALIVE');
+            break;
+
           default:
             console.warn(`SSE: Unknown message type received: ${type}`);
         }
@@ -61,7 +72,7 @@ export function useSseStream() {
         console.error('Error processing SSE message:', error, e.data);
       }
     },
-    [setFeeds, setUiConfig, setFeedConfig, setVideo],
+    [setFeeds, setUiConfig, setFeedConfig, setVideo, setImages],
   );
 
   const streamUrl = `${SERVER_URL}${SSE_URL.STREAM(currentKioskId)}`;
