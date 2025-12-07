@@ -65,9 +65,28 @@ export const useUploadImage = () => {
   );
 };
 
-export const useUpdateIsActiveImageMetadata = () => {
+export const useUpdateImageOrder = () => {
   return useMutation(
-    trpcWithProxy.image.updateImageStatus.mutationOptions({
+    trpcWithProxy.image.updateImageOrder.mutationOptions({
+      onSuccess: () => {
+        toast.success('Порядок успешно обновлен');
+        queryClient.invalidateQueries({
+          queryKey: trpcWithProxy.image.listFiles.queryKey(),
+        });
+      },
+      onError: (err: unknown) => {
+        if (err instanceof Error) {
+          toast.error(err.message || 'Ошибка при обновлении порядка');
+          return;
+        }
+      },
+    }),
+  );
+};
+
+export const useUpdateIsActiveImage = () => {
+  return useMutation(
+    trpcWithProxy.image.updateIsActiveImage.mutationOptions({
       onSuccess: (data) => {
         toast.success(
           `Файл ${data ? 'добавлен в список отображения' : 'удален из списка отображения'}`,
