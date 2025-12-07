@@ -52,7 +52,7 @@ export const imageStorageRouter = t.router({
       const activeImages = imageStorageService.listActiveImagesByKiosk(
         input.kioskId,
       );
-      eventBus.emit('image', activeImages);
+      eventBus.emit(`image:${input.kioskId}`, activeImages);
 
       return result;
     }),
@@ -68,7 +68,7 @@ export const imageStorageRouter = t.router({
       const activeImages = imageStorageService.listActiveImagesByKiosk(
         input.kioskId,
       );
-      eventBus.emit('image', activeImages);
+      eventBus.emit(`image:${input.kioskId}`, activeImages);
 
       return result;
     }),
@@ -80,7 +80,7 @@ export const imageStorageRouter = t.router({
       const activeImages = imageStorageService.listActiveImagesByKiosk(
         input.kioskId,
       );
-      eventBus.emit('image', activeImages);
+      eventBus.emit(`image:${input.kioskId}`, activeImages);
 
       return { ok: true };
     }),
