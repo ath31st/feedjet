@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { buildVideoUrl, useVideoStore } from '@/entities/video';
-import { PlaylistState } from '../lib/playlistState';
+import { PlaylistState } from '@/shared/constant';
 
 interface UseVideoPlayerProps {
   onVideoStart: () => void;
