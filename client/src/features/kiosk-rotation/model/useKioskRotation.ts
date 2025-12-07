@@ -38,6 +38,7 @@ export function useKioskRotation({ widgets, interval }: UseKioskRotationProps) {
   }, [widgets.length, index]);
 
   const isSingleVideoWidget = widgets.length === 1 && widgets[0] === 'video';
+  const isSingleImageWidget = widgets.length === 1 && widgets[0] === 'image';
 
   return {
     index,
@@ -46,5 +47,6 @@ export function useKioskRotation({ widgets, interval }: UseKioskRotationProps) {
     unlockRotation,
     isRotationLocked,
     isSingleVideoWidget,
+    isSingleImageWidget,
   };
 }

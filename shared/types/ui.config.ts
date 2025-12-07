@@ -51,12 +51,20 @@ export const themesFull = [
 export const themes = themesFull.map((t) => t.name);
 export type Theme = (typeof themes)[number];
 
-export const widgetTypes = ['schedule', 'video', 'feed', 'birthday', 'info'];
+export const widgetTypes = [
+  'schedule',
+  'video',
+  'image',
+  'feed',
+  'birthday',
+  'info',
+];
 export type WidgetType = (typeof widgetTypes)[number];
 
 export const widgetLabels: Record<WidgetType, string> = {
   schedule: 'Расписание',
   video: 'Видео',
+  image: 'Изображения',
   feed: 'Новости',
   birthday: 'Дни рожд.',
   info: 'Информация',

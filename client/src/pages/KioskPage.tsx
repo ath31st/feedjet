@@ -10,6 +10,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 const FeedWidget = lazy(() => import('@/widgets/feed'));
 const ScheduleWidget = lazy(() => import('@/widgets/schedule'));
 const VideoPlayerWidget = lazy(() => import('@/widgets/video-player'));
+const ImageViewerWidget = lazy(() => import('@/widgets/image-viewer'));
 const BirthdayWidget = lazy(() => import('@/widgets/birthday'));
 const InfoWidget = lazy(() => import('@/widgets/info'));
 
@@ -18,11 +19,16 @@ export function KioskPage() {
   const widgets = uiConfig?.rotatingWidgets ?? [];
   const interval = uiConfig?.autoSwitchIntervalMs ?? 0;
   const { rotate, animation } = useKioskParams();
-  const { index, lockRotation, unlockRotation, isSingleVideoWidget } =
-    useKioskRotation({
-      widgets,
-      interval,
-    });
+  const {
+    index,
+    lockRotation,
+    unlockRotation,
+    isSingleVideoWidget,
+    isSingleImageWidget,
+  } = useKioskRotation({
+    widgets,
+    interval,
+  });
   const currentWidgetKey = widgets[index];
 
   if (loading || !initialized) {
@@ -62,6 +68,14 @@ export function KioskPage() {
                   onVideoStart={lockRotation}
                   onVideoEnd={unlockRotation}
                   isSingleVideoWidget={isSingleVideoWidget}
+                />
+              )}
+              {currentWidgetKey === 'image' && (
+                <ImageViewerWidget
+                  onViewStart={lockRotation}
+                  onViewEnd={unlockRotation}
+                  isSingleImageWidget={isSingleImageWidget}
+                  displayDurationMs={interval}
                 />
               )}
               {currentWidgetKey === 'birthday' && (
