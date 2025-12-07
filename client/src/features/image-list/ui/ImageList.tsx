@@ -2,63 +2,24 @@ import { formatBytes } from '@/shared/lib';
 import { Cross1Icon } from '@radix-ui/react-icons';
 import { IconButton } from '@/shared/ui/common';
 import * as Switch from '@radix-ui/react-switch';
-import {
-  buildImageUrl,
-  useImageMetadataList,
-  useRemoveImageFile,
-  useUpdateImageOrder,
-  useUpdateIsActiveImage,
-} from '@/entities/image';
-import {
-  DragDropContext,
-  Droppable,
-  Draggable,
-  type DropResult,
-} from '@hello-pangea/dnd';
-import { useEffect, useState } from 'react';
+import { buildImageUrl } from '@/entities/image';
+import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
+import { useImageList } from '../model/useImageList';
 
 interface ImageListProps {
   kioskId: number;
 }
 
 export function ImageList({ kioskId }: ImageListProps) {
-  const { data: images = [], isLoading } = useImageMetadataList(kioskId);
-  const { mutate: removeImage, isPending } = useRemoveImageFile();
-  const { mutate: updateIsActive, isPending: isActivePending } =
-    useUpdateIsActiveImage();
-  const { mutate: updateOrder } = useUpdateImageOrder();
-
-  const [ordered, setOrdered] = useState(images);
-
-  useEffect(() => {
-    setOrdered(images);
-  }, [images]);
-
-  const handleRemoveImage = (fileName: string) => {
-    removeImage({ filename: fileName, kioskId });
-  };
-
-  const onDragEnd = (result: DropResult) => {
-    if (!result.destination) return;
-
-    const newItems = Array.from(ordered);
-    const [moved] = newItems.splice(result.source.index, 1);
-    newItems.splice(result.destination.index, 0, moved);
-
-    const updates = newItems.map((item, idx) => ({
-      fileName: item.fileName,
-      order: idx,
-    }));
-
-    setOrdered(
-      newItems.map((i, idx) => ({
-        ...i,
-        order: idx,
-      })),
-    );
-
-    updateOrder({ kioskId, updates });
-  };
+  const {
+    ordered,
+    isLoading,
+    isRemoving,
+    isUpdatingActive,
+    handleRemove,
+    handleToggleActive,
+    handleDragEnd,
+  } = useImageList(kioskId);
 
   if (isLoading) {
     return (
@@ -66,7 +27,7 @@ export function ImageList({ kioskId }: ImageListProps) {
     );
   }
 
-  if (!images.length) {
+  if (!ordered.length) {
     return (
       <div className="w-full text-[var(--meta-text)] text-sm">
         Нет загруженных изображений
@@ -75,7 +36,7 @@ export function ImageList({ kioskId }: ImageListProps) {
   }
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
+    <DragDropContext onDragEnd={handleDragEnd}>
       <Droppable droppableId="image-list">
         {(provided) => (
           <div
@@ -129,13 +90,9 @@ export function ImageList({ kioskId }: ImageListProps) {
                       <div className="flex flex-shrink-0 items-center gap-2">
                         <Switch.Root
                           checked={i.isActive ?? false}
-                          disabled={isActivePending}
+                          disabled={isUpdatingActive}
                           onCheckedChange={(checked) =>
-                            updateIsActive({
-                              kioskId,
-                              fileName: i.fileName,
-                              isActive: checked,
-                            })
+                            handleToggleActive(i.fileName, checked)
                           }
                           className="relative h-5 w-10 shrink-0 cursor-pointer rounded-full border border-[var(--border)] transition-colors data-[state=checked]:bg-[var(--button-bg)]"
                         >
@@ -143,8 +100,8 @@ export function ImageList({ kioskId }: ImageListProps) {
                         </Switch.Root>
 
                         <IconButton
-                          disabled={isPending}
-                          onClick={() => handleRemoveImage(i.fileName)}
+                          disabled={isRemoving}
+                          onClick={() => handleRemove(i.fileName)}
                           tooltip="Удалить"
                           icon={<Cross1Icon className="h-4 w-4" />}
                         />
