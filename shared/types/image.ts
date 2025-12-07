@@ -19,3 +19,8 @@ export interface KioskImageInfo extends ImageMetadata {
   isActive: boolean;
   order: number;
 }
+
+export interface ImageOrderUpdate {
+  fileName: string;
+  order: number;
+}

@@ -9,7 +9,10 @@ import {
   fileDeleteParamsSchema,
   fileParamsSchema,
 } from '../../validations/schemas/file.storage.validation.js';
-import { updateImageMetadataSchema } from '../../validations/schemas/image.schemas.js';
+import {
+  batchUpdateImageOrderSchema,
+  updateIsActiveImageSchema,
+} from '../../validations/schemas/image.schemas.js';
 import { kioskIdInputSchema } from '../../validations/schemas/kiosk.schemas.js';
 
 export const imageStorageRouter = t.router({
@@ -39,14 +42,28 @@ export const imageStorageRouter = t.router({
       return images;
     }),
 
-  updateImageStatus: protectedProcedure
-    .input(updateImageMetadataSchema)
+  updateImageOrder: protectedProcedure
+    .input(batchUpdateImageOrderSchema)
+    .mutation(async ({ input }) => {
+      const result = await imageStorageService.updateImageOrderBatch(
+        input.kioskId,
+        input.updates,
+      );
+      const activeImages = imageStorageService.listActiveImagesByKiosk(
+        input.kioskId,
+      );
+      eventBus.emit('image', activeImages);
+
+      return result;
+    }),
+
+  updateIsActiveImage: protectedProcedure
+    .input(updateIsActiveImageSchema)
     .mutation(async ({ input }) => {
       const result = await imageStorageService.update(
         input.fileName,
         input.kioskId,
         input.isActive,
-        input.order,
       );
       const activeImages = imageStorageService.listActiveImagesByKiosk(
         input.kioskId,

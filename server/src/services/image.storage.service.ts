@@ -6,6 +6,7 @@ import { FileStorageError } from '../errors/file.storage.error.js';
 import type {
   AdminImageInfo,
   ImageMetadata,
+  ImageOrderUpdate,
   KioskImageInfo,
 } from '@shared/types/image.js';
 import { webReadableToNode } from '../utils/stream.js';
@@ -90,10 +91,9 @@ export class ImageStorageService extends FileStorageService {
     fileName: string,
     kioskId: number,
     isActive: boolean,
-    order: number,
   ): Promise<boolean> {
     this.logger.debug(
-      { fileName, kioskId, order, isActive, fn: 'update' },
+      { fileName, kioskId, isActive, fn: 'update' },
       'Updating image',
     );
 
@@ -117,12 +117,7 @@ export class ImageStorageService extends FileStorageService {
       throw new ImageStorageServiceError(404, 'File not found on disk');
     }
 
-    const result = this.updateKioskImageStatus(
-      imageId,
-      kioskId,
-      isActive,
-      order,
-    );
+    const result = this.updateIsActiveImage(imageId, kioskId, isActive);
 
     this.logger.info(
       { fileName, isActive, fn: 'update' },
@@ -296,41 +291,94 @@ export class ImageStorageService extends FileStorageService {
     }
   }
 
-  updateKioskImageStatus(
+  updateIsActiveImage(
     imageId: number,
     kioskId: number,
     isActive: boolean,
-    order: number,
   ): boolean {
     this.logger.debug(
-      { imageId, kioskId, isActive, order, fn: 'updateKioskImageStatus' },
+      { imageId, kioskId, isActive, fn: 'updateIsActiveImage' },
       'Upserting kiosk image metadata',
     );
 
     try {
       this.db
         .insert(kioskImagesTable)
-        .values({ imageId, kioskId, isActive, order })
+        .values({ imageId, kioskId, isActive })
         .onConflictDoUpdate({
           target: [kioskImagesTable.kioskId, kioskImagesTable.imageId],
-          set: { isActive, order },
+          set: { isActive },
         })
         .run();
 
       this.logger.info(
-        { imageId, kioskId, isActive, order, fn: 'updateKioskImageStatus' },
+        { imageId, kioskId, isActive, fn: 'updateIsActiveImage' },
         'Kiosk image metadata upserted successfully',
       );
 
       return isActive;
     } catch (error) {
       this.logger.error(
-        { error, fn: 'updateKioskImageStatus' },
+        { error, fn: 'updateIsActiveImage' },
         'Error upserting kiosk image metadata',
       );
       throw new ImageStorageServiceError(
         500,
         'Error upserting kiosk image metadata',
+      );
+    }
+  }
+
+  async updateImageOrderBatch(
+    kioskId: number,
+    updates: ImageOrderUpdate[],
+  ): Promise<void> {
+    this.logger.debug(
+      { kioskId, updates, fn: 'updateImageOrderBatch' },
+      'Starting batch order update for kiosk images',
+    );
+
+    try {
+      await this.db.transaction(async (tx) => {
+        for (const { fileName, order } of updates) {
+          const imageRow = tx
+            .select({ id: imagesTable.id })
+            .from(imagesTable)
+            .where(eq(imagesTable.fileName, fileName))
+            .get();
+
+          if (!imageRow) {
+            this.logger.warn(
+              { fileName, fn: 'updateImageOrderBatch' },
+              'Image file not found in metadata table. Skipping.',
+            );
+            continue;
+          }
+
+          const imageId = imageRow.id;
+
+          tx.insert(kioskImagesTable)
+            .values({ imageId, kioskId, isActive: false, order })
+            .onConflictDoUpdate({
+              target: [kioskImagesTable.kioskId, kioskImagesTable.imageId],
+              set: { order: order },
+            })
+            .run();
+        }
+      });
+
+      this.logger.info(
+        { kioskId, updatesCount: updates.length, fn: 'updateImageOrderBatch' },
+        'Batch order update completed successfully',
+      );
+    } catch (error) {
+      this.logger.error(
+        { error, kioskId, fn: 'updateImageOrderBatch' },
+        'Error performing batch order update',
+      );
+      throw new ImageStorageServiceError(
+        500,
+        'Error updating image order batch',
       );
     }
   }
