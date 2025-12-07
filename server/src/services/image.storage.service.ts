@@ -13,8 +13,7 @@ import { webReadableToNode } from '../utils/stream.js';
 import { ImageStorageServiceError } from '../errors/image.error.js';
 import type { DbType } from '../container.js';
 import { imagesTable, kioskImagesTable } from '../db/schema.js';
-import { and, eq } from 'drizzle-orm';
-
+import { and, eq, asc } from 'drizzle-orm';
 export class ImageStorageService extends FileStorageService {
   private readonly db: DbType;
   private readonly imageDir = 'images';
@@ -243,6 +242,7 @@ export class ImageStorageService extends FileStorageService {
           eq(kioskImagesTable.kioskId, kioskId),
         ),
       )
+      .orderBy(asc(kioskImagesTable.order))
       .all();
   }
 
@@ -261,6 +261,7 @@ export class ImageStorageService extends FileStorageService {
           eq(kioskImagesTable.isActive, true),
         ),
       )
+      .orderBy(asc(kioskImagesTable.order))
       .all();
   }
 

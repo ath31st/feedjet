@@ -31,7 +31,7 @@ export function ImageList({ kioskId }: ImageListProps) {
   const [ordered, setOrdered] = useState(images);
 
   useEffect(() => {
-    setOrdered([...images].sort((a, b) => (a.order ?? 0) - (b.order ?? 0)));
+    setOrdered(images);
   }, [images]);
 
   const handleRemoveImage = (fileName: string) => {
