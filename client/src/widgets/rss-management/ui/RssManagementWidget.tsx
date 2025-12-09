@@ -24,11 +24,11 @@ export function RssManagementWidget() {
 
   return (
     <div className="flex w-full flex-row gap-6">
-      <SettingsCard title="Управление RSS-лентами" className="w-full md:w-2/3">
+      <SettingsCard title="Управление RSS-лентами" className="w-full md:w-3/5">
         <FeedAddForm />
         <FeedList />
       </SettingsCard>
-      <SettingsCard title="Настройки RSS-виджета" className="w-full md:w-1/3">
+      <SettingsCard title="Настройки RSS-виджета" className="w-full md:w-2/5">
         <div className="flex flex-col gap-4">
           <VisibleCellCountSelector kioskId={kioskId} />
           <CarouselSizeSelector kioskId={kioskId} />
