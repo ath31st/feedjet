@@ -1,6 +1,11 @@
 import * as Switch from '@radix-ui/react-switch';
-import { widgetTypes, widgetLabels } from '@shared/types/ui.config';
+import {
+  widgetTypes,
+  widgetLabels,
+  type WidgetType,
+} from '@shared/types/ui.config';
 import { useWidgetSelector } from '../model/useWidgetSelector';
+import { Calendar, Video, Image, Newspaper, Gift, Info } from 'lucide-react';
 
 interface WidgetSelectorProps {
   kioskId: number;
@@ -10,6 +15,27 @@ export function WidgetSelector({ kioskId }: WidgetSelectorProps) {
   const { rotatingWidgets, handleWidgetChange } = useWidgetSelector(kioskId);
 
   if (!widgetTypes.length) return <p>Нет доступных виджетов</p>;
+
+  const renderIcon = (type: WidgetType, isActive: boolean) => {
+    const colorClass = isActive ? 'text-(--text)' : 'text-(--meta-text)';
+
+    switch (type) {
+      case 'schedule':
+        return <Calendar className={colorClass} />;
+      case 'video':
+        return <Video className={colorClass} />;
+      case 'image':
+        return <Image className={colorClass} />;
+      case 'feed':
+        return <Newspaper className={colorClass} />;
+      case 'birthday':
+        return <Gift className={colorClass} />;
+      case 'info':
+        return <Info className={colorClass} />;
+      default:
+        return null;
+    }
+  };
 
   return (
     <ul className="space-y-2">
@@ -21,11 +47,16 @@ export function WidgetSelector({ kioskId }: WidgetSelectorProps) {
             key={type}
             className={`flex items-center justify-between rounded-lg border ${isActive ? 'border-(--border)' : 'border-(--border-disabled)'} px-4 py-2`}
           >
-            <span
-              className={`truncate ${isActive ? '' : 'text-(--meta-text)'}`}
-            >
-              {widgetLabels[type]}
-            </span>
+            <div className="flex items-center gap-2">
+              {renderIcon(type, isActive)}
+              <span
+                className={`truncate ${
+                  isActive ? 'text-(--text)' : 'text-(--meta-text)'
+                }`}
+              >
+                {widgetLabels[type]}
+              </span>
+            </div>
 
             <Switch.Root
               checked={isActive}

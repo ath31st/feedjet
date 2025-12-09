@@ -3,6 +3,7 @@ import { Cross1Icon } from '@radix-ui/react-icons';
 import { useRssManagement } from '../model/useRssManagement';
 import { LoadingThreeDotsJumping } from '@/shared/ui/LoadingThreeDotsJumping';
 import { IconButton } from '@/shared/ui/common';
+import { RssIcon } from 'lucide-react';
 
 export function FeedList() {
   const { feeds, feedsLoading, handleDeleteFeed, handleUpdateFeed } =
@@ -18,11 +19,20 @@ export function FeedList() {
           key={item.id}
           className={`flex items-center justify-between rounded-lg border ${item.isActive ? 'border-(--border)' : 'border-(--border-disabled)'} px-4 py-2`}
         >
-          <span
-            className={`truncate ${item.isActive ? '' : 'text-(--meta-text)'}`}
-          >
-            {item.url}
-          </span>
+          <div className="flex items-center gap-2">
+            {
+              <RssIcon
+                className={`${item.isActive ? 'text-(--text)' : 'text-(--meta-text)'}`}
+              />
+            }
+            <span
+              className={`truncate ${
+                item.isActive ? 'text-(--text)' : 'text-(--meta-text)'
+              }`}
+            >
+              {item.url}
+            </span>
+          </div>
           <div className="flex items-center gap-2">
             <Switch.Root
               checked={item.isActive}
