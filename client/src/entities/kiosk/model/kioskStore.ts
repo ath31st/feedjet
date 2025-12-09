@@ -9,7 +9,7 @@ interface KioskState {
 
   fetchKioskBySlug: (slug: string) => Promise<void>;
   setCurrentKiosk: (kiosk: Kiosk) => void;
-  init: () => Promise<void>;
+  setDefaultKiosk: () => Promise<void>;
   clearError: () => void;
 }
 
@@ -44,7 +44,7 @@ export const useKioskStore = create<KioskState>()((set, _get) => ({
     set({ currentKiosk: kiosk });
   },
 
-  init: async () => {
+  setDefaultKiosk: async () => {
     set({ loading: true, error: null });
     try {
       const kiosks = await trpcClient.kiosk.getAll.query();

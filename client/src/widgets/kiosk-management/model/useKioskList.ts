@@ -6,7 +6,7 @@ import {
 import { useGetActiveHeartbeats } from '@/features/kiosk-heartbeat';
 
 export function useKioskList() {
-  const { currentKiosk, setCurrentKiosk } = useKioskStore();
+  const { currentKiosk, setDefaultKiosk } = useKioskStore();
   const { data: kiosks, isLoading } = useGetAllKiosks();
   const { data: heartbeats = [] } = useGetActiveHeartbeats();
   const deleteKiosk = useDeleteKiosk();
@@ -22,7 +22,7 @@ export function useKioskList() {
       {
         onSuccess: () => {
           if (currentKiosk?.id === id) {
-            setCurrentKiosk(null);
+            setDefaultKiosk();
           }
         },
       },
