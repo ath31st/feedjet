@@ -18,16 +18,20 @@ export function FeedList() {
           key={item.id}
           className="flex items-center justify-between rounded-lg border border-[var(--border)] px-4 py-2"
         >
-          <span className="truncate">{item.url}</span>
+          <span
+            className={`truncate ${item.isActive ? '' : 'text-(--meta-text)'}`}
+          >
+            {item.url}
+          </span>
           <div className="flex items-center gap-2">
             <Switch.Root
               checked={item.isActive}
               onCheckedChange={(checked) =>
                 handleUpdateFeed(item.id, undefined, checked)
               }
-              className="relative h-5 w-10 shrink-0 cursor-pointer rounded-full border border-[var(--border)] transition-colors data-[state=checked]:bg-[var(--button-bg)]"
+              className="relative h-5 w-10 shrink-0 cursor-pointer rounded-full border border-(--border) transition-colors data-[state=checked]:bg-(--button-bg)"
             >
-              <Switch.Thumb className="block h-4 w-4 translate-x-[1px] rounded-full bg-[var(--text)] transition-transform data-[state=checked]:translate-x-[21px]" />
+              <Switch.Thumb className="block h-4 w-4 translate-x-[1px] rounded-full bg-(--text) transition-transform data-[state=checked]:translate-x-[21px]" />
             </Switch.Root>
 
             <IconButton
