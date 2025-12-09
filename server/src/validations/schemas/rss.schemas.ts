@@ -6,11 +6,13 @@ export const rssParamsSchema = z.object({
 
 export const rssCreateSchema = z.object({
   url: z.string(),
+  name: z.string().optional(),
 });
 
 export const rssUpdateSchema = z
   .object({
     url: z.string().optional(),
+    name: z.string().optional(),
     isActive: z.boolean().optional(),
   })
   .refine((data) => Object.keys(data).length > 0, {

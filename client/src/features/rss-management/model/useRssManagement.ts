@@ -9,24 +9,32 @@ import { isValidUrl } from '@/shared/lib/isValidUrl';
 import { toast } from 'sonner';
 
 export function useRssManagement() {
-  const [newFeed, setNewFeed] = useState('');
+  const [newFeedUrl, setNewFeedUrl] = useState('');
+  const [newFeedName, setNewFeedName] = useState('');
   const { data: feeds, isLoading: feedsLoading } = useGetAllRss();
   const createRss = useCreateRss();
   const deleteRss = useDeleteRss();
   const updateRss = useUpdateRss();
 
   const handleAddFeed = () => {
-    const url = newFeed.trim();
+    const url = newFeedUrl.trim();
+    const name = newFeedName.trim() || undefined;
 
-    if (!url || !isValidUrl(url)) {
+    if (!url) {
+      toast.error('Введите ссылку RSS');
+      return;
+    }
+
+    if (!isValidUrl(url)) {
       toast.error('Некорректная ссылка RSS');
       return;
     }
 
     createRss.mutate(
-      { url },
+      { url, name },
       {
-        onSuccess: () => setNewFeed(''),
+        onSuccess: () => setNewFeedUrl(''),
+        onError: () => setNewFeedName(''),
       },
     );
   };
@@ -35,21 +43,32 @@ export function useRssManagement() {
     deleteRss.mutate({ id });
   };
 
-  const handleUpdateFeed = (id: number, url?: string, isActive?: boolean) => {
-    updateRss.mutate({ id, data: { url, isActive } });
+  const handleUpdateFeed = (
+    id: number,
+    url?: string,
+    name?: string,
+    isActive?: boolean,
+  ) => {
+    updateRss.mutate({ id, data: { url, name, isActive } });
   };
 
-  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewFeed(e.target.value);
+  const handleUrlInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewFeedUrl(e.target.value);
+  };
+
+  const handleNameInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewFeedName(e.target.value);
   };
 
   return {
-    newFeed,
+    newFeedUrl,
+    newFeedName,
     feeds,
     feedsLoading,
     handleAddFeed,
     handleDeleteFeed,
     handleUpdateFeed,
-    handleInput,
+    handleUrlInput,
+    handleNameInput,
   };
 }

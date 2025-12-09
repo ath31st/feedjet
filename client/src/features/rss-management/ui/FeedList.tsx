@@ -25,19 +25,28 @@ export function FeedList() {
                 className={`${item.isActive ? 'text-(--text)' : 'text-(--meta-text)'}`}
               />
             }
-            <span
-              className={`truncate ${
-                item.isActive ? 'text-(--text)' : 'text-(--meta-text)'
-              }`}
-            >
-              {item.url}
-            </span>
+            <div className="flex flex-col">
+              <span
+                className={`truncate ${
+                  item.isActive ? 'text-(--text)' : 'text-(--meta-text)'
+                }`}
+              >
+                {item.name || 'Без названия'}
+              </span>
+              <span
+                className={`truncate text-xs ${
+                  item.isActive ? 'text-(--text)' : 'text-(--meta-text)'
+                }`}
+              >
+                {item.url}
+              </span>
+            </div>
           </div>
           <div className="flex items-center gap-2">
             <Switch.Root
               checked={item.isActive}
               onCheckedChange={(checked) =>
-                handleUpdateFeed(item.id, undefined, checked)
+                handleUpdateFeed(item.id, undefined, undefined, checked)
               }
               className="relative h-5 w-10 shrink-0 cursor-pointer rounded-full border border-(--border) transition-colors data-[state=checked]:bg-(--button-bg)"
             >
