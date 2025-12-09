@@ -148,6 +148,13 @@
       "when": 1765036380801,
       "tag": "0020_spotty_harpoon",
       "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "6",
+      "when": 1765301255711,
+      "tag": "0021_natural_big_bertha",
+      "breakpoints": true
     }
   ]
 }

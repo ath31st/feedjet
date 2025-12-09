@@ -38,6 +38,7 @@ export const usersTable = sqliteTable('users', {
 export const rssFeedsTable = sqliteTable('rss_feeds', {
   id: integer('id').primaryKey({ autoIncrement: true }),
   url: text('url').notNull().unique(),
+  name: text('name'),
   isActive: integer('is_active', { mode: 'boolean' }).notNull().default(true),
   createdAt: integer('created_at', { mode: 'timestamp' })
     .notNull()
