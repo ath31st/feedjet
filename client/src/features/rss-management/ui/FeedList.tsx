@@ -33,11 +33,7 @@ export function FeedList() {
               >
                 {item.name || 'Без названия'}
               </span>
-              <span
-                className={`truncate text-xs ${
-                  item.isActive ? 'text-(--text)' : 'text-(--meta-text)'
-                }`}
-              >
+              <span className={`truncate text-(--meta-text) text-xs`}>
                 {item.url}
               </span>
             </div>

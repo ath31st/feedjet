@@ -42,13 +42,18 @@ export class RssService {
 
   create(data: NewRssFeed): RssFeed {
     this.logger.debug({ data, fn: 'create' }, 'Creating RSS feed');
+    const newRssFeed = {
+      ...data,
+      isActive: false,
+    };
 
     try {
-      const rss = this.db.insert(rssFeedsTable).values(data).returning().get();
-      this.logger.info(
-        { id: rss.id, url: rss.url, fn: 'create' },
-        'Created RSS feed',
-      );
+      const rss = this.db
+        .insert(rssFeedsTable)
+        .values(newRssFeed)
+        .returning()
+        .get();
+      this.logger.info({ rss, fn: 'create' }, 'Created RSS feed');
       return rss;
     } catch (err: unknown) {
       if ((err as Error).message.includes('UNIQUE')) {
