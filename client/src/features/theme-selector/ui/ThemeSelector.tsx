@@ -1,57 +1,65 @@
+'use client';
+
+import { useState } from 'react';
 import { themesFull, type Theme } from '@/entities/ui-config';
 import { useThemeSelector } from '../model/useThemeSelector';
-import * as ToggleGroup from '@radix-ui/react-toggle-group';
-import { TooltipWrapper } from '@/shared/ui';
 import { getColorFromHex } from '@/shared/lib';
 import { CheckIcon } from '@radix-ui/react-icons';
 
-interface ThemeSelectorProps {
+interface Props {
   kioskId: number;
 }
 
-export function ThemeSelector({ kioskId }: ThemeSelectorProps) {
+export function ThemeSelector({ kioskId }: Props) {
   const { theme, handleThemeChange } = useThemeSelector(kioskId);
+  const [open, setOpen] = useState(false);
 
-  if (!themesFull?.length) return <p>Темы недоступны</p>;
+  const current = themesFull.find((t) => t.name === theme);
+  if (!current) return <p>Темы недоступны</p>;
 
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-2">
       <span className="text-[var(--text)]">Цветовая тема:</span>
 
-      <ToggleGroup.Root
-        type="single"
-        className="grid grid-cols-4 gap-1 rounded-lg border border-[var(--border)] p-1"
-        value={theme}
-        onValueChange={(next) => {
-          if (!next) return;
-          handleThemeChange(kioskId, next as Theme);
-        }}
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        style={{ backgroundColor: current.color }}
+        className="flex h-8 cursor-pointer items-center justify-center rounded-lg transition-opacity hover:opacity-70"
       >
-        {themesFull.map((t) => (
-          <ToggleGroup.Item
-            key={t.name}
-            value={t.name}
-            style={{
-              backgroundColor: t.color,
-              color: getColorFromHex(t.color),
-            }}
-            className="cursor-pointer rounded-lg px-2 py-2 transition-colors duration-200 hover:bg-[var(--button-hover-bg)] hover:text-[var(--text)] hover:opacity-70 data-[state=on]:bg-[var(--button-bg)] data-[state=on]:text-[var(--text)]"
-          >
-            <TooltipWrapper tooltip={t.label}>
-              <div className="flex items-center justify-center gap-1">
-                {t.name === theme && (
-                  <CheckIcon
-                    className="h-4 w-4 rounded-full border"
-                    style={{ color: getColorFromHex(t.color) }}
-                  />
-                )}
+        <span
+          className="font-medium"
+          style={{
+            backgroundColor: current.color,
+            color: getColorFromHex(current.color),
+          }}
+        >
+          {current.label}
+        </span>
+      </button>
 
-                <span className="font-medium text-xs">{t.name}</span>
-              </div>
-            </TooltipWrapper>
-          </ToggleGroup.Item>
-        ))}
-      </ToggleGroup.Root>
+      <div
+        className={`overflow-hidden transition-all duration-300 ${open ? 'max-h-64 opacity-100' : 'max-h-0 opacity-0'}
+        `}
+      >
+        <div className="grid grid-cols-4 gap-2 rounded-lg border border-(--border) p-2">
+          {themesFull.map((t) => (
+            <button
+              key={t.name}
+              type="button"
+              onClick={() => handleThemeChange(kioskId, t.name as Theme)}
+              style={{
+                backgroundColor: t.color,
+                color: getColorFromHex(t.color),
+              }}
+              className="flex items-center justify-center gap-1 rounded-lg p-2 transition-opacity hover:opacity-80"
+            >
+              {t.name === theme && <CheckIcon className="h-4 w-4" />}
+              <span className="font-medium text-xs">{t.name}</span>
+            </button>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
