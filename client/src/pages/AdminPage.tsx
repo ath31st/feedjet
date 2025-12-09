@@ -1,6 +1,5 @@
 import { RssManagementWidget } from '@/widgets/rss-management';
 import { AppearanceSettingsWidget } from '@/widgets/appearance-settings';
-import { FeedWidgetSettings } from '@/widgets/feed-widget-settings';
 import * as Tabs from '@radix-ui/react-tabs';
 import { AdminTabTrigger } from '@/shared/ui';
 import { ScheduleManagementWidget } from '@/widgets/schedule-management';
@@ -52,10 +51,7 @@ export function AdminPage() {
 
           <div className="w-full">
             <Tabs.Content value="settings" className="flex flex-col gap-6">
-              <div className="flex w-full gap-6">
-                <AppearanceSettingsWidget />
-                <FeedWidgetSettings />
-              </div>
+              <AppearanceSettingsWidget />
             </Tabs.Content>
 
             <Tabs.Content value="rss">
