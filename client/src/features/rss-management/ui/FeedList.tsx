@@ -16,7 +16,7 @@ export function FeedList() {
       {feeds.map((item) => (
         <li
           key={item.id}
-          className="flex items-center justify-between rounded-lg border border-[var(--border)] px-4 py-2"
+          className={`flex items-center justify-between rounded-lg border ${item.isActive ? 'border-(--border)' : 'border-(--border-disabled)'} px-4 py-2`}
         >
           <span
             className={`truncate ${item.isActive ? '' : 'text-(--meta-text)'}`}

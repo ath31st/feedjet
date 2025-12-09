@@ -29,6 +29,7 @@
   --button-text: hsl(var(--hue), 35%, 15%);
   --button-hover-bg: hsl(var(--hue), 30%, 75%);
   --border: hsl(var(--hue), 5%, 60%);
+  --border-disabled: hsl(var(--hue), 30%, 60%);
 }
 
 [data-theme="dark"] {
@@ -45,6 +46,7 @@
   --button-text: hsl(var(--hue), 35%, 90%);
   --button-hover-bg: hsl(var(--hue), 25%, 30%);
   --border: hsl(var(--hue), 20%, 40%);
+  --border-disabled: hsl(var(--hue), 20%, 20%);
 }
 
 [data-theme="sepia"] {
@@ -61,6 +63,7 @@
   --button-text: hsl(var(--hue), 35%, 90%);
   --button-hover-bg: hsl(var(--hue), 55%, 35%);
   --border: hsl(var(--hue), 45%, 50%);
+  --border-disabled: hsl(var(--hue), 45%, 30%);
 }
 
 [data-theme="sepia-light"] {
@@ -77,6 +80,7 @@
   --button-text: hsl(var(--hue), 35%, 90%);
   --button-hover-bg: hsl(var(--hue), 55%, 40%);
   --border: hsl(var(--hue), 55%, 50%);
+  --border-disabled: hsl(var(--hue), 55%, 30%);
 }
 
 [data-theme="blue"] {
@@ -93,6 +97,7 @@
   --button-text: hsl(var(--hue), 35%, 90%);
   --button-hover-bg: hsl(var(--hue), 55%, 35%);
   --border: hsl(var(--hue), 45%, 50%);
+  --border-disabled: hsl(var(--hue), 45%, 30%);
 }
 
 [data-theme="green"] {
@@ -109,6 +114,7 @@
   --button-text: hsl(var(--hue), 35%, 90%);
   --button-hover-bg: hsl(var(--hue), 45%, 35%);
   --border: hsl(var(--hue), 45%, 50%);
+  --border-disabled: hsl(var(--hue), 45%, 30%);
 }
 
 [data-theme="purple"] {
@@ -125,6 +131,7 @@
   --button-text: hsl(var(--hue), 35%, 90%);
   --button-hover-bg: hsl(var(--hue), 55%, 40%);
   --border: hsl(var(--hue), 50%, 45%);
+  --border-disabled: hsl(var(--hue), 50%, 25%);
 }
 
 [data-theme="red"] {
@@ -141,6 +148,7 @@
   --button-text: hsl(var(--hue), 20%, 90%);
   --button-hover-bg: hsl(var(--hue), 60%, 35%);
   --border: hsl(var(--hue), 50%, 40%);
+  --border-disabled: hsl(var(--hue), 50%, 20%);
 }
 
 [data-theme="teal"] {
@@ -157,6 +165,7 @@
   --button-text: hsl(var(--hue), 30%, 90%);
   --button-hover-bg: hsl(var(--hue), 50%, 35%);
   --border: hsl(var(--hue), 40%, 45%);
+  --border-disabled: hsl(var(--hue), 40%, 25%);
 }
 
 [data-theme="flame"] {
@@ -173,6 +182,7 @@
   --button-text: hsl(var(--hue), 35%, 90%);
   --button-hover-bg: hsl(var(--hue), 60%, 40%);
   --border: hsl(var(--hue), 50%, 45%);
+  --border-disabled: hsl(var(--hue), 50%, 25%);
 }
 [data-theme="indigo"] {
   --hue: 245;
@@ -188,6 +198,7 @@
   --button-text: hsl(var(--hue), 35%, 90%);
   --button-hover-bg: hsl(var(--hue), 55%, 45%);
   --border: hsl(var(--hue), 45%, 50%);
+  --border-disabled: hsl(var(--hue), 45%, 30%);
 }
 
 [data-theme="terminal"] {
@@ -206,6 +217,7 @@
   --button-text: hsl(var(--hue), 80%, 80%);
   --button-hover-bg: hsl(var(--hue), 80%, 30%);
   --border: hsl(var(--hue), 70%, 35%);
+  --border-disabled: hsl(var(--hue), 70%, 15%);
 }
 
 [data-theme="glacier"] {
@@ -222,6 +234,7 @@
   --button-text: hsl(var(--hue), 20%, 95%);
   --button-hover-bg: hsl(var(--hue), 30%, 45%);
   --border: hsl(var(--hue), 25%, 50%);
+  --border-disabled: hsl(var(--hue), 25%, 30%);
 }
 
 [data-theme="gold"] {
@@ -241,6 +254,7 @@
   --button-text: hsl(var(--primary-hue), 0%, 95%);
   --button-hover-bg: hsl(var(--accent-hue), 80%, 40%);
   --border: hsl(var(--accent-hue), 70%, 50%);
+  --border-disabled: hsl(var(--accent-hue), 70%, 20%);
 }
 
 [data-theme="silver"] {
@@ -260,6 +274,7 @@
   --button-text: hsl(var(--accent-hue), 5%, 95%);
   --button-hover-bg: hsl(var(--primary-hue), 15%, 35%);
   --border: hsl(var(--accent-hue), 5%, 60%);
+  --border-disabled: hsl(var(--accent-hue), 5%, 30%);
 }
 
 [data-theme="electric"] {
@@ -279,6 +294,7 @@
   --button-text: hsl(var(--accent-hue), 95%, 85%);
   --button-hover-bg: hsl(var(--accent-hue), 85%, 30%);
   --border: hsl(var(--accent-hue), 80%, 40%);
+  --border-disabled: hsl(var(--accent-hue), 80%, 20%);
 }
 
 [data-theme="cyborg"] {
@@ -298,6 +314,7 @@
   --button-text: hsl(var(--primary-hue), 10%, 95%);
   --button-hover-bg: hsl(var(--accent-hue), 80%, 30%);
   --border: hsl(var(--accent-hue), 70%, 40%);
+  --border-disabled: hsl(var(--accent-hue), 70%, 20%);
 }
 
 [data-theme="moss"] {
@@ -317,6 +334,7 @@
   --button-text: hsl(var(--primary-hue), 30%, 95%);
   --button-hover-bg: hsl(var(--accent-hue), 70%, 35%);
   --border: hsl(var(--accent-hue), 60%, 45%);
+  --border-disabled: hsl(var(--accent-hue), 60%, 25%);
 }
 
 [data-theme="charcoal"] {
@@ -336,6 +354,7 @@
   --button-text: hsl(var(--primary-hue), 20%, 95%);
   --button-hover-bg: hsl(var(--accent-hue), 60%, 35%);
   --border: hsl(var(--accent-hue), 50%, 40%);
+  --border-disabled: hsl(var(--accent-hue), 50%, 20%);
 }
 
 [data-theme="lavender"] {
@@ -355,6 +374,7 @@
   --button-text: hsl(var(--primary-hue), 20%, 95%);
   --button-hover-bg: hsl(var(--accent-hue), 50%, 30%);
   --border: hsl(var(--accent-hue), 40%, 40%);
+  --border-disabled: hsl(var(--accent-hue), 40%, 20%);
 }
 
 [data-theme="jade"] {
@@ -374,6 +394,7 @@
   --button-text: hsl(var(--primary-hue), 45%, 95%);
   --button-hover-bg: hsl(var(--accent-hue), 50%, 35%);
   --border: hsl(var(--accent-hue), 40%, 45%);
+  --border-disabled: hsl(var(--accent-hue), 40%, 25%);
 }
 
 [data-theme="ash"] {
@@ -393,6 +414,7 @@
   --button-text: hsl(var(--primary-hue), 10%, 95%);
   --button-hover-bg: hsl(var(--accent-hue), 50%, 30%);
   --border: hsl(var(--accent-hue), 40%, 40%);
+  --border-disabled: hsl(var(--accent-hue), 40%, 20%);
 }
 
 [data-theme="forest-fire"] {
@@ -412,6 +434,7 @@
   --button-text: hsl(var(--primary-hue), 10%, 95%);
   --button-hover-bg: hsl(var(--accent-hue), 60%, 35%);
   --border: hsl(var(--accent-hue), 50%, 45%);
+  --border-disabled: hsl(var(--accent-hue), 50%, 25%);
 }
 
 [data-theme="volcano"] {
@@ -431,6 +454,7 @@
   --button-text: hsl(var(--primary-hue), 35%, 95%);
   --button-hover-bg: hsl(var(--accent-hue), 70%, 35%);
   --border: hsl(var(--accent-hue), 60%, 40%);
+  --border-disabled: hsl(var(--accent-hue), 60%, 20%);
 }
 
 [data-theme="neon-mint"] {
@@ -450,6 +474,7 @@
   --button-text: hsl(var(--primary-hue), 30%, 95%);
   --button-hover-bg: hsl(var(--accent-hue), 70%, 30%);
   --border: hsl(var(--accent-hue), 60%, 40%);
+  --border-disabled: hsl(var(--accent-hue), 60%, 20%);
 }
 
 body {

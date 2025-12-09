@@ -19,7 +19,7 @@ export function WidgetSelector({ kioskId }: WidgetSelectorProps) {
         return (
           <li
             key={type}
-            className="flex items-center justify-between rounded-lg border border-(--border) px-4 py-2"
+            className={`flex items-center justify-between rounded-lg border ${isActive ? 'border-(--border)' : 'border-(--border-disabled)'} px-4 py-2`}
           >
             <span
               className={`truncate ${isActive ? '' : 'text-(--meta-text)'}`}
