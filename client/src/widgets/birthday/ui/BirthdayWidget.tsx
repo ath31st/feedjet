@@ -5,6 +5,7 @@ import { BirthdayGreeting } from './BirthdayGreeting';
 import { COMPANY_NAME } from '@/shared/config';
 import { useBirthdayWidgetModel } from '../model/useBirthdayWidget';
 import { calcFontSize, calcWidgetWidth } from '../lib/selectors';
+import { SeasonOverlay, type Season } from './SeasonOverlay';
 
 interface BirthdayWidgetProps {
   rotate: number;
@@ -21,8 +22,17 @@ export function BirthdayWidget({ rotate }: BirthdayWidgetProps) {
     columns,
   } = useBirthdayWidgetModel(rotate);
 
+  const getCurrentSeason = (): Season => {
+    const month = new Date().getMonth();
+    if (month === 11 || month === 0 || month === 1) return 'winter';
+    if (month >= 2 && month <= 4) return 'spring';
+    if (month >= 5 && month <= 7) return 'summer';
+    return 'autumn';
+  };
+
   const fontSizeXl = calcFontSize(isEffectiveXl, birthdays.length);
   const widgetWidth = calcWidgetWidth(isEffectiveXl);
+  const currentSeason = getCurrentSeason();
 
   if (isLoading) {
     return (
@@ -37,9 +47,13 @@ export function BirthdayWidget({ rotate }: BirthdayWidgetProps) {
 
     return (
       <div
-        className={`flex h-full w-full items-center justify-center text-${fontSizeXl}xl text-[var(--meta-text)]`}
+        className={`relative flex h-full w-full items-center justify-center text-${fontSizeXl}xl overflow-hidden text-(--meta-text)`} // relative + overflow-hidden
       >
-        Месяц {monthName} не содержит дней рождения
+        <SeasonOverlay season={currentSeason} />
+
+        <span className="z-10">
+          Месяц {monthName} не содержит дней рождения
+        </span>
       </div>
     );
   }
@@ -55,8 +69,10 @@ export function BirthdayWidget({ rotate }: BirthdayWidgetProps) {
         backgroundImage: backgroundUrl ? `url(${backgroundUrl})` : undefined,
       }}
     >
+      <SeasonOverlay season={currentSeason} />
+
       <div
-        className="mt-6 flex h-full flex-col items-center justify-start gap-10"
+        className="z-10 mt-6 flex h-full flex-col items-center justify-start gap-10"
         style={{ width: `${widgetWidth}%` }}
       >
         <BirthdayGreeting
