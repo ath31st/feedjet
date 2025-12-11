@@ -9,7 +9,7 @@ interface SeasonOverlayProps {
 const random = (min: number, max: number) => Math.random() * (max - min) + min;
 
 const animationStyles = `
-  /* ЗИМА и ВЕСНА: Падение/Подъем (Вертикаль) */
+  /* WINTER and SPRING: FALL */
   @keyframes fall {
     0% { transform: translateY(-10vh); }
     100% { transform: translateY(110vh); }
@@ -19,19 +19,19 @@ const animationStyles = `
     100% { transform: translateY(-10vh); }
   }
 
-  /* ЗИМА и ВЕСНА: Покачивание (Горизонталь) - ТЕПЕРЬ НА GPU */
+  /* WINTER and SPRING: SWAY (horizontal) */
   @keyframes sway {
     0%, 100% { transform: translateX(0); }
     50% { transform: translateX(25px); }
   }
   
-  /* ОСЕНЬ */
+  /* AUTUMN */
   @keyframes fallRotate {
     0% { transform: translateY(-10vh) rotate(0deg); }
     100% { transform: translateY(110vh) rotate(360deg); }
   }
   
-  /* ЛЕТО */
+  /* SUMMER */
   @keyframes spin-slow {
     from { transform: translate(-50%, -50%) rotate(0deg); }
     to { transform: translate(-50%, -50%) rotate(360deg); }
