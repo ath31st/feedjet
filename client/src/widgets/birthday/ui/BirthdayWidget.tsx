@@ -12,7 +12,7 @@ interface BirthdayWidgetProps {
   animation: AnimationType;
 }
 
-export function BirthdayWidget({ rotate }: BirthdayWidgetProps) {
+export function BirthdayWidget({ rotate, animation }: BirthdayWidgetProps) {
   const {
     isLoading,
     birthdays,
@@ -49,7 +49,7 @@ export function BirthdayWidget({ rotate }: BirthdayWidgetProps) {
       <div
         className={`relative flex h-full w-full items-center justify-center text-${fontSizeXl}xl overflow-hidden text-(--meta-text)`} // relative + overflow-hidden
       >
-        <SeasonOverlay season={currentSeason} />
+        {animation === 'full' && <SeasonOverlay season={currentSeason} />}
 
         <span className="z-10">
           Месяц {monthName} не содержит дней рождения
@@ -69,7 +69,7 @@ export function BirthdayWidget({ rotate }: BirthdayWidgetProps) {
         backgroundImage: backgroundUrl ? `url(${backgroundUrl})` : undefined,
       }}
     >
-      <SeasonOverlay season={currentSeason} />
+      {animation === 'full' && <SeasonOverlay season={currentSeason} />}
 
       <div
         className="z-10 mt-6 flex h-full flex-col items-center justify-start gap-10"
