@@ -11,12 +11,12 @@ const random = (min: number, max: number) => Math.random() * (max - min) + min;
 const animationStyles = `
   /* WINTER and SPRING: FALL */
   @keyframes fall {
-    0% { transform: translateY(-10vh); }
-    100% { transform: translateY(110vh); }
+    0% { top: -10%; }
+    100% { top: 110%; }
   }
   @keyframes rise {
-    0% { transform: translateY(110vh); }
-    100% { transform: translateY(-10vh); }
+    0% { top: 110%; }
+    100% { top: -10%; }
   }
 
   /* WINTER and SPRING: SWAY (horizontal) */
@@ -27,8 +27,8 @@ const animationStyles = `
   
   /* AUTUMN */
   @keyframes fallRotate {
-    0% { transform: translateY(-10vh) rotate(0deg); }
-    100% { transform: translateY(110vh) rotate(360deg); }
+    0% { top: -10%; rotate(0deg); }
+    100% { top: 110%; rotate(360deg); }
   }
   
   /* SUMMER */

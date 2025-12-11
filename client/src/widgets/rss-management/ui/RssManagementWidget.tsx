@@ -23,7 +23,7 @@ export function RssManagementWidget() {
   const { id: kioskId } = kiosk;
 
   return (
-    <div className="flex w-full flex-row gap-6">
+    <div className="flex w-full flex-row items-start gap-6">
       <SettingsCard title="Управление RSS-лентами" className="w-full md:w-3/5">
         <FeedAddForm />
         <FeedList />
