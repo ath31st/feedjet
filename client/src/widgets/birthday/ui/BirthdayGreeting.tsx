@@ -31,15 +31,6 @@ export function BirthdayGreeting({
         >
           {companyName.toUpperCase()}
         </h1>
-        <img
-          src={eagleUrl}
-          alt="Eagle"
-          className="h-full w-1/10 object-contain"
-          style={{
-            filter:
-              'drop-shadow(0 0 0px var(--without-theme)) drop-shadow(0 0 10px var(--without-theme)) brightness(1.2)',
-          }}
-        />
       </div>
       <div
         className={`flex flex-col items-center whitespace-nowrap text-shadow-[var(--text-shadow)] uppercase text-${fontSizeXl}xl`}
