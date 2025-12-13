@@ -1,18 +1,16 @@
-import type { AnimationType } from '@/shared/lib';
 import { LoadingThreeDotsJumping } from '@/shared/ui';
 import { BirthdayCard } from './BirthdayCard';
 import { BirthdayGreeting } from './BirthdayGreeting';
 import { COMPANY_NAME } from '@/shared/config';
 import { useBirthdayWidgetModel } from '../model/useBirthdayWidget';
 import { calcFontSize, calcWidgetWidth } from '../lib/selectors';
-import { SeasonOverlay, type Season } from './SeasonOverlay';
+import { SeasonOverlay } from './SeasonOverlay';
 
 interface BirthdayWidgetProps {
   rotate: number;
-  animation: AnimationType;
 }
 
-export function BirthdayWidget({ rotate, animation }: BirthdayWidgetProps) {
+export function BirthdayWidget({ rotate }: BirthdayWidgetProps) {
   const {
     isLoading,
     birthdays,
@@ -20,19 +18,11 @@ export function BirthdayWidget({ rotate, animation }: BirthdayWidgetProps) {
     isEffectiveXl,
     isTwoColumns,
     columns,
+    currentSeason,
   } = useBirthdayWidgetModel(rotate);
-
-  const getCurrentSeason = (): Season => {
-    const month = new Date().getMonth();
-    if (month === 11 || month === 0 || month === 1) return 'winter';
-    if (month >= 2 && month <= 4) return 'spring';
-    if (month >= 5 && month <= 7) return 'summer';
-    return 'autumn';
-  };
 
   const fontSizeXl = calcFontSize(isEffectiveXl, birthdays.length);
   const widgetWidth = calcWidgetWidth(isEffectiveXl);
-  const currentSeason = getCurrentSeason();
 
   if (isLoading) {
     return (
@@ -49,7 +39,7 @@ export function BirthdayWidget({ rotate, animation }: BirthdayWidgetProps) {
       <div
         className={`relative flex h-full w-full items-center justify-center text-${fontSizeXl}xl overflow-hidden text-(--meta-text)`} // relative + overflow-hidden
       >
-        {animation === 'full' && <SeasonOverlay season={currentSeason} />}
+        <SeasonOverlay season={currentSeason} />
 
         <span className="z-10">
           Месяц {monthName} не содержит дней рождения
@@ -69,7 +59,7 @@ export function BirthdayWidget({ rotate, animation }: BirthdayWidgetProps) {
         backgroundImage: backgroundUrl ? `url(${backgroundUrl})` : undefined,
       }}
     >
-      {animation === 'full' && <SeasonOverlay season={currentSeason} />}
+      <SeasonOverlay season={currentSeason} />
 
       <div
         className="z-10 mt-6 flex h-full flex-col items-center justify-start gap-10"
