@@ -5,13 +5,10 @@ import { CheckIcon, ResetIcon } from '@radix-ui/react-icons';
 
 interface ConfirmActionDialogProps {
   trigger: ReactNode;
-
   title: string;
   description?: string;
-
   confirmText?: string;
   cancelText?: string;
-
   onConfirm: () => void;
 }
 

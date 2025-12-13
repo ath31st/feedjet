@@ -25,7 +25,7 @@ export function KioskCard({ kiosk, onDelete, actions }: KioskCardProps) {
               confirmText="Удалить"
               onConfirm={() => onDelete(kiosk.id)}
               trigger={
-                <CommonButton type="button">
+                <CommonButton type="button" tooltip="Удалить киоск">
                   <TrashIcon />
                 </CommonButton>
               }
