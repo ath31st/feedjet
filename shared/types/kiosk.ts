@@ -9,6 +9,13 @@ export interface Kiosk {
   updatedAt: Date;
 }
 
+export interface UpdateKiosk {
+  name?: string;
+  description?: string;
+  location?: string;
+  isActive?: boolean;
+}
+
 export interface NewKiosk {
   name: string;
   slug: string;

@@ -4,6 +4,7 @@ import {
   kioskIdInputSchema,
   kioskSlugInputSchema,
   newKioskSchema,
+  updateKioskInputSchema,
 } from '../../validations/schemas/kiosk.schemas.js';
 import { protectedProcedure } from '../../middleware/auth.js';
 
@@ -28,6 +29,15 @@ export const kioskRouter = t.router({
       return kiosk;
     }),
   ),
+
+  update: protectedProcedure
+    .input(updateKioskInputSchema)
+    .mutation(({ input }) =>
+      handleServiceCall(() => {
+        const kiosk = kioskService.update(input.kioskId, input.data);
+        return kiosk;
+      }),
+    ),
 
   delete: protectedProcedure.input(kioskIdInputSchema).mutation(({ input }) =>
     handleServiceCall(() => {

@@ -1,4 +1,4 @@
-import type { Kiosk, NewKiosk } from '@shared/types/kiosk.js';
+import type { Kiosk, NewKiosk, UpdateKiosk } from '@shared/types/kiosk.js';
 import type { DbType } from '../container.js';
 import type { FeedConfigService } from './feed.config.service.js';
 import type { UiConfigService } from './ui.config.service.js';
@@ -29,7 +29,8 @@ export class KioskService {
 
     return this.db.transaction(() => {
       this.checkKiosksLimit();
-      this.validateUniqueConstraints(data);
+      this.validateUniqueName(data.name);
+      this.validateUniqueSlug(data.slug);
 
       try {
         const kiosk = this.db
@@ -71,39 +72,35 @@ export class KioskService {
     }
   }
 
-  private validateUniqueConstraints(data: NewKiosk): void {
+  private validateUniqueName(name: string): void {
     const existingByName = this.db
       .select()
       .from(kiosksTable)
-      .where(sql`lower(${kiosksTable.name}) = lower(${data.name})`)
+      .where(sql`lower(${kiosksTable.name}) = lower(${name})`)
       .get();
 
     if (existingByName) {
       this.logger.warn(
-        { name: data.name, fn: 'validateUniqueConstraints' },
+        { name, fn: 'validateUniqueName' },
         'Kiosk name already exists',
       );
-      throw new KioskError(
-        409,
-        `Kiosk with name '${data.name}' already exists`,
-      );
+      throw new KioskError(409, `Kiosk with name '${name}' already exists`);
     }
+  }
 
+  private validateUniqueSlug(slug: string): void {
     const existingBySlug = this.db
       .select()
       .from(kiosksTable)
-      .where(eq(kiosksTable.slug, data.slug))
+      .where(eq(kiosksTable.slug, slug))
       .get();
 
     if (existingBySlug) {
       this.logger.warn(
-        { slug: data.slug, fn: 'validateUniqueConstraints' },
+        { slug, fn: 'validateUniqueSlug' },
         'Kiosk slug already exists',
       );
-      throw new KioskError(
-        409,
-        `Kiosk with slug '${data.slug}' already exists`,
-      );
+      throw new KioskError(409, `Kiosk with slug '${slug}' already exists`);
     }
   }
 
@@ -124,6 +121,49 @@ export class KioskService {
 
   getAll(): Kiosk[] {
     return this.db.select().from(kiosksTable).all();
+  }
+
+  update(kioskId: number, data: UpdateKiosk): Kiosk {
+    this.logger.debug({ kioskId, data, fn: 'update' }, 'Updating kiosk');
+
+    if (Object.keys(data).length === 0) {
+      throw new KioskError(400, 'No data to update');
+    }
+
+    const existing = this.db
+      .select()
+      .from(kiosksTable)
+      .where(eq(kiosksTable.id, kioskId))
+      .get();
+
+    if (!existing) {
+      throw new KioskError(404, 'Kiosk not found');
+    }
+
+    if (data.name && data.name !== existing.name) {
+      this.validateUniqueName(data.name);
+    }
+
+    try {
+      const updated = this.db
+        .update(kiosksTable)
+        .set({
+          ...data,
+        })
+        .where(eq(kiosksTable.id, kioskId))
+        .returning()
+        .get();
+
+      this.logger.info({ kioskId, data, fn: 'update' }, 'Kiosk updated');
+
+      return updated;
+    } catch (error: unknown) {
+      this.logger.error(
+        { error, kioskId, data, fn: 'update' },
+        'Failed to update kiosk',
+      );
+      throw new KioskError(500, 'Failed to update kiosk');
+    }
   }
 
   delete(kioskId: number): void {
