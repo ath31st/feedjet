@@ -2,12 +2,14 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { trpcWithProxy, queryClient } from '@/shared/api';
 import { toast } from 'sonner';
 
-export const useVideoWithMetadataList = () => {
-  return useQuery(trpcWithProxy.videoFile.listFiles.queryOptions());
+export const useVideoWithMetadataList = (kioskId: number) => {
+  return useQuery(trpcWithProxy.videoFile.listFiles.queryOptions({ kioskId }));
 };
 
-export const useActiveVideoList = () => {
-  return useQuery(trpcWithProxy.videoFile.listActiveVideos.queryOptions());
+export const useActiveVideoList = (kioskId: number) => {
+  return useQuery(
+    trpcWithProxy.videoFile.listActiveVideos.queryOptions({ kioskId }),
+  );
 };
 
 export const useDiskUsage = () => {
@@ -58,6 +60,25 @@ export const useUploadVideo = () => {
       },
       onMutate: (data: FormData) => {
         return { toastId: toast.loading(`Загрузка ${data.get('filename')}…`) };
+      },
+    }),
+  );
+};
+
+export const useUpdateVideoOrder = () => {
+  return useMutation(
+    trpcWithProxy.videoFile.updateVideoOrder.mutationOptions({
+      onSuccess: () => {
+        toast.success('Порядок успешно обновлен');
+        queryClient.invalidateQueries({
+          queryKey: trpcWithProxy.videoFile.listFiles.queryKey(),
+        });
+      },
+      onError: (err: unknown) => {
+        if (err instanceof Error) {
+          toast.error(err.message || 'Ошибка при обновлении порядка');
+          return;
+        }
       },
     }),
   );
