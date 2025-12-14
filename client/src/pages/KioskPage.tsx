@@ -75,7 +75,7 @@ export function KioskPage() {
                 />
               )}
               {currentWidgetKey === 'birthday' && (
-                <BirthdayWidget rotate={rotate} animation={animation} />
+                <BirthdayWidget rotate={rotate} />
               )}
               {currentWidgetKey === 'info' && <InfoWidget rotate={rotate} />}
             </Suspense>

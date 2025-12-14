@@ -63,7 +63,7 @@ export function AdminPage() {
             </Tabs.Content>
 
             <Tabs.Content value="video">
-              <VideoContentManagementWidget />
+              <VideoContentManagementWidget kioskId={kioskId} />
             </Tabs.Content>
 
             <Tabs.Content value="image">

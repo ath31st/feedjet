@@ -2,7 +2,7 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { trpcWithProxy, queryClient } from '@/shared/api';
 import { toast } from 'sonner';
 
-export const useVideoWithMetadataList = (kioskId: number) => {
+export const useVideoMetadataList = (kioskId: number) => {
   return useQuery(trpcWithProxy.videoFile.listFiles.queryOptions({ kioskId }));
 };
 
@@ -84,7 +84,7 @@ export const useUpdateVideoOrder = () => {
   );
 };
 
-export const useUpdateIsActiveVideoWithMetadata = () => {
+export const useUpdateIsActive = () => {
   return useMutation(
     trpcWithProxy.videoFile.updateIsActive.mutationOptions({
       onSuccess: (data) => {

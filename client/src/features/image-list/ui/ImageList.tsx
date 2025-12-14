@@ -58,7 +58,7 @@ export function ImageList({ kioskId }: ImageListProps) {
             className="w-30 rounded-lg object-contain"
           />
 
-          <div className="flex w-[calc(100%-180px)] justify-between">
+          <div className="flex w-[calc(100%-180px)] flex-1 justify-between">
             <div className="flex flex-col overflow-hidden text-(--meta-text) text-xs">
               <span className="truncate text-(--text) text-sm">{i.name}</span>
 
@@ -85,15 +85,15 @@ export function ImageList({ kioskId }: ImageListProps) {
                 onCheckedChange={(checked) =>
                   handleToggleActive(i.fileName, checked)
                 }
-                className="relative h-5 w-10 shrink-0 cursor-pointer rounded-full border border-[var(--border)] transition-colors data-[state=checked]:bg-[var(--button-bg)]"
+                className="relative h-5 w-10 shrink-0 cursor-pointer rounded-full border border-(--border) transition-colors data-[state=checked]:bg-(--button-bg)"
               >
-                <Switch.Thumb className="block h-4 w-4 translate-x-[1px] rounded-full bg-[var(--text)] transition-transform data-[state=checked]:translate-x-[21px]" />
+                <Switch.Thumb className="block h-4 w-4 translate-x-[1px] rounded-full bg-(--text) transition-transform data-[state=checked]:translate-x-[21px]" />
               </Switch.Root>
 
               <IconButton
                 disabled={isRemoving}
                 onClick={() => handleRemove(i.fileName)}
-                tooltip="Удалить"
+                tooltip="Удалить изображение"
                 icon={<Cross1Icon className="h-4 w-4" />}
               />
             </div>
