@@ -1,0 +1,1 @@
+ALTER TABLE `videos` ADD `mtime` integer NOT NULL;

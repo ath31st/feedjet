@@ -169,6 +169,13 @@
       "when": 1765725496901,
       "tag": "0023_smart_roland_deschain",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "6",
+      "when": 1765726111784,
+      "tag": "0024_useful_landau",
+      "breakpoints": true
     }
   ]
 }

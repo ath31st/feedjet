@@ -110,6 +110,7 @@ export const videosTable = sqliteTable('videos', {
   width: integer('width').notNull(),
   height: integer('height').notNull(),
   size: integer('size').notNull(),
+  mtime: integer('mtime').notNull(),
   createdAt: integer('created_at').notNull().default(sql`(unixepoch())`),
 });
 
