@@ -1,11 +1,16 @@
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { FileStorageService } from './file.storage.service.js';
-import type { VideoMetadata } from '@shared/types/video.js';
+import type {
+  AdminVideoInfo,
+  KioskVideoInfo,
+  VideoMetadata,
+  VideoOrderUpdate,
+} from '@shared/types/video.js';
 import path from 'node:path';
 import type { DbType } from '../container.js';
-import { videosTable } from '../db/schema.js';
-import { eq } from 'drizzle-orm';
+import { kioskVideosTable, videosTable } from '../db/schema.js';
+import { eq, and, asc, sql } from 'drizzle-orm';
 import { VideoStorageServiceError } from '../errors/video.error.js';
 import { webReadableToNode } from '../utils/stream.js';
 import { promises as fs } from 'node:fs';
@@ -61,8 +66,23 @@ export class VideoStorageService extends FileStorageService {
     return { path: savedPath, savedFileName };
   }
 
-  async update(fileName: string, isActive: boolean): Promise<boolean> {
+  async update(
+    fileName: string,
+    kioskId: number,
+    isActive: boolean,
+  ): Promise<boolean> {
     this.logger.debug({ fileName, isActive, fn: 'update' }, 'Updating video');
+
+    const videoId = this.db
+      .select()
+      .from(videosTable)
+      .where(eq(videosTable.fileName, fileName))
+      .get()?.id;
+
+    if (!videoId) {
+      this.logger.warn({ fileName, fn: 'update' }, 'Video not found');
+      throw new VideoStorageServiceError(404, 'Video not found');
+    }
 
     const filePath = this.getFilePath(fileName);
     const fileExists = await this.exists(filePath);
@@ -73,7 +93,7 @@ export class VideoStorageService extends FileStorageService {
       throw new VideoStorageServiceError(404, 'File not found on disk');
     }
 
-    const result = this.updateIsActive(fileName, isActive);
+    const result = this.updateIsActive(videoId, kioskId, isActive);
 
     this.logger.info(
       { fileName, isActive, fn: 'update' },
@@ -88,7 +108,7 @@ export class VideoStorageService extends FileStorageService {
     this.logger.info({ fileName, fn: 'delete' }, 'Video deleted successfully');
   }
 
-  async getVideoMetadata(fileName: string): Promise<VideoMetadata> {
+  private async getVideoMetadata(fileName: string): Promise<VideoMetadata> {
     const filePath = this.getFilePath(fileName);
 
     const { stdout } = await execFileAsync('ffprobe', [
@@ -123,20 +143,53 @@ export class VideoStorageService extends FileStorageService {
       width: stream.width ?? 0,
       height: stream.height ?? 0,
       size: fileStats.size,
-      isActive: false,
+      mtime: fileStats.mtime.getTime(),
       createdAt: fileStats.birthtime.getTime(),
     };
   }
 
-  listVideosWithMetadata(): VideoMetadata[] {
+  private listVideoMetadata(): VideoMetadata[] {
     return this.db.select().from(videosTable).all();
   }
 
-  listActiveVideos(): VideoMetadata[] {
+  listAdminVideos(kioskId: number): AdminVideoInfo[] {
     return this.db
-      .select()
+      .select({
+        ...this.videoSelect(),
+        isActive: kioskVideosTable.isActive,
+        order: kioskVideosTable.order,
+      })
       .from(videosTable)
-      .where(eq(videosTable.isActive, true))
+      .leftJoin(
+        kioskVideosTable,
+        and(
+          eq(videosTable.id, kioskVideosTable.videoId),
+          eq(kioskVideosTable.kioskId, kioskId),
+        ),
+      )
+      .orderBy(
+        asc(sql`COALESCE(${kioskVideosTable.order}, 0)`),
+        asc(videosTable.id),
+      )
+      .all();
+  }
+
+  listActiveVideosByKiosk(kioskId: number): KioskVideoInfo[] {
+    return this.db
+      .select({
+        ...this.videoSelect(),
+        isActive: kioskVideosTable.isActive,
+        order: kioskVideosTable.order,
+      })
+      .from(videosTable)
+      .innerJoin(kioskVideosTable, eq(videosTable.id, kioskVideosTable.videoId))
+      .where(
+        and(
+          eq(kioskVideosTable.kioskId, kioskId),
+          eq(kioskVideosTable.isActive, true),
+        ),
+      )
+      .orderBy(asc(kioskVideosTable.order))
       .all();
   }
 
@@ -167,30 +220,28 @@ export class VideoStorageService extends FileStorageService {
     }
   }
 
-  updateIsActive(fileName: string, isActive: boolean): boolean {
+  updateIsActive(videoId: number, kioskId: number, isActive: boolean): boolean {
     this.logger.debug(
-      { fileName, isActive, fn: 'updateIsActive' },
+      { videoId, kioskId, isActive, fn: 'updateIsActive' },
       'Updating video metadata',
     );
 
     try {
-      const meta = this.db
-        .update(videosTable)
-        .set({ isActive })
-        .where(eq(videosTable.fileName, fileName))
-        .returning()
-        .get();
-
-      if (!meta) {
-        this.logger.warn({ fileName, fn: 'updateIsActive' }, 'Video not found');
-        throw new VideoStorageServiceError(404, 'Video not found');
-      }
+      this.db
+        .insert(kioskVideosTable)
+        .values({ videoId, kioskId, isActive })
+        .onConflictDoUpdate({
+          target: [kioskVideosTable.kioskId, kioskVideosTable.videoId],
+          set: { isActive },
+        })
+        .run();
 
       this.logger.info(
-        { fileName, isActive, fn: 'updateIsActive' },
-        'Video metadata updated successfully',
+        { videoId, kioskId, isActive, fn: 'updateIsActive' },
+        'Kiosk video metadata upserted successfully',
       );
-      return meta.isActive;
+
+      return isActive;
     } catch (error) {
       this.logger.error(
         { error, fn: 'updateIsActive' },
@@ -219,6 +270,60 @@ export class VideoStorageService extends FileStorageService {
     }
   }
 
+  async updateVideoOrderBatch(
+    kioskId: number,
+    updates: VideoOrderUpdate[],
+  ): Promise<void> {
+    this.logger.debug(
+      { kioskId, updates, fn: 'updateVideoOrderBatch' },
+      'Starting batch order update for kiosk videos',
+    );
+
+    try {
+      await this.db.transaction(async (tx) => {
+        for (const { fileName, order } of updates) {
+          const videoRow = tx
+            .select({ id: videosTable.id })
+            .from(videosTable)
+            .where(eq(videosTable.fileName, fileName))
+            .get();
+
+          if (!videoRow) {
+            this.logger.warn(
+              { fileName, fn: 'updateVideoOrderBatch' },
+              'Video file not found in metadata table. Skipping.',
+            );
+            continue;
+          }
+
+          const videoId = videoRow.id;
+
+          tx.insert(kioskVideosTable)
+            .values({ videoId, kioskId, isActive: false, order })
+            .onConflictDoUpdate({
+              target: [kioskVideosTable.kioskId, kioskVideosTable.videoId],
+              set: { order: order },
+            })
+            .run();
+        }
+      });
+
+      this.logger.info(
+        { kioskId, updatesCount: updates.length, fn: 'updateVideoOrderBatch' },
+        'Batch order update completed successfully',
+      );
+    } catch (error) {
+      this.logger.error(
+        { error, kioskId, fn: 'updateVideoOrderBatch' },
+        'Error performing batch order update',
+      );
+      throw new VideoStorageServiceError(
+        500,
+        'Error updating video order batch',
+      );
+    }
+  }
+
   findVideoMetadataByFileName(fileName: string): VideoMetadata | undefined {
     return this.db
       .select()
@@ -229,9 +334,7 @@ export class VideoStorageService extends FileStorageService {
 
   async syncWithDisk() {
     const files = await this.listFiles();
-    const existing = new Set(
-      this.listVideosWithMetadata().map((v) => v.fileName),
-    );
+    const existing = new Set(this.listVideoMetadata().map((v) => v.fileName));
 
     for (const file of files) {
       if (!existing.has(file)) {
@@ -240,10 +343,25 @@ export class VideoStorageService extends FileStorageService {
       }
     }
 
-    for (const video of this.listVideosWithMetadata()) {
+    for (const video of this.listVideoMetadata()) {
       if (!files.includes(video.fileName)) {
         this.removeVideoMetadataByFileName(video.fileName);
       }
     }
+  }
+
+  private videoSelect() {
+    return {
+      id: videosTable.id,
+      name: videosTable.name,
+      fileName: videosTable.fileName,
+      format: videosTable.format,
+      duration: videosTable.duration,
+      width: videosTable.width,
+      height: videosTable.height,
+      size: videosTable.size,
+      createdAt: videosTable.createdAt,
+      mtime: videosTable.mtime,
+    };
   }
 }
