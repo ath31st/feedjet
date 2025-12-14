@@ -9,7 +9,7 @@ const kioskSlugSchema = z
     message: 'Slug can only contain lowercase letters, numbers and hyphens',
   });
 
-const kioskNameSchema = z.string().min(1).max(10);
+const kioskNameSchema = z.string().min(1).max(30);
 
 export const newKioskSchema = z.object({
   name: kioskNameSchema,

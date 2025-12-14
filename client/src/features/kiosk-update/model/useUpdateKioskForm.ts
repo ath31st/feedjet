@@ -17,13 +17,15 @@ export function useUpdateKioskForm(
     e.preventDefault();
 
     const payload: UpdateKiosk = {
-      name: formData.name !== kiosk.name ? formData.name : undefined,
+      name: formData.name !== kiosk.name ? formData.name?.trim() : undefined,
       description:
         formData.description !== kiosk.description
-          ? formData.description
+          ? formData.description?.trim()
           : undefined,
       location:
-        formData.location !== kiosk.location ? formData.location : undefined,
+        formData.location !== kiosk.location
+          ? formData.location?.trim()
+          : undefined,
       isActive:
         formData.isActive !== kiosk.isActive ? formData.isActive : undefined,
     };

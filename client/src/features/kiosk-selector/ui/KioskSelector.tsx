@@ -13,7 +13,7 @@ export function KioskSelector({
 }: KioskSelectorProps) {
   return (
     <div className="relative flex flex-col">
-      <div className="-top-6 absolute bottom-0 left-38 w-[2px] bg-(--border)" />
+      <div className="-top-6 absolute bottom-0 left-50 w-[2px] bg-(--border)" />
 
       {kiosks.map((k) => {
         const isActive = k.slug === activeKiosk?.slug;
@@ -22,7 +22,7 @@ export function KioskSelector({
             key={k.slug}
             type="button"
             onClick={() => onChange(k)}
-            className={`relative w-38 cursor-pointer px-6 py-2 font-medium text-md outline-none transition-colors hover:text-(--button-hover-bg) hover:text-var(--border) ${
+            className={`relative w-50 cursor-pointer px-6 py-2 font-medium text-md outline-none transition-colors hover:text-(--button-hover-bg) hover:text-var(--border) ${
               isActive
                 ? 'text-(--text) hover:text-(--text)'
                 : 'text-muted-foreground'
@@ -37,7 +37,12 @@ export function KioskSelector({
                 }}
               />
             )}
-            <span className="relative">{k.name}</span>
+            <span
+              title={k.name}
+              className="relative block overflow-hidden text-ellipsis"
+            >
+              {k.name}
+            </span>
           </button>
         );
       })}

@@ -83,13 +83,13 @@ export function KioskForm({
           id="kiosk-name"
           type="text"
           required={!isUpdate}
-          maxLength={10}
+          maxLength={30}
           value={formData.name}
           onChange={(e) => onChange('name', e.target.value)}
           className="w-full rounded-lg border border-[var(--border)] px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-[var(--border)]"
         />
         <div className="mt-1 text-[var(--meta-text)] text-xs">
-          {formData.name?.length}/10 символов
+          {formData.name?.length}/30 символов
         </div>
       </div>
 

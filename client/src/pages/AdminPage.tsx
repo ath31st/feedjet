@@ -29,7 +29,7 @@ export function AdminPage() {
           className="flex border-(--border) border-b-2"
           aria-label="Управление админ-панелью"
         >
-          <div className="ml-44">
+          <div className="ml-56">
             <AdminTabTrigger value="settings">
               Настройки виджетов
             </AdminTabTrigger>
