@@ -32,7 +32,7 @@ export function KioskList() {
                 <CommonButton
                   onClick={() => setEditKiosk(kiosk)}
                   type="button"
-                  tooltip="Редактировать"
+                  tooltip="Редактировать киоск"
                 >
                   <Pencil1Icon />
                 </CommonButton>
