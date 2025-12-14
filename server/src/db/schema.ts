@@ -110,7 +110,6 @@ export const videosTable = sqliteTable('videos', {
   width: integer('width').notNull(),
   height: integer('height').notNull(),
   size: integer('size').notNull(),
-  isActive: integer('is_active', { mode: 'boolean' }).notNull().default(false),
   createdAt: integer('created_at').notNull().default(sql`(unixepoch())`),
 });
 
@@ -140,22 +139,22 @@ export const imagesTable = sqliteTable('images', {
   createdAt: integer('created_at').notNull().default(sql`(unixepoch())`),
 });
 
-// export const kioskVideosTable = sqliteTable(
-//   'kiosk_videos',
-//   {
-//     kioskId: integer('kiosk_id')
-//       .notNull()
-//       .references(() => kiosksTable.id, { onDelete: 'cascade' }),
-//     videoId: integer('video_id')
-//       .notNull()
-//       .references(() => videosTable.id, { onDelete: 'cascade' }),
-//     isActive: integer('is_active', { mode: 'boolean' })
-//       .notNull()
-//       .default(false),
-//     order: integer('order').notNull().default(0),
-//   },
-//   (table) => [primaryKey({ columns: [table.kioskId, table.videoId] })],
-// );
+export const kioskVideosTable = sqliteTable(
+  'kiosk_videos',
+  {
+    kioskId: integer('kiosk_id')
+      .notNull()
+      .references(() => kiosksTable.id, { onDelete: 'cascade' }),
+    videoId: integer('video_id')
+      .notNull()
+      .references(() => videosTable.id, { onDelete: 'cascade' }),
+    isActive: integer('is_active', { mode: 'boolean' })
+      .notNull()
+      .default(false),
+    order: integer('order').notNull().default(0),
+  },
+  (table) => [primaryKey({ columns: [table.kioskId, table.videoId] })],
+);
 
 export const kioskImagesTable = sqliteTable(
   'kiosk_images',
