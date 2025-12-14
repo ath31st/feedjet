@@ -6,7 +6,6 @@ import {
 export const unifiedSseHandler = createUnifiedSseHandler((kioskId) => {
   const subs: SseSubscription[] = [
     { eventName: 'feed', messageType: 'feed' },
-    { eventName: 'video', messageType: 'video' },
     {
       eventName: 'keepalive',
       messageType: 'keepalive',
@@ -19,6 +18,7 @@ export const unifiedSseHandler = createUnifiedSseHandler((kioskId) => {
       { eventName: `feed-config:${kioskId}`, messageType: 'feed-config' },
       { eventName: `ui-config:${kioskId}`, messageType: 'ui-config' },
       { eventName: `image:${kioskId}`, messageType: 'image' },
+      { eventName: `video:${kioskId}`, messageType: 'video' },
     );
   }
 
