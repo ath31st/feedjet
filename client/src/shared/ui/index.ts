@@ -16,3 +16,4 @@ export * from './FileUpload';
 export { DiskUsageView } from './disk-usage-view/DiskUsageView';
 export { DndSortableList } from './DndSortableList';
 export { ConfirmActionDialog } from './common/ConfirmActionDialog';
+export { KioskForm } from './KioskForm';

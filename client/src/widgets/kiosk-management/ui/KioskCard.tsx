@@ -50,7 +50,7 @@ export function KioskCard({ kiosk, onDelete, actions }: KioskCardProps) {
 
         {kiosk.location && (
           <div>
-            <strong className="text---meta-text)">Местоположение:</strong>{' '}
+            <strong className="text-(--meta-text)">Местоположение:</strong>{' '}
             {kiosk.location}
           </div>
         )}

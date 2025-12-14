@@ -45,6 +45,19 @@ export const useCreateKiosk = () => {
   );
 };
 
+export const useUpdateKiosk = () => {
+  return useMutation(
+    trpcWithProxy.kiosk.update.mutationOptions({
+      onSuccess() {
+        toast.success('Киоск успешно обновлен');
+        queryClient.invalidateQueries({
+          queryKey: trpcWithProxy.kiosk.getAll.queryKey(),
+        });
+      },
+    }),
+  );
+};
+
 export const useGetKioskBySlug = (slug: string) => {
   return useQuery(trpcWithProxy.kiosk.getBySlug.queryOptions({ slug }));
 };

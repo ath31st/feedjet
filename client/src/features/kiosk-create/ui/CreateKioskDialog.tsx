@@ -1,7 +1,7 @@
 import * as Dialog from '@radix-ui/react-dialog';
 import type { NewKiosk } from '@/entities/kiosk';
-import { CreateKioskForm } from './CreateKioskForm';
 import { useCreateKioskForm } from '../model/useCreateKioskForm';
+import { KioskForm } from '@/shared/ui';
 
 interface CreateKioskDialogProps {
   open: boolean;
@@ -32,7 +32,8 @@ export function CreateKioskDialog({
             Форма для создания нового киоска
           </Dialog.Description>
 
-          <CreateKioskForm
+          <KioskForm
+            mode="create"
             formData={formData}
             onChange={handleChange}
             onSubmit={handleSubmit}
