@@ -1,4 +1,5 @@
 import Parser from 'rss-parser';
+import axios from 'axios';
 import { RssParser } from './services/rss.parser.service.js';
 import { drizzle } from 'drizzle-orm/better-sqlite3';
 import Database from 'better-sqlite3';
@@ -29,10 +30,17 @@ import { BirthdayBackgroundService } from './services/birthday.background.servic
 import { KioskHeartbeatService } from './services/kiosk.heartbeat.service.js';
 import { ImageStorageService } from './services/image.storage.service.js';
 import { KioskWorkScheduleService } from './services/kiosk.work.schedule.service.js';
+import { FullyKioskClient } from './integration/fully.kiosk.client.js';
 
 const sqlite = new Database(dbPath);
 export const db = drizzle(sqlite, { schema });
 export type DbType = typeof db;
+
+export const http = axios.create({
+  timeout: 2000,
+});
+
+export const fullyKioskClient = new FullyKioskClient(http);
 
 export const imageCacheService = new ImageCacheService(cacheDir);
 export const videoStorageService = new VideoStorageService(db, fileStorageDir);
