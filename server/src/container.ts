@@ -65,7 +65,7 @@ export const kioskService = new KioskService(
 );
 kioskService.ensureDefaultKiosk();
 videoStorageService.syncWithDisk();
-//imageStorageService.syncWithDisk();
+imageStorageService.syncWithDisk();
 export const kioskHeartbeatService = new KioskHeartbeatService();
 
 export const t = initTRPC.context<Context>().create();

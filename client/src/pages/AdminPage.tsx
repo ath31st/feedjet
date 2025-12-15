@@ -43,6 +43,9 @@ export function AdminPage() {
             <AdminTabTrigger value="kiosks">
               Конфигурации киосков
             </AdminTabTrigger>
+            <AdminTabTrigger value="operating-hours">
+              Режим работы
+            </AdminTabTrigger>
           </div>
         </Tabs.List>
 
