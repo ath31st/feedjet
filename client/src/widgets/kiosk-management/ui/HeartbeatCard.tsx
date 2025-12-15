@@ -1,3 +1,7 @@
+import {
+  KioskScreenOffButton,
+  KioskScreenOnButton,
+} from '@/features/kiosk-screen-control';
 import { format } from 'date-fns';
 
 interface HeartbeatCardProps {
@@ -22,9 +26,13 @@ export const HeartbeatCard = ({ ip, lastHeartbeat }: HeartbeatCardProps) => {
   }
 
   return (
-    <div className={`flex flex-row gap-6 text-sm ${colorClass}`}>
+    <div className={`flex flex-row items-center gap-6 text-sm ${colorClass}`}>
       <span>📺 {ip}</span>
       <span>💓 {format(heartbeatDate, 'dd.MM.yyyy HH:mm:ss')}</span>
+      <div className="ml-auto flex gap-2">
+        <KioskScreenOnButton kioskIp={ip} />
+        <KioskScreenOffButton kioskIp={ip} />
+      </div>
     </div>
   );
 };
