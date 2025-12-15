@@ -10,6 +10,7 @@ import { Logout } from '@/features/auth';
 import { BirthdaysManagement } from '@/widgets/birthdays-management';
 import { ImageContentManagementWidget } from '@/widgets/image-content-management';
 import { useKioskStore } from '@/entities/kiosk';
+import { KioskWorkScheduleManagement } from '@/widgets/kiosk-work-schedule-management';
 
 export function AdminPage() {
   const kioskId = useKioskStore((s) => s.currentKiosk.id);
@@ -79,6 +80,10 @@ export function AdminPage() {
 
             <Tabs.Content value="kiosks">
               <KioskManagement />
+            </Tabs.Content>
+
+            <Tabs.Content value="operating-hours">
+              <KioskWorkScheduleManagement kioskId={kioskId} />
             </Tabs.Content>
           </div>
         </div>
