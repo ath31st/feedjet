@@ -10,7 +10,7 @@ interface DayScheduleCardProps {
 export function DayScheduleCard({ day, onChange }: DayScheduleCardProps) {
   return (
     <div
-      className={`${day.isEnabled ? '' : 'text-(--meta-text)'} flex h-16 items-center gap-10 rounded-lg border ${day.isEnabled ? 'border-(--border)' : 'border-(--border-disabled)'} bg-(--card-bg) p-2`}
+      className={`${day.isEnabled ? '' : 'text-(--meta-text)'} flex items-center gap-10 rounded-lg border ${day.isEnabled ? 'border-(--border)' : 'border-(--border-disabled)'} bg-(--card-bg) p-2`}
     >
       <span className="w-40 font-bold">{DAYS[day.dayOfWeek]}</span>
 

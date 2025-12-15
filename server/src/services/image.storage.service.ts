@@ -418,9 +418,10 @@ export class ImageStorageService extends FileStorageService {
 
   async syncWithDisk() {
     const files = await this.listFiles();
+    const withoutThumbnails = files.filter((f) => !f.includes('_thumbnail'));
     const existing = new Set(this.listImageMetadata().map((i) => i.fileName));
 
-    for (const file of files) {
+    for (const file of withoutThumbnails) {
       if (!existing.has(file)) {
         const meta = await this.getImageMetadata(file);
         this.saveImageMetadata(meta);
