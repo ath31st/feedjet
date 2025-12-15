@@ -173,3 +173,29 @@ export const kioskImagesTable = sqliteTable(
   },
   (table) => [primaryKey({ columns: [table.kioskId, table.imageId] })],
 );
+
+export const kioskWorkScheduleTable = sqliteTable(
+  'kiosk_work_schedule',
+  {
+    kioskId: integer('kiosk_id')
+      .notNull()
+      .references(() => kiosksTable.id, { onDelete: 'cascade' }),
+    dayOfWeek: integer('day_of_week').notNull(),
+    isEnabled: integer('is_enabled', { mode: 'boolean' })
+      .notNull()
+      .default(true),
+    startTime: text('start_time').notNull(),
+    endTime: text('end_time').notNull(),
+    createdAt: integer('created_at', { mode: 'timestamp' })
+      .notNull()
+      .default(sql`(unixepoch())`),
+    updatedAt: integer('updated_at', { mode: 'timestamp' })
+      .notNull()
+      .default(sql`(unixepoch())`),
+  },
+  (table) => [
+    primaryKey({
+      columns: [table.kioskId, table.dayOfWeek],
+    }),
+  ],
+);
