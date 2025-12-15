@@ -1,7 +1,13 @@
 import z from 'zod';
 import { kioskIdSchema } from './kiosk.schemas.js';
+import type { DayOfWeek } from '@shared/types/kiosk.work.schedule.js';
 
-export const dayOfWeekSchema = z.number().int().min(0).max(6);
+export const dayOfWeekSchema = z
+  .number()
+  .int()
+  .min(0)
+  .max(6)
+  .transform((val) => val as DayOfWeek);
 
 export const kioskWorkScheduleUpsertInputSchema = z.object({
   kioskId: kioskIdSchema,
