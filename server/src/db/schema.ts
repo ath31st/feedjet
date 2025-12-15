@@ -1,3 +1,4 @@
+import type { DayOfWeek } from '@shared/types/kiosk.work.schedule.js';
 import type { themes, widgetTypes } from '@shared/types/ui.config.js';
 import { sql } from 'drizzle-orm';
 import {
@@ -180,7 +181,7 @@ export const kioskWorkScheduleTable = sqliteTable(
     kioskId: integer('kiosk_id')
       .notNull()
       .references(() => kiosksTable.id, { onDelete: 'cascade' }),
-    dayOfWeek: integer('day_of_week').notNull(),
+    dayOfWeek: integer('day_of_week').notNull().$type<DayOfWeek>(),
     isEnabled: integer('is_enabled', { mode: 'boolean' })
       .notNull()
       .default(true),
