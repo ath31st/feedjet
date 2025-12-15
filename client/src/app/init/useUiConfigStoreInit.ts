@@ -1,14 +1,10 @@
 import { useEffect } from 'react';
 import { useUiConfigStore } from '@/entities/ui-config/model/uiConfigStore';
-import { useKioskStore } from '@/entities/kiosk';
 
-export function useUiConfigStoreInit() {
+export function useUiConfigStoreInit(kioskId: number) {
   const fetchUiConfig = useUiConfigStore((s) => s.fetchUiConfig);
-  const { currentKiosk, loading } = useKioskStore();
 
   useEffect(() => {
-    if (currentKiosk && !loading) {
-      fetchUiConfig(currentKiosk.id);
-    }
-  }, [fetchUiConfig, currentKiosk, loading]);
+    fetchUiConfig(kioskId);
+  }, [fetchUiConfig, kioskId]);
 }

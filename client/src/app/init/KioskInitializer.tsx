@@ -8,14 +8,13 @@ import { useImageStoreInit } from './useImageStoreInit';
 
 export function KioskInitializer() {
   useKioskInitialization();
-
   const kioskId = useKioskStore((s) => s.currentKiosk.id);
 
   useSseStream();
 
-  useUiConfigStoreInit();
+  useUiConfigStoreInit(kioskId);
   useFeedConfigStoreInit();
-  useVideoStoreInit();
+  useVideoStoreInit(kioskId);
   useImageStoreInit(kioskId);
 
   return null;

@@ -7,7 +7,7 @@ type VideoStore = {
   currentVideo: VideoMetadata | null;
   loading: boolean;
   error: string | null;
-  initStore: () => Promise<void>;
+  initStore: (kioskId: number) => Promise<void>;
   setVideos: (videos: VideoMetadata[]) => void;
   setCurrentVideo: (video: VideoMetadata | null) => void;
   resetPlaylist: () => void;
@@ -19,10 +19,12 @@ export const useVideoStore = create<VideoStore>((set) => ({
   currentVideo: null,
   loading: false,
   error: null,
-  initStore: async () => {
+  initStore: async (kioskId) => {
     set({ loading: true });
     try {
-      const data = await trpcClient.videoFile.listActiveVideos.query();
+      const data = await trpcClient.videoFile.listActiveVideos.query({
+        kioskId,
+      });
       set({
         videos: data,
         currentVideo: data.length > 0 ? data[0] : null,
