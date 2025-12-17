@@ -1,5 +1,6 @@
 import { format } from 'date-fns';
 import type { ReactNode } from 'react';
+import { FullyKioskLink } from './FullyKioskLink';
 
 interface HeartbeatCardProps {
   ip: string;
@@ -29,9 +30,9 @@ export const HeartbeatCard = ({
 
   return (
     <div className={`flex flex-row items-center gap-6 text-sm ${colorClass}`}>
-      <span>📺 {ip}</span>
+      <FullyKioskLink ip={ip} />
       <span>💓 {format(heartbeatDate, 'dd.MM.yyyy HH:mm:ss')}</span>
-      {actions}
+      {diffHour <= 1 && actions}
     </div>
   );
 };
