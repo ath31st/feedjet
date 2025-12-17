@@ -4,6 +4,10 @@ import { TrashIcon } from '@radix-ui/react-icons';
 import type { ReactNode } from 'react';
 import { HeartbeatCard } from './HeartbeatCard';
 import { ConfirmActionDialog } from '@/shared/ui';
+import {
+  KioskScreenOffAction,
+  KioskScreenOnAction,
+} from '@/features/kiosk-screen-control';
 
 interface KioskCardProps {
   kiosk: KioskWithHeartbeats;
@@ -76,6 +80,12 @@ export function KioskCard({ kiosk, onDelete, actions }: KioskCardProps) {
                 key={hb.ip}
                 ip={hb.ip}
                 lastHeartbeat={hb.lastHeartbeat}
+                actions={
+                  <div className="ml-auto flex gap-2">
+                    <KioskScreenOnAction kioskIp={hb.ip} />
+                    <KioskScreenOffAction kioskIp={hb.ip} />
+                  </div>
+                }
               />
             ))}
           </div>

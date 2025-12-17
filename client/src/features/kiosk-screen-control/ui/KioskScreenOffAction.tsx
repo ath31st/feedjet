@@ -2,11 +2,11 @@ import { CommonButton } from '@/shared/ui/common';
 import { MoonIcon } from '@radix-ui/react-icons';
 import { useKioskScreenControl } from '../model/useKioskScreenControl';
 
-interface KioskScreenOffButtonProps {
+interface KioskScreenOffActionProps {
   kioskIp: string;
 }
 
-export function KioskScreenOffButton({ kioskIp }: KioskScreenOffButtonProps) {
+export function KioskScreenOffAction({ kioskIp }: KioskScreenOffActionProps) {
   const { handleScreenOff, isScreenOffPending } =
     useKioskScreenControl(kioskIp);
 

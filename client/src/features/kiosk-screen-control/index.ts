@@ -1,2 +1,2 @@
-export { KioskScreenOnButton } from './ui/KioskScreenOnButton';
-export { KioskScreenOffButton } from './ui/KioskScreenOffButton';
+export { KioskScreenOnAction } from './ui/KioskScreenOnAction';
+export { KioskScreenOffAction } from './ui/KioskScreenOffAction';
