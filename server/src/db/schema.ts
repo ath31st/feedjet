@@ -1,3 +1,4 @@
+import type { IntegrationType } from '@shared/types/integration.js';
 import type { DayOfWeek } from '@shared/types/kiosk.work.schedule.js';
 import type { themes, widgetTypes } from '@shared/types/ui.config.js';
 import { sql } from 'drizzle-orm';
@@ -199,4 +200,24 @@ export const kioskWorkScheduleTable = sqliteTable(
       columns: [table.kioskId, table.dayOfWeek],
     }),
   ],
+);
+
+export const kioskIntegrationsTable = sqliteTable(
+  'kiosk_integrations',
+  {
+    kioskId: integer('kiosk_id')
+      .notNull()
+      .references(() => kiosksTable.id, { onDelete: 'cascade' }),
+    type: text('type').notNull().$type<IntegrationType>(),
+    url: text('url'),
+    login: text('login'),
+    passwordEnc: text('password'),
+    createdAt: integer('created_at', { mode: 'timestamp' })
+      .notNull()
+      .default(sql`(unixepoch())`),
+    updatedAt: integer('updated_at', { mode: 'timestamp' })
+      .notNull()
+      .default(sql`(unixepoch())`),
+  },
+  (table) => [primaryKey({ columns: [table.kioskId, table.type] })],
 );
