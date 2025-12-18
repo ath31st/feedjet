@@ -3,14 +3,15 @@ import z from 'zod';
 import { kioskIdSchema } from './kiosk.schemas.js';
 
 const integrationTypeSchema = z.enum(integrationTypes);
+const integrationTextSchema = z.string().min(1).max(500);
 
 export const integrationCreateSchema = z.object({
   kioskId: kioskIdSchema,
   data: z.object({
     type: integrationTypeSchema,
-    url: z.url().optional(),
-    login: z.string().min(1).max(500).optional(),
-    password: z.string().min(1).max(500),
+    description: integrationTextSchema.optional(),
+    login: integrationTextSchema.optional(),
+    password: integrationTextSchema.optional(),
   }),
 });
 
@@ -19,9 +20,9 @@ export const integrationUpdateSchema = z
     kioskId: kioskIdSchema,
     update: z.object({
       type: integrationTypeSchema,
-      url: z.url().optional(),
-      login: z.string().min(1).max(500).optional(),
-      password: z.string().min(1).max(500),
+      description: integrationTextSchema.optional(),
+      login: integrationTextSchema.optional(),
+      password: integrationTextSchema.optional(),
     }),
   })
   .refine((data) => Object.keys(data).length > 1, {

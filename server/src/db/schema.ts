@@ -209,7 +209,7 @@ export const kioskIntegrationsTable = sqliteTable(
       .notNull()
       .references(() => kiosksTable.id, { onDelete: 'cascade' }),
     type: text('type').notNull().$type<IntegrationType>(),
-    url: text('url'),
+    description: text('description'),
     login: text('login'),
     passwordEnc: text('password'),
     createdAt: integer('created_at', { mode: 'timestamp' })

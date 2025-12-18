@@ -9,21 +9,18 @@ export type IntegrationType = (typeof integrationTypes)[number];
 export interface Integration {
   kioskId: number;
   type: IntegrationType;
-  url?: string;
   login?: string;
   passwordEnc?: string;
 }
 
 export interface NewIntegration {
   type: IntegrationType;
-  url?: string;
   login?: string;
   password?: string;
 }
 
 export interface UpdateIntegration {
   type: IntegrationType;
-  url?: string;
   login?: string;
   password?: string;
 }

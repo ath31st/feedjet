@@ -1,0 +1,1 @@
+ALTER TABLE `kiosk_integrations` DROP COLUMN `url`;

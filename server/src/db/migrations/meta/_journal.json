@@ -211,6 +211,20 @@
       "when": 1765995150068,
       "tag": "0029_majestic_sharon_ventura",
       "breakpoints": true
+    },
+    {
+      "idx": 30,
+      "version": "6",
+      "when": 1766044468128,
+      "tag": "0030_even_dorian_gray",
+      "breakpoints": true
+    },
+    {
+      "idx": 31,
+      "version": "6",
+      "when": 1766044728133,
+      "tag": "0031_romantic_jubilee",
+      "breakpoints": true
     }
   ]
 }
