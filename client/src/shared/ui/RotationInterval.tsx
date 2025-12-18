@@ -74,7 +74,7 @@ export function RotationInterval({
         <div className="min-w-[100px]">
           <SimpleDropdownMenu
             value={currentStepKey}
-            options={stepKeys}
+            options={stepKeys.map((key) => ({ value: key, label: key }))}
             onSelect={handleStepChange}
           />
         </div>

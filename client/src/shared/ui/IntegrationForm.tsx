@@ -49,7 +49,10 @@ export function IntegrationForm({
         {isCreate ? (
           <SimpleDropdownMenu
             value={formData.type}
-            options={integrationFull.map((i) => i.type)}
+            options={integrationFull.map((i) => ({
+              label: i.label,
+              value: i.type,
+            }))}
             onSelect={(value) => onChange('type', value as IntegrationType)}
           />
         ) : (

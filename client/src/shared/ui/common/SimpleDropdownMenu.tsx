@@ -1,17 +1,24 @@
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { useLayoutEffect, useRef, useState } from 'react';
 
-interface DropdownProps {
-  value: string;
-  options: string[];
-  onSelect: (value: string) => void;
+interface DropdownOption<T extends string> {
+  label: string;
+  value: T;
 }
 
-export function SimpleDropdownMenu({
+interface DropdownProps<T extends string> {
+  value: T;
+  options: DropdownOption<T>[];
+  onSelect: (value: T) => void;
+  placeholder?: string;
+}
+
+export function SimpleDropdownMenu<T extends string>({
   value,
   options,
   onSelect,
-}: DropdownProps) {
+  placeholder = 'Выберите...',
+}: DropdownProps<T>) {
   const triggerRef = useRef<HTMLButtonElement>(null);
   const [width, setWidth] = useState(0);
 
@@ -21,15 +28,17 @@ export function SimpleDropdownMenu({
     }
   }, []);
 
+  const selectedOption = options.find((opt) => opt.value === value);
+
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>
         <button
           ref={triggerRef}
           type="button"
-          className="w-full cursor-pointer rounded-lg border border-(--border) bg-(--card-bg) px-2 py-1 text-left focus:outline-none"
+          className="w-full cursor-pointer rounded-lg border border-(--border) bg-(--card-bg) px-3 py-2 text-left text-sm focus:outline-none focus:ring-(--border) focus:ring-1"
         >
-          {value}
+          {selectedOption ? selectedOption.label : value || placeholder}
         </button>
       </DropdownMenu.Trigger>
 
@@ -42,11 +51,11 @@ export function SimpleDropdownMenu({
         >
           {options.map((opt) => (
             <DropdownMenu.Item
-              key={opt}
-              onSelect={() => onSelect(opt)}
-              className="cursor-pointer px-2 py-1 text-sm outline-none data-[highlighted]:bg-(--button-hover-bg)"
+              key={opt.value}
+              onSelect={() => onSelect(opt.value)}
+              className="cursor-pointer px-3 py-2 text-sm outline-none data-[highlighted]:bg-(--button-hover-bg)"
             >
-              {opt}
+              {opt.label}
             </DropdownMenu.Item>
           ))}
         </DropdownMenu.Content>

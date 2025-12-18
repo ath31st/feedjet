@@ -54,7 +54,12 @@ export function BirthdayFileUpload() {
 
         <SimpleDropdownMenu
           value={dateFormat ?? 'Стандартный'}
-          options={DATE_FORMATS.map((f) => f.label)}
+          options={DATE_FORMATS.map((f) => {
+            return {
+              label: f.label,
+              value: f.label,
+            };
+          })}
           onSelect={(label) =>
             setDateFormat(label === 'Стандартный' ? undefined : label)
           }
