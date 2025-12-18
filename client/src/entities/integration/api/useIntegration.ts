@@ -8,7 +8,7 @@ export const useDeleteIntegration = () => {
       onSuccess() {
         toast.success('Интеграция успешно удалена');
         queryClient.invalidateQueries({
-          queryKey: trpcWithProxy.integration.getAllByKioskId.queryKey(),
+          queryKey: trpcWithProxy.integration.getAll.queryKey(),
         });
       },
     }),
@@ -21,7 +21,7 @@ export const useCreateIntegration = () => {
       onSuccess() {
         toast.success('Интеграция успешно добавлена');
         queryClient.invalidateQueries({
-          queryKey: trpcWithProxy.integration.getAllByKioskId.queryKey(),
+          queryKey: trpcWithProxy.integration.getAll.queryKey(),
         });
       },
     }),
@@ -34,7 +34,7 @@ export const useUpdateIntegration = () => {
       onSuccess() {
         toast.success('Интеграция успешно обновлена');
         queryClient.invalidateQueries({
-          queryKey: trpcWithProxy.integration.getAllByKioskId.queryKey(),
+          queryKey: trpcWithProxy.integration.getAll.queryKey(),
         });
       },
     }),
@@ -45,4 +45,8 @@ export const useGetIntegrationsByKiosk = (kioskId: number) => {
   return useQuery(
     trpcWithProxy.integration.getAllByKioskId.queryOptions({ kioskId }),
   );
+};
+
+export const useGetAllIntegrations = () => {
+  return useQuery(trpcWithProxy.integration.getAll.queryOptions());
 };
