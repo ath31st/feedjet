@@ -1,21 +1,29 @@
 import * as Dialog from '@radix-ui/react-dialog';
-import type { UpdateIntegration } from '@/entities/integration';
+import type {
+  Integration,
+  IntegrationType,
+  UpdateIntegration,
+} from '@/entities/integration';
 import { useUpdateIntegrationForm } from '../model/useUpdateIntegrationForm';
 import { IntegrationForm } from '@/shared/ui';
 
 interface IntegrationUpdateDialogProps {
+  integration: Integration;
   open: boolean;
   onClose: () => void;
   onUpdate: (data: UpdateIntegration) => void;
+  onDelete: (kioskId: number, type: IntegrationType) => void;
 }
 
 export function IntegrationUpdateDialog({
+  integration,
   open,
   onClose,
   onUpdate,
+  onDelete,
 }: IntegrationUpdateDialogProps) {
-  const { formData, handleSubmit, handleChange, handleCancel } =
-    useUpdateIntegrationForm(onUpdate, onClose);
+  const { formData, handleSubmit, handleChange, handleCancel, handleDelete } =
+    useUpdateIntegrationForm(integration, onUpdate, onClose, onDelete);
 
   return (
     <Dialog.Root open={open} onOpenChange={onClose}>
@@ -34,10 +42,12 @@ export function IntegrationUpdateDialog({
 
           <IntegrationForm
             mode="update"
+            integration={integration}
             formData={formData}
             onChange={handleChange}
             onSubmit={handleSubmit}
             onCancel={handleCancel}
+            onDelete={handleDelete}
           />
         </Dialog.Content>
       </Dialog.Portal>

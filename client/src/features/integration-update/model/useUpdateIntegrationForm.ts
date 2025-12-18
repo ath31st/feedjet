@@ -2,6 +2,7 @@ import { useState } from 'react';
 import {
   integrationTypes,
   type Integration,
+  type IntegrationType,
   type UpdateIntegration,
 } from '@/entities/integration';
 
@@ -9,6 +10,7 @@ export function useUpdateIntegrationForm(
   integration: Integration,
   onUpdate: (data: UpdateIntegration) => void,
   onClose: () => void,
+  onDelete: (kioskId: number, type: IntegrationType) => void,
 ) {
   const [formData, setFormData] = useState<UpdateIntegration>({
     type: integrationTypes[0],
@@ -23,13 +25,16 @@ export function useUpdateIntegrationForm(
     const trimmedData: UpdateIntegration = {
       type: formData.type,
       login:
-        formData.login !== integration.login
-          ? formData.login?.trim()
+        formData.login && formData.login !== integration.login
+          ? formData.login.trim()
           : undefined,
-      password: formData.description?.trim(),
+      password:
+        formData.password && formData.password !== '*****'
+          ? formData.password.trim()
+          : undefined,
       description:
-        formData.description !== integration.description
-          ? formData.description?.trim()
+        formData.description && formData.description !== integration.description
+          ? formData.description.trim()
           : undefined,
     };
 
@@ -63,10 +68,16 @@ export function useUpdateIntegrationForm(
     onClose();
   };
 
+  const handleDelete = () => {
+    onDelete(integration.kioskId, integration.type);
+    onClose();
+  };
+
   return {
     formData,
     handleSubmit,
     handleChange,
     handleCancel,
+    handleDelete,
   };
 }

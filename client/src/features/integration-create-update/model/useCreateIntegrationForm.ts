@@ -17,9 +17,9 @@ export function useCreateIntegrationForm(
 
     const trimmedData: NewIntegration = {
       type: formData.type,
-      login: formData.login?.trim(),
-      password: formData.description?.trim(),
-      description: formData.description?.trim(),
+      login: formData.login?.trim() || undefined,
+      password: formData.password?.trim() || undefined,
+      description: formData.description?.trim() || undefined,
     };
 
     onCreate(trimmedData);

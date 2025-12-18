@@ -4,7 +4,7 @@ import {
   type IntegrationType,
 } from '@/entities/integration';
 import { CommonButton } from '@/shared/ui/common';
-import { CheckIcon, ResetIcon } from '@radix-ui/react-icons';
+import { CheckIcon, LinkBreak2Icon, ResetIcon } from '@radix-ui/react-icons';
 
 export type IntegrationFormData = {
   type: IntegrationType;
@@ -23,6 +23,7 @@ interface IntegrationFormProps {
   ) => void;
   onSubmit: (e: React.FormEvent) => void;
   onCancel: () => void;
+  onDelete?: () => void;
 }
 
 export function IntegrationForm({
@@ -32,8 +33,10 @@ export function IntegrationForm({
   onChange,
   onSubmit,
   onCancel,
+  onDelete,
 }: IntegrationFormProps) {
   const isCreate = mode === 'create';
+  console.log(formData);
 
   return (
     <form onSubmit={onSubmit} className="space-y-4">
@@ -132,6 +135,15 @@ export function IntegrationForm({
       </div>
 
       <div className="flex justify-end gap-2">
+        {onDelete && (
+          <CommonButton
+            tooltip="Удалить интеграцию"
+            type="button"
+            onClick={onDelete}
+          >
+            <LinkBreak2Icon />
+          </CommonButton>
+        )}
         <CommonButton type="button" onClick={onCancel}>
           <ResetIcon />
         </CommonButton>
