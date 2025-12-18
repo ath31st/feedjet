@@ -18,7 +18,7 @@ export class IntegrationService {
     this.db = db;
   }
 
-  async create(kioskId: number, input: NewIntegration) {
+  create(kioskId: number, input: NewIntegration) {
     this.logger.debug({ kioskId, input, fn: 'create' }, 'Creating integration');
     this.validate(input);
 
@@ -51,25 +51,23 @@ export class IntegrationService {
     }
   }
 
-  async update(kioskId: number, input: UpdateIntegration) {
+  update(kioskId: number, input: UpdateIntegration) {
     this.logger.debug({ kioskId, input, fn: 'update' }, 'Updating integration');
     this.validate(input);
 
+    const updateData: Record<string, unknown> = {
+      url: input.url,
+      login: input.login,
+    };
+
     if (input.password) {
-      input = {
-        ...input,
-        password: encrypt(input.password),
-      };
+      updateData.passwordEnc = encrypt(input.password);
     }
 
     try {
       const result = this.db
         .update(kioskIntegrationsTable)
-        .set({
-          url: input.url,
-          login: input.login,
-          ...(input.password && { passwordEnc: input.password }),
-        })
+        .set(updateData)
         .where(
           and(
             eq(kioskIntegrationsTable.kioskId, kioskId),
@@ -93,7 +91,7 @@ export class IntegrationService {
     }
   }
 
-  async delete(kioskId: number, type: IntegrationType) {
+  delete(kioskId: number, type: IntegrationType) {
     this.logger.debug({ kioskId, type, fn: 'delete' }, 'Deleting integration');
     const result = this.db
       .delete(kioskIntegrationsTable)
@@ -106,6 +104,26 @@ export class IntegrationService {
 
     this.logger.info({ kioskId, type, fn: 'delete' }, 'Deleted integration');
     return result;
+  }
+
+  exists(kioskId: number, type: IntegrationType): boolean {
+    this.logger.debug(
+      { kioskId, type, fn: 'exists' },
+      'Checking if integration exists',
+    );
+
+    const integration = this.db
+      .select()
+      .from(kioskIntegrationsTable)
+      .where(
+        and(
+          eq(kioskIntegrationsTable.kioskId, kioskId),
+          eq(kioskIntegrationsTable.type, type),
+        ),
+      )
+      .get();
+
+    return !!integration;
   }
 
   private validate(input: NewIntegration | UpdateIntegration) {
