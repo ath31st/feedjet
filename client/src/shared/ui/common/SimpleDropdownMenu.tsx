@@ -27,7 +27,7 @@ export function SimpleDropdownMenu({
         <button
           ref={triggerRef}
           type="button"
-          className="w-full cursor-pointer rounded-lg border border-[var(--border)] bg-[var(--card-bg)] px-3 py-2 text-left focus:outline-none"
+          className="w-full cursor-pointer rounded-lg border border-(--border) bg-(--card-bg) px-2 py-1 text-left focus:outline-none"
         >
           {value}
         </button>
@@ -38,13 +38,13 @@ export function SimpleDropdownMenu({
           align="start"
           sideOffset={4}
           style={{ width }}
-          className="z-50 overflow-hidden rounded-lg border border-[var(--border)] bg-[var(--card-bg)] shadow-md"
+          className="z-50 overflow-hidden rounded-lg border border-(--border) bg-(--card-bg) shadow-md"
         >
           {options.map((opt) => (
             <DropdownMenu.Item
               key={opt}
               onSelect={() => onSelect(opt)}
-              className="cursor-pointer px-3 py-2 text-sm outline-none data-[highlighted]:bg-[var(--button-hover-bg)]"
+              className="cursor-pointer px-2 py-1 text-sm outline-none data-[highlighted]:bg-(--button-hover-bg)"
             >
               {opt}
             </DropdownMenu.Item>

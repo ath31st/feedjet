@@ -1,6 +1,7 @@
 import type { Kiosk } from '@/entities/kiosk';
 import { CommonButton } from '@/shared/ui/common';
 import { CheckIcon, ResetIcon } from '@radix-ui/react-icons';
+import { FormField, sharedInputStyles } from './common/FormField';
 
 type KioskFormData = {
   name?: string;
@@ -29,110 +30,82 @@ export function KioskForm({
   onSubmit,
   onCancel,
 }: KioskFormProps) {
-  const isUpdate = mode === 'update';
+  const isCreate = mode === 'create';
 
   return (
-    <form onSubmit={onSubmit} className="space-y-4">
-      {mode === 'create' ? (
-        <div>
-          <label
-            htmlFor="kiosk-slug"
-            className="mb-1 block font-medium text-sm"
-          >
-            Slug * (только латинские буквы, цифры и дефисы)
-          </label>
-          <input
-            id="kiosk-slug"
-            type="text"
-            required
-            maxLength={50}
-            pattern="[a-z0-9-]+"
-            title="Только латинские буквы в нижнем регистре, цифры и дефисы"
-            value={formData.slug}
-            onChange={(e) => onChange('slug', e.target.value.toLowerCase())}
-            className="w-full rounded-lg border border-[var(--border)] px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-[var(--border)]"
-            placeholder="например, main-hall"
-          />
-          <div className="mt-1 text-[var(--meta-text)] text-xs">
-            {formData.slug?.length}/50 символов
-          </div>
-        </div>
-      ) : (
-        <div>
-          <label
-            htmlFor="kiosk-slug"
-            className="mb-1 block font-medium text-sm"
-          >
-            Slug
-          </label>
-          <input
-            id="kiosk-slug"
-            type="text"
-            disabled
-            value={kiosk?.slug}
-            className="w-full rounded-lg border border-(--border-disabled) px-2 py-1 text-sm"
-          />
-        </div>
-      )}
+    <form onSubmit={onSubmit} className="space-y-2">
+      <FormField
+        id="kiosk-slug"
+        label="Slug"
+        required={isCreate}
+        maxLength={isCreate ? 50 : undefined}
+        currentLength={formData.slug?.length}
+        hint={isCreate ? 'только латинские буквы, цифры и дефисы' : ''}
+      >
+        <input
+          id="kiosk-slug"
+          type="text"
+          disabled={!isCreate}
+          required={isCreate}
+          pattern={isCreate ? '[a-z0-9-]+' : undefined}
+          value={isCreate ? formData.slug : kiosk?.slug}
+          onChange={(e) => onChange('slug', e.target.value.toLowerCase())}
+          className={sharedInputStyles}
+          maxLength={50}
+          placeholder="например, main-hall"
+        />
+      </FormField>
 
-      <div>
-        <label htmlFor="kiosk-name" className="mb-1 block font-medium text-sm">
-          Название * (макс. 10 символов)
-        </label>
+      <FormField
+        id="kiosk-name"
+        label="Название"
+        required={!isCreate}
+        maxLength={30}
+        currentLength={formData.name?.length}
+      >
         <input
           id="kiosk-name"
           type="text"
-          required={!isUpdate}
-          maxLength={30}
+          required={!isCreate}
           value={formData.name}
           onChange={(e) => onChange('name', e.target.value)}
-          className="w-full rounded-lg border border-[var(--border)] px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-[var(--border)]"
+          className={sharedInputStyles}
+          maxLength={30}
         />
-        <div className="mt-1 text-[var(--meta-text)] text-xs">
-          {formData.name?.length}/30 символов
-        </div>
-      </div>
+      </FormField>
 
-      <div>
-        <label
-          htmlFor="kiosk-description"
-          className="mb-1 block font-medium text-sm"
-        >
-          Описание (макс. 200 символов)
-        </label>
+      <FormField
+        id="kiosk-description"
+        label="Описание"
+        maxLength={200}
+        currentLength={formData.description?.length}
+      >
         <textarea
           id="kiosk-description"
-          maxLength={200}
+          rows={3}
           value={formData.description}
           onChange={(e) => onChange('description', e.target.value)}
-          className="w-full rounded-lg border border-[var(--border)] px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-[var(--border)]"
-          rows={3}
+          className={sharedInputStyles}
+          maxLength={200}
         />
-        <div className="mt-1 text-[var(--meta-text)] text-xs">
-          {formData.description?.length}/200 символов
-        </div>
-      </div>
+      </FormField>
 
-      <div>
-        <label
-          htmlFor="kiosk-location"
-          className="mb-1 block font-medium text-sm"
-        >
-          Местоположение (макс. 200 символов)
-        </label>
+      <FormField
+        id="kiosk-location"
+        label="Местоположение"
+        maxLength={200}
+        currentLength={formData.location?.length}
+      >
         <input
           id="kiosk-location"
           type="text"
-          maxLength={200}
           value={formData.location}
           onChange={(e) => onChange('location', e.target.value)}
-          className="w-full rounded-lg border border-[var(--border)] px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-[var(--border)]"
+          className={sharedInputStyles}
           placeholder="например, 1 этаж, холл"
+          maxLength={200}
         />
-        <div className="mt-1 text-[var(--meta-text)] text-xs">
-          {formData.location?.length}/200 символов
-        </div>
-      </div>
+      </FormField>
 
       <div className="flex justify-end gap-2">
         <CommonButton type="button" onClick={onCancel}>

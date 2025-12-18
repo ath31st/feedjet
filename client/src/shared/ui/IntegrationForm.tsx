@@ -3,8 +3,9 @@ import {
   type Integration,
   type IntegrationType,
 } from '@/entities/integration';
-import { CommonButton } from '@/shared/ui/common';
+import { CommonButton, SimpleDropdownMenu } from '@/shared/ui/common';
 import { CheckIcon, LinkBreak2Icon, ResetIcon } from '@radix-ui/react-icons';
+import { FormField, sharedInputStyles } from './common/FormField';
 
 export type IntegrationFormData = {
   type: IntegrationType;
@@ -39,100 +40,86 @@ export function IntegrationForm({
   console.log(formData);
 
   return (
-    <form onSubmit={onSubmit} className="space-y-4">
-      <div>
-        <label
-          htmlFor="integration-type"
-          className="mb-1 block font-medium text-sm"
-        >
-          Тип интеграции *
-        </label>
-
+    <form onSubmit={onSubmit} className="space-y-2">
+      <FormField
+        id="integration-type"
+        label="Тип интеграции"
+        required={isCreate}
+      >
         {isCreate ? (
-          <select
+          <SimpleDropdownMenu
             value={formData.type}
-            onChange={(e) =>
-              onChange('type', e.target.value as IntegrationType)
-            }
-            className="w-full rounded-lg border border-(--border) px-2 py-1 text-sm"
-            required
-          >
-            <option value="" disabled>
-              Выберите тип
-            </option>
-            {integrationFull.map((i) => (
-              <option key={i.type} value={i.type}>
-                {i.label}
-              </option>
-            ))}
-          </select>
+            options={integrationFull.map((i) => i.type)}
+            onSelect={(value) => onChange('type', value as IntegrationType)}
+          />
         ) : (
           <input
+            id="integration-type"
             type="text"
             disabled
+            className={sharedInputStyles}
             value={
               integrationFull.find((i) => i.type === integration?.type)
                 ?.label ?? formData.type
             }
-            className="w-full rounded-lg border border-(--border-disabled) px-2 py-1 text-sm"
           />
         )}
-      </div>
+      </FormField>
 
-      <div>
-        <label
-          htmlFor="integration-description"
-          className="mb-1 block font-medium text-sm"
-        >
-          Описание
-        </label>
+      <FormField
+        id="integration-login"
+        label="Логин"
+        maxLength={100}
+        currentLength={formData.login?.length}
+      >
         <input
+          id="integration-login"
           type="text"
-          value={formData.description ?? ''}
-          onChange={(e) => onChange('description', e.target.value)}
-          className="w-full rounded-lg border border-(--border) px-2 py-1 text-sm"
-          placeholder="Например: https://device.local или комментарий"
-        />
-      </div>
-
-      <div>
-        <label
-          htmlFor="integration-login"
-          className="mb-1 block font-medium text-sm"
-        >
-          Логин
-        </label>
-        <input
-          type="text"
+          className={sharedInputStyles}
           value={formData.login ?? ''}
           onChange={(e) => onChange('login', e.target.value)}
-          className="w-full rounded-lg border border-(--border) px-2 py-1 text-sm"
-          autoComplete="username"
         />
-      </div>
+      </FormField>
 
-      <div>
-        <label
-          htmlFor="integration-password"
-          className="mb-1 block font-medium text-sm"
-        >
-          Пароль
-          {formData.type === 'fully_kiosk' && ' *'}
-        </label>
+      <FormField
+        id="integration-password"
+        label="Пароль"
+        required={formData.type === 'fully_kiosk'}
+        hint={
+          mode === 'update'
+            ? 'Оставьте пустым, если не нужно менять'
+            : undefined
+        }
+        maxLength={100}
+        currentLength={formData.password?.length}
+      >
         <input
+          id="integration-password"
           type="password"
+          className={sharedInputStyles}
           value={formData.password ?? ''}
           onChange={(e) => onChange('password', e.target.value)}
-          className="w-full rounded-lg border border-(--border) px-2 py-1 text-sm"
           autoComplete="current-password"
           required={formData.type === 'fully_kiosk'}
         />
-        {mode === 'update' && (
-          <div className="mt-1 text-(--meta-text) text-xs">
-            Оставьте пустым, если не нужно менять пароль
-          </div>
-        )}
-      </div>
+      </FormField>
+
+      <FormField
+        id="integration-description"
+        label="Описание"
+        maxLength={500}
+        currentLength={formData.description?.length}
+      >
+        <textarea
+          id="integration-description"
+          rows={3}
+          className={sharedInputStyles}
+          value={formData.description ?? ''}
+          onChange={(e) => onChange('description', e.target.value)}
+          placeholder="Например: https://device.local или комментарий"
+          maxLength={200}
+        />
+      </FormField>
 
       <div className="flex justify-end gap-2">
         {onDelete && (

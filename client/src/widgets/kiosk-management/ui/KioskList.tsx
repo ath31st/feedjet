@@ -4,7 +4,9 @@ import { ReloadKioskPageButton } from '@/features/reload-kiosk';
 import { useKioskList } from '../model/useKioskList';
 import { UpdateKioskDialog } from '@/features/kiosk-update';
 import { CommonButton } from '@/shared/ui/common';
-import { Pencil1Icon } from '@radix-ui/react-icons';
+import { Link2Icon, Pencil1Icon, Pencil2Icon } from '@radix-ui/react-icons';
+import { IntegrationUpdateDialog } from '@/features/integration-update';
+import { IntegrationCreateDialog } from '@/features/integration-create-update';
 
 export function KioskList() {
   const {
@@ -14,6 +16,13 @@ export function KioskList() {
     handleUpdate,
     setEditKiosk,
     editKiosk,
+    createIntegrationFor,
+    setCreateIntegrationFor,
+    editIntegration,
+    setEditIntegration,
+    handleCreateIntegration,
+    handleUpdateIntegration,
+    handleDeleteIntegration,
   } = useKioskList();
 
   if (isLoading) return <LoadingThreeDotsJumping />;
@@ -29,6 +38,24 @@ export function KioskList() {
             onDelete={handleDelete}
             actions={
               <>
+                {kiosk.integration ? (
+                  <CommonButton
+                    onClick={() => setEditIntegration(kiosk.integration)}
+                    type="button"
+                    tooltip="Редактировать интеграцию"
+                  >
+                    <Pencil2Icon />
+                  </CommonButton>
+                ) : (
+                  <CommonButton
+                    onClick={() => setCreateIntegrationFor(kiosk)}
+                    type="button"
+                    tooltip="Добавить интеграцию"
+                  >
+                    <Link2Icon />
+                  </CommonButton>
+                )}
+
                 <CommonButton
                   onClick={() => setEditKiosk(kiosk)}
                   type="button"
@@ -42,6 +69,28 @@ export function KioskList() {
           />
         ))}
       </div>
+
+      {createIntegrationFor && (
+        <IntegrationCreateDialog
+          open={true}
+          onClose={() => setCreateIntegrationFor(null)}
+          onCreate={(data) =>
+            handleCreateIntegration(createIntegrationFor.id, data)
+          }
+        />
+      )}
+
+      {editIntegration && (
+        <IntegrationUpdateDialog
+          integration={editIntegration}
+          open={true}
+          onClose={() => setEditIntegration(null)}
+          onUpdate={(data) =>
+            handleUpdateIntegration(editIntegration.kioskId, data)
+          }
+          onDelete={(kioskId, type) => handleDeleteIntegration(type, kioskId)}
+        />
+      )}
 
       {editKiosk && (
         <UpdateKioskDialog
