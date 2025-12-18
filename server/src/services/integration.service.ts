@@ -44,6 +44,7 @@ export class IntegrationService {
         .values({
           kioskId: kioskId,
           type: input.type,
+          description: input.description ?? null,
           login: input.login ?? null,
           passwordEnc: input.password && encrypt(input.password),
         })
@@ -75,6 +76,7 @@ export class IntegrationService {
     }
 
     const updateData: Record<string, unknown> = {
+      description: input.description,
       login: input.login,
     };
 
