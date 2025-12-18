@@ -22,6 +22,10 @@ export class IntegrationService {
     this.logger.debug({ kioskId, input, fn: 'create' }, 'Creating integration');
     this.validate(input);
 
+    if (this.exists(kioskId, input.type)) {
+      throw new IntegrationError(409, 'Integration already exists');
+    }
+
     try {
       const integration = this.db
         .insert(kioskIntegrationsTable)
@@ -54,6 +58,10 @@ export class IntegrationService {
   update(kioskId: number, input: UpdateIntegration) {
     this.logger.debug({ kioskId, input, fn: 'update' }, 'Updating integration');
     this.validate(input);
+
+    if (!this.exists(kioskId, input.type)) {
+      throw new IntegrationError(404, 'Integration not found');
+    }
 
     const updateData: Record<string, unknown> = {
       url: input.url,
@@ -106,7 +114,7 @@ export class IntegrationService {
     return result;
   }
 
-  exists(kioskId: number, type: IntegrationType): boolean {
+  private exists(kioskId: number, type: IntegrationType): boolean {
     this.logger.debug(
       { kioskId, type, fn: 'exists' },
       'Checking if integration exists',

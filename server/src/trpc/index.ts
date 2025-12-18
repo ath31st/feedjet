@@ -19,6 +19,7 @@ import { birthdayBackgroundRouter } from './routes/birthday.background.route.js'
 import { kioskHeartbeatRouter } from './routes/kiosk.heartbeat.route.js';
 import { imageStorageRouter } from './routes/image.storage.route.js';
 import { kioskWorkScheduleRouter } from './routes/kiosk.work.schedule.route.js';
+import { integrationRouter } from './routes/integration.route.js';
 
 const logger = createServiceLogger('trpc');
 
@@ -40,6 +41,7 @@ const appRouter = t.router({
   birthday: birthdayRouter,
   birthdayBackground: birthdayBackgroundRouter,
   kioskWorkSchedule: kioskWorkScheduleRouter,
+  integration: integrationRouter,
 });
 
 export type AppRouter = typeof appRouter;
