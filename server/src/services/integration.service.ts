@@ -18,6 +18,18 @@ export class IntegrationService {
     this.db = db;
   }
 
+  getAll() {
+    return this.db.select().from(kioskIntegrationsTable).get();
+  }
+
+  getAllByKiosk(kioskId: number) {
+    return this.db
+      .select()
+      .from(kioskIntegrationsTable)
+      .where(eq(kioskIntegrationsTable.kioskId, kioskId))
+      .get();
+  }
+
   create(kioskId: number, input: NewIntegration) {
     this.logger.debug({ kioskId, input, fn: 'create' }, 'Creating integration');
     this.validate(input);
