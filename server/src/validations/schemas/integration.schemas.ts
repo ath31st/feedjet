@@ -15,19 +15,15 @@ export const integrationCreateSchema = z.object({
   }),
 });
 
-export const integrationUpdateSchema = z
-  .object({
-    kioskId: kioskIdSchema,
-    update: z.object({
-      type: integrationTypeSchema,
-      description: integrationTextSchema.optional(),
-      login: integrationTextSchema.optional(),
-      password: integrationTextSchema.optional(),
-    }),
-  })
-  .refine((data) => Object.keys(data).length > 1, {
-    message: 'At least one field must be provided',
-  });
+export const integrationUpdateSchema = z.object({
+  kioskId: kioskIdSchema,
+  update: z.object({
+    type: integrationTypeSchema,
+    description: integrationTextSchema.optional(),
+    login: integrationTextSchema.optional(),
+    password: integrationTextSchema.optional(),
+  }),
+});
 
 export const integrationDeleteSchema = z.object({
   type: integrationTypeSchema,

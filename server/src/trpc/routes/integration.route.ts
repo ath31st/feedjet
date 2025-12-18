@@ -9,6 +9,12 @@ import {
 } from '../../validations/schemas/integration.schemas.js';
 
 export const integrationRouter = t.router({
+  getAll: protectedProcedure.query(() => {
+    return handleServiceCall(() => {
+      return integrationService.getAll();
+    });
+  }),
+
   getAllByKioskId: protectedProcedure
     .input(kioskIdInputSchema)
     .query(({ input }) => {

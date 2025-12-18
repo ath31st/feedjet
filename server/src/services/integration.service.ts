@@ -1,4 +1,5 @@
 import type {
+  Integration,
   IntegrationType,
   NewIntegration,
   UpdateIntegration,
@@ -9,6 +10,7 @@ import { createServiceLogger } from '../utils/pino.logger.js';
 import { kioskIntegrationsTable } from '../db/schema.js';
 import { and, eq } from 'drizzle-orm';
 import { IntegrationError } from '../errors/integration.error.js';
+import { integrationMapper } from '../mappers/integration.mapper.js';
 
 export class IntegrationService {
   private readonly db: DbType;
@@ -18,8 +20,10 @@ export class IntegrationService {
     this.db = db;
   }
 
-  getAll() {
-    return this.db.select().from(kioskIntegrationsTable).get();
+  getAll(): Integration[] {
+    const rows = this.db.select().from(kioskIntegrationsTable).all();
+
+    return integrationMapper.fromEntities(rows);
   }
 
   getAllByKiosk(kioskId: number) {
@@ -30,7 +34,26 @@ export class IntegrationService {
       .get();
   }
 
-  create(kioskId: number, input: NewIntegration) {
+  getByKioskIdAndType(kioskId: number, type: IntegrationType): Integration {
+    const row = this.db
+      .select()
+      .from(kioskIntegrationsTable)
+      .where(
+        and(
+          eq(kioskIntegrationsTable.kioskId, kioskId),
+          eq(kioskIntegrationsTable.type, type),
+        ),
+      )
+      .get();
+
+    if (!row) {
+      throw new IntegrationError(404, 'Integration not found');
+    }
+
+    return integrationMapper.fromEntity(row);
+  }
+
+  create(kioskId: number, input: NewIntegration): Integration {
     this.logger.debug({ kioskId, input, fn: 'create' }, 'Creating integration');
     this.validate(input);
 
@@ -56,7 +79,7 @@ export class IntegrationService {
         'Created integration',
       );
 
-      return integration;
+      return integrationMapper.fromEntity(integration);
     } catch (error) {
       this.logger.error(
         { kioskId, type: input.type, fn: 'create' },
@@ -67,21 +90,33 @@ export class IntegrationService {
     }
   }
 
-  update(kioskId: number, input: UpdateIntegration) {
+  update(kioskId: number, input: UpdateIntegration): Integration {
     this.logger.debug({ kioskId, input, fn: 'update' }, 'Updating integration');
-    this.validate(input);
 
     if (!this.exists(kioskId, input.type)) {
       throw new IntegrationError(404, 'Integration not found');
     }
 
-    const updateData: Record<string, unknown> = {
-      description: input.description,
-      login: input.login,
-    };
+    const updateData: Partial<{
+      description: string;
+      login: string;
+      passwordEnc: string;
+    }> = {};
 
-    if (input.password) {
+    if (input.description !== undefined) {
+      updateData.description = input.description;
+    }
+
+    if (input.login !== undefined) {
+      updateData.login = input.login;
+    }
+
+    if (input.password !== undefined) {
       updateData.passwordEnc = encrypt(input.password);
+    }
+
+    if (Object.keys(updateData).length === 0) {
+      return this.getByKioskIdAndType(kioskId, input.type);
     }
 
     try {
@@ -93,14 +128,16 @@ export class IntegrationService {
             eq(kioskIntegrationsTable.kioskId, kioskId),
             eq(kioskIntegrationsTable.type, input.type),
           ),
-        );
+        )
+        .returning()
+        .get();
 
       this.logger.info(
         { kioskId, type: input.type, fn: 'update' },
         'Updated integration',
       );
 
-      return result;
+      return integrationMapper.fromEntity(result);
     } catch (error) {
       this.logger.error(
         { kioskId, type: input.type, fn: 'update' },
@@ -111,16 +148,18 @@ export class IntegrationService {
     }
   }
 
-  delete(kioskId: number, type: IntegrationType) {
+  delete(kioskId: number, type: IntegrationType): boolean {
     this.logger.debug({ kioskId, type, fn: 'delete' }, 'Deleting integration');
-    const result = this.db
-      .delete(kioskIntegrationsTable)
-      .where(
-        and(
-          eq(kioskIntegrationsTable.kioskId, kioskId),
-          eq(kioskIntegrationsTable.type, type),
-        ),
-      );
+    const result =
+      this.db
+        .delete(kioskIntegrationsTable)
+        .where(
+          and(
+            eq(kioskIntegrationsTable.kioskId, kioskId),
+            eq(kioskIntegrationsTable.type, type),
+          ),
+        )
+        .run().changes > 0;
 
     this.logger.info({ kioskId, type, fn: 'delete' }, 'Deleted integration');
     return result;
@@ -149,10 +188,7 @@ export class IntegrationService {
   private validate(input: NewIntegration | UpdateIntegration) {
     if (input.type === 'fully_kiosk') {
       if (!input.password) {
-        throw new IntegrationError(
-          400,
-          'Fully Kiosk requires url and password',
-        );
+        throw new IntegrationError(400, 'Fully Kiosk requires password');
       }
     }
   }
