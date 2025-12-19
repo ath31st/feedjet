@@ -127,6 +127,15 @@ export class KioskService {
       .all();
   }
 
+  getActive(): Kiosk[] {
+    return this.db
+      .select()
+      .from(kiosksTable)
+      .where(eq(kiosksTable.isActive, true))
+      .orderBy(kiosksTable.name, kiosksTable.id)
+      .all();
+  }
+
   update(kioskId: number, data: UpdateKiosk): Kiosk {
     this.logger.debug({ kioskId, data, fn: 'update' }, 'Updating kiosk');
 

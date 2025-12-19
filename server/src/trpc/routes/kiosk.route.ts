@@ -13,6 +13,10 @@ export const kioskRouter = t.router({
     return kioskService.getAll();
   }),
 
+  getActive: publicProcedure.query(() => {
+    return kioskService.getActive();
+  }),
+
   getBySlug: publicProcedure.input(kioskSlugInputSchema).query(({ input }) => {
     return handleServiceCall(() => {
       try {

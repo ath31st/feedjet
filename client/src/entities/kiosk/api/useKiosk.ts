@@ -6,6 +6,10 @@ export const useGetAllKiosks = () => {
   return useQuery(trpcWithProxy.kiosk.getAll.queryOptions());
 };
 
+export const useGetActiveKiosks = () => {
+  return useQuery(trpcWithProxy.kiosk.getActive.queryOptions());
+};
+
 export const useDeleteKiosk = () => {
   return useMutation(
     trpcWithProxy.kiosk.delete.mutationOptions({
@@ -27,6 +31,9 @@ export const useDeleteKioskBySlug = () => {
         queryClient.invalidateQueries({
           queryKey: trpcWithProxy.kiosk.getAll.queryKey(),
         });
+        queryClient.invalidateQueries({
+          queryKey: trpcWithProxy.kiosk.getActive.queryKey(),
+        });
       },
     }),
   );
@@ -40,6 +47,9 @@ export const useCreateKiosk = () => {
         queryClient.invalidateQueries({
           queryKey: trpcWithProxy.kiosk.getAll.queryKey(),
         });
+        queryClient.invalidateQueries({
+          queryKey: trpcWithProxy.kiosk.getActive.queryKey(),
+        });
       },
     }),
   );
@@ -52,6 +62,9 @@ export const useUpdateKiosk = () => {
         toast.success('Киоск успешно обновлен');
         queryClient.invalidateQueries({
           queryKey: trpcWithProxy.kiosk.getAll.queryKey(),
+        });
+        queryClient.invalidateQueries({
+          queryKey: trpcWithProxy.kiosk.getActive.queryKey(),
         });
       },
     }),

@@ -1,9 +1,9 @@
-import { useGetAllKiosks, useKioskStore } from '@/entities/kiosk';
+import { useGetActiveKiosks, useKioskStore } from '@/entities/kiosk';
 import { KioskSelector } from '@/features/kiosk-selector';
 
 export function KioskSelectorWidget() {
   const { setCurrentKiosk, currentKiosk } = useKioskStore();
-  const { data: kiosks = [] } = useGetAllKiosks();
+  const { data: kiosks = [] } = useGetActiveKiosks();
 
   return (
     <KioskSelector
