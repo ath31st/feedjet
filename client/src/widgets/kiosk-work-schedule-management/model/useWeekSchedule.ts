@@ -1,4 +1,4 @@
-import { useGetIntegrationsByKiosk } from '@/entities/integration';
+import { useGetIntegrationByKiosk } from '@/entities/integration';
 import {
   useGetKioskWorkSchedules,
   useUpsertDayKioskWorkSchedule,
@@ -10,8 +10,8 @@ import { useEffect, useState } from 'react';
 export function useWeekSchedule(kioskId: number) {
   const { data: schedulesData, isLoading } = useGetKioskWorkSchedules(kioskId);
   const upsertDay = useUpsertDayKioskWorkSchedule();
-  const { data: integrations = [], isLoading: isLoadingIntegrations } =
-    useGetIntegrationsByKiosk(kioskId);
+  const { data: integration, isLoading: isLoadingIntegrations } =
+    useGetIntegrationByKiosk(kioskId);
 
   const [schedules, setSchedules] = useState<DaySchedule[]>([]);
 
@@ -45,6 +45,6 @@ export function useWeekSchedule(kioskId: number) {
     handleChange,
     isLoading,
     isLoadingIntegrations,
-    hasIntegrations: integrations.length > 0,
+    hasIntegration: !!integration,
   };
 }

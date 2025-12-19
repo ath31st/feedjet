@@ -11,25 +11,25 @@ export function WeekSchedule({ kioskId }: WeekScheduleProps) {
     schedules,
     handleChange,
     isLoadingIntegrations,
-    hasIntegrations,
+    hasIntegration,
   } = useWeekSchedule(kioskId);
 
   if (isLoading || isLoadingIntegrations) return <div>Загрузка...</div>;
 
   return (
     <div className="relative flex flex-col gap-2">
-      {!hasIntegrations && (
+      {!hasIntegration && (
         <div className="mb-4 rounded-lg border border-(--border) bg-(--border-disabled) p-3">
           <p>
             <strong>Внимание:</strong> Управление расписанием недоступно. Не
-            настроены интеграции. Пожалуйста, проверьте конфигурацию киоска.
+            настроена интеграция. Пожалуйста, проверьте конфигурацию киоска.
           </p>
         </div>
       )}
 
       <div
         className={
-          !hasIntegrations ? 'pointer-events-none select-none opacity-50' : ''
+          !hasIntegration ? 'pointer-events-none select-none opacity-50' : ''
         }
       >
         <div className="flex flex-col gap-2">

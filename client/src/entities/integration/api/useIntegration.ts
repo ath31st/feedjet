@@ -41,9 +41,9 @@ export const useUpdateIntegration = () => {
   );
 };
 
-export const useGetIntegrationsByKiosk = (kioskId: number) => {
+export const useGetIntegrationByKiosk = (kioskId: number) => {
   return useQuery(
-    trpcWithProxy.integration.getAllByKioskId.queryOptions({ kioskId }),
+    trpcWithProxy.integration.getByKioskId.queryOptions({ kioskId }),
   );
 };
 
