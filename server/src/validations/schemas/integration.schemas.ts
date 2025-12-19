@@ -24,7 +24,3 @@ export const integrationUpdateSchema = z.object({
     password: integrationTextSchema.optional(),
   }),
 });
-
-export const integrationDeleteSchema = z.object({
-  type: integrationTypeSchema,
-});

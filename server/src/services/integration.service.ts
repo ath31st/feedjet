@@ -1,6 +1,5 @@
 import type {
   Integration,
-  IntegrationType,
   NewIntegration,
   UpdateIntegration,
 } from '@shared/types/integration.js';
@@ -26,26 +25,11 @@ export class IntegrationService {
     return integrationMapper.fromEntities(rows);
   }
 
-  getAllByKiosk(kioskId: number): Integration[] {
-    const rows = this.db
-      .select()
-      .from(kioskIntegrationsTable)
-      .where(eq(kioskIntegrationsTable.kioskId, kioskId))
-      .all();
-
-    return integrationMapper.fromEntities(rows);
-  }
-
-  getByKioskIdAndType(kioskId: number, type: IntegrationType): Integration {
+  getByKiosk(kioskId: number): Integration {
     const row = this.db
       .select()
       .from(kioskIntegrationsTable)
-      .where(
-        and(
-          eq(kioskIntegrationsTable.kioskId, kioskId),
-          eq(kioskIntegrationsTable.type, type),
-        ),
-      )
+      .where(eq(kioskIntegrationsTable.kioskId, kioskId))
       .get();
 
     if (!row) {
@@ -59,7 +43,7 @@ export class IntegrationService {
     this.logger.debug({ kioskId, input, fn: 'create' }, 'Creating integration');
     this.validate(input);
 
-    if (this.exists(kioskId, input.type)) {
+    if (this.exists(kioskId)) {
       throw new IntegrationError(409, 'Integration already exists');
     }
 
@@ -95,7 +79,7 @@ export class IntegrationService {
   update(kioskId: number, input: UpdateIntegration): Integration {
     this.logger.debug({ kioskId, input, fn: 'update' }, 'Updating integration');
 
-    if (!this.exists(kioskId, input.type)) {
+    if (!this.exists(kioskId)) {
       throw new IntegrationError(404, 'Integration not found');
     }
 
@@ -118,7 +102,7 @@ export class IntegrationService {
     }
 
     if (Object.keys(updateData).length === 0) {
-      return this.getByKioskIdAndType(kioskId, input.type);
+      return this.getByKiosk(kioskId);
     }
 
     try {
@@ -150,38 +134,28 @@ export class IntegrationService {
     }
   }
 
-  delete(kioskId: number, type: IntegrationType): boolean {
-    this.logger.debug({ kioskId, type, fn: 'delete' }, 'Deleting integration');
+  delete(kioskId: number): boolean {
+    this.logger.debug({ kioskId, fn: 'delete' }, 'Deleting integration');
     const result =
       this.db
         .delete(kioskIntegrationsTable)
-        .where(
-          and(
-            eq(kioskIntegrationsTable.kioskId, kioskId),
-            eq(kioskIntegrationsTable.type, type),
-          ),
-        )
+        .where(eq(kioskIntegrationsTable.kioskId, kioskId))
         .run().changes > 0;
 
-    this.logger.info({ kioskId, type, fn: 'delete' }, 'Deleted integration');
+    this.logger.info({ kioskId, fn: 'delete' }, 'Deleted integration');
     return result;
   }
 
-  private exists(kioskId: number, type: IntegrationType): boolean {
+  private exists(kioskId: number): boolean {
     this.logger.debug(
-      { kioskId, type, fn: 'exists' },
+      { kioskId, fn: 'exists' },
       'Checking if integration exists',
     );
 
     const integration = this.db
       .select()
       .from(kioskIntegrationsTable)
-      .where(
-        and(
-          eq(kioskIntegrationsTable.kioskId, kioskId),
-          eq(kioskIntegrationsTable.type, type),
-        ),
-      )
+      .where(eq(kioskIntegrationsTable.kioskId, kioskId))
       .get();
 
     return !!integration;

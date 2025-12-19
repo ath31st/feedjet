@@ -4,7 +4,6 @@ import { kioskIdInputSchema } from '../../validations/schemas/kiosk.schemas.js';
 import { protectedProcedure } from '../../middleware/auth.js';
 import {
   integrationCreateSchema,
-  integrationDeleteSchema,
   integrationUpdateSchema,
 } from '../../validations/schemas/integration.schemas.js';
 
@@ -15,11 +14,11 @@ export const integrationRouter = t.router({
     });
   }),
 
-  getAllByKioskId: protectedProcedure
+  getByKioskId: protectedProcedure
     .input(kioskIdInputSchema)
     .query(({ input }) => {
       return handleServiceCall(() => {
-        return integrationService.getAllByKiosk(input.kioskId);
+        return integrationService.getByKiosk(input.kioskId);
       });
     }),
 
@@ -47,12 +46,10 @@ export const integrationRouter = t.router({
       }),
     ),
 
-  delete: protectedProcedure
-    .input(integrationDeleteSchema.and(kioskIdInputSchema))
-    .mutation(({ input }) =>
-      handleServiceCall(() => {
-        integrationService.delete(input.kioskId, input.type);
-        return { success: true };
-      }),
-    ),
+  delete: protectedProcedure.input(kioskIdInputSchema).mutation(({ input }) =>
+    handleServiceCall(() => {
+      integrationService.delete(input.kioskId);
+      return { success: true };
+    }),
+  ),
 });
