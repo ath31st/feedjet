@@ -1,4 +1,3 @@
-// features/manage-images/ui/ImageList.tsx
 import { formatBytes } from '@/shared/lib';
 import { Cross1Icon } from '@radix-ui/react-icons';
 import { IconButton } from '@/shared/ui/common';

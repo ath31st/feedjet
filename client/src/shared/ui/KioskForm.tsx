@@ -2,12 +2,14 @@ import type { Kiosk } from '@/entities/kiosk';
 import { CommonButton } from '@/shared/ui/common';
 import { CheckIcon, ResetIcon } from '@radix-ui/react-icons';
 import { FormField, sharedInputStyles } from './common/FormField';
+import * as Switch from '@radix-ui/react-switch';
 
 type KioskFormData = {
   name?: string;
   slug?: string;
   description?: string;
   location?: string;
+  isActive?: boolean;
 };
 
 interface KioskFormProps {
@@ -15,8 +17,8 @@ interface KioskFormProps {
   kiosk?: Kiosk;
   formData: KioskFormData;
   onChange: (
-    field: 'name' | 'slug' | 'description' | 'location',
-    value: string,
+    field: 'name' | 'slug' | 'description' | 'location' | 'isActive',
+    value: string | boolean,
   ) => void;
   onSubmit: (e: React.FormEvent) => void;
   onCancel: () => void;
@@ -75,22 +77,6 @@ export function KioskForm({
       </FormField>
 
       <FormField
-        id="kiosk-description"
-        label="Описание"
-        maxLength={200}
-        currentLength={formData.description?.length}
-      >
-        <textarea
-          id="kiosk-description"
-          rows={3}
-          value={formData.description}
-          onChange={(e) => onChange('description', e.target.value)}
-          className={sharedInputStyles}
-          maxLength={200}
-        />
-      </FormField>
-
-      <FormField
         id="kiosk-location"
         label="Местоположение"
         maxLength={200}
@@ -103,6 +89,37 @@ export function KioskForm({
           onChange={(e) => onChange('location', e.target.value)}
           className={sharedInputStyles}
           placeholder="например, 1 этаж, холл"
+          maxLength={200}
+        />
+      </FormField>
+
+      {!isCreate && (
+        <div className="flex justify-between">
+          <span className="block font-medium text-sm">
+            Конфигурация киоска включена
+          </span>
+          <Switch.Root
+            checked={formData.isActive ?? false}
+            onCheckedChange={(checked) => onChange('isActive', checked)}
+            className="relative h-5 w-10 shrink-0 cursor-pointer rounded-full border border-(--border) transition-colors data-[state=checked]:bg-(--button-bg)"
+          >
+            <Switch.Thumb className="block h-4 w-4 translate-x-[1px] rounded-full bg-(--text) transition-transform data-[state=checked]:translate-x-[21px]" />
+          </Switch.Root>
+        </div>
+      )}
+
+      <FormField
+        id="kiosk-description"
+        label="Описание"
+        maxLength={200}
+        currentLength={formData.description?.length}
+      >
+        <textarea
+          id="kiosk-description"
+          rows={3}
+          value={formData.description}
+          onChange={(e) => onChange('description', e.target.value)}
+          className={sharedInputStyles}
           maxLength={200}
         />
       </FormField>

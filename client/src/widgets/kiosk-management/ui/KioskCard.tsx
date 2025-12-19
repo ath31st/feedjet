@@ -17,9 +17,15 @@ interface KioskCardProps {
 
 export function KioskCard({ kiosk, onDelete, actions }: KioskCardProps) {
   return (
-    <div className="rounded-lg border border-(--border) p-4">
+    <div
+      className={`rounded-lg border ${kiosk.isActive ? 'border-(--border)' : 'border-(--border-disabled)'} p-4`}
+    >
       <div className="mb-3 flex items-start justify-between">
-        <h3 className="font-semibold text-lg">{kiosk.name}</h3>
+        <h3
+          className={`font-semibold text-lg ${kiosk.isActive ? '' : 'text-(--meta-text)'}`}
+        >
+          {kiosk.name}
+        </h3>
 
         <div className="flex items-center gap-2">
           {kiosk.slug === 'default' ? null : (

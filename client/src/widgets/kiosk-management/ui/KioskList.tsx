@@ -88,7 +88,7 @@ export function KioskList() {
           onUpdate={(data) =>
             handleUpdateIntegration(editIntegration.kioskId, data)
           }
-          onDelete={(kioskId, type) => handleDeleteIntegration(type, kioskId)}
+          onDelete={(kioskId) => handleDeleteIntegration(kioskId)}
         />
       )}
 
