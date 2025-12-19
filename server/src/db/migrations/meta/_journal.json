@@ -225,6 +225,20 @@
       "when": 1766044728133,
       "tag": "0031_romantic_jubilee",
       "breakpoints": true
+    },
+    {
+      "idx": 32,
+      "version": "6",
+      "when": 1766124786854,
+      "tag": "0032_purple_orphan",
+      "breakpoints": true
+    },
+    {
+      "idx": 33,
+      "version": "6",
+      "when": 1766124988186,
+      "tag": "0033_military_the_anarchist",
+      "breakpoints": true
     }
   ]
 }

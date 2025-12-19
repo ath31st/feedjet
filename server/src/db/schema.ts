@@ -202,22 +202,18 @@ export const kioskWorkScheduleTable = sqliteTable(
   ],
 );
 
-export const kioskIntegrationsTable = sqliteTable(
-  'kiosk_integrations',
-  {
-    kioskId: integer('kiosk_id')
-      .notNull()
-      .references(() => kiosksTable.id, { onDelete: 'cascade' }),
-    type: text('type').notNull().$type<IntegrationType>(),
-    description: text('description'),
-    login: text('login'),
-    passwordEnc: text('password'),
-    createdAt: integer('created_at', { mode: 'timestamp' })
-      .notNull()
-      .default(sql`(unixepoch())`),
-    updatedAt: integer('updated_at', { mode: 'timestamp' })
-      .notNull()
-      .default(sql`(unixepoch())`),
-  },
-  (table) => [primaryKey({ columns: [table.kioskId, table.type] })],
-);
+export const kioskIntegrationsTable = sqliteTable('kiosk_integrations', {
+  kioskId: integer('kiosk_id')
+    .primaryKey()
+    .references(() => kiosksTable.id, { onDelete: 'cascade' }),
+  type: text('type').notNull().$type<IntegrationType>(),
+  description: text('description'),
+  login: text('login'),
+  passwordEnc: text('password'),
+  createdAt: integer('created_at', { mode: 'timestamp' })
+    .notNull()
+    .default(sql`(unixepoch())`),
+  updatedAt: integer('updated_at', { mode: 'timestamp' })
+    .notNull()
+    .default(sql`(unixepoch())`),
+});
