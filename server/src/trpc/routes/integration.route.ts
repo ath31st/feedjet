@@ -46,6 +46,12 @@ export const integrationRouter = t.router({
       }),
     ),
 
+  exists: protectedProcedure.input(kioskIdInputSchema).query(({ input }) => {
+    return handleServiceCall(() => {
+      return integrationService.exists(input.kioskId);
+    });
+  }),
+
   delete: protectedProcedure.input(kioskIdInputSchema).mutation(({ input }) =>
     handleServiceCall(() => {
       integrationService.delete(input.kioskId);

@@ -50,3 +50,7 @@ export const useGetIntegrationByKiosk = (kioskId: number) => {
 export const useGetAllIntegrations = () => {
   return useQuery(trpcWithProxy.integration.getAll.queryOptions());
 };
+
+export const useExistsIntegration = (kioskId: number) => {
+  return useQuery(trpcWithProxy.integration.exists.queryOptions({ kioskId }));
+};

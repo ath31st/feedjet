@@ -146,12 +146,7 @@ export class IntegrationService {
     return result;
   }
 
-  private exists(kioskId: number): boolean {
-    this.logger.debug(
-      { kioskId, fn: 'exists' },
-      'Checking if integration exists',
-    );
-
+  exists(kioskId: number): boolean {
     const integration = this.db
       .select()
       .from(kioskIntegrationsTable)
