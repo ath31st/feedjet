@@ -35,7 +35,8 @@ export function CreateKioskDialog({
           <KioskForm
             mode="create"
             formData={formData}
-            onChange={handleChange}
+            // biome-ignore lint/suspicious/noExplicitAny: ignore this any for common interface
+            onChange={handleChange as any}
             onSubmit={handleSubmit}
             onCancel={handleCancel}
           />

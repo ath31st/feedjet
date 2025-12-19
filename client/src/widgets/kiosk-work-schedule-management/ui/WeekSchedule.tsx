@@ -10,11 +10,11 @@ export function WeekSchedule({ kioskId }: WeekScheduleProps) {
     isLoading,
     schedules,
     handleChange,
-    isLoadingIntegrations,
+    isLoadingIntegration,
     hasIntegration,
   } = useWeekSchedule(kioskId);
 
-  if (isLoading || isLoadingIntegrations) return <div>Загрузка...</div>;
+  if (isLoading || isLoadingIntegration) return <div>Загрузка...</div>;
 
   return (
     <div className="relative flex flex-col gap-2">
