@@ -120,7 +120,11 @@ export class KioskService {
   }
 
   getAll(): Kiosk[] {
-    return this.db.select().from(kiosksTable).all();
+    return this.db
+      .select()
+      .from(kiosksTable)
+      .orderBy(kiosksTable.name, kiosksTable.id)
+      .all();
   }
 
   update(kioskId: number, data: UpdateKiosk): Kiosk {

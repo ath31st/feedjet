@@ -4,7 +4,6 @@ import {
   useGetAllIntegrations,
   useUpdateIntegration,
   type Integration,
-  type IntegrationType,
   type NewIntegration,
   type UpdateIntegration,
 } from '@/entities/integration';
@@ -66,8 +65,8 @@ export function useKioskList() {
     });
   };
 
-  const handleDeleteIntegration = (type: IntegrationType, kioskId: number) => {
-    deleteIntegration.mutate({ type, kioskId });
+  const handleDeleteIntegration = (kioskId: number) => {
+    deleteIntegration.mutate({ kioskId });
   };
 
   const handleCreateIntegration = (
