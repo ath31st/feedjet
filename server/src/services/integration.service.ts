@@ -26,12 +26,14 @@ export class IntegrationService {
     return integrationMapper.fromEntities(rows);
   }
 
-  getAllByKiosk(kioskId: number) {
-    return this.db
+  getAllByKiosk(kioskId: number): Integration[] {
+    const rows = this.db
       .select()
       .from(kioskIntegrationsTable)
       .where(eq(kioskIntegrationsTable.kioskId, kioskId))
-      .get();
+      .all();
+
+    return integrationMapper.fromEntities(rows);
   }
 
   getByKioskIdAndType(kioskId: number, type: IntegrationType): Integration {
