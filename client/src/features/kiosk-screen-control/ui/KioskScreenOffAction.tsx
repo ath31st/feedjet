@@ -3,12 +3,18 @@ import { MoonIcon } from '@radix-ui/react-icons';
 import { useKioskScreenControl } from '../model/useKioskScreenControl';
 
 interface KioskScreenOffActionProps {
+  kioskId: number;
   kioskIp: string;
 }
 
-export function KioskScreenOffAction({ kioskIp }: KioskScreenOffActionProps) {
-  const { handleScreenOff, isScreenOffPending } =
-    useKioskScreenControl(kioskIp);
+export function KioskScreenOffAction({
+  kioskId,
+  kioskIp,
+}: KioskScreenOffActionProps) {
+  const { handleScreenOff, isScreenOffPending } = useKioskScreenControl(
+    kioskId,
+    kioskIp,
+  );
 
   return (
     <CommonButton

@@ -1,22 +1,16 @@
 import { useKioskScreenOff, useKioskScreenOn } from '@/entities/kiosk-control';
 
-export const useKioskScreenControl = (kioskIp: string) => {
+export const useKioskScreenControl = (kioskId: number, kioskIp: string) => {
   const { mutate: screenOn, isPending: isScreenOnPending } = useKioskScreenOn();
   const { mutate: screenOff, isPending: isScreenOffPending } =
     useKioskScreenOff();
 
   const handleScreenOn = () => {
-    const password = window.prompt('Пароль Fully Kiosk');
-    if (!password) return;
-
-    screenOn({ kioskIp, password });
+    screenOn({ kioskId, kioskIp });
   };
 
   const handleScreenOff = () => {
-    const password = window.prompt('Пароль Fully Kiosk');
-    if (!password) return;
-
-    screenOff({ kioskIp, password });
+    screenOff({ kioskId, kioskIp });
   };
 
   return {

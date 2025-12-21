@@ -36,6 +36,7 @@ export function KioskList() {
             key={kiosk.id}
             kiosk={kiosk}
             onDelete={handleDelete}
+            hasIntegration={!!kiosk.integration}
             actions={
               <>
                 {kiosk.integration ? (

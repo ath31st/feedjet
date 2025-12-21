@@ -3,11 +3,18 @@ import { SunIcon } from '@radix-ui/react-icons';
 import { useKioskScreenControl } from '../model/useKioskScreenControl';
 
 interface KioskScreenOnActionProps {
+  kioskId: number;
   kioskIp: string;
 }
 
-export function KioskScreenOnAction({ kioskIp }: KioskScreenOnActionProps) {
-  const { handleScreenOn, isScreenOnPending } = useKioskScreenControl(kioskIp);
+export function KioskScreenOnAction({
+  kioskId,
+  kioskIp,
+}: KioskScreenOnActionProps) {
+  const { handleScreenOn, isScreenOnPending } = useKioskScreenControl(
+    kioskId,
+    kioskIp,
+  );
 
   return (
     <CommonButton

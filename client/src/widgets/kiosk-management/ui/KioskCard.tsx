@@ -13,9 +13,15 @@ interface KioskCardProps {
   kiosk: KioskWithHeartbeats;
   onDelete: (id: number) => void;
   actions?: ReactNode;
+  hasIntegration: boolean;
 }
 
-export function KioskCard({ kiosk, onDelete, actions }: KioskCardProps) {
+export function KioskCard({
+  kiosk,
+  onDelete,
+  actions,
+  hasIntegration,
+}: KioskCardProps) {
   return (
     <div
       className={`rounded-lg border ${kiosk.isActive ? 'border-(--border)' : 'border-(--border-disabled)'} p-4`}
@@ -87,10 +93,15 @@ export function KioskCard({ kiosk, onDelete, actions }: KioskCardProps) {
                 ip={hb.ip}
                 lastHeartbeat={hb.lastHeartbeat}
                 actions={
-                  <div className="ml-auto flex gap-2">
-                    <KioskScreenOnAction kioskIp={hb.ip} />
-                    <KioskScreenOffAction kioskIp={hb.ip} />
-                  </div>
+                  hasIntegration && (
+                    <div className="ml-auto flex gap-2">
+                      <KioskScreenOnAction kioskId={kiosk.id} kioskIp={hb.ip} />
+                      <KioskScreenOffAction
+                        kioskId={kiosk.id}
+                        kioskIp={hb.ip}
+                      />
+                    </div>
+                  )
                 }
               />
             ))}
