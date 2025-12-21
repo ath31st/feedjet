@@ -37,17 +37,20 @@ export class FullyKioskClient {
   }
 
   async screenOn(target: FullyKioskTarget) {
-    this.logger.debug({ target, fn: 'screenOn' }, 'Screen on');
+    this.logger.debug({ targetIp: target.ip, fn: 'screenOn' }, 'Screen on');
     return this.cmd(target, 'screenOn');
   }
 
   async screenOff(target: FullyKioskTarget) {
-    this.logger.debug({ target, fn: 'screenOff' }, 'Screen off');
+    this.logger.debug({ targetIp: target.ip, fn: 'screenOff' }, 'Screen off');
     return this.cmd(target, 'screenOff');
   }
 
   async getScreenshot(target: FullyKioskTarget): Promise<Buffer> {
-    this.logger.debug({ target, fn: 'getScreenshot' }, 'Get screenshot');
+    this.logger.debug(
+      { targetIp: target.ip, fn: 'getScreenshot' },
+      'Get screenshot',
+    );
     return this.http
       .get('/', {
         baseURL: this.getBaseUrl(target.ip),
