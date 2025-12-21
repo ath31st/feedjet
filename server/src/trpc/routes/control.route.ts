@@ -1,4 +1,4 @@
-import { eventBus, fullyKioskClient, t } from '../../container.js';
+import { eventBus, kioskControlService, t } from '../../container.js';
 import { protectedProcedure } from '../../middleware/auth.js';
 import type { ControlEvent } from '@shared/types/control.event.js';
 import { kioskIdInputSchema } from '../../validations/schemas/kiosk.schemas.js';
@@ -18,22 +18,14 @@ export const controlRouter = t.router({
   screenOn: protectedProcedure
     .input(kioskControlInputSchema)
     .mutation(async ({ input }) => {
-      const target = {
-        ip: input.kioskIp,
-        password: input.password,
-      };
-      await fullyKioskClient.screenOn(target);
+      await kioskControlService.screenOn(input.kioskId, input.kioskIp);
       return true;
     }),
 
   screenOff: protectedProcedure
     .input(kioskControlInputSchema)
     .mutation(async ({ input }) => {
-      const target = {
-        ip: input.kioskIp,
-        password: input.password,
-      };
-      await fullyKioskClient.screenOff(target);
+      await kioskControlService.screenOff(input.kioskId, input.kioskIp);
       return true;
     }),
 });

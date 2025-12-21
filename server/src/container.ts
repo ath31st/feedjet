@@ -32,6 +32,7 @@ import { ImageStorageService } from './services/image.storage.service.js';
 import { KioskWorkScheduleService } from './services/kiosk.work.schedule.service.js';
 import { FullyKioskClient } from './integration/fully.kiosk.client.js';
 import { IntegrationService } from './services/integration.service.js';
+import { KioskControlService } from './services/kiosk.control.service.js';
 
 const sqlite = new Database(dbPath);
 export const db = drizzle(sqlite, { schema });
@@ -79,6 +80,10 @@ imageStorageService.syncWithDisk();
 export const kioskWorkScheduleService = new KioskWorkScheduleService(db);
 export const kioskHeartbeatService = new KioskHeartbeatService();
 export const integrationService = new IntegrationService(db);
+export const kioskControlService = new KioskControlService(
+  integrationService,
+  fullyKioskClient,
+);
 
 export const t = initTRPC.context<Context>().create();
 export const publicProcedure = t.procedure;
