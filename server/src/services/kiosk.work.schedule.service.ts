@@ -71,7 +71,20 @@ export class KioskWorkScheduleService {
   }
 
   getDay(kioskId: number, dayOfWeek: DayOfWeek): KioskWorkSchedule {
-    const row = this.db
+    const schedule = this.findDay(kioskId, dayOfWeek);
+
+    if (!schedule) {
+      throw new KioskWorkScheduleError(404, 'Schedule not found');
+    }
+
+    return schedule;
+  }
+
+  findDay(
+    kioskId: number,
+    dayOfWeek: DayOfWeek,
+  ): KioskWorkSchedule | undefined {
+    const schedule = this.db
       .select()
       .from(kioskWorkScheduleTable)
       .where(
@@ -82,11 +95,7 @@ export class KioskWorkScheduleService {
       )
       .get();
 
-    if (!row) {
-      throw new KioskWorkScheduleError(404, 'Schedule not found');
-    }
-
-    return row;
+    return schedule;
   }
 
   getActiveSchedulesByDayAndTime(
@@ -109,17 +118,17 @@ export class KioskWorkScheduleService {
       .all();
   }
 
-  isKioskActiveNow(kioskId: number, now = new Date()): boolean {
-    const day = now.getDay() as DayOfWeek;
-    const time = now.toTimeString().slice(0, 5);
+  scheduleStatuses(kioskId: number, now = new Date()) {
+    const day = ((now.getDay() + 6) % 7) as DayOfWeek;
+    const currentTime = now.toTimeString().slice(0, 5);
 
-    const schedule = this.getDay(kioskId, day);
+    const schedule = this.findDay(kioskId, day);
 
-    if (!schedule.isEnabled) {
-      return false;
-    }
-
-    return time >= schedule.startTime && time < schedule.endTime;
+    return {
+      scheduleNotActive: !schedule || !schedule.isEnabled,
+      isStartTime: schedule?.isEnabled && currentTime === schedule.startTime,
+      isEndTime: schedule?.isEnabled && currentTime === schedule.endTime,
+    };
   }
 
   private validateTimeRange(startTime?: string, endTime?: string): void {
