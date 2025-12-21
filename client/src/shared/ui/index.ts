@@ -19,3 +19,4 @@ export { ConfirmActionDialog } from './common/ConfirmActionDialog';
 export { FormField, sharedInputStyles } from './common/FormField';
 export { KioskForm } from './KioskForm';
 export { IntegrationForm } from './IntegrationForm';
+export { SeasonOverlay } from './season-overlay/SeasonOverlay';

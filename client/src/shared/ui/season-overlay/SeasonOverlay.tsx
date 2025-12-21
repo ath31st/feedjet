@@ -1,10 +1,5 @@
 import { useMemo } from 'react';
-
-export type Season = 'winter' | 'spring' | 'summer' | 'autumn';
-
-interface SeasonOverlayProps {
-  season?: Season;
-}
+import { getCurrentSeason } from './useSeasonOverlay';
 
 const random = (min: number, max: number) => Math.random() * (max - min) + min;
 
@@ -42,8 +37,9 @@ const animationStyles = `
   }
 `;
 
-export const SeasonOverlay = ({ season = 'summer' }: SeasonOverlayProps) => {
+export const SeasonOverlay = () => {
   const colors = ['#ffa500', '#d2691e', '#ffd700', '#a52a2a'];
+  const season = getCurrentSeason();
 
   const particlesData = useMemo(() => {
     const MAX_PARTICLES = 30;

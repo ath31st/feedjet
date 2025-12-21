@@ -4,7 +4,6 @@ import { BirthdayGreeting } from './BirthdayGreeting';
 import { COMPANY_NAME } from '@/shared/config';
 import { useBirthdayWidgetModel } from '../model/useBirthdayWidget';
 import { calcFontSize, calcWidgetWidth } from '../lib/selectors';
-import { SeasonOverlay } from './SeasonOverlay';
 
 interface BirthdayWidgetProps {
   rotate: number;
@@ -18,7 +17,6 @@ export function BirthdayWidget({ rotate }: BirthdayWidgetProps) {
     isEffectiveXl,
     isTwoColumns,
     columns,
-    currentSeason,
   } = useBirthdayWidgetModel(rotate);
 
   const fontSizeXl = calcFontSize(isEffectiveXl, birthdays.length);
@@ -39,8 +37,6 @@ export function BirthdayWidget({ rotate }: BirthdayWidgetProps) {
       <div
         className={`relative flex h-full w-full items-center justify-center text-${fontSizeXl}xl overflow-hidden text-(--meta-text)`} // relative + overflow-hidden
       >
-        <SeasonOverlay season={currentSeason} />
-
         <span className="z-10">
           Месяц {monthName} не содержит дней рождения
         </span>
@@ -59,8 +55,6 @@ export function BirthdayWidget({ rotate }: BirthdayWidgetProps) {
         backgroundImage: backgroundUrl ? `url(${backgroundUrl})` : undefined,
       }}
     >
-      <SeasonOverlay season={currentSeason} />
-
       <div
         className="z-10 mt-6 flex h-full flex-col items-center justify-start gap-10"
         style={{ width: `${widgetWidth}%` }}

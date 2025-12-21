@@ -5,7 +5,6 @@ import {
 } from '@/entities/birthday-background';
 import { isRotate90, useIsXl } from '@/shared/lib';
 import { useMemo } from 'react';
-import type { Season } from '../ui/SeasonOverlay';
 
 export function useBirthdayWidgetModel(rotate: number) {
   const { start, end, month } = useMemo(() => {
@@ -38,14 +37,6 @@ export function useBirthdayWidgetModel(rotate: number) {
   const isTwoColumns = birthdays.length > 12;
   const midIndex = Math.ceil(birthdays.length / 2);
 
-  const getCurrentSeason = (): Season => {
-    const month = new Date().getMonth();
-    if (month === 11 || month === 0 || month === 1) return 'winter';
-    if (month >= 2 && month <= 4) return 'spring';
-    if (month >= 5 && month <= 7) return 'summer';
-    return 'autumn';
-  };
-
   const columns = useMemo(() => {
     if (!isTwoColumns) return [birthdays, []];
     return [birthdays.slice(0, midIndex), birthdays.slice(midIndex)];
@@ -58,6 +49,5 @@ export function useBirthdayWidgetModel(rotate: number) {
     isEffectiveXl,
     isTwoColumns,
     columns,
-    currentSeason: getCurrentSeason(),
   };
 }
