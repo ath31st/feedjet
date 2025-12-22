@@ -1,9 +1,6 @@
 import type { KioskWithHeartbeats } from '@/entities/kiosk';
-import { CommonButton } from '@/shared/ui/common';
-import { TrashIcon } from '@radix-ui/react-icons';
 import type { ReactNode } from 'react';
 import { HeartbeatCard } from './HeartbeatCard';
-import { ConfirmActionDialog } from '@/shared/ui';
 import {
   KioskScreenOffAction,
   KioskScreenOnAction,
@@ -11,17 +8,11 @@ import {
 
 interface KioskCardProps {
   kiosk: KioskWithHeartbeats;
-  onDelete: (id: number) => void;
   actions?: ReactNode;
   hasIntegration: boolean;
 }
 
-export function KioskCard({
-  kiosk,
-  onDelete,
-  actions,
-  hasIntegration,
-}: KioskCardProps) {
+export function KioskCard({ kiosk, actions, hasIntegration }: KioskCardProps) {
   return (
     <div
       className={`rounded-lg border ${kiosk.isActive ? 'border-(--border)' : 'border-(--border-disabled)'} p-4`}
@@ -33,23 +24,7 @@ export function KioskCard({
           {kiosk.name}
         </h3>
 
-        <div className="flex items-center gap-2">
-          {kiosk.slug === 'default' ? null : (
-            <ConfirmActionDialog
-              title="Удалить киоск?"
-              description={`Киоск «${kiosk.name}» будет удалён без возможности восстановления.`}
-              confirmText="Удалить"
-              onConfirm={() => onDelete(kiosk.id)}
-              trigger={
-                <CommonButton type="button" tooltip="Удалить киоск">
-                  <TrashIcon />
-                </CommonButton>
-              }
-            />
-          )}
-
-          {actions}
-        </div>
+        <div className="flex items-center gap-2">{actions}</div>
       </div>
 
       <div className="space-y-2 text-(--card-text) text-sm">

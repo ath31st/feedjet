@@ -4,9 +4,15 @@ import { ReloadKioskPageButton } from '@/features/reload-kiosk';
 import { useKioskList } from '../model/useKioskList';
 import { UpdateKioskDialog } from '@/features/kiosk-update';
 import { CommonButton } from '@/shared/ui/common';
-import { Link2Icon, Pencil1Icon, Pencil2Icon } from '@radix-ui/react-icons';
+import {
+  Link2Icon,
+  Pencil1Icon,
+  Pencil2Icon,
+  TrashIcon,
+} from '@radix-ui/react-icons';
 import { IntegrationUpdateDialog } from '@/features/integration-update';
 import { IntegrationCreateDialog } from '@/features/integration-create-update';
+import { ConfirmActionDialog } from '@/shared/ui';
 
 export function KioskList() {
   const {
@@ -35,10 +41,33 @@ export function KioskList() {
           <KioskCard
             key={kiosk.id}
             kiosk={kiosk}
-            onDelete={handleDelete}
             hasIntegration={!!kiosk.integration}
             actions={
               <>
+                {kiosk.slug === 'default' ? null : (
+                  <>
+                    <ConfirmActionDialog
+                      title="Удалить киоск?"
+                      description={`Киоск «${kiosk.name}» будет удалён без возможности восстановления.`}
+                      confirmText="Удалить"
+                      onConfirm={() => handleDelete(kiosk.id)}
+                      trigger={
+                        <CommonButton type="button" tooltip="Удалить киоск">
+                          <TrashIcon />
+                        </CommonButton>
+                      }
+                    />
+
+                    <CommonButton
+                      onClick={() => setEditKiosk(kiosk)}
+                      type="button"
+                      tooltip="Редактировать киоск"
+                    >
+                      <Pencil1Icon />
+                    </CommonButton>
+                  </>
+                )}
+
                 {kiosk.integration ? (
                   <CommonButton
                     onClick={() => setEditIntegration(kiosk.integration)}
@@ -57,13 +86,6 @@ export function KioskList() {
                   </CommonButton>
                 )}
 
-                <CommonButton
-                  onClick={() => setEditKiosk(kiosk)}
-                  type="button"
-                  tooltip="Редактировать киоск"
-                >
-                  <Pencil1Icon />
-                </CommonButton>
                 <ReloadKioskPageButton kioskId={kiosk.id} />
               </>
             }
