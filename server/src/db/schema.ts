@@ -224,7 +224,8 @@ export const birthdayWidgetConfigTable = sqliteTable('birthday_widget_config', {
   posY: integer('pos_y').notNull().default(50),
   fontScale: integer('font_scale').notNull().default(100),
   rotateZ: integer('rotate_z').notNull().default(0),
-  tiltY: integer('tilt_y').notNull().default(0),
+  rotateX: integer('rotate_x').notNull().default(0),
+  rotateY: integer('rotate_y').notNull().default(0),
   lineGap: integer('line_gap').notNull().default(100),
   createdAt: integer('created_at', { mode: 'timestamp' })
     .notNull()

@@ -239,6 +239,13 @@
       "when": 1766124988186,
       "tag": "0033_military_the_anarchist",
       "breakpoints": true
+    },
+    {
+      "idx": 34,
+      "version": "6",
+      "when": 1766677160405,
+      "tag": "0034_faulty_gargoyle",
+      "breakpoints": true
     }
   ]
 }
