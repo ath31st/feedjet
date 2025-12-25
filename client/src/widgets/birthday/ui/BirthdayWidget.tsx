@@ -37,9 +37,7 @@ export function BirthdayWidget({ rotate }: BirthdayWidgetProps) {
       <div
         className={`relative flex h-full w-full items-center justify-center text-${fontSizeXl}xl overflow-hidden text-(--meta-text)`} // relative + overflow-hidden
       >
-        <span className="z-10">
-          Месяц {monthName} не содержит дней рождения
-        </span>
+        <span>Месяц {monthName} не содержит дней рождения</span>
       </div>
     );
   }
@@ -48,15 +46,15 @@ export function BirthdayWidget({ rotate }: BirthdayWidgetProps) {
     <div
       className={
         backgroundUrl
-          ? 'fixed inset-0 z-10 flex flex-col items-center bg-center bg-cover bg-no-repeat p-4'
-          : 'flex h-full w-full flex-col items-center rounded-lg border-4 border-[var(--border)] bg-[var(--card-bg)] bg-center bg-cover bg-no-repeat'
+          ? 'fixed inset-0 flex flex-col items-center bg-center bg-cover bg-no-repeat p-4'
+          : 'flex h-full w-full flex-col items-center rounded-lg border-(--border) border-4 bg-(--card-bg) bg-center bg-cover bg-no-repeat'
       }
       style={{
         backgroundImage: backgroundUrl ? `url(${backgroundUrl})` : undefined,
       }}
     >
       <div
-        className="z-10 mt-6 flex h-full flex-col items-center justify-start gap-10"
+        className="mt-6 flex h-full flex-col items-center justify-start gap-10"
         style={{ width: `${widgetWidth}%` }}
       >
         <BirthdayGreeting
