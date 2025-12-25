@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react';
-import { StaticBackground } from '@/shared/ui';
+import { SeasonOverlay, StaticBackground } from '@/shared/ui';
 import { useUiConfigStore } from '@/entities/ui-config';
 import { Rotator } from '@/shared/ui/Rotator';
 import { LoadingThreeDotsJumping } from '@/shared/ui';
@@ -50,6 +50,7 @@ export function KioskPage() {
           transition={{ duration: 1.0 }}
         >
           <Rotator rotate={rotate}>
+            <SeasonOverlay />
             <StaticBackground />
 
             <Suspense fallback={null}>
