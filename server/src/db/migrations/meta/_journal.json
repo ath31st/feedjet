@@ -246,6 +246,13 @@
       "when": 1766677160405,
       "tag": "0034_faulty_gargoyle",
       "breakpoints": true
+    },
+    {
+      "idx": 35,
+      "version": "6",
+      "when": 1766677396198,
+      "tag": "0035_stiff_hairball",
+      "breakpoints": true
     }
   ]
 }
