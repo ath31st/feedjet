@@ -23,6 +23,8 @@ export class BirthdayWidgetTransformService {
    * rotateX: 0 (-90-90)
    * rotateY: 0 (-90-90)
    * lineGap: 100 (50-300%)
+   * textColor: '#ffffff' (hex)
+   * shadowBlur: 6 (0-40)
    */
   private defaultTransform: BirthdayWidgetTransform = {
     width: 50,
@@ -35,6 +37,8 @@ export class BirthdayWidgetTransformService {
     rotateX: 0,
     rotateY: 0,
     lineGap: 100,
+    textColor: '#ffffff',
+    shadowBlur: 6,
   };
 
   constructor(db: DbType) {
