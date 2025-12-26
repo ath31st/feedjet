@@ -22,6 +22,8 @@ export function TransformPreview({
     rotateX,
     rotateY,
     lineGap,
+    textColor,
+    shadowBlur,
   } = transformData;
 
   return (
@@ -42,8 +44,9 @@ export function TransformPreview({
       )}
 
       <div
-        className="absolute border-(--without-theme) border-2 border-dashed text-(--without-theme)"
+        className="absolute border-(--without-theme) border-2 border-dashed"
         style={{
+          color: textColor,
           left: `${posX}%`,
           top: `${posY}%`,
           width: `${width}%`,
@@ -56,7 +59,10 @@ export function TransformPreview({
           `,
           transformStyle: 'preserve-3d',
           fontSize: `${fontScale}%`,
-          textShadow: '0 2px 6px rgba(0,0,0,0.6)',
+          textShadow:
+            shadowBlur === 0
+              ? 'none'
+              : `2px 2px ${shadowBlur}px rgba(0,0,0,0.6)`,
           lineHeight: `${lineGap}%`,
         }}
       >
