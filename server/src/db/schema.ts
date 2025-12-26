@@ -231,6 +231,8 @@ export const birthdayWidgetTransformTable = sqliteTable(
     rotateX: integer('rotate_x').notNull().default(0),
     rotateY: integer('rotate_y').notNull().default(0),
     lineGap: integer('line_gap').notNull().default(100),
+    textColor: text('text_color').notNull().default('#ffffff'),
+    shadowBlur: integer('shadow_blur').notNull().default(0),
     createdAt: integer('created_at', { mode: 'timestamp' })
       .notNull()
       .default(sql`(unixepoch())`),

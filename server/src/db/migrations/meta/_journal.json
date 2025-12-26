@@ -260,6 +260,13 @@
       "when": 1766749865467,
       "tag": "0036_sturdy_sebastian_shaw",
       "breakpoints": true
+    },
+    {
+      "idx": 37,
+      "version": "6",
+      "when": 1766774621408,
+      "tag": "0037_blue_amphibian",
+      "breakpoints": true
     }
   ]
 }

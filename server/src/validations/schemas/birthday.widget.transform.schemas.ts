@@ -10,4 +10,6 @@ export const birthdayWidgetTransformInputSchema = z.object({
   rotateX: z.number().int().min(-90).max(90),
   rotateY: z.number().int().min(-90).max(90),
   lineGap: z.number().int().min(50).max(300),
+  textColor: z.string().min(1).max(50),
+  shadowBlur: z.number().int().min(0).max(40),
 });

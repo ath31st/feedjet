@@ -9,4 +9,6 @@ export interface BirthdayWidgetTransform {
   rotateX: number;
   rotateY: number;
   lineGap: number;
+  textColor: string;
+  shadowBlur: number;
 }
