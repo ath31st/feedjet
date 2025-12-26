@@ -14,6 +14,8 @@ export class BirthdayWidgetTransformService {
    * Default values for the birthday widget transform
    *
    * month: 0 (1-12)
+   * width: 50 (10-100%)
+   * height: 50 (10-100%)
    * posX: 50 (0-100%)
    * posY: 50 (0-100%)
    * fontScale: 100 (50-300%)
@@ -23,6 +25,8 @@ export class BirthdayWidgetTransformService {
    * lineGap: 100 (50-300%)
    */
   private defaultTransform: BirthdayWidgetTransform = {
+    width: 50,
+    height: 50,
     month: 0,
     posX: 50,
     posY: 50,

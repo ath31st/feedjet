@@ -1,5 +1,7 @@
 export interface BirthdayWidgetTransform {
   month: number;
+  width: number;
+  height: number;
   posX: number;
   posY: number;
   fontScale: number;

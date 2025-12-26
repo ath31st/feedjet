@@ -1,6 +1,8 @@
 import z from 'zod';
 
 export const birthdayWidgetTransformInputSchema = z.object({
+  width: z.number().int().min(10).max(100),
+  height: z.number().int().min(10).max(100),
   posX: z.number().int().min(0).max(100),
   posY: z.number().int().min(0).max(100),
   fontScale: z.number().int().min(50).max(300),

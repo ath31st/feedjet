@@ -222,6 +222,8 @@ export const birthdayWidgetTransformTable = sqliteTable(
   'birthday_widget_transform',
   {
     month: integer('month').primaryKey(),
+    width: integer('width').notNull().default(50),
+    height: integer('height').notNull().default(50),
     posX: integer('pos_x').notNull().default(50),
     posY: integer('pos_y').notNull().default(50),
     fontScale: integer('font_scale').notNull().default(100),
