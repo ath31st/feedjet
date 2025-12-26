@@ -3,6 +3,7 @@ import { BirthdayFileUpload } from '@/features/birthday-file-upload';
 import { SettingsCard } from '@/shared/ui/SettingsCard';
 import { BirthdayList } from './BirthdayList';
 import { ManageBirthdayBackground } from '@/features/manage-birthday-background';
+import { BirthdayWidgetTransformSettings } from '@/features/birthday-widget-transform-settings';
 
 export function BirthdaysManagement() {
   return (
@@ -25,6 +26,15 @@ export function BirthdaysManagement() {
       <div className="w-full">
         <SettingsCard title="Фон поздравления" className="w-full">
           <ManageBirthdayBackground />
+        </SettingsCard>
+      </div>
+
+      <div className="w-full">
+        <SettingsCard
+          title="Настройка размеров и положения блока с ФИО и датой рождения"
+          className="w-full"
+        >
+          <BirthdayWidgetTransformSettings />
         </SettingsCard>
       </div>
 
