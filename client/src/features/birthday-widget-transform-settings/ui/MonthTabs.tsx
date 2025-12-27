@@ -1,17 +1,4 @@
-const MONTHS = [
-  'Янв',
-  'Фев',
-  'Мар',
-  'Апр',
-  'Май',
-  'Июн',
-  'Июл',
-  'Авг',
-  'Сен',
-  'Окт',
-  'Ноя',
-  'Дек',
-];
+import { MONTHS } from '@/entities/birthday-background';
 
 export function MonthTabs({
   value,
@@ -22,16 +9,18 @@ export function MonthTabs({
 }) {
   return (
     <div className="flex w-full gap-1">
-      {MONTHS.map((label, index) => {
-        const month = index + 1;
+      {Object.entries(MONTHS).map(([monthStr, label]) => {
+        const month = Number(monthStr);
         const isActive = month === value;
 
         return (
           <button
-            type="button"
             key={month}
+            type="button"
             onClick={() => onChange(month)}
-            className={`flex-1 cursor-pointer ${isActive ? 'bg-(--button-bg)' : 'bg-(--card-bg)'} rounded-lg`}
+            className={`h-8 flex-1 cursor-pointer rounded-lg ${
+              isActive ? 'bg-(--button-bg)' : 'bg-(--card-bg)'
+            } hover:bg-(--button-hover-bg)`}
           >
             {label}
           </button>

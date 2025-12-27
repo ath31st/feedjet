@@ -1,5 +1,6 @@
 import {
   useGetBirthdayWidgetTransformByMonth,
+  useUpsertBirthdayWidgetTransform,
   type BirthdayWidgetTransform,
 } from '@/entities/birthday-widget-transform';
 import { useEffect, useState } from 'react';
@@ -12,6 +13,9 @@ import {
 import { useGetBirthdaysByMonth } from '@/entities/birthday';
 import { SliderControl } from './SliderControl';
 import { ColorControl } from './ColorControl';
+import { IconButton } from '@/shared/ui/common';
+import { ResetIcon } from '@radix-ui/react-icons';
+import { SaveIcon } from 'lucide-react';
 
 export function BirthdayWidgetTransformSettings() {
   const currentMonth = new Date().getMonth() + 1;
@@ -21,6 +25,8 @@ export function BirthdayWidgetTransformSettings() {
     useGetBirthdaysByMonth(month);
   const { data: transformData, isLoading: transformIsLoading } =
     useGetBirthdayWidgetTransformByMonth(month);
+  const { mutate: upsertTransform, isPending } =
+    useUpsertBirthdayWidgetTransform();
   const { data: backgroundFileName, isLoading: backgroundIsLoading } =
     useGetBackgroundByMonth(month);
   const backgroundUrl = backgroundFileName
@@ -29,6 +35,18 @@ export function BirthdayWidgetTransformSettings() {
 
   const [localTransform, setLocalTransform] =
     useState<BirthdayWidgetTransform | null>(null);
+
+  const handleSave = () => {
+    if (localTransform) {
+      upsertTransform(localTransform);
+    }
+  };
+
+  const handleReset = () => {
+    if (transformData) {
+      setLocalTransform(transformData);
+    }
+  };
 
   useEffect(() => {
     if (transformData) setLocalTransform(transformData);
@@ -47,7 +65,7 @@ export function BirthdayWidgetTransformSettings() {
     <div className="flex flex-col gap-4">
       <MonthTabs value={month} onChange={setMonth} />
 
-      <div className="flex gap-6">
+      <div className="flex items-center gap-6">
         <div className="flex-1">
           <TransformPreview
             transformData={localTransform}
@@ -57,7 +75,7 @@ export function BirthdayWidgetTransformSettings() {
         </div>
 
         {localTransform && (
-          <div className="grid w-full grid-cols-2 gap-4">
+          <div className="grid w-full grid-cols-2 gap-x-4 gap-y-3">
             <SliderControl
               label="Ось Х (в %)"
               value={localTransform.posX}
@@ -197,6 +215,23 @@ export function BirthdayWidgetTransformSettings() {
                 )
               }
             />
+
+            <div className="flex flex-row items-center justify-center gap-10">
+              <IconButton
+                onClick={handleReset}
+                tooltip="Сбросить настройки"
+                ariaLabel="Сбросить настройки"
+                icon={<ResetIcon className="h-5 w-5 cursor-pointer" />}
+              />
+
+              <IconButton
+                onClick={handleSave}
+                disabled={isPending}
+                tooltip="Сохранить настройки"
+                ariaLabel="Сохранить настройки"
+                icon={<SaveIcon className="h-5 w-5 cursor-pointer" />}
+              />
+            </div>
           </div>
         )}
       </div>
