@@ -3,6 +3,7 @@ import {
   useGetBackgroundByMonth,
   buildBackgroundUrl,
 } from '@/entities/birthday-background';
+import { useGetBirthdayWidgetTransformByMonth } from '@/entities/birthday-widget-transform';
 import { isRotate90, useIsXl } from '@/shared/lib';
 import { useMemo } from 'react';
 
@@ -25,6 +26,9 @@ export function useBirthdayWidgetModel(rotate: number) {
     end,
   );
 
+  const { data: transformData, isLoading: isLoadingTransform } =
+    useGetBirthdayWidgetTransformByMonth(month);
+
   const { data: backgroundFileName } = useGetBackgroundByMonth(month);
 
   const backgroundUrl = backgroundFileName
@@ -34,20 +38,12 @@ export function useBirthdayWidgetModel(rotate: number) {
   const isXl = useIsXl();
   const isEffectiveXl = isRotate90(rotate) ? !isXl : isXl;
 
-  const isTwoColumns = birthdays.length > 12;
-  const midIndex = Math.ceil(birthdays.length / 2);
-
-  const columns = useMemo(() => {
-    if (!isTwoColumns) return [birthdays, []];
-    return [birthdays.slice(0, midIndex), birthdays.slice(midIndex)];
-  }, [isTwoColumns, birthdays, midIndex]);
-
   return {
     isLoading,
     birthdays,
     backgroundUrl,
     isEffectiveXl,
-    isTwoColumns,
-    columns,
+    isLoadingTransform,
+    transformData,
   };
 }

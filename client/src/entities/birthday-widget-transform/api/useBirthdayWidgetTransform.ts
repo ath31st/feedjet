@@ -20,3 +20,9 @@ export const useGetBirthdayWidgetTransformByMonth = (month: number) => {
     trpcWithProxy.birthdayWidgetTransform.getByMonth.queryOptions({ month }),
   );
 };
+
+export const useGetDefaultBirthdayWidgetTransform = () => {
+  return useQuery(
+    trpcWithProxy.birthdayWidgetTransform.getDefault.queryOptions(),
+  );
+};

@@ -1,9 +1,6 @@
-import { LoadingThreeDotsJumping } from '@/shared/ui';
-import { BirthdayCard } from './BirthdayCard';
-import { BirthdayGreeting } from './BirthdayGreeting';
-import { COMPANY_NAME } from '@/shared/config';
+import { BirthdayTransformView, LoadingThreeDotsJumping } from '@/shared/ui';
 import { useBirthdayWidgetModel } from '../model/useBirthdayWidget';
-import { calcFontSize, calcWidgetWidth } from '../lib/selectors';
+import { calcFontSize } from '../lib/selectors';
 
 interface BirthdayWidgetProps {
   rotate: number;
@@ -15,14 +12,13 @@ export function BirthdayWidget({ rotate }: BirthdayWidgetProps) {
     birthdays,
     backgroundUrl,
     isEffectiveXl,
-    isTwoColumns,
-    columns,
+    transformData,
+    isLoadingTransform,
   } = useBirthdayWidgetModel(rotate);
 
   const fontSizeXl = calcFontSize(isEffectiveXl, birthdays.length);
-  const widgetWidth = calcWidgetWidth(isEffectiveXl);
 
-  if (isLoading) {
+  if (isLoading || isLoadingTransform) {
     return (
       <div className="flex h-screen w-screen items-center justify-center">
         <LoadingThreeDotsJumping />
@@ -51,49 +47,16 @@ export function BirthdayWidget({ rotate }: BirthdayWidgetProps) {
       }
       style={{
         backgroundImage: backgroundUrl ? `url(${backgroundUrl})` : undefined,
+        perspective: '1000px',
       }}
     >
-      <div
-        className="mt-6 flex h-full flex-col items-center justify-start gap-10"
-        style={{ width: `${widgetWidth}%` }}
-      >
-        <BirthdayGreeting
-          isEffectiveXl={isEffectiveXl}
-          companyName={COMPANY_NAME}
+      {transformData && (
+        <BirthdayTransformView
+          transformData={transformData}
+          birthdays={birthdays}
+          showDebugBorder={false}
         />
-        {isTwoColumns ? (
-          <div className="grid h-full w-full grid-cols-2 justify-center gap-20">
-            {columns.map((column, i) => (
-              <div
-                key={i === 0 ? 'left' : 'right'}
-                className="flex flex-col gap-4"
-              >
-                {column.map((birthday, index) => (
-                  <BirthdayCard
-                    key={birthday.id}
-                    birthday={birthday}
-                    fontSizeXl={fontSizeXl}
-                    delay={index * 0.5}
-                    duration={1.3}
-                  />
-                ))}
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="flex h-full w-full flex-col justify-center gap-4">
-            {birthdays.map((birthday, index) => (
-              <BirthdayCard
-                key={birthday.id}
-                birthday={birthday}
-                fontSizeXl={fontSizeXl}
-                delay={index * 0.5}
-                duration={1.3}
-              />
-            ))}
-          </div>
-        )}
-      </div>
+      )}
     </div>
   );
 }

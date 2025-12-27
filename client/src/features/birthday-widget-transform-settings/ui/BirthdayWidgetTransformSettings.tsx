@@ -1,5 +1,6 @@
 import {
   useGetBirthdayWidgetTransformByMonth,
+  useGetDefaultBirthdayWidgetTransform,
   useUpsertBirthdayWidgetTransform,
   type BirthdayWidgetTransform,
 } from '@/entities/birthday-widget-transform';
@@ -13,7 +14,7 @@ import {
 import { SliderControl } from './SliderControl';
 import { ColorControl } from './ColorControl';
 import { IconButton } from '@/shared/ui/common';
-import { ResetIcon } from '@radix-ui/react-icons';
+import { ResetIcon, UpdateIcon } from '@radix-ui/react-icons';
 import { SaveIcon } from 'lucide-react';
 import { MOCK_BIRTHDAYS } from '../lib/mockBirthdays';
 import * as Switch from '@radix-ui/react-switch';
@@ -26,6 +27,7 @@ export function BirthdayWidgetTransformSettings() {
 
   const { data: transformData, isLoading: transformIsLoading } =
     useGetBirthdayWidgetTransformByMonth(month);
+  const { data: defaultTransform } = useGetDefaultBirthdayWidgetTransform();
   const { mutate: upsertTransform, isPending } =
     useUpsertBirthdayWidgetTransform();
   const { data: backgroundFileName, isLoading: backgroundIsLoading } =
@@ -44,6 +46,16 @@ export function BirthdayWidgetTransformSettings() {
   };
 
   const handleReset = () => {
+    if (defaultTransform) {
+      const defaultTransformWithMonth = {
+        ...defaultTransform,
+        month,
+      };
+      setLocalTransform(defaultTransformWithMonth);
+    }
+  };
+
+  const handleRollbackChanges = () => {
     if (transformData) {
       setLocalTransform(transformData);
     }
@@ -82,33 +94,7 @@ export function BirthdayWidgetTransformSettings() {
 
         <div className="grid w-full grid-cols-2 gap-x-4 gap-y-3">
           <SliderControl
-            label="Ось Х (в %)"
-            value={localTransform.posX}
-            min={10}
-            max={100}
-            step={1}
-            onChange={(val) =>
-              setLocalTransform((prev) =>
-                prev ? { ...prev, posX: val } : prev,
-              )
-            }
-          />
-
-          <SliderControl
-            label="Ось Y (в %)"
-            value={localTransform.posY}
-            min={10}
-            max={100}
-            step={1}
-            onChange={(val) =>
-              setLocalTransform((prev) =>
-                prev ? { ...prev, posY: val } : prev,
-              )
-            }
-          />
-
-          <SliderControl
-            label="Ширина (в %)"
+            label="Ширина блока (в %)"
             value={localTransform.width}
             min={0}
             max={100}
@@ -121,7 +107,7 @@ export function BirthdayWidgetTransformSettings() {
           />
 
           <SliderControl
-            label="Высота (в %)"
+            label="Высота блока (в %)"
             value={localTransform.height}
             min={0}
             max={100}
@@ -134,7 +120,33 @@ export function BirthdayWidgetTransformSettings() {
           />
 
           <SliderControl
-            label="Поворот X (в град)"
+            label="Расположение по Х (в %)"
+            value={localTransform.posX}
+            min={10}
+            max={100}
+            step={1}
+            onChange={(val) =>
+              setLocalTransform((prev) =>
+                prev ? { ...prev, posX: val } : prev,
+              )
+            }
+          />
+
+          <SliderControl
+            label="Расположение по Y (в %)"
+            value={localTransform.posY}
+            min={10}
+            max={100}
+            step={1}
+            onChange={(val) =>
+              setLocalTransform((prev) =>
+                prev ? { ...prev, posY: val } : prev,
+              )
+            }
+          />
+
+          <SliderControl
+            label="Поворот вокруг X (в град)"
             value={localTransform.rotateX}
             min={-90}
             max={90}
@@ -147,7 +159,7 @@ export function BirthdayWidgetTransformSettings() {
           />
 
           <SliderControl
-            label="Поворот Y (в град)"
+            label="Поворот вокруг Y (в град)"
             value={localTransform.rotateY}
             min={-90}
             max={90}
@@ -160,7 +172,7 @@ export function BirthdayWidgetTransformSettings() {
           />
 
           <SliderControl
-            label="Поворот Z (в град)"
+            label="Поворот вокруг Z (в град)"
             value={localTransform.rotateZ}
             min={-180}
             max={180}
@@ -199,7 +211,7 @@ export function BirthdayWidgetTransformSettings() {
           />
 
           <SliderControl
-            label="Радиус тени (в px)"
+            label="Размытие(блюр) тени (в px)"
             value={localTransform.shadowBlur}
             min={0}
             max={10}
@@ -221,9 +233,9 @@ export function BirthdayWidgetTransformSettings() {
             }
           />
 
-          <div className="flex flex-row items-center justify-center gap-10">
+          <div className="flex flex-row items-center justify-center gap-6">
             <TooltipWrapper
-              tooltip={`Показывать ${isHalfSetBirthdays ? 'всех' : 'половину списка'}`}
+              tooltip={`Показывать ${isHalfSetBirthdays ? 'весь список' : 'половину списка'}`}
             >
               <div className="flex items-center">
                 <Switch.Root
@@ -237,10 +249,18 @@ export function BirthdayWidgetTransformSettings() {
             </TooltipWrapper>
 
             <IconButton
+              onClick={handleRollbackChanges}
+              tooltip="Отменить изменения"
+              ariaLabel="Отменить изменения"
+              icon={<ResetIcon className="h-5 w-5 cursor-pointer" />}
+            />
+
+            <IconButton
               onClick={handleReset}
+              disabled={isPending}
               tooltip="Сбросить настройки"
               ariaLabel="Сбросить настройки"
-              icon={<ResetIcon className="h-5 w-5 cursor-pointer" />}
+              icon={<UpdateIcon className="h-5 w-5 cursor-pointer" />}
             />
 
             <IconButton
