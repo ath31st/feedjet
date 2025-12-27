@@ -27,9 +27,9 @@ export class BirthdayWidgetTransformService {
    * shadowBlur: 6 (0-40)
    */
   private defaultTransform: BirthdayWidgetTransform = {
+    month: 0,
     width: 50,
     height: 50,
-    month: 0,
     posX: 50,
     posY: 50,
     fontScale: 100,
@@ -47,6 +47,10 @@ export class BirthdayWidgetTransformService {
 
   getAll(): BirthdayWidgetTransform[] {
     return this.db.select().from(birthdayWidgetTransformTable).all();
+  }
+
+  getDefault(): BirthdayWidgetTransform {
+    return this.defaultTransform;
   }
 
   getByMonth(month: number): BirthdayWidgetTransform {
@@ -72,6 +76,8 @@ export class BirthdayWidgetTransformService {
         .onConflictDoUpdate({
           target: birthdayWidgetTransformTable.month,
           set: {
+            width: data.width,
+            height: data.height,
             posX: data.posX,
             posY: data.posY,
             fontScale: data.fontScale,
@@ -79,6 +85,8 @@ export class BirthdayWidgetTransformService {
             rotateX: data.rotateX,
             rotateY: data.rotateY,
             lineGap: data.lineGap,
+            textColor: data.textColor,
+            shadowBlur: data.shadowBlur,
             updatedAt: sql`(unixepoch())`,
           },
         })

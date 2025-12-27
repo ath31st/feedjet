@@ -21,4 +21,9 @@ export const birthdayWidgetTransformRouter = t.router({
       const bwt = birthdayWidgetTransformService.getByMonth(input.month);
       return bwt;
     }),
+
+  getDefault: protectedProcedure.query(() => {
+    const bwt = birthdayWidgetTransformService.getDefault();
+    return bwt;
+  }),
 });
