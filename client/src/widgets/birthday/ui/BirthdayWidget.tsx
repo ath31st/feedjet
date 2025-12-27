@@ -31,7 +31,7 @@ export function BirthdayWidget({ rotate }: BirthdayWidgetProps) {
 
     return (
       <div
-        className={`relative flex h-full w-full items-center justify-center text-${fontSizeXl}xl overflow-hidden text-(--meta-text)`} // relative + overflow-hidden
+        className={`relative flex h-full w-full items-center justify-center text-${fontSizeXl}xl overflow-hidden text-(--meta-text)`}
       >
         <span>Месяц {monthName} не содержит дней рождения</span>
       </div>
