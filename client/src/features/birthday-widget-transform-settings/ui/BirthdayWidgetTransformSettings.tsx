@@ -10,19 +10,17 @@ import {
   buildBackgroundUrl,
   useGetBackgroundByMonth,
 } from '@/entities/birthday-background';
-import { useGetBirthdaysByMonth } from '@/entities/birthday';
 import { SliderControl } from './SliderControl';
 import { ColorControl } from './ColorControl';
 import { IconButton } from '@/shared/ui/common';
 import { ResetIcon } from '@radix-ui/react-icons';
 import { SaveIcon } from 'lucide-react';
+import { MOCK_BIRTHDAYS } from '../lib/mockBirthdays';
 
 export function BirthdayWidgetTransformSettings() {
   const currentMonth = new Date().getMonth() + 1;
   const [month, setMonth] = useState(currentMonth);
 
-  const { data: birthdays = [], isLoading: birthdaysIsLoading } =
-    useGetBirthdaysByMonth(month);
   const { data: transformData, isLoading: transformIsLoading } =
     useGetBirthdayWidgetTransformByMonth(month);
   const { mutate: upsertTransform, isPending } =
@@ -52,12 +50,7 @@ export function BirthdayWidgetTransformSettings() {
     if (transformData) setLocalTransform(transformData);
   }, [transformData]);
 
-  if (
-    transformIsLoading ||
-    backgroundIsLoading ||
-    birthdaysIsLoading ||
-    !localTransform
-  ) {
+  if (transformIsLoading || backgroundIsLoading || !localTransform) {
     return <div className="w-full text-(--meta-text) text-sm">Загрузка...</div>;
   }
 
@@ -70,7 +63,7 @@ export function BirthdayWidgetTransformSettings() {
           <TransformPreview
             transformData={localTransform}
             backgroundUrl={backgroundUrl}
-            birthdays={birthdays}
+            birthdays={MOCK_BIRTHDAYS}
           />
         </div>
 
