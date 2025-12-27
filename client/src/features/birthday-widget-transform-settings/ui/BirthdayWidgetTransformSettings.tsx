@@ -16,10 +16,13 @@ import { IconButton } from '@/shared/ui/common';
 import { ResetIcon } from '@radix-ui/react-icons';
 import { SaveIcon } from 'lucide-react';
 import { MOCK_BIRTHDAYS } from '../lib/mockBirthdays';
+import * as Switch from '@radix-ui/react-switch';
+import { TooltipWrapper } from '@/shared/ui';
 
 export function BirthdayWidgetTransformSettings() {
   const currentMonth = new Date().getMonth() + 1;
   const [month, setMonth] = useState(currentMonth);
+  const [isHalfSetBirthdays, setHalfSetBirthdays] = useState(true);
 
   const { data: transformData, isLoading: transformIsLoading } =
     useGetBirthdayWidgetTransformByMonth(month);
@@ -46,6 +49,16 @@ export function BirthdayWidgetTransformSettings() {
     }
   };
 
+  const getPreviewBirthdays = () => {
+    if (!isHalfSetBirthdays) return MOCK_BIRTHDAYS;
+
+    const halfIndex = Math.floor(MOCK_BIRTHDAYS.length / 2);
+    return MOCK_BIRTHDAYS.slice(
+      0,
+      isHalfSetBirthdays ? halfIndex : MOCK_BIRTHDAYS.length,
+    );
+  };
+
   useEffect(() => {
     if (transformData) setLocalTransform(transformData);
   }, [transformData]);
@@ -63,7 +76,7 @@ export function BirthdayWidgetTransformSettings() {
           <TransformPreview
             transformData={localTransform}
             backgroundUrl={backgroundUrl}
-            birthdays={MOCK_BIRTHDAYS}
+            birthdays={getPreviewBirthdays()}
           />
         </div>
 
@@ -209,6 +222,20 @@ export function BirthdayWidgetTransformSettings() {
           />
 
           <div className="flex flex-row items-center justify-center gap-10">
+            <TooltipWrapper
+              tooltip={`Показывать ${isHalfSetBirthdays ? 'всех' : 'половину списка'}`}
+            >
+              <div className="flex items-center">
+                <Switch.Root
+                  checked={isHalfSetBirthdays ?? false}
+                  onCheckedChange={(checked) => setHalfSetBirthdays(checked)}
+                  className="relative h-5 w-10 shrink-0 cursor-pointer rounded-full border border-(--border) transition-colors data-[state=checked]:bg-(--button-bg)"
+                >
+                  <Switch.Thumb className="block h-4 w-4 translate-x-[1px] rounded-full bg-(--text) transition-transform data-[state=checked]:translate-x-[21px]" />
+                </Switch.Root>
+              </div>
+            </TooltipWrapper>
+
             <IconButton
               onClick={handleReset}
               tooltip="Сбросить настройки"
