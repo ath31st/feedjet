@@ -1,5 +1,6 @@
 import type { Birthday } from '@/entities/birthday';
 import type { BirthdayWidgetTransform } from '@/entities/birthday-widget-transform';
+import { BirthdayTransformView } from '@/shared/ui';
 
 interface TransformPreviewProps {
   backgroundUrl: string | null;
@@ -12,78 +13,24 @@ export function TransformPreview({
   transformData,
   birthdays,
 }: TransformPreviewProps) {
-  const {
-    width,
-    height,
-    posX,
-    posY,
-    fontScale,
-    rotateZ,
-    rotateX,
-    rotateY,
-    lineGap,
-    textColor,
-    shadowBlur,
-  } = transformData;
-
   return (
     <div
       className="relative h-[400px] w-[711px] overflow-hidden rounded-lg border border-(--border) bg-neutral-900"
       style={{ perspective: '900px' }}
     >
-      {backgroundUrl ? (
+      {backgroundUrl && (
         <img
           src={backgroundUrl}
           alt="Background preview"
           className="absolute inset-0 h-full w-full object-cover"
         />
-      ) : (
-        <div className="absolute inset-0 flex items-center justify-center text-(--without-theme) text-xs">
-          background preview
-        </div>
       )}
 
-      <div
-        className="absolute border-(--without-theme) border-2 border-dashed"
-        style={{
-          color: textColor,
-          left: `${posX}%`,
-          top: `${posY}%`,
-          width: `${width}%`,
-          height: `${height}%`,
-          transform: `
-            translate(-50%, -50%)
-            rotateZ(${rotateZ}deg)
-            rotateX(${rotateX}deg)
-            rotateY(${rotateY}deg)
-          `,
-          transformStyle: 'preserve-3d',
-          fontSize: `${fontScale}%`,
-          textShadow:
-            shadowBlur === 0
-              ? 'none'
-              : `2px 2px ${shadowBlur}px rgba(0,0,0,0.6)`,
-          lineHeight: `${lineGap}%`,
-        }}
-      >
-        <div className="flex h-full w-full flex-col">
-          {birthdays.map((birthday) => (
-            <div
-              key={birthday.id}
-              className="flex w-full items-center justify-between whitespace-nowrap"
-            >
-              <span className="font-semibold">{birthday.fullName}</span>
-
-              <span>
-                {new Date(birthday.birthDate).toLocaleDateString('ru-RU', {
-                  day: '2-digit',
-                  month: 'long',
-                })}
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
+      <BirthdayTransformView
+        transformData={transformData}
+        birthdays={birthdays}
+        showDebugBorder={true}
+      />
     </div>
   );
 }
