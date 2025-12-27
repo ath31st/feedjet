@@ -1,5 +1,4 @@
 import * as Slider from '@radix-ui/react-slider';
-import { useState } from 'react';
 
 interface SliderControlProps {
   label: string;
@@ -18,19 +17,16 @@ export function SliderControl({
   step = 1,
   onChange,
 }: SliderControlProps) {
-  const [internalValue, setInternalValue] = useState<number>(value);
-
   return (
     <div className="flex w-full flex-col gap-2">
       <div className="flex justify-between text-(--meta-text) text-xs">
         <span>{label}</span>
-        <span>{internalValue}</span>
+        <span>{value}</span>
       </div>
 
       <Slider.Root
-        value={[internalValue]}
+        value={[value]}
         onValueChange={(val) => {
-          setInternalValue(val[0]);
           onChange(val[0]);
         }}
         min={min}
