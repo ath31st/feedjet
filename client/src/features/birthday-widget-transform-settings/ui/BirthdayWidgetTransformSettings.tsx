@@ -1,81 +1,33 @@
-import {
-  useGetBirthdayWidgetTransformByMonth,
-  useGetDefaultBirthdayWidgetTransform,
-  useUpsertBirthdayWidgetTransform,
-  type BirthdayWidgetTransform,
-} from '@/entities/birthday-widget-transform';
-import { useEffect, useState } from 'react';
 import { MonthTabs } from './MonthTabs';
 import { TransformPreview } from './TransformPreview';
-import {
-  buildBackgroundUrl,
-  useGetBackgroundByMonth,
-} from '@/entities/birthday-background';
 import { SliderControl } from './SliderControl';
 import { ColorControl } from './ColorControl';
 import { IconButton } from '@/shared/ui/common';
 import { ResetIcon, UpdateIcon } from '@radix-ui/react-icons';
 import { SaveIcon } from 'lucide-react';
-import { MOCK_BIRTHDAYS } from '../lib/mockBirthdays';
 import * as Switch from '@radix-ui/react-switch';
 import { TooltipWrapper } from '@/shared/ui';
+import { useBirthdayWidgetTransformSettings } from '../model/useBirthdayWidgetTransformSettings';
 
 export function BirthdayWidgetTransformSettings() {
-  const currentMonth = new Date().getMonth() + 1;
-  const [month, setMonth] = useState(currentMonth);
-  const [isHalfSetBirthdays, setHalfSetBirthdays] = useState(true);
+  const {
+    isTransformLoading,
+    isBackgroundLoading,
+    localTransform,
+    backgroundUrl,
+    month,
+    setMonth,
+    setLocalTransform,
+    getPreviewBirthdays,
+    handleRollbackChanges,
+    handleReset,
+    handleSave,
+    isHalfSetBirthdays,
+    setHalfSetBirthdays,
+    isUpdating,
+  } = useBirthdayWidgetTransformSettings();
 
-  const { data: transformData, isLoading: transformIsLoading } =
-    useGetBirthdayWidgetTransformByMonth(month);
-  const { data: defaultTransform } = useGetDefaultBirthdayWidgetTransform();
-  const { mutate: upsertTransform, isPending } =
-    useUpsertBirthdayWidgetTransform();
-  const { data: backgroundFileName, isLoading: backgroundIsLoading } =
-    useGetBackgroundByMonth(month);
-  const backgroundUrl = backgroundFileName
-    ? buildBackgroundUrl(backgroundFileName)
-    : null;
-
-  const [localTransform, setLocalTransform] =
-    useState<BirthdayWidgetTransform | null>(null);
-
-  const handleSave = () => {
-    if (localTransform) {
-      upsertTransform(localTransform);
-    }
-  };
-
-  const handleReset = () => {
-    if (defaultTransform) {
-      const defaultTransformWithMonth = {
-        ...defaultTransform,
-        month,
-      };
-      setLocalTransform(defaultTransformWithMonth);
-    }
-  };
-
-  const handleRollbackChanges = () => {
-    if (transformData) {
-      setLocalTransform(transformData);
-    }
-  };
-
-  const getPreviewBirthdays = () => {
-    if (!isHalfSetBirthdays) return MOCK_BIRTHDAYS;
-
-    const halfIndex = Math.floor(MOCK_BIRTHDAYS.length / 2);
-    return MOCK_BIRTHDAYS.slice(
-      0,
-      isHalfSetBirthdays ? halfIndex : MOCK_BIRTHDAYS.length,
-    );
-  };
-
-  useEffect(() => {
-    if (transformData) setLocalTransform(transformData);
-  }, [transformData]);
-
-  if (transformIsLoading || backgroundIsLoading || !localTransform) {
+  if (isTransformLoading || isBackgroundLoading || !localTransform) {
     return <div className="w-full text-(--meta-text) text-sm">Загрузка...</div>;
   }
 
@@ -257,7 +209,7 @@ export function BirthdayWidgetTransformSettings() {
 
             <IconButton
               onClick={handleReset}
-              disabled={isPending}
+              disabled={isUpdating}
               tooltip="Сбросить настройки"
               ariaLabel="Сбросить настройки"
               icon={<UpdateIcon className="h-5 w-5 cursor-pointer" />}
@@ -265,7 +217,7 @@ export function BirthdayWidgetTransformSettings() {
 
             <IconButton
               onClick={handleSave}
-              disabled={isPending}
+              disabled={isUpdating}
               tooltip="Сохранить настройки"
               ariaLabel="Сохранить настройки"
               icon={<SaveIcon className="h-5 w-5 cursor-pointer" />}
