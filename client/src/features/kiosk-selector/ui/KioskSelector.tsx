@@ -13,7 +13,7 @@ export function KioskSelector({
 }: KioskSelectorProps) {
   return (
     <div className="relative flex flex-col">
-      <div className="-top-6 absolute bottom-0 left-50 w-[2px] bg-(--border)" />
+      <div className="absolute -top-6 bottom-0 left-50 w-[2px] bg-(--border)" />
 
       {kiosks.map((k) => {
         const isActive = k.slug === activeKiosk?.slug;

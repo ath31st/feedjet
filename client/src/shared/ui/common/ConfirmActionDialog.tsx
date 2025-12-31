@@ -27,7 +27,7 @@ export function ConfirmActionDialog({
       <AlertDialog.Portal>
         <AlertDialog.Overlay className="fixed inset-0 bg-black/40 backdrop-blur-sm" />
 
-        <AlertDialog.Content className="-translate-x-1/2 -translate-y-1/2 fixed top-1/2 left-1/2 w-[350px] rounded-lg border border-(--border) bg-(--card-bg) p-4 shadow-xl">
+        <AlertDialog.Content className="fixed top-1/2 left-1/2 w-[350px] -translate-x-1/2 -translate-y-1/2 rounded-lg border border-(--border) bg-(--card-bg) p-4 shadow-xl">
           <AlertDialog.Title className="mb-2 font-semibold text-lg">
             {title}
           </AlertDialog.Title>

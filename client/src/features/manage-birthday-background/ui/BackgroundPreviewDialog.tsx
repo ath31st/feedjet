@@ -32,7 +32,7 @@ export function BackgroundPreviewDialog({
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/50" />
-        <Dialog.Content className="-translate-x-1/2 -translate-y-1/2 fixed top-1/2 left-1/2 w-[90vw] max-w-[1400px] overflow-hidden rounded-lg bg-[var(--card-bg)]">
+        <Dialog.Content className="fixed top-1/2 left-1/2 w-[90vw] max-w-[1400px] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-lg bg-[var(--card-bg)]">
           <Dialog.Description className="sr-only">
             Предпросмотр фона
           </Dialog.Description>

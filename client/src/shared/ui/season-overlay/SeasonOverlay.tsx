@@ -71,7 +71,7 @@ export const SeasonOverlay = () => {
         {winterParticles.map((p) => (
           <div
             key={p.id}
-            className="-top-4 absolute"
+            className="absolute -top-4"
             style={{
               left: p.leftPosition,
               animation: `fall ${p.durationFall}s linear infinite`,
@@ -100,7 +100,7 @@ export const SeasonOverlay = () => {
         {springParticles.map((p) => (
           <div
             key={p.id}
-            className="-top-4 absolute"
+            className="absolute -top-4"
             style={{
               left: p.leftPosition,
               animation: `rise ${p.durationRise}s linear infinite`,
@@ -131,7 +131,7 @@ export const SeasonOverlay = () => {
         {autumnParticles.map((p) => (
           <div
             key={p.id}
-            className="-top-8 absolute opacity-50"
+            className="absolute -top-8 opacity-50"
             style={{
               left: p.leftPosition,
               width: `${p.size}px`,
@@ -149,7 +149,7 @@ export const SeasonOverlay = () => {
   const summerElements = Array.from({ length: 12 }).map((_, i) => i);
 
   const renderSummer = () => (
-    <div className="-top-[60px] -right-[60px] absolute h-[240px] w-[240px]">
+    <div className="absolute -top-[60px] -right-[60px] h-[240px] w-[240px]">
       <div
         className="relative h-full w-full rounded-full"
         style={{
