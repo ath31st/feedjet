@@ -6,11 +6,13 @@ import {
 } from '@/shared/ui/common';
 import { useUploadBirthdays } from '@/entities/birthday';
 import { DATE_FORMATS } from '@/shared/constant';
+import { NumberSliderSelector } from '@/shared/ui';
 
 export function BirthdayFileUpload() {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const { mutate: uploadFile, isPending } = useUploadBirthdays();
   const [dateFormat, setDateFormat] = useState<string | undefined>(undefined);
+  const [lastDays, setLastDays] = useState(0);
 
   const handleButtonClick = () => {
     inputRef.current?.click();
@@ -22,6 +24,7 @@ export function BirthdayFileUpload() {
 
     const formData = new FormData();
     formData.set('file', file);
+    formData.set('lastDays', lastDays.toString());
     if (dateFormat) formData.set('dateFormat', dateFormat);
 
     uploadFile(formData);
@@ -30,40 +33,52 @@ export function BirthdayFileUpload() {
   };
 
   return (
-    <div className="flex w-full flex-col gap-3">
-      <div className="flex flex-col gap-1">
-        <div className="flex items-center gap-2">
-          <span>Формат даты:</span>
-          <PopoverHint
-            content={
-              <>
-                <p className="mb-1 text-[var(--meta-text)]">
-                  Примеры форматов:
-                </p>
-                <ul className="list-disc pl-4">
-                  {DATE_FORMATS.map((f) => (
-                    <li key={f.label}>
-                      <b>{f.label}</b> → {f.example}
-                    </li>
-                  ))}
-                </ul>
-              </>
+    <div className="flex w-full flex-col gap-4">
+      <div className="flex flex-row items-center gap-4">
+        <div className="flex w-1/3 flex-col gap-1">
+          <div className="flex items-center gap-2">
+            <span>Формат даты:</span>
+            <PopoverHint
+              content={
+                <>
+                  <p className="mb-1 text-[var(--meta-text)]">
+                    Примеры форматов:
+                  </p>
+                  <ul className="list-disc pl-4">
+                    {DATE_FORMATS.map((f) => (
+                      <li key={f.label}>
+                        <b>{f.label}</b> → {f.example}
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              }
+            />
+          </div>
+
+          <SimpleDropdownMenu
+            value={dateFormat ?? 'Стандартный'}
+            options={DATE_FORMATS.map((f) => {
+              return {
+                label: f.label,
+                value: f.label,
+              };
+            })}
+            onSelect={(label) =>
+              setDateFormat(label === 'Стандартный' ? undefined : label)
             }
           />
         </div>
 
-        <SimpleDropdownMenu
-          value={dateFormat ?? 'Стандартный'}
-          options={DATE_FORMATS.map((f) => {
-            return {
-              label: f.label,
-              value: f.label,
-            };
-          })}
-          onSelect={(label) =>
-            setDateFormat(label === 'Стандартный' ? undefined : label)
-          }
-        />
+        <div className="w-2/3">
+          <NumberSliderSelector
+            label="Не удалять ДР последних N дней"
+            value={lastDays}
+            min={0}
+            max={15}
+            setValue={setLastDays}
+          />
+        </div>
       </div>
 
       <input

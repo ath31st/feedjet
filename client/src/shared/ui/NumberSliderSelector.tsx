@@ -6,6 +6,7 @@ interface NumberSliderSelectorProps {
   setValue: (val: number) => void;
   min?: number;
   max?: number;
+  step?: number;
 }
 
 export function NumberSliderSelector({
@@ -14,6 +15,7 @@ export function NumberSliderSelector({
   setValue,
   min = 1,
   max = 10,
+  step = 1,
 }: NumberSliderSelectorProps) {
   return (
     <div className="flex flex-col gap-2">
@@ -25,7 +27,7 @@ export function NumberSliderSelector({
         value={[value]}
         min={min}
         max={max}
-        step={1}
+        step={step}
         onValueChange={([val]) => setValue(val)}
       >
         <Slider.Track className="relative h-1 w-full grow cursor-pointer rounded-full bg-[var(--border)]">
