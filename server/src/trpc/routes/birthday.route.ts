@@ -22,9 +22,11 @@ export const birthdayRouter = t.router({
     .mutation(async ({ input }) => {
       const file = input.get('file') as File;
       const dateFormat = input.get('dateFormat') as string;
+      const lastDays = input.get('lastDays') as unknown as number;
 
       const birthdays = await birthdayFileService.handleUpload(
         file,
+        lastDays ? lastDays : 0,
         dateFormat ? dateFormat : undefined,
       );
 

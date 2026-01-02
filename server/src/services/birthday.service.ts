@@ -165,14 +165,14 @@ export class BirthdayService {
     return deleted;
   }
 
-  purgeAndInsert(data: NewBirthday[]): Birthday[] {
+  purgeAndInsert(data: NewBirthday[], lastDays: number = 0): Birthday[] {
     this.logger.info(
-      { count: data.length, fn: 'purgeAndInsert' },
+      { count: data.length, lastDays, fn: 'purgeAndInsert' },
       'Purging and inserting birthdays',
     );
 
     try {
-      const deleted = this.purgeExceptLastDays(5);
+      const deleted = this.purgeExceptLastDays(lastDays);
       this.logger.debug(
         { deleted, fn: 'purgeAndInsert' },
         'Purged old birthdays',

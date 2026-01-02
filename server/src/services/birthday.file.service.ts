@@ -85,18 +85,27 @@ export class BirthdayFileService extends FileStorageService {
     return parsed;
   }
 
-  async handleUpload(file: File, dateFormat?: string): Promise<Birthday[]> {
+  async handleUpload(
+    file: File,
+    lastDays: number,
+    dateFormat?: string,
+  ): Promise<Birthday[]> {
     try {
       await this.uploadFile(file);
       const filename = file.name;
       const parsed = await this.parseUploadedFile(filename, dateFormat);
 
       this.logger.debug(
-        { fileName: filename, parsedCount: parsed.length, fn: 'handleUpload' },
+        {
+          fileName: filename,
+          lastDays,
+          parsedCount: parsed.length,
+          fn: 'handleUpload',
+        },
         'Parsed birthdays from file',
       );
 
-      const birthdays = this.birthdayService.purgeAndInsert(parsed);
+      const birthdays = this.birthdayService.purgeAndInsert(parsed, lastDays);
 
       this.logger.info(
         { fileName: filename, inserted: birthdays.length, fn: 'handleUpload' },
