@@ -128,40 +128,27 @@ export class BirthdayService {
     if (days <= 0) {
       return this.purge();
     }
-
     const today = sql`date('now', 'localtime')`;
-
-    const lastBirthdayExpr = sql`
+    const start = sql`date(${today}, '-' || ${days} || ' days')`;
+    const birth_md = sql`strftime('%m-%d', ${birthdaysTable.birthDate}, 'unixepoch', 'localtime')`;
+    const start_md = sql`strftime('%m-%d', ${start})`;
+    const today_md = sql`strftime('%m-%d', ${today})`;
+    const condition = sql`NOT (
     CASE
-      WHEN date(
-        strftime('%Y', ${today}) || '-' ||
-        strftime('%m-%d', ${birthdaysTable.birthDate}, 'unixepoch', 'localtime')
-      ) > ${today}
-      THEN date(
-        strftime('%Y', ${today}, '-1 year') || '-' ||
-        strftime('%m-%d', ${birthdaysTable.birthDate}, 'unixepoch', 'localtime')
-      )
-      ELSE date(
-        strftime('%Y', ${today}) || '-' ||
-        strftime('%m-%d', ${birthdaysTable.birthDate}, 'unixepoch', 'localtime')
-      )
+      WHEN strftime('%Y', ${start}) = strftime('%Y', ${today}) THEN
+        ${birth_md} BETWEEN ${start_md} AND ${today_md}
+      ELSE
+        ${birth_md} >= ${start_md} OR ${birth_md} <= ${today_md}
     END
-  `;
-
+  )`;
     const deleted = this.db
       .delete(birthdaysTable)
-      .where(
-        sql`(
-        julianday(${today}) - julianday(${lastBirthdayExpr})
-      ) NOT BETWEEN 0 AND ${days}`,
-      )
+      .where(condition)
       .run().changes;
-
     this.logger.info(
       { days, deleted, fn: 'purgeExceptLastDays' },
       'Purged birthdays except those within last N days',
     );
-
     return deleted;
   }
 
