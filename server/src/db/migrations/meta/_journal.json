@@ -267,6 +267,13 @@
       "when": 1766774621408,
       "tag": "0037_blue_amphibian",
       "breakpoints": true
+    },
+    {
+      "idx": 38,
+      "version": "6",
+      "when": 1767346893941,
+      "tag": "0038_lyrical_rogue",
+      "breakpoints": true
     }
   ]
 }

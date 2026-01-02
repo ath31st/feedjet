@@ -7,6 +7,7 @@ import type {
   NewBirthday,
 } from '@shared/types/birthdays.js';
 import { encrypt } from '../utils/crypto.js';
+import { createHash } from 'node:crypto';
 import { BirthdayError } from '../errors/birthday.error.js';
 import { birthdayMapper } from '../mappers/birthday.mapper.js';
 import { createServiceLogger } from '../utils/pino.logger.js';
@@ -29,9 +30,15 @@ export class BirthdayService {
           fullNameEnc: encrypt(data.fullName),
           departmentEnc: data.department ? encrypt(data.department) : null,
           birthDate: data.birthDate,
+          dedupKey: this.makeDedupKey(data.fullName, data.birthDate),
         })
+        .onConflictDoNothing()
         .returning()
         .get() as unknown as BirthdayEncrypted;
+
+      if (!inserted) {
+        throw new BirthdayError(409, 'Birthday already exists');
+      }
 
       const result = birthdayMapper.mapEncToDec(inserted);
       this.logger.info(
@@ -44,6 +51,9 @@ export class BirthdayService {
         { err, data, fn: 'create' },
         'Failed to create birthday',
       );
+      if (err as BirthdayError) {
+        throw err;
+      }
       throw new BirthdayError(500, 'Failed to create birthday');
     }
   }
@@ -114,6 +124,47 @@ export class BirthdayService {
     return this.db.delete(birthdaysTable).run().changes;
   }
 
+  purgeExceptLastDays(days: number): number {
+    if (days <= 0) {
+      return this.purge();
+    }
+
+    const today = sql`date('now', 'localtime')`;
+
+    const lastBirthdayExpr = sql`
+    CASE
+      WHEN date(
+        strftime('%Y', ${today}) || '-' ||
+        strftime('%m-%d', ${birthdaysTable.birthDate}, 'unixepoch', 'localtime')
+      ) > ${today}
+      THEN date(
+        strftime('%Y', ${today}, '-1 year') || '-' ||
+        strftime('%m-%d', ${birthdaysTable.birthDate}, 'unixepoch', 'localtime')
+      )
+      ELSE date(
+        strftime('%Y', ${today}) || '-' ||
+        strftime('%m-%d', ${birthdaysTable.birthDate}, 'unixepoch', 'localtime')
+      )
+    END
+  `;
+
+    const deleted = this.db
+      .delete(birthdaysTable)
+      .where(
+        sql`(
+        julianday(${today}) - julianday(${lastBirthdayExpr})
+      ) NOT BETWEEN 0 AND ${days}`,
+      )
+      .run().changes;
+
+    this.logger.info(
+      { days, deleted, fn: 'purgeExceptLastDays' },
+      'Purged birthdays except those within last N days',
+    );
+
+    return deleted;
+  }
+
   purgeAndInsert(data: NewBirthday[]): Birthday[] {
     this.logger.info(
       { count: data.length, fn: 'purgeAndInsert' },
@@ -121,7 +172,7 @@ export class BirthdayService {
     );
 
     try {
-      const deleted = this.purge();
+      const deleted = this.purgeExceptLastDays(5);
       this.logger.debug(
         { deleted, fn: 'purgeAndInsert' },
         'Purged old birthdays',
@@ -134,12 +185,14 @@ export class BirthdayService {
             fullNameEnc: encrypt(b.fullName),
             departmentEnc: b.department ? encrypt(b.department) : null,
             birthDate: b.birthDate,
+            dedupKey: this.makeDedupKey(b.fullName, b.birthDate),
           })
+          .onConflictDoNothing()
           .returning()
           .get() as unknown as BirthdayEncrypted;
       });
 
-      const result = inserted.map(birthdayMapper.mapEncToDec);
+      const result = inserted.filter(Boolean).map(birthdayMapper.mapEncToDec);
       this.logger.info(
         { insertedCount: result.length, fn: 'purgeAndInsert' },
         'Birthdays inserted successfully',
@@ -208,7 +261,22 @@ export class BirthdayService {
     return changes;
   }
 
-  birthdayComparator(a: Birthday, b: Birthday): number {
+  private normalizeName(name: string): string {
+    return name.trim().toLowerCase().replace(/\s+/g, ' ');
+  }
+
+  private monthDay(date: Date): string {
+    return `${String(date.getMonth() + 1).padStart(2, '0')}-${String(
+      date.getDate(),
+    ).padStart(2, '0')}`;
+  }
+
+  private makeDedupKey(fullName: string, birthDate: Date): string {
+    const base = `${this.normalizeName(fullName)}|${this.monthDay(birthDate)}`;
+    return createHash('sha256').update(base).digest('hex');
+  }
+
+  private birthdayComparator(a: Birthday, b: Birthday): number {
     const aMonth = a.birthDate.getMonth();
     const bMonth = b.birthDate.getMonth();
     if (aMonth !== bMonth) return aMonth - bMonth;

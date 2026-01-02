@@ -14,6 +14,7 @@ import {
   birthdayUpdateSchema,
 } from '../../validations/schemas/birthday.schemas.js';
 import { fileParamsSchema } from '../../validations/schemas/file.storage.validation.js';
+import { handleServiceCall } from '../error.handler.js';
 
 export const birthdayRouter = t.router({
   uploadFile: protectedProcedure
@@ -52,9 +53,8 @@ export const birthdayRouter = t.router({
       return birthdays;
     }),
 
-  create: protectedProcedure
-    .input(birthdayCreateSchema)
-    .mutation(({ input }) => {
+  create: protectedProcedure.input(birthdayCreateSchema).mutation(({ input }) =>
+    handleServiceCall(() => {
       const birthday = birthdayService.create(input);
       const birthdays = birthdayService.getAll();
 
@@ -62,10 +62,10 @@ export const birthdayRouter = t.router({
 
       return { ok: true, birthday };
     }),
+  ),
 
-  update: protectedProcedure
-    .input(birthdayUpdateSchema)
-    .mutation(({ input }) => {
+  update: protectedProcedure.input(birthdayUpdateSchema).mutation(({ input }) =>
+    handleServiceCall(() => {
       const birthday = birthdayService.update(input.id, {
         fullName: input.fullName,
         department: input.department,
@@ -77,15 +77,18 @@ export const birthdayRouter = t.router({
 
       return { ok: true, birthday };
     }),
+  ),
 
   delete: protectedProcedure
     .input(birthdayIdInputSchema)
-    .mutation(async ({ input }) => {
-      const result = birthdayService.delete(input.id);
-      const birthdays = birthdayService.getAll();
+    .mutation(async ({ input }) =>
+      handleServiceCall(() => {
+        const result = birthdayService.delete(input.id);
+        const birthdays = birthdayService.getAll();
 
-      eventBus.emit('birthday', birthdays);
+        eventBus.emit('birthday', birthdays);
 
-      return { ok: result === 1 };
-    }),
+        return { ok: result === 1 };
+      }),
+    ),
 });

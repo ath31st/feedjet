@@ -121,6 +121,7 @@ export const birthdaysTable = sqliteTable('birthdays', {
   fullNameEnc: text('full_name').notNull(),
   departmentEnc: text('department'),
   birthDate: integer('birth_date', { mode: 'timestamp' }).notNull(),
+  dedupKey: text('dedup_key').unique().notNull(),
   createdAt: integer('created_at', { mode: 'timestamp' })
     .notNull()
     .default(sql`(unixepoch())`),
