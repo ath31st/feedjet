@@ -1,36 +1,23 @@
-import { useRef, useState } from 'react';
 import {
   CommonButton,
   PopoverHint,
   SimpleDropdownMenu,
 } from '@/shared/ui/common';
-import { useUploadBirthdays } from '@/entities/birthday';
 import { DATE_FORMATS } from '@/shared/constant';
 import { NumberSliderSelector } from '@/shared/ui';
+import { useBirthdayFileUpload } from '../model/useBirthdayFileUpload';
 
 export function BirthdayFileUpload() {
-  const inputRef = useRef<HTMLInputElement | null>(null);
-  const { mutate: uploadFile, isPending } = useUploadBirthdays();
-  const [dateFormat, setDateFormat] = useState<string | undefined>(undefined);
-  const [lastDays, setLastDays] = useState(0);
-
-  const handleButtonClick = () => {
-    inputRef.current?.click();
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    const formData = new FormData();
-    formData.set('file', file);
-    formData.set('lastDays', lastDays.toString());
-    if (dateFormat) formData.set('dateFormat', dateFormat);
-
-    uploadFile(formData);
-
-    e.target.value = '';
-  };
+  const {
+    inputRef,
+    handleButtonClick,
+    handleInputChange,
+    isPending,
+    dateFormat,
+    setDateFormat,
+    lastDays,
+    setLastDays,
+  } = useBirthdayFileUpload();
 
   return (
     <div className="flex w-full flex-col gap-4">
@@ -41,9 +28,7 @@ export function BirthdayFileUpload() {
             <PopoverHint
               content={
                 <>
-                  <p className="mb-1 text-[var(--meta-text)]">
-                    Примеры форматов:
-                  </p>
+                  <p className="mb-1 text-(--meta-text)">Примеры форматов:</p>
                   <ul className="list-disc pl-4">
                     {DATE_FORMATS.map((f) => (
                       <li key={f.label}>
@@ -98,7 +83,7 @@ export function BirthdayFileUpload() {
       </CommonButton>
 
       {isPending && (
-        <span className="text-[var(--meta-text)] text-sm">
+        <span className="text-(--meta-text) text-sm">
           Файл загружается и обрабатывается...
         </span>
       )}

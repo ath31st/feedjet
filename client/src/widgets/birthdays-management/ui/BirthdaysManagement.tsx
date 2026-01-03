@@ -8,21 +8,6 @@ import { BirthdayWidgetTransformSettings } from '@/features/birthday-widget-tran
 export function BirthdaysManagement() {
   return (
     <div className="flex w-full flex-col gap-6">
-      <div className="flex w-full flex-row gap-6">
-        <SettingsCard
-          title="Загрузка файла с днями рождения"
-          className="w-full md:w-1/2"
-        >
-          <BirthdayFileUpload />
-        </SettingsCard>
-        <SettingsCard
-          title="Добавление дня рождения"
-          className="w-full md:w-1/2"
-        >
-          <BirthdayCreateForm />
-        </SettingsCard>
-      </div>
-
       <div className="w-full">
         <SettingsCard title="Фон поздравления" className="w-full">
           <ManageBirthdayBackground />
@@ -35,6 +20,21 @@ export function BirthdaysManagement() {
           className="w-full"
         >
           <BirthdayWidgetTransformSettings />
+        </SettingsCard>
+      </div>
+
+      <div className="flex w-full flex-row gap-6">
+        <SettingsCard
+          title="Загрузка файла с днями рождения"
+          className="w-full md:w-1/2"
+        >
+          <BirthdayFileUpload />
+        </SettingsCard>
+        <SettingsCard
+          title="Добавление дня рождения"
+          className="w-full md:w-1/2"
+        >
+          <BirthdayCreateForm />
         </SettingsCard>
       </div>
 
