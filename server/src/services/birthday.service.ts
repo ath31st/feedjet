@@ -128,14 +128,14 @@ export class BirthdayService {
     if (days <= 0) {
       return this.purge();
     }
-    const today = sql`date('now', 'localtime')`;
-    const start = sql`date(${today}, '-' || ${days} || ' days')`;
+    const firstOfNextMonth = sql`date('now', 'start of month', '+1 month', 'localtime')`;
+    const start = sql`date(${firstOfNextMonth}, '-' || ${days} || ' days')`;
     const birth_md = sql`strftime('%m-%d', ${birthdaysTable.birthDate}, 'unixepoch', 'localtime')`;
     const start_md = sql`strftime('%m-%d', ${start})`;
-    const today_md = sql`strftime('%m-%d', ${today})`;
+    const today_md = sql`strftime('%m-%d', ${firstOfNextMonth})`;
     const condition = sql`NOT (
     CASE
-      WHEN strftime('%Y', ${start}) = strftime('%Y', ${today}) THEN
+      WHEN strftime('%Y', ${start}) = strftime('%Y', ${firstOfNextMonth}) THEN
         ${birth_md} BETWEEN ${start_md} AND ${today_md}
       ELSE
         ${birth_md} >= ${start_md} OR ${birth_md} <= ${today_md}
