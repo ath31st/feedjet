@@ -8,7 +8,8 @@ const logFilter = z.object({
 });
 
 export const logInputSchema = z.object({
-  cursor: z.string().optional(),
+  file: z.string().optional(),
   filter: logFilter.optional(),
-  limit: z.number().int().positive().optional(),
+  page: z.number().int().min(0).optional(),
+  pageSize: z.number().int().positive().optional(),
 });

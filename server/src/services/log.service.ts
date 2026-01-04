@@ -1,120 +1,101 @@
-import { join } from 'node:path';
-import fs from 'node:fs';
-import readline from 'node:readline';
 import type { LogFilter, LogItem, LogPage } from '@shared/types/log.js';
+import fs from 'node:fs';
+import { join } from 'node:path';
+import { LogServiceError } from '../errors/log.service.error.js';
 
 export class LogService {
   private readonly baseDir = join('logs');
-  private readonly pageSize = 20;
+  private readonly CHUNK_SIZE = 64 * 1024;
 
-  private getLogFiles(descending: boolean = true): string[] {
+  getLogFiles(): string[] {
     if (!fs.existsSync(this.baseDir)) return [];
 
-    let files = fs
+    return fs
       .readdirSync(this.baseDir)
-      .filter(
-        (f) =>
-          /^app\.\d{4}-\d{2}-\d{2}(\.\d+)?\.log$/.test(f) ||
-          f === 'current.log',
-      );
-
-    const hasCurrent = files.includes('current.log');
-    if (hasCurrent) {
-      files = ['current.log', ...files.filter((f) => f !== 'current.log')];
-    }
-
-    if (!descending) {
-      files.reverse();
-    }
-
-    return files;
+      .filter((f) => f.endsWith('.log'))
+      .sort((a, b) => b.localeCompare(a));
   }
 
-  async getLogPage(
-    cursor?: string,
+  getLogPageByFile(
+    file: string = 'current.log',
+    page: number = 0,
+    pageSize: number = 20,
     filter: LogFilter = {},
-    limit = this.pageSize,
-  ): Promise<LogPage> {
-    const files = this.getLogFiles();
-    if (files.length === 0) return { logs: [] };
-
-    const logs: LogItem[] = [];
-    let nextCursor: string | undefined;
-
-    let startFileIndex = 0;
-    if (cursor) {
-      const cursorDate = new Date(cursor).toISOString().slice(0, 10);
-      startFileIndex = files.findIndex((f) =>
-        f.includes(cursorDate.replace(/-/g, '.')),
-      );
-      if (startFileIndex === -1) startFileIndex = 0;
+  ): LogPage {
+    const filePath = join(this.baseDir, file);
+    if (!fs.existsSync(filePath)) {
+      throw new LogServiceError(404, 'Log file not found');
     }
 
-    for (let i = startFileIndex; i < files.length && logs.length < limit; i++) {
-      const fileName = files[i];
-      const actualFileName =
-        fileName === 'current.log'
-          ? fs.readlinkSync(join(this.baseDir, fileName))
-          : fileName;
-      const filePath = join(this.baseDir, actualFileName);
+    const need = (page + 1) * pageSize + 1;
+    const all = this.readLastNLines(filePath, need, filter);
 
-      const rl = readline.createInterface({
-        input: fs.createReadStream(filePath, { encoding: 'utf8' }),
-        crlfDelay: Infinity,
-      });
+    const start = page * pageSize;
+    const logs = all.slice(start, start + pageSize);
 
-      let skipUntilCursor = i === startFileIndex && cursor !== undefined;
+    const hasNext = all.length > start + pageSize;
+    const hasPrev = page > 0;
 
-      for await (const line of rl) {
-        if (line.trim() === '') continue;
+    return {
+      logs,
+      page,
+      pageSize,
+      hasPrev,
+      hasNext,
+    };
+  }
 
-        let parsed: unknown;
-        try {
-          parsed = JSON.parse(line);
-        } catch {
-          continue;
-        }
+  private readLastNLines(
+    filePath: string,
+    limit: number,
+    filter: LogFilter,
+  ): LogItem[] {
+    const fd = fs.openSync(filePath, 'r');
+    const stat = fs.statSync(filePath);
 
-        const log = parsed as LogItem;
+    let position = stat.size;
+    let buffer = '';
+    const items: LogItem[] = [];
 
-        if (
-          typeof log.time !== 'string' ||
-          typeof log.level !== 'number' ||
-          typeof log.source !== 'string'
-        ) {
-          continue;
-        }
+    try {
+      while (position > 0 && items.length < limit) {
+        const size = Math.min(this.CHUNK_SIZE, position);
+        position -= size;
 
-        const logTime = log.time;
+        const buf = Buffer.alloc(size);
+        fs.readSync(fd, buf, 0, size, position);
 
-        if (skipUntilCursor && cursor && new Date(logTime) > new Date(cursor)) {
-          continue;
-        }
-        skipUntilCursor = false;
+        buffer = buf.toString('utf8') + buffer;
+        const lines = buffer.split('\n');
+        buffer = lines.shift() ?? '';
 
-        if (filter.level && log.level !== filter.level) continue;
-        if (filter.source && log.source !== filter.source) continue;
-        if (
-          filter.search &&
-          !JSON.stringify(log)
-            .toLowerCase()
-            .includes(filter.search.toLowerCase())
-        ) {
-          continue;
-        }
+        for (let i = lines.length - 1; i >= 0; i--) {
+          if (items.length >= limit) break;
 
-        logs.push(log);
+          const line = lines[i].trim();
+          if (!line) continue;
 
-        if (logs.length === limit) {
-          nextCursor = logTime;
-          rl.close();
-          break;
+          try {
+            const log = JSON.parse(line);
+            if (this.applyFilter(log, filter)) {
+              items.push(log);
+            }
+          } catch {}
         }
       }
-
-      if (logs.length === limit) break;
+    } finally {
+      fs.closeSync(fd);
     }
 
-    return { logs, nextCursor };
+    return items;
+  }
+
+  private applyFilter(log: LogItem, filter: LogFilter): boolean {
+    if (filter.level && log.level !== filter.level) return false;
+    if (filter.search) {
+      const s = filter.search.toLowerCase();
+      if (!JSON.stringify(log).toLowerCase().includes(s)) return false;
+    }
+    return true;
   }
 }
