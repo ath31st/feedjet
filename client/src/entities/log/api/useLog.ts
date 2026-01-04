@@ -3,15 +3,21 @@ import { trpcWithProxy } from '@/shared/api';
 import type { LogFilter } from '..';
 
 export const useGetLogPage = (
-  cursor?: string,
+  file?: string,
   filter: LogFilter = {},
-  limit?: number,
+  page?: number,
+  pageSize?: number,
 ) => {
   return useQuery(
     trpcWithProxy.log.getLogPage.queryOptions({
-      cursor,
+      file,
+      page,
+      pageSize,
       filter,
-      limit,
     }),
   );
+};
+
+export const useGetLogFiles = () => {
+  return useQuery(trpcWithProxy.log.getLogFiles.queryOptions());
 };

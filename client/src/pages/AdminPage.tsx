@@ -11,6 +11,7 @@ import { BirthdaysManagement } from '@/widgets/birthdays-management';
 import { ImageContentManagementWidget } from '@/widgets/image-content-management';
 import { useKioskStore } from '@/entities/kiosk';
 import { KioskWorkScheduleManagement } from '@/widgets/kiosk-work-schedule-management';
+import { LogWidget } from '@/widgets/log';
 
 export function AdminPage() {
   const kioskId = useKioskStore((s) => s.currentKiosk.id);
@@ -47,6 +48,7 @@ export function AdminPage() {
             <AdminTabTrigger value="operating-hours">
               Режим работы
             </AdminTabTrigger>
+            <AdminTabTrigger value="logs">Логи</AdminTabTrigger>
           </div>
         </Tabs.List>
 
@@ -84,6 +86,10 @@ export function AdminPage() {
 
             <Tabs.Content value="operating-hours">
               <KioskWorkScheduleManagement kioskId={kioskId} />
+            </Tabs.Content>
+
+            <Tabs.Content value="logs">
+              <LogWidget />
             </Tabs.Content>
           </div>
         </div>
