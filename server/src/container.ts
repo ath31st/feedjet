@@ -34,6 +34,7 @@ import { FullyKioskClient } from './integration/fully.kiosk.client.js';
 import { IntegrationService } from './services/integration.service.js';
 import { KioskControlService } from './services/kiosk.control.service.js';
 import { BirthdayWidgetTransformService } from './services/birthday.widget.transform.service.js';
+import { LogService } from './services/log.service.js';
 
 const sqlite = new Database(dbPath);
 export const db = drizzle(sqlite, { schema });
@@ -87,6 +88,7 @@ export const kioskControlService = new KioskControlService(
   integrationService,
   fullyKioskClient,
 );
+export const logService = new LogService();
 
 export const t = initTRPC.context<Context>().create();
 export const publicProcedure = t.procedure;
