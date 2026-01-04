@@ -3,8 +3,9 @@ import { LogLevel } from '@/entities/log';
 export const getLevelColor = (level: number) => {
   switch (level) {
     case LogLevel.Trace:
-    case LogLevel.Debug:
       return 'text-gray-500';
+    case LogLevel.Debug:
+      return 'text-green-500';
     case LogLevel.Info:
       return 'text-blue-500';
     case LogLevel.Warn:

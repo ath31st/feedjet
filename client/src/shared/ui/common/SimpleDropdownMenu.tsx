@@ -1,19 +1,19 @@
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { useLayoutEffect, useRef, useState } from 'react';
 
-interface DropdownOption<T extends string> {
+interface DropdownOption<T extends string | number> {
   label: string;
   value: T;
 }
 
-interface DropdownProps<T extends string> {
+interface DropdownProps<T extends string | number> {
   value: T;
   options: DropdownOption<T>[];
   onSelect: (value: T) => void;
   placeholder?: string;
 }
 
-export function SimpleDropdownMenu<T extends string>({
+export function SimpleDropdownMenu<T extends string | number>({
   value,
   options,
   onSelect,
@@ -47,7 +47,7 @@ export function SimpleDropdownMenu<T extends string>({
           align="start"
           sideOffset={4}
           style={{ width }}
-          className="z-50 overflow-hidden rounded-lg border border-(--border) bg-(--card-bg) shadow-md"
+          className="z-50 max-h-100 overflow-y-auto rounded-lg border border-(--border) bg-(--card-bg) shadow-md"
         >
           {options.map((opt) => (
             <DropdownMenu.Item
