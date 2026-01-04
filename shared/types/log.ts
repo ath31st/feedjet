@@ -12,10 +12,13 @@ export interface LogItem {
   [key: string]: unknown;
 }
 
-export interface LogPage {
+export type LogPage = {
   logs: LogItem[];
-  nextCursor?: string;
-}
+  page: number;
+  pageSize: number;
+  hasPrev: boolean;
+  hasNext: boolean;
+};
 
 export const LogLevel = {
   Trace: 10,
