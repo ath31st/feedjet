@@ -17,7 +17,7 @@ export const LogCard = ({ log }: LogCardProps) => {
       <span className="text-(--description-text)">[{log.source}]</span>{' '}
       <span>{log.msg}</span>
       {Object.keys(log).length > 4 && (
-        <pre className="mt-1 max-w-full overflow-x-auto whitespace-pre-wrap break-all text-(--description-text) text-xs">
+        <pre className="mt-1 max-w-full overflow-x-auto whitespace-pre-wrap break-all text-(--description-text) text-sm">
           {JSON.stringify(
             Object.fromEntries(
               Object.entries(log).filter(

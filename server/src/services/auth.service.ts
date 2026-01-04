@@ -49,10 +49,6 @@ export class AuthService {
   validateAccessToken = (token: string): JwtPayload => {
     try {
       const payload = jwt.verify(token, this.jwtSecret) as JwtPayload;
-      this.logger.debug(
-        { userId: payload.userId, fn: 'validateAccessToken' },
-        'Access token validated successfully',
-      );
       return payload;
     } catch (error) {
       this.logger.error(

@@ -19,15 +19,19 @@ if (!fs.existsSync(resolvedPath)) {
 }
 
 export const cacheDir = process.env.CACHE_DIR ?? './.image-cache';
-if (cacheDir) {
+if (!fs.existsSync(cacheDir)) {
   fs.mkdirSync(cacheDir, { recursive: true });
   logger.info({ cacheDir }, 'Image cache directory created');
+} else {
+  logger.info({ cacheDir }, 'Image cache directory already exists');
 }
 
 export const fileStorageDir = process.env.FILE_STORAGE_DIR ?? './file-storage';
-if (fileStorageDir) {
+if (!fs.existsSync(fileStorageDir)) {
   fs.mkdirSync(fileStorageDir, { recursive: true });
   logger.info({ fileStorageDir }, 'File storage directory created');
+} else {
+  logger.info({ fileStorageDir }, 'File storage directory already exists');
 }
 
 export const openWeatherApiKey = process.env.OPEN_WEATHER_API_KEY;
