@@ -1,40 +1,26 @@
-import { useEffect, useState } from 'react';
 import { LogCard } from './LogCard';
-import {
-  LogLevel,
-  useGetLogFiles,
-  useGetLogPage,
-  type LogFilter,
-  type LogItem,
-} from '@/entities/log';
+import { LogLevel, type LogItem } from '@/entities/log';
 import { IconButton, SimpleDropdownMenu } from '@/shared/ui/common';
 import { ThickArrowLeftIcon, ThickArrowRightIcon } from '@radix-ui/react-icons';
+import { useLogViewer } from '../model/useLogViewer';
 
 export function LogViewer() {
-  const [file, setFile] = useState<string>();
-  const [page, setPage] = useState(0);
-  const [pageSize, setPageSize] = useState<number>(20);
-  const [filter, setFilter] = useState<LogFilter>({});
-  const [search, setSearch] = useState('');
-  const [level, setLevel] = useState<LogLevel | undefined>(undefined);
-  const { data: files } = useGetLogFiles();
-
-  useEffect(() => {
-    if (files?.length && !file) {
-      setFile(files[0]);
-      setPage(0);
-    }
-  }, [files, file]);
-
-  const { data, isLoading } = useGetLogPage(file, filter, page, pageSize);
-
-  const applyFilters = () => {
-    setFilter({
-      level: level || undefined,
-      search: search || undefined,
-    });
-    setPage(0);
-  };
+  const {
+    file,
+    setFile,
+    files,
+    setFilter,
+    setLevel,
+    setPage,
+    pageSize,
+    level,
+    isLoading,
+    search,
+    setSearch,
+    applyFilters,
+    setPageSize,
+    logPage,
+  } = useLogViewer();
 
   if (isLoading) {
     return <div className="p-4">Загрузка...</div>;
@@ -104,20 +90,20 @@ export function LogViewer() {
           <IconButton
             onClick={() => setPage((p) => p - 1)}
             tooltip="Следующая страница"
-            disabled={!data?.hasPrev}
+            disabled={!logPage?.hasPrev}
             icon={<ThickArrowLeftIcon className="h-5 w-5 cursor-pointer" />}
           />
           <IconButton
             onClick={() => setPage((p) => p + 1)}
             tooltip="Предыдущая страница"
-            disabled={!data?.hasNext}
+            disabled={!logPage?.hasNext}
             icon={<ThickArrowRightIcon className="h-5 w-5 cursor-pointer" />}
           />
         </div>
       </div>
 
       <div className="flex-1 overflow-auto p-3 text-sm">
-        {data?.logs.map((log: LogItem, i: number) => (
+        {logPage?.logs.map((log: LogItem, i: number) => (
           <LogCard key={`${log.time}-${i}`} log={log} />
         ))}
       </div>
