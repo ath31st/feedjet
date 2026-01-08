@@ -15,6 +15,11 @@ import { LogWidget } from '@/widgets/log';
 
 export function AdminPage() {
   const kioskId = useKioskStore((s) => s.currentKiosk.id);
+  const isKioskLoading = useKioskStore((s) => s.loading);
+
+  if (isKioskLoading || kioskId === -1) {
+    return null;
+  }
 
   return (
     <div className="p-6">
@@ -57,11 +62,11 @@ export function AdminPage() {
 
           <div className="w-full">
             <Tabs.Content value="settings" className="flex flex-col gap-6">
-              <AppearanceSettingsWidget />
+              <AppearanceSettingsWidget kioskId={kioskId} />
             </Tabs.Content>
 
             <Tabs.Content value="rss">
-              <RssManagementWidget />
+              <RssManagementWidget kioskId={kioskId} />
             </Tabs.Content>
 
             <Tabs.Content className="-mt-6" value="schedule">

@@ -2,24 +2,14 @@ import { ThemeSelector } from '@/features/theme-selector';
 import { WidgetSelector } from '@/features/widget-selector';
 import { WidgetRotationInterval } from '@/features/widget-rotation-interval';
 import { SettingsCard } from '@/shared/ui/SettingsCard';
-import { useCurrentKiosk } from '@/entities/kiosk';
-import { StatusMessageCard } from '@/shared/ui/StatusMessageCard';
 
-export function AppearanceSettingsWidget() {
-  const { kiosk, loading } = useCurrentKiosk();
+interface AppearanceSettingsWidgetProps {
+  kioskId: number;
+}
 
-  if (loading) {
-    return (
-      <StatusMessageCard
-        title="Настройки оформления"
-        message="Загрузка киоска..."
-        className="w-full md:w-1/2"
-      />
-    );
-  }
-
-  const { id: kioskId } = kiosk;
-
+export function AppearanceSettingsWidget({
+  kioskId,
+}: AppearanceSettingsWidgetProps) {
   return (
     <div className="flex w-full flex-row items-start gap-6">
       <SettingsCard title="Выбор виджетов" className="w-full md:w-3/5">

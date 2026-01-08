@@ -1,27 +1,15 @@
-import { useCurrentKiosk } from '@/entities/kiosk';
 import { VisibleCellCountSelector } from '@/features/cell-count-selector';
 import { CarouselSizeSelector } from '@/features/feed-carousel-size-selector';
 import { FeedRotationInterval } from '@/features/feed-rotation-interval';
 import { FeedAddForm } from '@/features/rss-management';
 import { FeedList } from '@/features/rss-management';
-import { StatusMessageCard } from '@/shared/ui';
 import { SettingsCard } from '@/shared/ui/SettingsCard';
 
-export function RssManagementWidget() {
-  const { kiosk, loading } = useCurrentKiosk();
+interface RssManagementWidgetProps {
+  kioskId: number;
+}
 
-  if (loading) {
-    return (
-      <StatusMessageCard
-        title="Настройки оформления"
-        message="Загрузка киоска..."
-        className="w-full"
-      />
-    );
-  }
-
-  const { id: kioskId } = kiosk;
-
+export function RssManagementWidget({ kioskId }: RssManagementWidgetProps) {
   return (
     <div className="flex w-full flex-row items-start gap-6">
       <SettingsCard title="Управление RSS-лентами" className="w-full md:w-3/5">
