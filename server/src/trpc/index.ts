@@ -22,6 +22,7 @@ import { kioskWorkScheduleRouter } from './routes/kiosk.work.schedule.route.js';
 import { integrationRouter } from './routes/integration.route.js';
 import { birthdayWidgetTransformRouter } from './routes/birthday.widget.transform.route.js';
 import { logRouter } from './routes/log.route.js';
+import { ZodError } from 'zod';
 
 const logger = createServiceLogger('trpc');
 
@@ -53,7 +54,27 @@ export type AppRouter = typeof appRouter;
 export const trpcMiddleware = createExpressMiddleware({
   router: appRouter,
   createContext,
-  onError: ({ error }) => {
-    logger.error({ error, fn: 'createExpressMiddleware' }, 'TRPC error');
+  onError: ({ error, path, type }) => {
+    if (error.cause instanceof ZodError) {
+      logger.warn(
+        {
+          path,
+          type,
+          issues: error.cause.issues,
+        },
+        'TRPC validation error',
+      );
+      return;
+    }
+
+    logger.error(
+      {
+        path,
+        type,
+        code: error.code,
+        message: error.message,
+      },
+      'TRPC error',
+    );
   },
 });
