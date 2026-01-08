@@ -37,7 +37,6 @@ export function IntegrationForm({
   onDelete,
 }: IntegrationFormProps) {
   const isCreate = mode === 'create';
-  console.log(formData);
 
   return (
     <form onSubmit={onSubmit} className="space-y-2">
