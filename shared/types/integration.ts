@@ -1,5 +1,6 @@
 export const integrationFull = [
   { type: 'fully_kiosk', label: 'Fully Kiosk' },
+  { type: 'adb', label: 'ADB' },
   { type: 'other', label: 'Другое' },
 ] as const;
 

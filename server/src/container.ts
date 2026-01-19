@@ -35,6 +35,7 @@ import { IntegrationService } from './services/integration.service.js';
 import { KioskControlService } from './services/kiosk.control.service.js';
 import { BirthdayWidgetTransformService } from './services/birthday.widget.transform.service.js';
 import { LogService } from './services/log.service.js';
+import { AdbClient } from './integration/adb.client.js';
 
 const sqlite = new Database(dbPath);
 export const db = drizzle(sqlite, { schema });
@@ -45,6 +46,7 @@ export const http = axios.create({
 });
 
 export const fullyKioskClient = new FullyKioskClient(http);
+export const adbClient = new AdbClient();
 
 export const imageCacheService = new ImageCacheService(cacheDir);
 export const videoStorageService = new VideoStorageService(db, fileStorageDir);
@@ -87,6 +89,7 @@ export const integrationService = new IntegrationService(db);
 export const kioskControlService = new KioskControlService(
   integrationService,
   fullyKioskClient,
+  adbClient,
 );
 export const logService = new LogService();
 
