@@ -1,12 +1,21 @@
-import Adb from '@devicefarmer/adbkit';
 import { createServiceLogger } from '../utils/pino.logger.js';
 
 export interface AdbTarget {
   ip: string;
 }
 
+import * as AdbLib from '@devicefarmer/adbkit';
+
+const Adb =
+  // biome-ignore lint/suspicious/noExplicitAny: stupid lib structure
+  (AdbLib as any).default?.Adb ||
+  // biome-ignore lint/suspicious/noExplicitAny: stupid lib structure
+  (AdbLib as any).Adb ||
+  // biome-ignore lint/suspicious/noExplicitAny: stupid lib structure
+  (AdbLib as any).default;
+
 export class AdbClient {
-  private readonly client = Adb.Adb.createClient();
+  private readonly client = Adb.createClient();
   private readonly logger = createServiceLogger('adbClient');
   private readonly defaultPort = 5555;
 
@@ -25,7 +34,7 @@ export class AdbClient {
 
     const exec = async () => {
       const stream = await device.shell(command);
-      const buffer = await Adb.Adb.util.readAll(stream);
+      const buffer = await Adb.util.readAll(stream);
       return buffer.toString('utf-8').trim();
     };
 
@@ -65,7 +74,7 @@ export class AdbClient {
       'Get screenshot',
     );
     const stream = await this.getDevice(target).screencap();
-    return Adb.Adb.util.readAll(stream);
+    return Adb.util.readAll(stream);
   }
 
   async reboot(target: AdbTarget) {
