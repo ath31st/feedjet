@@ -1,18 +1,10 @@
 import { createServiceLogger } from '../utils/pino.logger.js';
+const AdbModule = await import('@devicefarmer/adbkit');
+const Adb = AdbModule.Adb ?? AdbModule.default ?? AdbModule;
 
 export interface AdbTarget {
   ip: string;
 }
-
-import * as AdbLib from '@devicefarmer/adbkit';
-
-const Adb =
-  // biome-ignore lint/suspicious/noExplicitAny: stupid lib structure
-  (AdbLib as any).default?.Adb ||
-  // biome-ignore lint/suspicious/noExplicitAny: stupid lib structure
-  (AdbLib as any).Adb ||
-  // biome-ignore lint/suspicious/noExplicitAny: stupid lib structure
-  (AdbLib as any).default;
 
 export class AdbClient {
   private readonly client = Adb.createClient();
