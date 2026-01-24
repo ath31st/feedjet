@@ -4,6 +4,7 @@ import { defineConfig } from 'vite'
 import { fileURLToPath } from 'node:url';
 
 // https://vite.dev/config/
+
 export default defineConfig({
   server: {
     host: true,
