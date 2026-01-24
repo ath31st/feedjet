@@ -11,8 +11,17 @@ export class AdbClient {
   private readonly logger = createServiceLogger('adbClient');
   private readonly defaultPort = 5555;
 
-  private getDevice(target: AdbTarget) {
-    return this.client.getDevice(`${target.ip}:${this.defaultPort}`);
+  private async getDevice(target: AdbTarget) {
+    const serial = `${target.ip}:${this.defaultPort}`;
+
+    const devices = await this.client.listDevices();
+    const exists = devices.some((d: { id: string }) => d.id === serial);
+
+    if (!exists) {
+      await this.client.connect(target.ip, this.defaultPort);
+    }
+
+    return this.client.getDevice(serial);
   }
 
   private async cmd(
@@ -22,7 +31,7 @@ export class AdbClient {
   ): Promise<string> {
     this.logger.debug({ targetIp: target.ip, command }, 'ADB shell');
 
-    const device = this.getDevice(target);
+    const device = await this.getDevice(target);
 
     const exec = async () => {
       const stream = await device.shell(command);
@@ -65,13 +74,17 @@ export class AdbClient {
       { targetIp: target.ip, fn: 'getScreenshot' },
       'Get screenshot',
     );
-    const stream = await this.getDevice(target).screencap();
+    const device = await this.getDevice(target);
+    const stream = await device.screencap();
+
     return Adb.util.readAll(stream);
   }
 
   async reboot(target: AdbTarget) {
     this.logger.info({ targetIp: target.ip, fn: 'reboot' }, 'Reboot device');
-    return this.getDevice(target).reboot();
+
+    const device = await this.getDevice(target);
+    return device.reboot();
   }
 
   async connect(target: AdbTarget) {
