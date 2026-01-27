@@ -4,7 +4,17 @@ import { useBirthdayList } from '../model/useBirthdayList';
 import { PopoverHint } from '@/shared/ui/common';
 
 export function BirthdayList() {
-  const { isLoading, birthdays, handleDelete } = useBirthdayList();
+  const {
+    isLoading,
+    birthdays,
+    handleDelete,
+    startEdit,
+    saveEdit,
+    setFullNameDraft,
+    fullNameDraft,
+    editingId,
+    cancelEdit,
+  } = useBirthdayList();
 
   if (isLoading) return <LoadingThreeDotsJumping />;
   if (!birthdays?.length) return <p>В базе данных нет дней рождения</p>;
@@ -34,10 +44,16 @@ export function BirthdayList() {
       </div>
 
       <div className="flex w-full flex-col gap-2">
-        {birthdays.map((birthday) => (
+        {birthdays.map((b) => (
           <BirthdayCard
-            key={birthday.id}
-            birthday={birthday}
+            key={b.id}
+            birthday={b}
+            isEditing={editingId === b.id}
+            fullNameDraft={fullNameDraft}
+            onChangeFullName={setFullNameDraft}
+            onEdit={startEdit}
+            onSave={saveEdit}
+            onCancel={cancelEdit}
             onDelete={handleDelete}
           />
         ))}
