@@ -77,6 +77,8 @@
 
 - Errors — обработка ошибок.
 
+- Integrations — интеграции с внешними сервисами (ADB, Fully Kiosk).
+
 - Mappers — преобразование данных.
 
 - Middleware —  промежуточный обработчик auth для tRPC запросов.
