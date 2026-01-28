@@ -6,7 +6,7 @@ import { createServiceLogger } from '../utils/pino.logger.js';
 
 export class WeatherForecastClient {
   private readonly client: OpenWeatherAPI;
-  private readonly logger = createServiceLogger('weatherForecastService');
+  private readonly logger = createServiceLogger('weatherForecastClient');
   private readonly limit = 8;
   private readonly currentCacheTtl = 5 * 60 * 1000;
   private readonly dailyCacheTtl = 30 * 60 * 1000;

@@ -77,7 +77,7 @@
 
 - Errors — обработка ошибок.
 
-- Integrations — интеграции с внешними сервисами (ADB, Fully Kiosk).
+- Integrations — интеграции с внешними сервисами (ADB, Fully Kiosk, OpenWeatherAPI).
 
 - Mappers — преобразование данных.
 
