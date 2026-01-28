@@ -15,7 +15,7 @@ import { UiConfigService } from './services/ui.config.service.js';
 import { ScheduleEventService } from './services/schedule.event.service.js';
 import { ImageCacheService } from './services/image.cache.service.js';
 import { OpenWeatherAPI } from 'openweather-api-node';
-import { WeatherForecastService } from './services/weather.forecast.service.js';
+import { WeatherForecastClient } from './integration/weather.forecast.client.js';
 import { VideoStorageService } from './services/video.storage.service.js';
 import {
   cacheDir,
@@ -53,7 +53,7 @@ export const videoStorageService = new VideoStorageService(db, fileStorageDir);
 export const imageStorageService = new ImageStorageService(db, fileStorageDir);
 
 const openWeatherClient = new OpenWeatherAPI({ key: openWeatherApiKey });
-export const weatherForecastService = new WeatherForecastService(
+export const weatherForecastClient = new WeatherForecastClient(
   openWeatherClient,
 );
 

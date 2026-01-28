@@ -4,7 +4,7 @@ import type { WeatherForecast } from '@shared/types/weather.forecast.js';
 import { LRUCache } from 'lru-cache';
 import { createServiceLogger } from '../utils/pino.logger.js';
 
-export class WeatherForecastService {
+export class WeatherForecastClient {
   private readonly client: OpenWeatherAPI;
   private readonly logger = createServiceLogger('weatherForecastService');
   private readonly limit = 8;
