@@ -3,43 +3,34 @@ import { createServiceLogger } from '../utils/pino.logger.js';
 import {
   kioskService,
   kioskWorkScheduleService,
-  fullyKioskClient,
   kioskHeartbeatService,
+  kioskControlService,
 } from '../container.js';
-import { decrypt } from '../utils/crypto.js';
 
 const CRON_KIOSK_WORK = '* * * * *';
 const logger = createServiceLogger('kioskWorkCron');
 
 export function startKioskWorkCron(): void {
   cron.schedule(CRON_KIOSK_WORK, async () => {
-    logger.debug({ fn: 'startKioskWorkCron' }, 'Kiosk work cron job executed');
+    logger.info({ fn: 'startKioskWorkCron' }, 'Kiosk work cron job started');
 
     try {
-      const dbKiosks = kioskService.getActiveWithIntegration();
+      const activeKiosks = kioskService.getActive();
       const heartbeats = kioskHeartbeatService.getActiveKiosks();
 
-      if (dbKiosks.length === 0) {
-        logger.debug({ fn: 'startKioskWorkCron' }, 'Skip: No active kiosks');
+      if (activeKiosks.length === 0) {
+        logger.info({ fn: 'startKioskWorkCron' }, 'Skip: No active kiosks');
         return;
       }
 
-      for (const { kiosk, integration } of dbKiosks) {
+      for (const kiosk of activeKiosks) {
         try {
           const heartbeat = heartbeats.find((hb) => hb.slug === kiosk.slug);
 
           if (!heartbeat || !heartbeat.ip) {
-            logger.debug(
+            logger.info(
               { slug: kiosk.slug, fn: 'startKioskWorkCron' },
               'Skip: No heartbeat/IP found for active kiosk',
-            );
-            continue;
-          }
-
-          if (integration.type !== 'fully_kiosk' || !integration.passwordEnc) {
-            logger.debug(
-              { slug: kiosk.slug, fn: 'startKioskWorkCron' },
-              'Skip: No fully kiosk integration found for active kiosk',
             );
             continue;
           }
@@ -48,22 +39,25 @@ export function startKioskWorkCron(): void {
             kioskWorkScheduleService.scheduleStatuses(kiosk.id);
 
           if (scheduleNotActive) {
-            logger.debug(
+            logger.info(
               { slug: kiosk.slug, fn: 'startKioskWorkCron' },
               'Skip: Schedule not active for active kiosk',
             );
             continue;
           }
 
-          const target = {
-            ip: heartbeat.ip,
-            password: decrypt(integration.passwordEnc),
-          };
-
           if (isStartTime) {
-            await fullyKioskClient.screenOn(target);
+            kioskControlService.screenOn(kiosk.id, heartbeat.ip);
+            logger.info(
+              { kioskId: kiosk.id, ip: heartbeat.ip },
+              'Screen ON command sent',
+            );
           } else if (isEndTime) {
-            await fullyKioskClient.screenOff(target);
+            kioskControlService.screenOff(kiosk.id, heartbeat.ip);
+            logger.info(
+              { kioskId: kiosk.id, ip: heartbeat.ip },
+              'Screen OFF command sent',
+            );
           }
         } catch (kioskError) {
           logger.error(
@@ -78,5 +72,7 @@ export function startKioskWorkCron(): void {
         'Critical error in kiosk work cron',
       );
     }
+
+    logger.info({ fn: 'startKioskWorkCron' }, 'Kiosk work cron job finished');
   });
 }
