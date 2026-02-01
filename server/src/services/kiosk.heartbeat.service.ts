@@ -6,7 +6,7 @@ export class KioskHeartbeatService {
   private readonly logger = createServiceLogger('kioskHeartbeatService');
 
   private readonly cacheLimit = 100;
-  private readonly ttl = 24 * 60 * 60 * 1000;
+  private readonly ttl = 24 * 60 * 60 * 1000 * 3; // 3 days
 
   private readonly cache = new LRUCache<string, KioskHeartbeat>({
     max: this.cacheLimit,
