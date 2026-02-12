@@ -1,10 +1,10 @@
 import {
   feedConfigService,
-  publicProcedure,
   rssParser,
   rssService,
   t,
 } from '../../container.js';
+import { publicProcedure } from '../../middleware/auth.js';
 
 export const rssParserRouter = t.router({
   parseLatestFeedIitems: publicProcedure.query(() => {

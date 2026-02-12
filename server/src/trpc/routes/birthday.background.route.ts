@@ -1,9 +1,5 @@
-import {
-  t,
-  publicProcedure,
-  birthdayBackgroundService,
-} from '../../container.js';
-import { protectedProcedure } from '../../middleware/auth.js';
+import { t, birthdayBackgroundService } from '../../container.js';
+import { publicProcedure, protectedProcedure } from '../../middleware/auth.js';
 import { birthdayMonthInputSchema } from '../../validations/schemas/birthday.schemas.js';
 
 import { fileParamsSchema } from '../../validations/schemas/file.storage.validation.js';

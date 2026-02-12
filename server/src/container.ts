@@ -94,6 +94,4 @@ export const kioskControlService = new KioskControlService(
 export const logService = new LogService();
 
 export const t = initTRPC.context<Context>().create();
-export const publicProcedure = t.procedure;
-
 export const eventBus = new EventEmitter();

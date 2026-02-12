@@ -1,10 +1,5 @@
-import {
-  t,
-  eventBus,
-  publicProcedure,
-  uiConfigService,
-} from '../../container.js';
-import { protectedProcedure } from '../../middleware/auth.js';
+import { t, eventBus, uiConfigService } from '../../container.js';
+import { protectedProcedure, publicProcedure } from '../../middleware/auth.js';
 import {
   uiConfigGetInputSchema,
   uiConfigUpdateInputSchema,

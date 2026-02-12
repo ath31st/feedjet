@@ -1,4 +1,5 @@
-import { publicProcedure, t, weatherForecastClient } from '../../container.js';
+import { t, weatherForecastClient } from '../../container.js';
+import { publicProcedure } from '../../middleware/auth.js';
 import { weatherForecastParamsSchema } from '../../validations/schemas/weather.forecast.schemas.js';
 
 export const weatherForecastRouter = t.router({

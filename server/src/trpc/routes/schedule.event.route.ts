@@ -1,5 +1,5 @@
-import { publicProcedure, scheduleEventService, t } from '../../container.js';
-import { protectedProcedure } from '../../middleware/auth.js';
+import { scheduleEventService, t } from '../../container.js';
+import { protectedProcedure, publicProcedure } from '../../middleware/auth.js';
 import {
   scheduleEventCreateSchema,
   scheduleEventFindByDateRangeSchema,

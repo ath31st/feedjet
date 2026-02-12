@@ -4,8 +4,8 @@ import {
   userCreateSchema,
   userUpdateSchema,
 } from '../../validations/schemas/users.schemas.js';
-import { publicProcedure, t, userService } from '../../container.js';
-import { protectedProcedure } from '../../middleware/auth.js';
+import { t, userService } from '../../container.js';
+import { publicProcedure, protectedProcedure } from '../../middleware/auth.js';
 import { handleServiceCall } from '../error.handler.js';
 
 export const userRouter = t.router({

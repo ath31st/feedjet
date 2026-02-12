@@ -1,10 +1,5 @@
-import {
-  t,
-  publicProcedure,
-  eventBus,
-  imageStorageService,
-} from '../../container.js';
-import { protectedProcedure } from '../../middleware/auth.js';
+import { t, eventBus, imageStorageService } from '../../container.js';
+import { publicProcedure, protectedProcedure } from '../../middleware/auth.js';
 import {
   fileDeleteParamsSchema,
   fileParamsSchema,

@@ -11,3 +11,5 @@ export const protectedProcedure = t.procedure.use((opts) => {
     },
   });
 });
+
+export const publicProcedure = t.procedure;

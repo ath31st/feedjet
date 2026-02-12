@@ -3,13 +3,8 @@ import {
   feedConfigGetInputSchema,
   feedConfigUpdateInputSchema,
 } from '../../validations/schemas/feed.config.schemas.js';
-import {
-  t,
-  feedConfigService,
-  eventBus,
-  publicProcedure,
-} from '../../container.js';
-import { protectedProcedure } from '../../middleware/auth.js';
+import { t, feedConfigService, eventBus } from '../../container.js';
+import { publicProcedure, protectedProcedure } from '../../middleware/auth.js';
 import { handleServiceCall } from '../error.handler.js';
 
 export const feedConfigRouter = t.router({

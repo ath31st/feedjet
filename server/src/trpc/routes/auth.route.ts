@@ -1,7 +1,7 @@
-import { t, authService, publicProcedure } from '../../container.js';
+import { t, authService } from '../../container.js';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
-import { protectedProcedure } from '../../middleware/auth.js';
+import { protectedProcedure, publicProcedure } from '../../middleware/auth.js';
 
 export const authRouter = t.router({
   login: publicProcedure

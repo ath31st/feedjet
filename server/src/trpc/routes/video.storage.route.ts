@@ -1,10 +1,5 @@
-import {
-  videoStorageService,
-  t,
-  publicProcedure,
-  eventBus,
-} from '../../container.js';
-import { protectedProcedure } from '../../middleware/auth.js';
+import { videoStorageService, t, eventBus } from '../../container.js';
+import { protectedProcedure, publicProcedure } from '../../middleware/auth.js';
 import {
   fileDeleteParamsSchema,
   fileParamsSchema,

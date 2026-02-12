@@ -1,6 +1,7 @@
-import { publicProcedure, t, imageCacheService } from '../../container.js';
+import { t, imageCacheService } from '../../container.js';
 import { TRPCError } from '@trpc/server';
 import { imageCacheParamsSchema } from '../../validations/schemas/image.cache.schemas.js';
+import { publicProcedure } from '../../middleware/auth.js';
 
 export const imageCacheRouter = t.router({
   get: publicProcedure

@@ -1,4 +1,4 @@
-import { t, kioskService, publicProcedure } from '../../container.js';
+import { t, kioskService } from '../../container.js';
 import { handleServiceCall } from '../error.handler.js';
 import {
   kioskIdInputSchema,
@@ -6,7 +6,7 @@ import {
   newKioskSchema,
   updateKioskInputSchema,
 } from '../../validations/schemas/kiosk.schemas.js';
-import { protectedProcedure } from '../../middleware/auth.js';
+import { protectedProcedure, publicProcedure } from '../../middleware/auth.js';
 
 export const kioskRouter = t.router({
   getAll: publicProcedure.query(() => {
