@@ -8,10 +8,40 @@ import {
 } from '../container.js';
 
 const CRON_KIOSK_WORK = '* * * * *';
+const CONTROL_TIMEOUT_MS = 15_000;
+
 const logger = createServiceLogger('kioskWorkCron');
+
+let cronRunning = false;
+
+function withTimeout<T>(
+  promise: Promise<T>,
+  timeoutMs: number,
+  label: string,
+): Promise<T> {
+  return Promise.race([
+    promise,
+    new Promise<T>((_, reject) =>
+      setTimeout(
+        () => reject(new Error(`${label} timeout after ${timeoutMs}ms`)),
+        timeoutMs,
+      ),
+    ),
+  ]);
+}
 
 export function startKioskWorkCron(): void {
   cron.schedule(CRON_KIOSK_WORK, async () => {
+    if (cronRunning) {
+      logger.warn(
+        { fn: 'startKioskWorkCron' },
+        'Skip: previous cron still running',
+      );
+      return;
+    }
+
+    cronRunning = true;
+
     logger.info({ fn: 'startKioskWorkCron' }, 'Kiosk work cron job started');
 
     try {
@@ -47,13 +77,23 @@ export function startKioskWorkCron(): void {
           }
 
           if (isStartTime) {
-            kioskControlService.screenOn(kiosk.id, heartbeat.ip);
+            await withTimeout(
+              kioskControlService.screenOn(kiosk.id, heartbeat.ip),
+              CONTROL_TIMEOUT_MS,
+              'screenOn',
+            );
+
             logger.info(
               { kioskId: kiosk.id, ip: heartbeat.ip },
               'Screen ON command sent',
             );
           } else if (isEndTime) {
-            kioskControlService.screenOff(kiosk.id, heartbeat.ip);
+            await withTimeout(
+              kioskControlService.screenOff(kiosk.id, heartbeat.ip),
+              CONTROL_TIMEOUT_MS,
+              'screenOff',
+            );
+
             logger.info(
               { kioskId: kiosk.id, ip: heartbeat.ip },
               'Screen OFF command sent',
@@ -71,8 +111,10 @@ export function startKioskWorkCron(): void {
         { error: globalError, fn: 'startKioskWorkCron' },
         'Critical error in kiosk work cron',
       );
-    }
+    } finally {
+      cronRunning = false;
 
-    logger.info({ fn: 'startKioskWorkCron' }, 'Kiosk work cron job finished');
+      logger.info({ fn: 'startKioskWorkCron' }, 'Kiosk work cron finished');
+    }
   });
 }
