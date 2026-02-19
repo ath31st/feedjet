@@ -23,9 +23,19 @@ export class AdbClient {
     const serial = `${target.ip}:${this.defaultPort}`;
 
     const devices = await this.client.listDevices();
-    const exists = devices.some((d: { id: string }) => d.id === serial);
+    const deviceInfo = devices.find(
+      (d: { id: string; type: string }) => d.id === serial,
+    );
 
-    if (!exists) {
+    if (!deviceInfo) {
+      await this.client.connect(target.ip, this.defaultPort);
+    } else if (deviceInfo.type === 'offline') {
+      this.logger.warn({ serial }, 'Device offline. Reconnecting...');
+
+      try {
+        await this.client.disconnect(target.ip, this.defaultPort);
+      } catch {}
+
       await this.client.connect(target.ip, this.defaultPort);
     }
 
@@ -36,23 +46,36 @@ export class AdbClient {
     target: AdbTarget,
     command: string,
     timeoutMs = 5000,
+    retries = 1,
   ): Promise<string> {
     this.logger.debug({ targetIp: target.ip, command }, 'ADB shell');
+    try {
+      const device = await this.getDevice(target);
 
-    const device = await this.getDevice(target);
+      const exec = async () => {
+        const stream = await device.shell(command);
+        const buffer = await Adb.util.readAll(stream);
+        return buffer.toString('utf-8').trim();
+      };
 
-    const exec = async () => {
-      const stream = await device.shell(command);
-      const buffer = await Adb.util.readAll(stream);
-      return buffer.toString('utf-8').trim();
-    };
+      return Promise.race([
+        exec(),
+        new Promise<never>((_, reject) =>
+          setTimeout(() => reject(new Error('ADB shell timeout')), timeoutMs),
+        ),
+      ]);
+    } catch (err: unknown) {
+      if (
+        retries > 0 &&
+        err instanceof Error &&
+        err.message?.includes('offline')
+      ) {
+        this.logger.warn('Retrying ADB command due to offline state...');
+        return this.cmd(target, command, timeoutMs, retries - 1);
+      }
 
-    return Promise.race([
-      exec(),
-      new Promise<never>((_, reject) =>
-        setTimeout(() => reject(new Error('ADB shell timeout')), timeoutMs),
-      ),
-    ]);
+      throw err;
+    }
   }
 
   async screenOn(target: AdbTarget) {
