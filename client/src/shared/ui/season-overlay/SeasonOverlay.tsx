@@ -61,7 +61,7 @@ export const SeasonOverlay = () => {
       durationFallRotate: random(10, 18),
       delayAutumn: random(0, 10),
     }));
-  }, []);
+  }, [colors.length]);
 
   const renderWinter = () => {
     const winterParticles = particlesData.slice(0, 30);

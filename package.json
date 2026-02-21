@@ -5,7 +5,7 @@
         "server"
     ],
     "devDependencies": {
-        "@biomejs/biome": "^2.3.10"
+        "@biomejs/biome": "^2.4.4"
     },
     "type": "module"
 }
