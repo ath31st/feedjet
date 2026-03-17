@@ -28,7 +28,7 @@ export function WeatherForecast({
 
   if (!currentWeather || !dailyForecast.length) {
     return (
-      <div className="flex h-full flex-1 items-center justify-center text-[var(--meta-text)]">
+      <div className="flex h-full flex-1 items-center justify-center text-(--meta-text)">
         Нет данных о погоде
       </div>
     );
@@ -36,7 +36,7 @@ export function WeatherForecast({
 
   return (
     <div className="flex h-full flex-1 gap-10 py-10">
-      <div className="flex h-full w-1/2 flex-col items-center justify-center gap-2 text-[var(--meta-text)]">
+      <div className="flex h-full w-1/2 flex-col items-center justify-center gap-2 text-(--meta-text)">
         <div className="text-center text-5xl">
           Погода в {locationTitle || 'Lorem ipsum'}
         </div>
@@ -46,7 +46,7 @@ export function WeatherForecast({
             alt={currentWeather.description}
             className="h-40 w-40"
           />
-          <div className="font-semibold text-8xl text-[var(--card-text)]">
+          <div className="font-semibold text-(--card-text) text-8xl">
             {Math.round(currentWeather.temperature)}°C
           </div>
         </div>
@@ -58,7 +58,7 @@ export function WeatherForecast({
         </div>
       </div>
 
-      <div className="flex h-full flex-1 flex-col items-center justify-center text-4xl text-[var(--card-text)]">
+      <div className="flex h-full flex-1 flex-col items-center justify-center text-(--card-text) text-4xl">
         {dailyForecast
           .slice(0, 6)
           .map(({ time, temperature, iconUrl, description }) => (

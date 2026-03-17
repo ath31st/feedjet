@@ -22,10 +22,10 @@ export function KioskManagement() {
           type="button"
           onClick={() => !isLimitReached && setIsDialogOpen(true)}
           disabled={isLimitReached}
-          className={`flex w-1/4 items-center justify-center gap-2 rounded-lg border border-[var(--border)] px-4 py-2 text-sm ${
+          className={`flex w-1/4 items-center justify-center gap-2 rounded-lg border border-(--border) px-4 py-2 text-sm ${
             isLimitReached
-              ? 'cursor-not-allowed bg-[var(--border)] text-[var(--button-text)]'
-              : 'cursor-pointer bg-[var(--button-bg)] text-[var(--button-text)] hover:bg-[var(--button-hover-bg)]'
+              ? 'cursor-not-allowed bg-(--border) text-(--button-text)'
+              : 'cursor-pointer bg-(--button-bg) text-(--button-text) hover:bg-(--button-hover-bg)'
           }`}
         >
           Добавить конфигурацию ({kiosksLength}/{kioskLimit})

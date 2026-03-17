@@ -17,7 +17,7 @@ export function CommonButton({
 }: CommonButtonProps) {
   const button = (
     <button
-      className="cursor-pointer rounded-lg border border-[var(--border)] bg-[var(--button-bg)] p-2 text-[var(--button-text)] hover:bg-[var(--button-hover-bg)]"
+      className="cursor-pointer rounded-lg border border-(--border) bg-(--button-bg) p-2 text-(--button-text) hover:bg-(--button-hover-bg)"
       type={type}
       onClick={onClick}
       disabled={disabled}
