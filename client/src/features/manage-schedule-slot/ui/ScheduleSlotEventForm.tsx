@@ -46,7 +46,7 @@ export function ScheduleSlotEventForm({
           min={`${slotHour}:00`}
           max={`${slotHour}:59`}
           step={60}
-          className="w-full rounded-lg border border-[var(--border)] bg-transparent px-2 py-1 focus:outline-none focus:ring-1 focus:ring-[var(--border)]"
+          className="w-full rounded-lg border border-(--border) bg-transparent px-2 py-1 focus:outline-none focus:ring-(--border) focus:ring-1"
           required
         />
       </div>
@@ -62,7 +62,7 @@ export function ScheduleSlotEventForm({
           id="title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="w-full rounded-lg border border-[var(--border)] px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-[var(--border)]"
+          className="w-full rounded-lg border border-(--border) px-2 py-1 text-sm focus:outline-none focus:ring-(--border) focus:ring-1"
           required
           rows={4}
         />
@@ -79,7 +79,7 @@ export function ScheduleSlotEventForm({
           id="description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          className="w-full resize-none rounded-lg border border-[var(--border)] px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-[var(--border)]"
+          className="w-full resize-none rounded-lg border border-(--border) px-2 py-1 text-sm focus:outline-none focus:ring-(--border) focus:ring-1"
           rows={4}
         />
       </div>

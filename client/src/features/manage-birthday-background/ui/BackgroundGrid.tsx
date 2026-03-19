@@ -22,11 +22,11 @@ export function BackgroundGrid({
 
           return (
             <div key={monthNumber} className="flex flex-col gap-1">
-              <div className="text-[var(--meta-text)] text-sm">{monthName}</div>
+              <div className="text-(--meta-text) text-sm">{monthName}</div>
               <button
                 type="button"
                 onClick={() => onSlotClick(monthNumber, fileName)}
-                className="relative flex aspect-[16/9] cursor-pointer items-center justify-center overflow-hidden rounded-lg border border-[var(--border)] bg-[var(--bg-muted)] hover:bg-[var(--button-hover-bg)]"
+                className="relative flex aspect-video cursor-pointer items-center justify-center overflow-hidden rounded-lg border border-(--border) bg-(--bg-muted) hover:bg-(--button-hover-bg)"
               >
                 {thumbnailUrl ? (
                   <img
@@ -35,9 +35,7 @@ export function BackgroundGrid({
                     className="h-full w-full object-cover"
                   />
                 ) : (
-                  <span className="text-[var(--meta-text)] text-sm">
-                    Нет фона
-                  </span>
+                  <span className="text-(--meta-text) text-sm">Нет фона</span>
                 )}
               </button>
             </div>

@@ -15,7 +15,7 @@ export function BirthdayCreateForm() {
         placeholder="ФИО"
         value={formData.fullName}
         onChange={(e) => handleChange('fullName', e.target.value)}
-        className="rounded-lg border border-[var(--border)] bg-transparent px-3 py-2 focus:outline-none focus:ring-1 focus:ring-[var(--border)]"
+        className="rounded-lg border border-(--border) bg-transparent px-3 py-2 focus:outline-none focus:ring-(--border) focus:ring-1"
         required
       />
 
@@ -24,7 +24,7 @@ export function BirthdayCreateForm() {
         placeholder="Департамент"
         value={formData.department || ''}
         onChange={(e) => handleChange('department', e.target.value)}
-        className="rounded-lg border border-[var(--border)] bg-transparent px-3 py-2 focus:outline-none focus:ring-1 focus:ring-[var(--border)]"
+        className="rounded-lg border border-(--border) bg-transparent px-3 py-2 focus:outline-none focus:ring-(--border) focus:ring-1"
       />
 
       <div className="flex flex-row gap-2">
@@ -32,7 +32,7 @@ export function BirthdayCreateForm() {
           type="date"
           value={formData.birthDate}
           onChange={(e) => handleChange('birthDate', e.target.value)}
-          className="flex-1 rounded-lg border border-[var(--border)] bg-transparent px-3 py-2 focus:outline-none focus:ring-1 focus:ring-[var(--border)]"
+          className="flex-1 rounded-lg border border-(--border) bg-transparent px-3 py-2 focus:outline-none focus:ring-(--border) focus:ring-1"
           required
         />
 

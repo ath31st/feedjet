@@ -32,7 +32,7 @@ export function BackgroundPreviewDialog({
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/50" />
-        <Dialog.Content className="fixed top-1/2 left-1/2 w-[90vw] max-w-[1400px] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-lg bg-[var(--card-bg)]">
+        <Dialog.Content className="fixed top-1/2 left-1/2 w-[90vw] max-w-350 -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-lg bg-(--card-bg)">
           <Dialog.Description className="sr-only">
             Предпросмотр фона
           </Dialog.Description>
@@ -44,7 +44,7 @@ export function BackgroundPreviewDialog({
               className="h-auto w-full object-contain"
             />
           )}
-          <div className="flex justify-end gap-4 border-[var(--border)] border-t p-3">
+          <div className="flex justify-end gap-4 border-(--border) border-t p-3">
             <IconButton
               onClick={onDelete}
               tooltip="Удалить"
