@@ -22,9 +22,11 @@ export const HeartbeatCard = ({
 
   let colorClass = 'text-red-500';
 
-  if (diffMin <= 1) {
+  if (diffMin <= 2) {
+    // до 2 минут текст будет зеленым
     colorClass = 'text-green-500';
   } else if (diffHour <= 1) {
+    // от 2 минут до 1 часа текст будет оранжевым
     colorClass = 'text-orange-500';
   }
 
@@ -32,7 +34,7 @@ export const HeartbeatCard = ({
     <div className={`flex flex-row items-center gap-6 text-sm ${colorClass}`}>
       <FullyKioskLink ip={ip} />
       <span>💓 {format(heartbeatDate, 'dd.MM.yyyy HH:mm:ss')}</span>
-      {diffHour <= 1 && actions}
+      {actions}
     </div>
   );
 };
