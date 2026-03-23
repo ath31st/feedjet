@@ -53,7 +53,7 @@ export function SimpleDropdownMenu<T extends string | number>({
             <DropdownMenu.Item
               key={opt.value}
               onSelect={() => onSelect(opt.value)}
-              className="cursor-pointer px-3 py-2 text-sm outline-none data-[highlighted]:bg-(--button-hover-bg)"
+              className="cursor-pointer px-3 py-2 text-sm outline-none data-highlighted:bg-(--button-hover-bg)"
             >
               {opt.label}
             </DropdownMenu.Item>

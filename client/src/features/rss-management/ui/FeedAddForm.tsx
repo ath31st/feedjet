@@ -34,7 +34,7 @@ export function FeedAddForm() {
             placeholder="Введите название ленты"
             value={newFeedName}
             onChange={handleNameInput}
-            className="flex-grow rounded-lg border border-(--border) bg-transparent px-3 py-2 focus:outline-none focus:ring-(--border) focus:ring-1"
+            className="grow rounded-lg border border-(--border) bg-transparent px-3 py-2 focus:outline-none focus:ring-(--border) focus:ring-1"
           />
 
           <input
@@ -42,7 +42,7 @@ export function FeedAddForm() {
             placeholder="Введите RSS ссылку"
             value={newFeedUrl}
             onChange={handleUrlInput}
-            className="flex-grow rounded-lg border border-(--border) bg-transparent px-3 py-2 focus:outline-none focus:ring-(--border) focus:ring-1"
+            className="grow rounded-lg border border-(--border) bg-transparent px-3 py-2 focus:outline-none focus:ring-(--border) focus:ring-1"
           />
 
           <CommonButton

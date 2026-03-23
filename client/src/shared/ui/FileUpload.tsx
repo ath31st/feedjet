@@ -61,8 +61,8 @@ export function FileUpload({
       <div
         className={`flex h-30 items-center justify-center rounded-lg border-2 border-dashed ${
           dragOver
-            ? 'border-[var(--border)] bg-[var(--button-hover-bg)]'
-            : 'border-[var(--border)]'
+            ? 'border-(--border) bg-(--button-hover-bg)'
+            : 'border-(--border)'
         }`}
         onDragOver={(e) => {
           e.preventDefault();
@@ -71,7 +71,7 @@ export function FileUpload({
         onDragLeave={() => setDragOver(false)}
         onDrop={handleDrop}
       >
-        <span className="text-[var(--meta-text)] text-sm">
+        <span className="text-(--meta-text) text-sm">
           {isPending ? loadingText : dropText}
         </span>
       </div>

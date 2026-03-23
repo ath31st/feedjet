@@ -13,10 +13,10 @@ export function TooltipWrapper({ tooltip, children }: TooltipWrapperProps) {
         <Tooltip.Portal>
           <Tooltip.Content
             sideOffset={2}
-            className="select-none rounded-lg bg-[var(--button-bg)] px-2 py-1 text-[var(--tooltip-text)] text-sm shadow-md"
+            className="select-none rounded-lg bg-(--button-bg) px-2 py-1 text-(--tooltip-text) text-sm shadow-md"
           >
             {tooltip}
-            <Tooltip.Arrow className="fill-[var(--button-bg)]" />
+            <Tooltip.Arrow className="fill-(--button-bg)" />
           </Tooltip.Content>
         </Tooltip.Portal>
       </Tooltip.Root>

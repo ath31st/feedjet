@@ -19,7 +19,7 @@ export function ThemeSelector({ kioskId }: Props) {
 
   return (
     <div className="flex flex-col gap-2">
-      <span className="text-[var(--text)]">Цветовая тема:</span>
+      <span className="text-(--text)">Цветовая тема:</span>
 
       <button
         type="button"

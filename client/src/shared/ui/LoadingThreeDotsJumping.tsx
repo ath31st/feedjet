@@ -20,15 +20,15 @@ export function LoadingThreeDotsJumping() {
       className="flex h-full items-center justify-center gap-2 overflow-hidden"
     >
       <motion.div
-        className="h-5 w-5 rounded-full bg-[var(--border)]"
+        className="h-5 w-5 rounded-full bg-(--border)"
         variants={dotVariants}
       />
       <motion.div
-        className="h-5 w-5 rounded-full bg-[var(--border)]"
+        className="h-5 w-5 rounded-full bg-(--border)"
         variants={dotVariants}
       />
       <motion.div
-        className="h-5 w-5 rounded-full bg-[var(--border)]"
+        className="h-5 w-5 rounded-full bg-(--border)"
         variants={dotVariants}
       />
     </motion.div>

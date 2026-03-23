@@ -9,7 +9,7 @@ interface DiskUsageViewProps {
 
 export function DiskUsageView({ used, total, isLoading }: DiskUsageViewProps) {
   if (isLoading) {
-    return <span className="text-[var(--meta-text)] text-sm">Загрузка…</span>;
+    return <span className="text-(--meta-text) text-sm">Загрузка…</span>;
   }
 
   const usedPercent = (used / total) * 100;
@@ -18,7 +18,7 @@ export function DiskUsageView({ used, total, isLoading }: DiskUsageViewProps) {
     <div className="flex w-full flex-col">
       <div className="flex flex-col gap-2 text-md">
         <div className="flex justify-between">
-          <span className="text-[var(--meta-text)]">Использовано:</span>
+          <span className="text-(--meta-text)">Использовано:</span>
           <span>
             {formatBytes(used)} / {formatBytes(total)}
           </span>

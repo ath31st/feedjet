@@ -59,7 +59,7 @@ export function RotationInterval({
 
   return (
     <div className="flex flex-col gap-1">
-      <label htmlFor={inputId} className="text-[var(--text)]">
+      <label htmlFor={inputId} className="text-(--text)">
         {label}
       </label>
       <div className="flex items-center gap-2">
@@ -71,7 +71,7 @@ export function RotationInterval({
           <MinusIcon className="" />
         </CommonButton>
 
-        <div className="min-w-[100px]">
+        <div className="min-w-25">
           <SimpleDropdownMenu
             value={currentStepKey}
             options={stepKeys.map((key) => ({ value: key, label: key }))}
@@ -89,7 +89,7 @@ export function RotationInterval({
 
         <span
           id={inputId}
-          className="min-w-[120px] text-center font-semibold text-[var(--text)]"
+          className="min-w-30 text-center font-semibold text-(--text)"
         >
           {formattedValue}
         </span>

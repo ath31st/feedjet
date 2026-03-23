@@ -12,7 +12,7 @@ export function PopoverHint({ content, trigger, className }: PopoverHintProps) {
     <Popover.Root>
       <Popover.Trigger asChild>
         {trigger ?? (
-          <InfoCircledIcon className="h-5 w-5 cursor-pointer text-[var(--text-secondary)] hover:text-[var(--text-primary)]" />
+          <InfoCircledIcon className="h-5 w-5 cursor-pointer text-(--text-secondary) hover:text-(--text-primary)" />
         )}
       </Popover.Trigger>
 
@@ -20,7 +20,7 @@ export function PopoverHint({ content, trigger, className }: PopoverHintProps) {
         <Popover.Content
           align="start"
           sideOffset={4}
-          className={`z-50 max-w-xs rounded-lg border border-[var(--border)] bg-[var(--card-bg)] p-3 text-sm ${className ?? ''}`}
+          className={`z-50 max-w-xs rounded-lg border border-(--border) bg-(--card-bg) p-3 text-sm ${className ?? ''}`}
         >
           {content}
         </Popover.Content>

@@ -19,7 +19,7 @@ export function NumberSliderSelector({
 }: NumberSliderSelectorProps) {
   return (
     <div className="flex flex-col gap-2">
-      <span className="text-[var(--text)]">
+      <span className="text-(--text)">
         {label}: {value}
       </span>
       <Slider.Root
@@ -30,10 +30,10 @@ export function NumberSliderSelector({
         step={step}
         onValueChange={([val]) => setValue(val)}
       >
-        <Slider.Track className="relative h-1 w-full grow cursor-pointer rounded-full bg-[var(--border)]">
-          <Slider.Range className="absolute h-full rounded-full bg-[var(--text)]" />
+        <Slider.Track className="relative h-1 w-full grow cursor-pointer rounded-full bg-(--border)">
+          <Slider.Range className="absolute h-full rounded-full bg-(--text)" />
         </Slider.Track>
-        <Slider.Thumb className="block h-4 w-4 cursor-pointer rounded-full bg-[var(--text)] focus:outline-none" />
+        <Slider.Thumb className="block h-4 w-4 cursor-pointer rounded-full bg-(--text) focus:outline-none" />
       </Slider.Root>
     </div>
   );

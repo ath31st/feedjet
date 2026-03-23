@@ -10,7 +10,7 @@ export function ProgressBar({ value }: ProgressBarProps) {
   };
 
   return (
-    <div className="h-20 w-full rounded-lg bg-[var(--button-bg)]">
+    <div className="h-20 w-full rounded-lg bg-(--button-bg)">
       <div
         className={`h-20 rounded-lg transition-all duration-300 ${getColor()}`}
         style={{ width: `${value}%` }}
