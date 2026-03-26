@@ -24,6 +24,12 @@ export const queryClient = new QueryClient({
 
 const trpcUrl = `${SERVER_URL}/trpc`;
 
+function handleUnauthorized(): void {
+  localStorage.removeItem('token');
+  queryClient.clear();
+  window.location.href = '/login';
+}
+
 export const trpcClient = createTRPCClient<AppRouter>({
   links: [
     splitLink({
@@ -37,10 +43,16 @@ export const trpcClient = createTRPCClient<AppRouter>({
           if (token) {
             headers.set('Authorization', `Bearer ${token}`);
           }
-          return fetch(url, {
+          const response = await fetch(url, {
             ...(options as RequestInit),
             headers,
           });
+          
+          if (response.status === 401) {
+            handleUnauthorized();
+          }
+          
+          return response;
         },
       }),
 
@@ -52,10 +64,16 @@ export const trpcClient = createTRPCClient<AppRouter>({
           if (token) {
             headers.set('Authorization', `Bearer ${token}`);
           }
-          return fetch(url, {
+          const response = await fetch(url, {
             ...(options as RequestInit),
             headers,
           });
+          
+          if (response.status === 401) {
+            handleUnauthorized();
+          }
+          
+          return response;
         },
       }),
     }),
