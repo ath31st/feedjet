@@ -14,7 +14,7 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   }, [error, navigate]);
 
   if (isLoading) {
-    <LoadingThreeDotsJumping />;
+    return <LoadingThreeDotsJumping />;
   }
 
   if (error?.data?.code === 'UNAUTHORIZED') {
