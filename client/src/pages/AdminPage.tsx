@@ -1,6 +1,6 @@
+import * as Tabs from '@radix-ui/react-tabs';
 import { RssManagementWidget } from '@/widgets/rss-management';
 import { AppearanceSettingsWidget } from '@/widgets/appearance-settings';
-import * as Tabs from '@radix-ui/react-tabs';
 import { AdminTabTrigger } from '@/shared/ui';
 import { ScheduleManagementWidget } from '@/widgets/schedule-management';
 import { VideoContentManagementWidget } from '@/widgets/video-content-management';
@@ -12,10 +12,12 @@ import { ImageContentManagementWidget } from '@/widgets/image-content-management
 import { useKioskStore } from '@/entities/kiosk';
 import { KioskWorkScheduleManagement } from '@/widgets/kiosk-work-schedule-management';
 import { LogWidget } from '@/widgets/log';
+import { useHorizontalWheelScroll } from '@/shared/lib';
 
 export function AdminPage() {
   const kioskId = useKioskStore((s) => s.currentKiosk.id);
   const isKioskLoading = useKioskStore((s) => s.loading);
+  const tabsRef = useHorizontalWheelScroll();
 
   if (isKioskLoading || kioskId === -1) {
     return null;
@@ -33,10 +35,11 @@ export function AdminPage() {
 
       <Tabs.Root defaultValue="settings" className="w-full">
         <Tabs.List
-          className="flex border-(--border) border-b-2"
+          ref={tabsRef}
+          className="scrollbar-hide flex overflow-x-auto border-(--border) border-b-2"
           aria-label="Управление админ-панелью"
         >
-          <div className="ml-56">
+          <div className="ml-56 flex shrink-0">
             <AdminTabTrigger value="settings">
               Настройки виджетов
             </AdminTabTrigger>
