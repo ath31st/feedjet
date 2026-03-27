@@ -17,3 +17,4 @@ export * from './useEnv';
 export * from './geRemFromTailwindXl';
 export * from './formatSecondsToTime';
 export * from './getColorFromHex';
+export * from './useHorizontalWheelScroll'
