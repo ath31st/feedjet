@@ -38,7 +38,7 @@ export function BirthdayCard({
             value={fullNameDraft}
             onChange={(e) => onChangeFullName(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && onSave()}
-            className="w-[max-content] rounded-lg border border-(--border) bg-transparent px-2 py-1 ring-(--border) focus:outline-none"
+            className="w-max rounded-lg border border-(--border) bg-transparent px-2 py-1 ring-(--border) focus:outline-none"
             style={{ width: `${Math.max(fullNameDraft.length, 1) + 2}ch` }}
           />
         ) : (
@@ -46,7 +46,7 @@ export function BirthdayCard({
         )}
       </div>
 
-      <div className="flex min-w-[220px] justify-end gap-4 text-(--text-meta) text-sm">
+      <div className="flex min-w-55 justify-end gap-4 text-(--text-meta) text-sm">
         <span className="w-24 text-right">
           {new Date(birthday.birthDate).toLocaleDateString()}
         </span>

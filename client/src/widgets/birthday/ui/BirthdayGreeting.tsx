@@ -33,7 +33,7 @@ export function BirthdayGreeting({
         </h1>
       </div>
       <div
-        className={`flex flex-col items-center whitespace-nowrap text-shadow-[var(--text-shadow)] uppercase text-${fontSizeXl}xl`}
+        className={`flex flex-col items-center whitespace-nowrap text-shadow-(--text-shadow) uppercase text-${fontSizeXl}xl`}
       >
         <p className="text-(--without-theme)">Поздравляет с днем рождения</p>
       </div>

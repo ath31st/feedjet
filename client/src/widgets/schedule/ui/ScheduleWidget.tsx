@@ -75,7 +75,7 @@ export function ScheduleWidget({ rotate }: ScheduleWidgetProps) {
           todayIndex={todayIndex}
           isEffectiveXl={isEffectiveXl}
         />
-        <div className="h-full border-2 border-[var(--border)]" />
+        <div className="h-full border-(--border) border-2" />
         <div className={`w-full ${isEffectiveXl ? 'px-10 py-4' : 'p-12 py-8'}`}>
           <div className="relative h-full">
             <TimeGrid hours={hours} positionPercent={positionPercent} />
@@ -90,7 +90,7 @@ export function ScheduleWidget({ rotate }: ScheduleWidgetProps) {
         </div>
         {isEffectiveXl && (
           <>
-            <div className="h-full border-2 border-[var(--border)]" />
+            <div className="h-full border-(--border) border-2" />
             <div className="flex h-full w-1/2 flex-col gap-4 px-4 py-10">
               <DigitalClock fontXlSize={fontXlSize} />
               <WeatherForecast
@@ -106,7 +106,7 @@ export function ScheduleWidget({ rotate }: ScheduleWidgetProps) {
       </div>
 
       {!isEffectiveXl && (
-        <div className="flex h-1/7 flex-row gap-4 border-[var(--border)] border-t-4 px-4">
+        <div className="flex h-1/7 flex-row gap-4 border-(--border) border-t-4 px-4">
           <DigitalClock fontXlSize={fontXlSize} />
           <WeatherForecast
             locationTitle={locationTitle}

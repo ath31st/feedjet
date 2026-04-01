@@ -23,15 +23,15 @@ export function ScheduleGrid({
   } = useScheduleGrid(weekStart);
 
   return (
-    <div className="w-full overflow-auto rounded-lg border border-[var(--border)]">
+    <div className="w-full overflow-auto rounded-lg border border-(--border)">
       <div className="grid grid-cols-[80px_repeat(7,1fr)]">
-        <div className="h-12 border-[var(--border)] border-b bg-[var(--card-bg)]" />
+        <div className="h-12 border-(--border) border-b bg-(--card-bg)" />
         {days.map((date) => (
           <div
             key={date.toISOString()}
-            className="flex h-12 flex-col items-center justify-center border-[var(--border)] border-b border-l bg-[var(--card-bg)] text-md"
+            className="flex h-12 flex-col items-center justify-center border-(--border) border-b border-l bg-(--card-bg) text-md"
           >
-            <span className="font-medium text-[var(--meta-text)]">
+            <span className="font-medium text-(--meta-text)">
               {format(date, 'EE', { locale: ru })}
             </span>
             <span className="text-muted-foreground">
@@ -44,7 +44,7 @@ export function ScheduleGrid({
           <React.Fragment key={`hour-row-${hour}`}>
             <div
               key={`hour-${hour}`}
-              className="flex h-16 items-start justify-center border-[var(--border)] border-t bg-[var(--card-bg)] px-1 pt-1 text-md"
+              className="flex h-16 items-start justify-center border-(--border) border-t bg-(--card-bg) px-1 pt-1 text-md"
             >
               {hour}
             </div>
@@ -59,7 +59,7 @@ export function ScheduleGrid({
                   onClick={() =>
                     setSelectedSlot({ date: dateStr, startTime: hour })
                   }
-                  className="flex h-16 w-full flex-col overflow-hidden border-[var(--border)] border-t border-l bg-[var(--card-bg)] p-1 text-left hover:bg-[var(--button-hover-bg)] focus:outline-none focus-visible:ring focus-visible:ring-primary"
+                  className="flex h-16 w-full flex-col overflow-hidden border-(--border) border-t border-l bg-(--card-bg) p-1 text-left hover:bg-(--button-hover-bg) focus:outline-none focus-visible:ring focus-visible:ring-primary"
                   aria-label={`Ячейка расписания на ${dateStr} в ${hour}`}
                 >
                   {slotEvents.slice(0, 3).map((event) => (

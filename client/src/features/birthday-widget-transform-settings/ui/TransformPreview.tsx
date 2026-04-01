@@ -15,7 +15,7 @@ export function TransformPreview({
 }: TransformPreviewProps) {
   return (
     <div
-      className="relative h-[400px] w-[711px] overflow-hidden rounded-lg border border-(--border) bg-neutral-900"
+      className="relative h-100 w-177.75 overflow-hidden rounded-lg border border-(--border) bg-neutral-900"
       style={{ perspective: '1000px' }}
     >
       {backgroundUrl && (

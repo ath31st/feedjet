@@ -10,7 +10,7 @@ export function InfoDate({ date }: InfoDateProps) {
         month: 'long',
         year: 'numeric',
       })}
-      <div className="text-5xl text-[var(--meta-text)]">
+      <div className="text-(--meta-text) text-5xl">
         {new Date().toLocaleDateString('ru-RU', { weekday: 'long' })}
       </div>
     </div>

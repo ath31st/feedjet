@@ -12,10 +12,10 @@ interface FeedCardProps {
 
 export function FeedCard({ item, cellsCount }: FeedCardProps) {
   return (
-    <div className="flex h-full rounded-lg bg-[var(--card-bg)] p-2 shadow-2xl">
+    <div className="flex h-full rounded-lg bg-(--card-bg) p-2 shadow-2xl">
       <div className="flex w-full overflow-hidden">
         <div
-          className={`${getImageWidthByCells(cellsCount)} z-10 flex-shrink-0 overflow-hidden rounded-lg`}
+          className={`${getImageWidthByCells(cellsCount)} z-10 shrink-0 overflow-hidden rounded-lg`}
         >
           {item.image ? (
             <FeedImage url={item.image} alt={''} />
@@ -26,7 +26,7 @@ export function FeedCard({ item, cellsCount }: FeedCardProps) {
 
         <div className="flex h-full min-w-0 flex-col gap-2 px-4">
           <div
-            className={`overflow-hidden text-ellipsis whitespace-nowrap text-[var(--category-text)] ${getTextSizeByCells(cellsCount + 4)}`}
+            className={`overflow-hidden text-ellipsis whitespace-nowrap text-(--category-text) ${getTextSizeByCells(cellsCount + 4)}`}
           >
             {item.categories.join(', ')}
           </div>
@@ -39,15 +39,15 @@ export function FeedCard({ item, cellsCount }: FeedCardProps) {
 
             <div className="relative flex-1 overflow-hidden">
               <p
-                className={`text-[var(--description-text)] ${getTextSizeByCells(cellsCount + 2)}`}
+                className={`text-(--description-text) ${getTextSizeByCells(cellsCount + 2)}`}
               >
                 {item.description}
               </p>
-              <div className="pointer-events-none absolute bottom-0 left-0 h-6 w-full bg-gradient-to-t from-[var(--card-bg)] to-transparent" />
+              <div className="pointer-events-none absolute bottom-0 left-0 h-6 w-full bg-linear-to-t from-(--card-bg) to-transparent" />
             </div>
           </div>
           <div
-            className={`overflow-hidden text-ellipsis whitespace-nowrap text-[var(--meta-text)] ${getTextSizeByCells(cellsCount + 4)}`}
+            className={`overflow-hidden text-ellipsis whitespace-nowrap text-(--meta-text) ${getTextSizeByCells(cellsCount + 4)}`}
           >
             {item.author} · {new Date(item.pubDate).toLocaleString('ru-RU')}
           </div>
