@@ -1,4 +1,5 @@
 import {
+  useDeleteLogFiles,
   useGetLogFiles,
   useGetLogPage,
   type LogFilter,
@@ -14,6 +15,8 @@ export const useLogViewer = () => {
   const [search, setSearch] = useState('');
   const [level, setLevel] = useState<LogLevel | undefined>(undefined);
   const { data: files } = useGetLogFiles();
+  const { mutate: deleteLogFiles } = useDeleteLogFiles();
+  const [daysToKeep, setDaysToKeep] = useState<number>(0);
 
   useEffect(() => {
     if (files?.length && !file) {
@@ -47,5 +50,8 @@ export const useLogViewer = () => {
     applyFilters,
     setPageSize,
     logPage: data,
+    deleteLogFiles,
+    daysToKeep,
+    setDaysToKeep,
   };
 };

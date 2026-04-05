@@ -1,7 +1,11 @@
 import { LogCard } from './LogCard';
 import { LogLevel, type LogItem } from '@/entities/log';
 import { IconButton, SimpleDropdownMenu } from '@/shared/ui/common';
-import { ThickArrowLeftIcon, ThickArrowRightIcon } from '@radix-ui/react-icons';
+import {
+  ThickArrowLeftIcon,
+  ThickArrowRightIcon,
+  TrashIcon,
+} from '@radix-ui/react-icons';
 import { useLogViewer } from '../model/useLogViewer';
 
 export function LogViewer() {
@@ -20,6 +24,9 @@ export function LogViewer() {
     applyFilters,
     setPageSize,
     logPage,
+    deleteLogFiles,
+    daysToKeep,
+    setDaysToKeep,
   } = useLogViewer();
 
   if (isLoading) {
@@ -32,7 +39,7 @@ export function LogViewer() {
 
   return (
     <div className="flex h-full flex-col">
-      <div className="flex w-full flex-row items-center gap-4 p-3">
+      <div className="flex w-full flex-row gap-4 p-3">
         <SimpleDropdownMenu
           value={file ?? ''}
           options={(files ?? []).map((f) => ({ label: f, value: f }))}
@@ -100,6 +107,28 @@ export function LogViewer() {
             icon={<ThickArrowRightIcon className="h-5 w-5 cursor-pointer" />}
           />
         </div>
+      </div>
+
+      <div className="flex w-1/4 gap-2 p-3">
+        <IconButton
+          onClick={() => deleteLogFiles({ daysToKeep })}
+          tooltip="Очистить логи"
+          disabled={daysToKeep === 0}
+          icon={<TrashIcon className="h-5 w-5 cursor-pointer" />}
+        />
+
+        <SimpleDropdownMenu
+          placeholder="Оставить логи за:"
+          value={daysToKeep}
+          options={[
+            { label: 'Последние 3 дня', value: 3 },
+            { label: 'Последние 7 дней', value: 7 },
+            { label: 'Последние 30 дней', value: 30 },
+          ]}
+          onSelect={(v) => {
+            setDaysToKeep(v);
+          }}
+        />
       </div>
 
       <div className="flex-1 overflow-auto p-3 text-sm">
