@@ -90,6 +90,37 @@ export class LogService {
     return items;
   }
 
+  deleteLogFiles(daysToKeep: number): void {
+    if (!fs.existsSync(this.baseDir)) {
+      return;
+    }
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const cutoffDate = new Date(today);
+    if (daysToKeep > 0) {
+      cutoffDate.setDate(cutoffDate.getDate() - daysToKeep);
+    }
+
+    const files = fs.readdirSync(this.baseDir);
+
+    for (const file of files) {
+      if (!file.endsWith('.log')) continue;
+
+      const dateMatch = file.match(/(\d{4}-\d{2}-\d{2})/);
+      if (!dateMatch) continue;
+
+      const fileDate = new Date(dateMatch[1]);
+      fileDate.setHours(0, 0, 0, 0);
+
+      if (fileDate < cutoffDate) {
+        const filePath = join(this.baseDir, file);
+        fs.unlinkSync(filePath);
+      }
+    }
+  }
+
   private applyFilter(log: LogItem, filter: LogFilter): boolean {
     if (filter.level && log.level !== filter.level) return false;
     if (filter.search) {

@@ -13,3 +13,7 @@ export const logInputSchema = z.object({
   page: z.number().int().min(0).optional(),
   pageSize: z.number().int().positive().optional(),
 });
+
+export const deleteLogFilesSchema = z.object({
+  daysToKeep: z.number().int().min(0),
+});
