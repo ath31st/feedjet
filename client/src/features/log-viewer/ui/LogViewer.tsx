@@ -89,13 +89,13 @@ export function LogViewer() {
         <div className="ml-auto flex gap-2">
           <IconButton
             onClick={() => setPage((p) => p - 1)}
-            tooltip="Следующая страница"
+            tooltip="Предыдущая страница"
             disabled={!logPage?.hasPrev}
             icon={<ThickArrowLeftIcon className="h-5 w-5 cursor-pointer" />}
           />
           <IconButton
             onClick={() => setPage((p) => p + 1)}
-            tooltip="Предыдущая страница"
+            tooltip="Следующая страница"
             disabled={!logPage?.hasNext}
             icon={<ThickArrowRightIcon className="h-5 w-5 cursor-pointer" />}
           />
