@@ -47,11 +47,11 @@ export const trpcClient = createTRPCClient<AppRouter>({
             ...(options as RequestInit),
             headers,
           });
-          
+
           if (response.status === 401) {
             handleUnauthorized();
           }
-          
+
           return response;
         },
       }),
@@ -68,11 +68,11 @@ export const trpcClient = createTRPCClient<AppRouter>({
             ...(options as RequestInit),
             headers,
           });
-          
+
           if (response.status === 401) {
             handleUnauthorized();
           }
-          
+
           return response;
         },
       }),

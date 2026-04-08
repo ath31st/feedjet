@@ -25,7 +25,7 @@ export const useGetLogFiles = () => {
 
 export const useDeleteLogFiles = () => {
   return useMutation(
-    trpcWithProxy.log.deleteLogFiles.mutationOptions({ 
+    trpcWithProxy.log.deleteLogFiles.mutationOptions({
       onError: (err: unknown) => {
         if (err instanceof Error) {
           toast.error(err.message || 'Ошибка при удалении файлов');
@@ -38,6 +38,6 @@ export const useDeleteLogFiles = () => {
           queryKey: trpcWithProxy.log.getLogFiles.queryKey(),
         });
       },
-     }),
+    }),
   );
-}
+};
