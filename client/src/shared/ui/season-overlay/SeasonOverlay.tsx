@@ -149,7 +149,7 @@ export const SeasonOverlay = () => {
   const summerElements = Array.from({ length: 12 }).map((_, i) => i);
 
   const renderSummer = () => (
-    <div className="absolute -top-[60px] -right-[60px] h-[240px] w-[240px]">
+    <div className="absolute -top-15 -right-15 h-60 w-60">
       <div
         className="relative h-full w-full rounded-full"
         style={{
@@ -170,7 +170,7 @@ export const SeasonOverlay = () => {
               style={{ transform: `rotate(${id * 30}deg)` }}
             >
               <div
-                className="absolute h-[300px] w-[3px]"
+                className="absolute h-75 w-0.75"
                 style={{
                   background:
                     'linear-gradient(to bottom, rgba(255, 235, 59, 0.8) 0%, rgba(255, 215, 0, 0.4) 30%, rgba(255, 193, 7, 0.2) 60%, transparent 100%)',
@@ -202,7 +202,7 @@ export const SeasonOverlay = () => {
   }, [season]);
 
   return (
-    <div className="pointer-events-none absolute top-0 left-0 z-[1] h-full w-full overflow-hidden">
+    <div className="pointer-events-none absolute top-0 left-0 z-1 h-full w-full overflow-hidden">
       <style>{animationStyles}</style>
       {content}
     </div>
