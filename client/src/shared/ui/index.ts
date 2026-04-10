@@ -13,6 +13,8 @@ export * from './TooltipWrapper';
 export * from './StaticBackground';
 export * from './DigitalClock';
 export * from './FileUpload';
+export * from './help/HelpDialog';
+export * from './help/HelpSectionButton';
 export { DiskUsageView } from './disk-usage-view/DiskUsageView';
 export { DndSortableList } from './DndSortableList';
 export { ConfirmActionDialog } from './common/ConfirmActionDialog';
