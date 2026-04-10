@@ -104,8 +104,6 @@ export function AdminPage() {
           </div>
 
           <div className="relative flex flex-col">
-            <div className="absolute -top-6 right-50 bottom-0 w-0.5 bg-(--border)"></div>
-
             <Tabs.Content value="settings">
               <AdminHelpPanel helpItems={[]} />
             </Tabs.Content>

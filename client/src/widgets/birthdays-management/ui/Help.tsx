@@ -1,10 +1,4 @@
-import type { ReactNode } from 'react';
-
-export interface HelpItem {
-  label: string;
-  title: string;
-  content: ReactNode;
-}
+import type { HelpItem } from '@/entities/help';
 
 export const HelpItems: HelpItem[] = [
   {
