@@ -13,6 +13,8 @@ import { useKioskStore } from '@/entities/kiosk';
 import { KioskWorkScheduleManagement } from '@/widgets/kiosk-work-schedule-management';
 import { LogWidget } from '@/widgets/log';
 import { useHorizontalWheelScroll } from '@/shared/lib';
+import { AdminHelpPanel } from '@/widgets/admin-help-panel';
+import { HelpItems as birthdaysHelp } from '@/widgets/birthdays-management';
 
 export function AdminPage() {
   const kioskId = useKioskStore((s) => s.currentKiosk.id);
@@ -98,6 +100,38 @@ export function AdminPage() {
 
             <Tabs.Content value="logs">
               <LogWidget />
+            </Tabs.Content>
+          </div>
+
+          <div className="relative flex flex-col">
+            <div className="absolute -top-6 right-50 bottom-0 w-0.5 bg-(--border)"></div>
+
+            <Tabs.Content value="settings">
+              <AdminHelpPanel helpItems={[]} />
+            </Tabs.Content>
+            <Tabs.Content value="rss">
+              <AdminHelpPanel helpItems={[]} />
+            </Tabs.Content>
+            <Tabs.Content value="schedule">
+              <AdminHelpPanel helpItems={[]} />
+            </Tabs.Content>
+            <Tabs.Content value="video">
+              <AdminHelpPanel helpItems={[]} />
+            </Tabs.Content>
+            <Tabs.Content value="image">
+              <AdminHelpPanel helpItems={[]} />
+            </Tabs.Content>
+            <Tabs.Content value="birthdays">
+              <AdminHelpPanel helpItems={birthdaysHelp} />
+            </Tabs.Content>
+            <Tabs.Content value="kiosks">
+              <AdminHelpPanel helpItems={[]} />
+            </Tabs.Content>
+            <Tabs.Content value="operating-hours">
+              <AdminHelpPanel helpItems={[]} />
+            </Tabs.Content>
+            <Tabs.Content value="logs">
+              <AdminHelpPanel helpItems={[]} />
             </Tabs.Content>
           </div>
         </div>
