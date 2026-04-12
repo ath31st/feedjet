@@ -1,11 +1,12 @@
 import { useAdminTheme } from '@/app/providers/CommonThemeProvider';
 import { themesFull, type Theme } from '@/entities/ui-config';
+import { SidebarPanel } from '@/shared/ui';
 
 export function ThemeSwitcher() {
   const { setTheme } = useAdminTheme();
 
   return (
-    <div className="fixed top-45 right-0 z-10 flex h-9 w-6 transform flex-col overflow-hidden rounded-l-lg bg-(--button-bg) p-2 shadow-md transition-all duration-300 hover:h-64 hover:w-48">
+    <SidebarPanel top={180} hoverHeight={64} hoverWidth={48}>
       <div className="grid h-full w-full grid-cols-4 gap-2">
         {themesFull.map((t) => (
           <button
@@ -20,6 +21,6 @@ export function ThemeSwitcher() {
           </button>
         ))}
       </div>
-    </div>
+    </SidebarPanel>
   );
 }
