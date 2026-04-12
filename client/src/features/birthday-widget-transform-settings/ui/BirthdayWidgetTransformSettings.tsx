@@ -35,7 +35,7 @@ export function BirthdayWidgetTransformSettings() {
     <div className="flex flex-col gap-4">
       <MonthTabs value={month} onChange={setMonth} />
 
-      <div className="flex items-center gap-6">
+      <div className="flex flex-col items-center gap-6 2xl:flex-row">
         <div className="flex-1">
           <TransformPreview
             transformData={localTransform}
