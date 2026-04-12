@@ -14,6 +14,6 @@ export const useAdminHelp = create<AdminHelpState>()(
     }),
     {
       name: 'admin-help-enabled',
-    }
-  )
+    },
+  ),
 );
