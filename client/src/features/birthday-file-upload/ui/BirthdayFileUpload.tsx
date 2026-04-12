@@ -69,7 +69,7 @@ export function BirthdayFileUpload() {
       <input
         ref={inputRef}
         type="file"
-        accept=".txt,.csv,.odt,.docx"
+        accept=".txt,.doc,.odt,.docx"
         onChange={handleInputChange}
         className="hidden"
       />
