@@ -10,10 +10,9 @@ interface HelpPanelProps {
 export function AdminHelpPanel({ helpItems }: HelpPanelProps) {
   const { enabled } = useAdminHelp();
   const [openDialog, setOpenDialog] = useState<number | null>(null);
-
-  if (!enabled) return null;
-
   const isEmpty = helpItems.length === 0;
+
+  if (!enabled || isEmpty) return null;
 
   return (
     <>
