@@ -79,25 +79,11 @@ export class AdbClient {
   }
 
   async screenOn(target: AdbTarget) {
-    this.logger.debug({ targetIp: target.ip, fn: 'screenOn' }, 'Screen ON');
-    const state = await this.cmd(
-      target,
-      'dumpsys power | grep "mHoldingDisplaySuspendBlocker"',
-    );
-    if (!state.includes('true')) {
-      await this.cmd(target, 'input keyevent 26');
-    }
+    return this.ensureScreenState(target, true);
   }
 
   async screenOff(target: AdbTarget) {
-    this.logger.debug({ targetIp: target.ip, fn: 'screenOff' }, 'Screen OFF');
-    const state = await this.cmd(
-      target,
-      'dumpsys power | grep "mHoldingDisplaySuspendBlocker"',
-    );
-    if (state.includes('true')) {
-      await this.cmd(target, 'input keyevent 26');
-    }
+    return this.ensureScreenState(target, false);
   }
 
   async getScreenshot(target: AdbTarget): Promise<Buffer> {
@@ -129,5 +115,41 @@ export class AdbClient {
       'ADB disconnect',
     );
     return this.client.disconnect(target.ip, this.defaultPort);
+  }
+
+  private async isScreenOn(target: AdbTarget): Promise<boolean> {
+    const state = await this.cmd(
+      target,
+      'dumpsys power | grep "mHoldingDisplaySuspendBlocker"',
+    );
+
+    return state.includes('true');
+  }
+
+  private async ensureScreenState(
+    target: AdbTarget,
+    desired: boolean,
+    retries = 4,
+  ): Promise<void> {
+    for (let i = 0; i <= retries; i++) {
+      const current = await this.isScreenOn(target);
+
+      if (current === desired) return;
+
+      await this.cmd(target, 'input keyevent 26');
+
+      await new Promise((r) => setTimeout(r, 300));
+
+      const after = await this.isScreenOn(target);
+      if (after === desired) return;
+
+      if (i === retries) {
+        throw new Error(
+          `Failed to set screen state to ${desired ? 'ON' : 'OFF'}`,
+        );
+      }
+
+      this.logger.warn({ attempt: i + 1 }, 'Retrying screen state change');
+    }
   }
 }
