@@ -18,6 +18,7 @@ import { HelpItems as birthdaysHelp } from '@/widgets/birthdays-management';
 import { HelpItems as kiosksHelp } from '@/widgets/kiosk-management';
 import { HelpItems as appearanceHelp } from '@/widgets/appearance-settings';
 import { HelpItems as operatingHoursHelp } from '@/widgets/kiosk-work-schedule-management';
+import { HelpItems as rssHelp } from '@/widgets/rss-management';
 
 export function AdminPage() {
   const kioskId = useKioskStore((s) => s.currentKiosk.id);
@@ -111,7 +112,7 @@ export function AdminPage() {
               <AdminHelpPanel helpItems={appearanceHelp} />
             </Tabs.Content>
             <Tabs.Content value="rss">
-              <AdminHelpPanel helpItems={[]} />
+              <AdminHelpPanel helpItems={rssHelp} />
             </Tabs.Content>
             <Tabs.Content value="schedule">
               <AdminHelpPanel helpItems={[]} />
