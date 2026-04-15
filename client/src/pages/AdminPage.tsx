@@ -16,6 +16,7 @@ import { useHorizontalWheelScroll } from '@/shared/lib';
 import { AdminHelpPanel } from '@/widgets/admin-help-panel';
 import { HelpItems as birthdaysHelp } from '@/widgets/birthdays-management';
 import { HelpItems as kiosksHelp } from '@/widgets/kiosk-management';
+import { HelpItems as appearanceHelp } from '@/widgets/appearance-settings';
 
 export function AdminPage() {
   const kioskId = useKioskStore((s) => s.currentKiosk.id);
@@ -106,7 +107,7 @@ export function AdminPage() {
 
           <div className="relative flex flex-col">
             <Tabs.Content value="settings">
-              <AdminHelpPanel helpItems={[]} />
+              <AdminHelpPanel helpItems={appearanceHelp} />
             </Tabs.Content>
             <Tabs.Content value="rss">
               <AdminHelpPanel helpItems={[]} />
