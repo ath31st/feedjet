@@ -20,6 +20,7 @@ import { HelpItems as appearanceHelp } from '@/widgets/appearance-settings';
 import { HelpItems as operatingHoursHelp } from '@/widgets/kiosk-work-schedule-management';
 import { HelpItems as rssHelp } from '@/widgets/rss-management';
 import { HelpItems as videoHelp } from '@/widgets/video-content-management';
+import { HelpItems as imageHelp } from '@/widgets/image-content-management';
 
 export function AdminPage() {
   const kioskId = useKioskStore((s) => s.currentKiosk.id);
@@ -122,7 +123,7 @@ export function AdminPage() {
               <AdminHelpPanel helpItems={videoHelp} />
             </Tabs.Content>
             <Tabs.Content value="image">
-              <AdminHelpPanel helpItems={[]} />
+              <AdminHelpPanel helpItems={imageHelp} />
             </Tabs.Content>
             <Tabs.Content value="birthdays">
               <AdminHelpPanel helpItems={birthdaysHelp} />
