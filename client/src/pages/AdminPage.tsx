@@ -15,6 +15,7 @@ import { LogWidget } from '@/widgets/log';
 import { useHorizontalWheelScroll } from '@/shared/lib';
 import { AdminHelpPanel } from '@/widgets/admin-help-panel';
 import { HelpItems as birthdaysHelp } from '@/widgets/birthdays-management';
+import { HelpItems as kiosksHelp } from '@/widgets/kiosk-management';
 
 export function AdminPage() {
   const kioskId = useKioskStore((s) => s.currentKiosk.id);
@@ -123,7 +124,7 @@ export function AdminPage() {
               <AdminHelpPanel helpItems={birthdaysHelp} />
             </Tabs.Content>
             <Tabs.Content value="kiosks">
-              <AdminHelpPanel helpItems={[]} />
+              <AdminHelpPanel helpItems={kiosksHelp} />
             </Tabs.Content>
             <Tabs.Content value="operating-hours">
               <AdminHelpPanel helpItems={[]} />
