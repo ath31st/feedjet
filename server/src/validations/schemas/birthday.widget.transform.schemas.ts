@@ -12,4 +12,6 @@ export const birthdayWidgetTransformInputSchema = z.object({
   lineGap: z.number().int().min(50).max(300),
   textColor: z.string().min(1).max(50),
   shadowBlur: z.number().int().min(0).max(40),
+  lineOffsetX: z.number().int().min(-20).max(20),
+  lineOffsetY: z.number().int().min(-20).max(20),
 });

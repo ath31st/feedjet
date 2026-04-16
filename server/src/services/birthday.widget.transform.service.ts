@@ -25,6 +25,8 @@ export class BirthdayWidgetTransformService {
    * lineGap: 100 (50-300%)
    * textColor: '#ffffff' (hex)
    * shadowBlur: 6 (0-40)
+   * lineOffsetX: 0 (-20-20)
+   * lineOffsetY: 0 (-20-20)
    */
   private defaultTransform: BirthdayWidgetTransform = {
     month: 0,
@@ -39,6 +41,8 @@ export class BirthdayWidgetTransformService {
     lineGap: 100,
     textColor: '#ffffff',
     shadowBlur: 6,
+    lineOffsetX: 0,
+    lineOffsetY: 0,
   };
 
   constructor(db: DbType) {
