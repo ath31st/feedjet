@@ -41,7 +41,7 @@ export function BackgroundPreviewDialog({
             <img
               src={previewUrl}
               alt=""
-              className="h-auto w-full object-contain"
+              className="max-h-[90vh] w-full object-contain"
             />
           )}
           <div className="flex justify-end gap-4 border-(--border) border-t p-3">
