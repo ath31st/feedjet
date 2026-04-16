@@ -98,6 +98,32 @@ export function BirthdayWidgetTransformSettings() {
           />
 
           <SliderControl
+            label="Горизонтальный сдвиг строк (px)"
+            value={localTransform.lineOffsetX ?? 0}
+            min={-20}
+            max={20}
+            step={1}
+            onChange={(val) =>
+              setLocalTransform((prev) =>
+                prev ? { ...prev, lineOffsetX: val } : prev,
+              )
+            }
+          />
+
+          <SliderControl
+            label="Вертикальный сдвиг строк (px)"
+            value={localTransform.lineOffsetY ?? 0}
+            min={-20}
+            max={20}
+            step={1}
+            onChange={(val) =>
+              setLocalTransform((prev) =>
+                prev ? { ...prev, lineOffsetY: val } : prev,
+              )
+            }
+          />
+
+          <SliderControl
             label="Поворот вокруг X (в град)"
             value={localTransform.rotateX}
             min={-90}
@@ -171,32 +197,6 @@ export function BirthdayWidgetTransformSettings() {
             onChange={(val) =>
               setLocalTransform((prev) =>
                 prev ? { ...prev, shadowBlur: val } : prev,
-              )
-            }
-          />
-
-          <SliderControl
-            label="Горизонтальный сдвиг строк (px)"
-            value={localTransform.lineOffsetX ?? 0}
-            min={-20}
-            max={20}
-            step={1}
-            onChange={(val) =>
-              setLocalTransform((prev) =>
-                prev ? { ...prev, lineOffsetX: val } : prev,
-              )
-            }
-          />
-
-          <SliderControl
-            label="Вертикальный сдвиг строк (px)"
-            value={localTransform.lineOffsetY ?? 0}
-            min={-20}
-            max={20}
-            step={1}
-            onChange={(val) =>
-              setLocalTransform((prev) =>
-                prev ? { ...prev, lineOffsetY: val } : prev,
               )
             }
           />
