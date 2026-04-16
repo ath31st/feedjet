@@ -91,6 +91,8 @@ export class BirthdayWidgetTransformService {
             lineGap: data.lineGap,
             textColor: data.textColor,
             shadowBlur: data.shadowBlur,
+            lineOffsetX: data.lineOffsetX,
+            lineOffsetY: data.lineOffsetY,
             updatedAt: sql`(unixepoch())`,
           },
         })
