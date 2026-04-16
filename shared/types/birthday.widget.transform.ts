@@ -11,4 +11,6 @@ export interface BirthdayWidgetTransform {
   lineGap: number;
   textColor: string;
   shadowBlur: number;
+  lineOffsetX: number;
+  lineOffsetY: number;
 }

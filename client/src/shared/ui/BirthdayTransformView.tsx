@@ -24,6 +24,8 @@ export function BirthdayTransformView({
     lineGap,
     textColor,
     shadowBlur,
+    lineOffsetX,
+    lineOffsetY,
   } = transformData;
 
   return (
@@ -61,20 +63,29 @@ export function BirthdayTransformView({
         }}
       >
         <div className="flex h-full w-full flex-col">
-          {birthdays.map((birthday) => (
-            <div
-              key={birthday.id}
-              className="flex w-full items-center justify-between whitespace-nowrap"
-            >
-              <span className="font-semibold">{birthday.fullName}</span>
-              <span>
-                {new Date(birthday.birthDate).toLocaleDateString('ru-RU', {
-                  day: '2-digit',
-                  month: 'long',
-                })}
-              </span>
-            </div>
-          ))}
+          {birthdays.map((birthday, index) => {
+            const offsetX = index * lineOffsetX;
+            const offsetY = index * lineOffsetY;
+
+            return (
+              <div
+                key={birthday.id}
+                style={{
+                  transform: `translateY(${offsetY}px) translateX(${offsetX}px)`,
+                }}
+              >
+                <div className="flex w-full items-center justify-between whitespace-nowrap">
+                  <span className="font-semibold">{birthday.fullName}</span>
+                  <span>
+                    {new Date(birthday.birthDate).toLocaleDateString('ru-RU', {
+                      day: '2-digit',
+                      month: 'long',
+                    })}
+                  </span>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
