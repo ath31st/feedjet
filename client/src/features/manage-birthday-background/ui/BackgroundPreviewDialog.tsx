@@ -1,10 +1,10 @@
-import * as Dialog from '@radix-ui/react-dialog';
 import {
   buildBackgroundUrl,
   type BirthdayBackground,
 } from '@/entities/birthday-background';
 import { IconButton } from '@/shared/ui/common';
 import { Cross1Icon, ResetIcon, UpdateIcon } from '@radix-ui/react-icons';
+import { PreviewDialogBase } from '@/shared/ui';
 
 interface BackgroundPreviewDialogProps {
   open: boolean;
@@ -29,40 +29,29 @@ export function BackgroundPreviewDialog({
     : null;
 
   return (
-    <Dialog.Root open={open} onOpenChange={onOpenChange}>
-      <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 bg-black/50" />
-        <Dialog.Content className="fixed top-1/2 left-1/2 w-[90vw] max-w-350 -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-lg bg-(--card-bg)">
-          <Dialog.Description className="sr-only">
-            Предпросмотр фона
-          </Dialog.Description>
-          <Dialog.Title className="sr-only">Предпросмотр</Dialog.Title>
-          {previewUrl && (
-            <img
-              src={previewUrl}
-              alt=""
-              className="max-h-[90vh] w-full object-contain"
-            />
-          )}
-          <div className="flex justify-end gap-4 border-(--border) border-t p-3">
-            <IconButton
-              onClick={onDelete}
-              tooltip="Удалить"
-              icon={<Cross1Icon className="h-5 w-5 cursor-pointer" />}
-            />
-            <IconButton
-              onClick={onReplace}
-              tooltip="Заменить"
-              icon={<UpdateIcon className="h-5 w-5 cursor-pointer" />}
-            />
-            <IconButton
-              onClick={onOpenChange}
-              tooltip="Закрыть"
-              icon={<ResetIcon className="h-5 w-5 cursor-pointer" />}
-            />
-          </div>
-        </Dialog.Content>
-      </Dialog.Portal>
-    </Dialog.Root>
+    <PreviewDialogBase
+      open={open}
+      onOpenChange={onOpenChange}
+      imageUrl={previewUrl}
+      footer={
+        <>
+          <IconButton
+            onClick={onDelete}
+            tooltip="Удалить"
+            icon={<Cross1Icon className="h-5 w-5 cursor-pointer" />}
+          />
+          <IconButton
+            onClick={onReplace}
+            tooltip="Заменить"
+            icon={<UpdateIcon className="h-5 w-5 cursor-pointer" />}
+          />
+          <IconButton
+            onClick={onOpenChange}
+            tooltip="Закрыть"
+            icon={<ResetIcon className="h-5 w-5 cursor-pointer" />}
+          />
+        </>
+      }
+    />
   );
 }
