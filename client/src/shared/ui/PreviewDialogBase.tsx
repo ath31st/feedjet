@@ -32,8 +32,8 @@ export function PreviewDialogBase({
           )}
 
           {footer && (
-            <div className="flex justify-end gap-4 border-(--border) border-t p-3">
-              {footer}
+            <div className="pointer-events-none absolute right-3 bottom-3">
+              <div className="pointer-events-auto flex gap-2">{footer}</div>
             </div>
           )}
         </Dialog.Content>
