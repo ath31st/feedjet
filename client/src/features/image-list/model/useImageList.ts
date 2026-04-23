@@ -13,6 +13,7 @@ export function useImageList(kioskId: number) {
   const { mutate: updateIsActive, isPending: isUpdatingActive } =
     useUpdateIsActiveImage();
   const { mutate: updateOrder } = useUpdateImageOrder();
+  const [openImage, setOpenImage] = useState<AdminImageInfo | null>(null);
 
   const [ordered, setOrdered] = useState(images);
 
@@ -48,5 +49,7 @@ export function useImageList(kioskId: number) {
     handleRemove,
     handleToggleActive,
     handleReorder,
+    openImage,
+    setOpenImage,
   };
 }
