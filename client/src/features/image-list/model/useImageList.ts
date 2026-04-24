@@ -1,8 +1,9 @@
 import {
   useImageMetadataList,
   useRemoveImageFile,
+  useUpdateImageDurations,
   useUpdateImageOrder,
-  useUpdateIsActiveImage,
+  useUpdateKioskImage,
   type AdminImageInfo,
 } from '@/entities/image';
 import { useEffect, useState } from 'react';
@@ -11,8 +12,9 @@ export function useImageList(kioskId: number) {
   const { data: images = [], isLoading } = useImageMetadataList(kioskId);
   const { mutate: removeImage, isPending: isRemoving } = useRemoveImageFile();
   const { mutate: updateIsActive, isPending: isUpdatingActive } =
-    useUpdateIsActiveImage();
+    useUpdateKioskImage();
   const { mutate: updateOrder } = useUpdateImageOrder();
+  const { mutate: updateImageDurations } = useUpdateImageDurations();
   const [openImage, setOpenImage] = useState<AdminImageInfo | null>(null);
 
   const [ordered, setOrdered] = useState(images);
@@ -25,8 +27,20 @@ export function useImageList(kioskId: number) {
     removeImage({ filename: fileName, kioskId });
   };
 
-  const handleToggleActive = (fileName: string, isActive: boolean) => {
-    updateIsActive({ kioskId, fileName, isActive });
+  const handleUpdateDuration =
+    (fileName: string) => (durationSeconds: number) => {
+      updateImageDurations({
+        kioskId,
+        updates: [{ durationSeconds, fileName }],
+      });
+    };
+
+  const handleUpdateIsActiveAndDuration = (
+    fileName: string,
+    isActive: boolean,
+    durationSeconds: number,
+  ) => {
+    updateIsActive({ kioskId, fileName, isActive, durationSeconds });
   };
 
   const handleReorder = (newItems: AdminImageInfo[]) => {
@@ -47,7 +61,8 @@ export function useImageList(kioskId: number) {
     isRemoving,
     isUpdatingActive,
     handleRemove,
-    handleToggleActive,
+    handleUpdateIsActiveAndDuration,
+    handleUpdateDuration,
     handleReorder,
     openImage,
     setOpenImage,
