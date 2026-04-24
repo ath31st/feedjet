@@ -84,9 +84,9 @@ export const useUpdateImageOrder = () => {
   );
 };
 
-export const useUpdateIsActiveImage = () => {
+export const useUpdateKioskImage = () => {
   return useMutation(
-    trpcWithProxy.image.updateIsActiveImage.mutationOptions({
+    trpcWithProxy.image.updateKioskImage.mutationOptions({
       onSuccess: (data) => {
         toast.success(
           `Файл ${data ? 'добавлен в список отображения' : 'удален из списка отображения'}`,
@@ -102,6 +102,30 @@ export const useUpdateIsActiveImage = () => {
         if (err instanceof Error) {
           toast.error(
             err.message || 'Ошибка при обновлении списка отображения',
+          );
+          return;
+        }
+      },
+    }),
+  );
+};
+
+export const useUpdateImageDurations = () => {
+  return useMutation(
+    trpcWithProxy.image.updateImageDurations.mutationOptions({
+      onSuccess: () => {
+        toast.success(`Продолжительность показа успешно изменена`);
+        queryClient.invalidateQueries({
+          queryKey: trpcWithProxy.image.listFiles.queryKey(),
+        });
+      },
+      onError: (err: unknown) => {
+        queryClient.invalidateQueries({
+          queryKey: trpcWithProxy.image.listFiles.queryKey(),
+        });
+        if (err instanceof Error) {
+          toast.error(
+            err.message || 'Ошибка при обновлении продолжительности показа',
           );
           return;
         }
