@@ -12,7 +12,6 @@ const STEP_OPTIONS = [
 ];
 
 export interface RotationIntervalProps {
-  label: string;
   inputId: string;
   value: number;
   update: (val: number) => void;
@@ -21,7 +20,6 @@ export interface RotationIntervalProps {
 }
 
 export function RotationInterval({
-  label,
   inputId,
   value,
   update,
@@ -59,9 +57,6 @@ export function RotationInterval({
 
   return (
     <div className="flex flex-col gap-1">
-      <label htmlFor={inputId} className="text-(--text)">
-        {label}
-      </label>
       <div className="flex items-center gap-2">
         <CommonButton
           type="button"

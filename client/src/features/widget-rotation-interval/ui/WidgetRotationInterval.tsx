@@ -5,10 +5,7 @@ import {
 import { useRotationInterval } from '../model/useRotationInterval';
 
 interface WidgetRotationIntervalProps
-  extends Omit<
-    RotationIntervalProps,
-    'label' | 'inputId' | 'value' | 'update'
-  > {
+  extends Omit<RotationIntervalProps, 'inputId' | 'value' | 'update'> {
   kioskId: number;
 }
 
@@ -19,7 +16,6 @@ export function WidgetRotationInterval({
   const { value, update } = useRotationInterval(kioskId, props.min, props.max);
   return (
     <RotationInterval
-      label=""
       inputId="widget-rotation-interval"
       value={value}
       update={update}
