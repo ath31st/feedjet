@@ -5,6 +5,7 @@ import sharp from 'sharp';
 import { FileStorageError } from '../errors/file.storage.error.js';
 import type {
   AdminImageInfo,
+  ImageDurationUpdate,
   ImageMetadata,
   ImageOrderUpdate,
   KioskImageInfo,
@@ -13,7 +14,21 @@ import { webReadableToNode } from '../utils/stream.js';
 import { ImageStorageServiceError } from '../errors/image.error.js';
 import type { DbType } from '../container.js';
 import { imagesTable, kioskImagesTable } from '../db/schema.js';
-import { and, eq, asc, sql } from 'drizzle-orm';
+import { and, eq, asc, sql, inArray } from 'drizzle-orm';
+
+type TxType = Parameters<Parameters<DbType['transaction']>[0]>[0];
+
+type KioskImagePatch = Partial<{
+  isActive: boolean;
+  order: number;
+  durationSeconds: number;
+}>;
+
+type KioskImageBatchItem = {
+  imageId: number;
+  patch: KioskImagePatch;
+};
+
 export class ImageStorageService extends FileStorageService {
   private readonly db: DbType;
   private readonly imageDir = 'images';
@@ -90,6 +105,7 @@ export class ImageStorageService extends FileStorageService {
     fileName: string,
     kioskId: number,
     isActive: boolean,
+    durationSeconds: number,
   ): Promise<boolean> {
     this.logger.debug(
       { fileName, kioskId, isActive, fn: 'update' },
@@ -116,7 +132,12 @@ export class ImageStorageService extends FileStorageService {
       throw new ImageStorageServiceError(404, 'File not found on disk');
     }
 
-    const result = this.updateIsActiveImage(imageId, kioskId, isActive);
+    const result = this.upsertKioskImage(
+      imageId,
+      kioskId,
+      isActive,
+      durationSeconds,
+    );
 
     this.logger.info(
       { fileName, isActive, fn: 'update' },
@@ -233,6 +254,7 @@ export class ImageStorageService extends FileStorageService {
         ...this.imageSelect(),
         isActive: kioskImagesTable.isActive,
         order: kioskImagesTable.order,
+        durationSeconds: kioskImagesTable.durationSeconds,
       })
       .from(imagesTable)
       .leftJoin(
@@ -255,6 +277,7 @@ export class ImageStorageService extends FileStorageService {
         ...this.imageSelect(),
         isActive: kioskImagesTable.isActive,
         order: kioskImagesTable.order,
+        durationSeconds: kioskImagesTable.durationSeconds,
       })
       .from(imagesTable)
       .innerJoin(kioskImagesTable, eq(imagesTable.id, kioskImagesTable.imageId))
@@ -295,23 +318,30 @@ export class ImageStorageService extends FileStorageService {
     }
   }
 
-  updateIsActiveImage(
+  private upsertKioskImage(
     imageId: number,
     kioskId: number,
     isActive: boolean,
+    durationSeconds: number,
   ): boolean {
     this.logger.debug(
-      { imageId, kioskId, isActive, fn: 'updateIsActiveImage' },
+      {
+        imageId,
+        kioskId,
+        isActive,
+        durationSeconds,
+        fn: 'upsertKioskImage',
+      },
       'Upserting kiosk image metadata',
     );
 
     try {
       this.db
         .insert(kioskImagesTable)
-        .values({ imageId, kioskId, isActive })
+        .values({ imageId, kioskId, isActive, durationSeconds })
         .onConflictDoUpdate({
           target: [kioskImagesTable.kioskId, kioskImagesTable.imageId],
-          set: { isActive },
+          set: { isActive, durationSeconds },
         })
         .run();
 
@@ -338,41 +368,48 @@ export class ImageStorageService extends FileStorageService {
     updates: ImageOrderUpdate[],
   ): Promise<void> {
     this.logger.debug(
-      { kioskId, updates, fn: 'updateImageOrderBatch' },
-      'Starting batch order update for kiosk images',
+      { kioskId, updatesCount: updates.length, fn: 'updateImageOrderBatch' },
+      'Starting batch order update',
     );
 
     try {
       await this.db.transaction(async (tx) => {
-        for (const { fileName, order } of updates) {
-          const imageRow = tx
-            .select({ id: imagesTable.id })
-            .from(imagesTable)
-            .where(eq(imagesTable.fileName, fileName))
-            .get();
+        if (updates.length === 0) return;
 
-          if (!imageRow) {
-            this.logger.warn(
-              { fileName, fn: 'updateImageOrderBatch' },
-              'Image file not found in metadata table. Skipping.',
-            );
+        const fileNames = updates.map((u) => u.fileName);
+
+        const rows = tx
+          .select({
+            id: imagesTable.id,
+            fileName: imagesTable.fileName,
+          })
+          .from(imagesTable)
+          .where(inArray(imagesTable.fileName, fileNames))
+          .all();
+
+        const map = new Map(rows.map((r) => [r.fileName, r.id]));
+
+        const items: KioskImageBatchItem[] = [];
+
+        for (const { fileName, order } of updates) {
+          const imageId = map.get(fileName);
+
+          if (!imageId) {
+            this.logger.warn({ fileName }, 'Image not found, skipping');
             continue;
           }
 
-          const imageId = imageRow.id;
-
-          tx.insert(kioskImagesTable)
-            .values({ imageId, kioskId, isActive: false, order })
-            .onConflictDoUpdate({
-              target: [kioskImagesTable.kioskId, kioskImagesTable.imageId],
-              set: { order: order },
-            })
-            .run();
+          items.push({
+            imageId,
+            patch: { order },
+          });
         }
+
+        this.upsertKioskImagesBatch(tx, kioskId, items);
       });
 
       this.logger.info(
-        { kioskId, updatesCount: updates.length, fn: 'updateImageOrderBatch' },
+        { kioskId, updatesCount: updates.length },
         'Batch order update completed successfully',
       );
     } catch (error) {
@@ -385,6 +422,105 @@ export class ImageStorageService extends FileStorageService {
         'Error updating image order batch',
       );
     }
+  }
+
+  async updateImageDuration(
+    fileName: string,
+    kioskId: number,
+    durationSeconds: number,
+  ): Promise<void> {
+    return this.updateImageDurationBatch(kioskId, [
+      { fileName, durationSeconds },
+    ]);
+  }
+
+  async updateImageDurationBatch(
+    kioskId: number,
+    updates: ImageDurationUpdate[],
+  ): Promise<void> {
+    this.logger.debug(
+      { kioskId, updatesCount: updates.length, fn: 'updateImageDurationBatch' },
+      'Starting batch duration update',
+    );
+
+    try {
+      await this.db.transaction(async (tx) => {
+        if (updates.length === 0) return;
+
+        const fileNames = updates.map((u) => u.fileName);
+
+        const rows = tx
+          .select({
+            id: imagesTable.id,
+            fileName: imagesTable.fileName,
+          })
+          .from(imagesTable)
+          .where(inArray(imagesTable.fileName, fileNames))
+          .all();
+
+        const map = new Map(rows.map((r) => [r.fileName, r.id]));
+
+        const items: KioskImageBatchItem[] = [];
+
+        for (const { fileName, durationSeconds } of updates) {
+          const imageId = map.get(fileName);
+
+          if (!imageId) {
+            this.logger.warn({ fileName }, 'Image not found, skipping');
+            continue;
+          }
+
+          items.push({
+            imageId,
+            patch: { durationSeconds },
+          });
+        }
+
+        this.upsertKioskImagesBatch(tx, kioskId, items);
+      });
+
+      this.logger.info(
+        { kioskId, updatesCount: updates.length },
+        'Batch duration update completed successfully',
+      );
+    } catch (error) {
+      this.logger.error(
+        { error, kioskId, fn: 'updateImageDurationBatch' },
+        'Error performing batch duration update',
+      );
+      throw new ImageStorageServiceError(
+        500,
+        'Error updating image durations batch',
+      );
+    }
+  }
+
+  private upsertKioskImagesBatch(
+    tx: TxType,
+    kioskId: number,
+    items: KioskImageBatchItem[],
+  ) {
+    if (items.length === 0) return;
+
+    const values = items.map(({ imageId, patch }) => ({
+      kioskId,
+      imageId,
+      ...patch,
+    }));
+
+    console.log('values', values);
+
+    tx.insert(kioskImagesTable)
+      .values(values)
+      .onConflictDoUpdate({
+        target: [kioskImagesTable.kioskId, kioskImagesTable.imageId],
+        set: {
+          isActive: sql.raw(`excluded.is_active`),
+          order: sql.raw(`excluded."order"`),
+          durationSeconds: sql.raw(`excluded.duration_seconds`),
+        },
+      })
+      .run();
   }
 
   private removeImageMetadataByFileName(fileName: string) {

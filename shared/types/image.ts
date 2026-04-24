@@ -13,14 +13,21 @@ export interface ImageMetadata {
 export interface AdminImageInfo extends ImageMetadata {
   isActive: boolean | null;
   order: number | null;
+  durationSeconds: number | null;
 }
 
 export interface KioskImageInfo extends ImageMetadata {
   isActive: boolean;
   order: number;
+  durationSeconds: number;
 }
 
 export interface ImageOrderUpdate {
   fileName: string;
   order: number;
+}
+
+export interface ImageDurationUpdate {
+  fileName: string;
+  durationSeconds: number;
 }
