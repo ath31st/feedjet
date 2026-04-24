@@ -5,8 +5,9 @@ import {
   fileParamsSchema,
 } from '../../validations/schemas/file.storage.validation.js';
 import {
+  batchUpdateImageDurationSchema,
   batchUpdateImageOrderSchema,
-  updateIsActiveImageSchema,
+  updateKioskImageSchema,
 } from '../../validations/schemas/image.schemas.js';
 import { kioskIdInputSchema } from '../../validations/schemas/kiosk.schemas.js';
 
@@ -52,13 +53,29 @@ export const imageStorageRouter = t.router({
       return result;
     }),
 
-  updateIsActiveImage: protectedProcedure
-    .input(updateIsActiveImageSchema)
+  updateImageDurations: protectedProcedure
+    .input(batchUpdateImageDurationSchema)
+    .mutation(async ({ input }) => {
+      const result = await imageStorageService.updateImageDurationBatch(
+        input.kioskId,
+        input.updates,
+      );
+      const activeImages = imageStorageService.listActiveImagesByKiosk(
+        input.kioskId,
+      );
+      eventBus.emit(`image:${input.kioskId}`, activeImages);
+
+      return result;
+    }),
+
+  updateKioskImage: protectedProcedure
+    .input(updateKioskImageSchema)
     .mutation(async ({ input }) => {
       const result = await imageStorageService.update(
         input.fileName,
         input.kioskId,
         input.isActive,
+        input.durationSeconds,
       );
       const activeImages = imageStorageService.listActiveImagesByKiosk(
         input.kioskId,
