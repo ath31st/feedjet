@@ -16,8 +16,6 @@ import type { DbType } from '../container.js';
 import { imagesTable, kioskImagesTable } from '../db/schema.js';
 import { and, eq, asc, sql, inArray } from 'drizzle-orm';
 
-type TxType = Parameters<Parameters<DbType['transaction']>[0]>[0];
-
 type KioskImagePatch = Partial<{
   isActive: boolean;
   order: number;
@@ -405,7 +403,7 @@ export class ImageStorageService extends FileStorageService {
           });
         }
 
-        this.upsertKioskImagesBatch(tx, kioskId, items);
+        this.upsertKioskImagesBatch(kioskId, items);
       });
 
       this.logger.info(
@@ -476,7 +474,7 @@ export class ImageStorageService extends FileStorageService {
           });
         }
 
-        this.upsertKioskImagesBatch(tx, kioskId, items);
+        this.upsertKioskImagesBatch(kioskId, items);
       });
 
       this.logger.info(
@@ -495,32 +493,49 @@ export class ImageStorageService extends FileStorageService {
     }
   }
 
-  private upsertKioskImagesBatch(
-    tx: TxType,
+  async upsertKioskImagesBatch(
     kioskId: number,
-    items: KioskImageBatchItem[],
-  ) {
-    if (items.length === 0) return;
+    updates: KioskImageBatchItem[],
+  ): Promise<void> {
+    this.logger.debug(
+      { kioskId, updatesCount: updates.length },
+      'Starting batch upsert kiosk images',
+    );
 
-    const values = items.map(({ imageId, patch }) => ({
-      kioskId,
-      imageId,
-      ...patch,
-    }));
+    try {
+      await this.db.transaction(async (tx) => {
+        for (const { imageId, patch } of updates) {
+          tx.insert(kioskImagesTable)
+            .values({
+              kioskId,
+              imageId,
+              ...patch,
+            })
+            .onConflictDoUpdate({
+              target: [kioskImagesTable.kioskId, kioskImagesTable.imageId],
+              set: {
+                ...patch,
+              },
+            })
+            .run();
+        }
+      });
 
-    console.log('values', values);
+      this.logger.info(
+        { kioskId, updatesCount: updates.length },
+        'Batch upsert kiosk images completed successfully',
+      );
+    } catch (error) {
+      this.logger.error(
+        { error, kioskId },
+        'Error performing batch upsert kiosk images',
+      );
 
-    tx.insert(kioskImagesTable)
-      .values(values)
-      .onConflictDoUpdate({
-        target: [kioskImagesTable.kioskId, kioskImagesTable.imageId],
-        set: {
-          isActive: sql.raw(`excluded.is_active`),
-          order: sql.raw(`excluded."order"`),
-          durationSeconds: sql.raw(`excluded.duration_seconds`),
-        },
-      })
-      .run();
+      throw new ImageStorageServiceError(
+        500,
+        'Error upserting kiosk images batch',
+      );
+    }
   }
 
   private removeImageMetadataByFileName(fileName: string) {
