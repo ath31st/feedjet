@@ -56,20 +56,20 @@ export function VideoList({ kioskId }: VideoListProps) {
               key={v.fileName}
               className="flex w-full items-center justify-between p-1"
             >
-              <div className="flex flex-col overflow-hidden">
+              <div className="flex w-full flex-col overflow-hidden">
                 <div className="flex flex-col overflow-hidden text-(--meta-text) text-xs">
                   <span className="truncate text-(--text) text-sm">
                     {v.name}
                   </span>
 
-                  <div className="flex flex-row gap-10">
-                    <div className="flex flex-col">
+                  <div className="flex w-[60%] flex-row items-center">
+                    <div className="flex flex-1 flex-col">
                       <span>
                         Разрешение: {v.width}x{v.height}px
                       </span>
                       <span>Формат: {v.format}</span>
                     </div>
-                    <div className="flex flex-col">
+                    <div className="flex flex-1 flex-col">
                       <span>Размер: {formatBytes(v.size)}</span>
                       <span>
                         Дата загрузки:{' '}
