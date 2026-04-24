@@ -13,16 +13,17 @@ export function AppearanceSettingsWidget({
   return (
     <div className="flex w-full flex-row items-start gap-6">
       <SettingsCard title="Выбор виджетов" className="w-full md:w-3/5">
-        <div className="flex flex-col gap-4">
-          <WidgetSelector kioskId={kioskId} />
+        <WidgetSelector kioskId={kioskId} />
+      </SettingsCard>
+      <div className="flex w-full flex-col gap-6 md:w-2/5">
+        <SettingsCard title="Интервал смены виджетов">
           <WidgetRotationInterval kioskId={kioskId} />
-        </div>
-      </SettingsCard>
-      <SettingsCard title="Настройки оформления" className="w-full md:w-2/5">
-        <div className="flex flex-col gap-4">
+        </SettingsCard>
+
+        <SettingsCard title="Настройки оформления">
           <ThemeSelector kioskId={kioskId} />
-        </div>
-      </SettingsCard>
+        </SettingsCard>
+      </div>
     </div>
   );
 }

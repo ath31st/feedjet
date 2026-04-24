@@ -16,13 +16,18 @@ export function RssManagementWidget({ kioskId }: RssManagementWidgetProps) {
         <FeedAddForm />
         <FeedList />
       </SettingsCard>
-      <SettingsCard title="Настройки RSS-виджета" className="w-full md:w-2/5">
-        <div className="flex flex-col gap-4">
-          <VisibleCellCountSelector kioskId={kioskId} />
-          <CarouselSizeSelector kioskId={kioskId} />
+      <div className="flex w-full flex-col gap-6 md:w-2/5">
+        <SettingsCard title={`Интервал "вращения" ленты`}>
           <FeedRotationInterval kioskId={kioskId} />
-        </div>
-      </SettingsCard>
+        </SettingsCard>
+
+        <SettingsCard title="Настройки RSS-виджета">
+          <div className="flex flex-col gap-4">
+            <VisibleCellCountSelector kioskId={kioskId} />
+            <CarouselSizeSelector kioskId={kioskId} />
+          </div>
+        </SettingsCard>
+      </div>
     </div>
   );
 }
