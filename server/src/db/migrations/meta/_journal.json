@@ -281,6 +281,13 @@
       "when": 1776337116247,
       "tag": "0039_right_tattoo",
       "breakpoints": true
+    },
+    {
+      "idx": 40,
+      "version": "6",
+      "when": 1777022435914,
+      "tag": "0040_majestic_prism",
+      "breakpoints": true
     }
   ]
 }

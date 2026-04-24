@@ -172,6 +172,7 @@ export const kioskImagesTable = sqliteTable(
     isActive: integer('is_active', { mode: 'boolean' })
       .notNull()
       .default(false),
+    durationSeconds: integer('duration_seconds').notNull().default(0),
     order: integer('order').notNull().default(0),
   },
   (table) => [primaryKey({ columns: [table.kioskId, table.imageId] })],
