@@ -36,7 +36,7 @@ export function SimpleDropdownMenu<T extends string | number>({
         <button
           ref={triggerRef}
           type="button"
-          className="w-full cursor-pointer rounded-lg border border-(--border) bg-(--card-bg) px-3 py-2 text-left text-sm focus:outline-none focus:ring-(--border) focus:ring-1"
+          className="w-full cursor-pointer rounded-lg border border-(--border) bg-(--card-bg) px-3 py-1.5 text-left text-sm focus:outline-none focus:ring-(--border) focus:ring-1"
         >
           {selectedOption ? selectedOption.label : value || placeholder}
         </button>
@@ -53,7 +53,7 @@ export function SimpleDropdownMenu<T extends string | number>({
             <DropdownMenu.Item
               key={opt.value}
               onSelect={() => onSelect(opt.value)}
-              className="cursor-pointer px-3 py-2 text-sm outline-none data-highlighted:bg-(--button-hover-bg)"
+              className="cursor-pointer px-3 py-1.5 text-sm outline-none data-highlighted:bg-(--button-hover-bg)"
             >
               {opt.label}
             </DropdownMenu.Item>
