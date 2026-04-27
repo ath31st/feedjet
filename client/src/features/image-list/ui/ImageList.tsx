@@ -9,9 +9,10 @@ import { ImagePreviewDialog } from './ImagePreviewDialog';
 
 interface ImageListProps {
   kioskId: number;
+  globalDuration: number;
 }
 
-export function ImageList({ kioskId }: ImageListProps) {
+export function ImageList({ kioskId, globalDuration }: ImageListProps) {
   const {
     ordered,
     isLoading,
@@ -95,7 +96,11 @@ export function ImageList({ kioskId }: ImageListProps) {
                   checked={i.isActive ?? false}
                   disabled={isUpdatingActive}
                   onCheckedChange={(checked) =>
-                    handleUpdateIsActiveAndDuration(i.fileName, checked, 0)
+                    handleUpdateIsActiveAndDuration(
+                      i.fileName,
+                      checked,
+                      globalDuration,
+                    )
                   }
                   className="relative h-5 w-10 shrink-0 cursor-pointer rounded-full border border-(--border) transition-colors data-[state=checked]:bg-(--button-bg)"
                 >
