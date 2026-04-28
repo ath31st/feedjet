@@ -4,20 +4,16 @@ interface ImageViewerKioskProps {
   onViewStart: () => void;
   onViewEnd: () => void;
   isSingleImageWidget: boolean;
-  displayDurationMs: number;
 }
 
 export function ImageViewerKiosk({
   onViewStart,
   onViewEnd,
   isSingleImageWidget,
-  displayDurationMs,
 }: ImageViewerKioskProps) {
   const { currentImage, url } = useImageViewer({
-    onViewStart,
     onViewEnd,
     isSingleImageWidget,
-    displayDurationMs,
   });
 
   if (!currentImage || !url) {
@@ -27,6 +23,7 @@ export function ImageViewerKiosk({
   return (
     <img
       src={url}
+      onLoad={onViewStart}
       className="relative z-10 h-full w-full object-contain"
       alt=""
     />

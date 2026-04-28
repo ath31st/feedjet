@@ -72,7 +72,6 @@ export function KioskPage() {
                   onViewStart={lockRotation}
                   onViewEnd={unlockRotation}
                   isSingleImageWidget={isSingleImageWidget}
-                  displayDurationMs={interval}
                 />
               )}
               {currentWidgetKey === 'birthday' && (
