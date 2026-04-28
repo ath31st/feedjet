@@ -8,6 +8,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
+    "type-check": "tsc --noEmit",
     "format": "biome format --write .",
     "lint": "biome lint --write .",
     "check": "biome check --write .",
