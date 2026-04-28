@@ -3,17 +3,13 @@ import { PlaylistState } from '@/shared/constant';
 import { useEffect, useRef, useState } from 'react';
 
 interface UseImageViewerProps {
-  onViewStart: () => void;
   onViewEnd: () => void;
   isSingleImageWidget: boolean;
-  displayDurationMs: number;
 }
 
 export function useImageViewer({
-  onViewStart,
   onViewEnd,
   isSingleImageWidget,
-  displayDurationMs,
 }: UseImageViewerProps) {
   const { currentImage, nextImage, resetPlaylist, images } = useImageStore();
   const [playlistState, setPlaylistState] = useState<PlaylistState>(
@@ -58,20 +54,25 @@ export function useImageViewer({
   useEffect(() => {
     if (!currentImage) return;
 
-    onViewStart();
-
     if (timerRef.current) {
       clearTimeout(timerRef.current);
     }
 
+    if (currentImage.durationSeconds === 0) {
+      nextImage();
+      return;
+    }
+
+    const durationMs = currentImage.durationSeconds * 1000;
+
     timerRef.current = setTimeout(() => {
       nextImage();
-    }, displayDurationMs);
+    }, durationMs);
 
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [currentImage, nextImage, onViewStart, displayDurationMs]);
+  }, [currentImage, nextImage]);
 
   return {
     currentImage,
