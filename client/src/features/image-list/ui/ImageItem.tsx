@@ -1,6 +1,6 @@
 import { buildImageUrl, type AdminImageInfo } from '@/entities/image';
 import { formatBytes, formatSecondsToTime } from '@/shared/lib';
-import { RotationInterval } from '@/shared/ui';
+import { RotationInterval, TooltipWrapper } from '@/shared/ui';
 import { IconButton } from '@/shared/ui/common';
 import {
   Cross1Icon,
@@ -110,22 +110,30 @@ export function ImageItem({
             <Switch.Thumb className="block h-4 w-4 translate-x-px rounded-full bg-(--text) transition-transform data-[state=checked]:translate-x-5.25" />
           </Switch.Root>
 
-          <button
-            type="button"
-            onClick={toggleManual}
-            className={`flex h-5 cursor-pointer items-center gap-1 rounded-lg border px-1.5 transition-colors ${
+          <TooltipWrapper
+            tooltip={
               isManual
-                ? 'border-(--button-bg) bg-(--button-bg) text-(--text)'
-                : 'border-(--border) text-(--meta-text) hover:bg-(--border)'
-            }`}
+                ? 'Сбросить к глобальной длительности'
+                : 'Установить индивидуальную длительность'
+            }
           >
-            <TimerIcon className="h-4 w-4" />
-            {isManual ? (
-              <UpdateIcon className="h-4 w-4" />
-            ) : (
-              <Pencil1Icon className="h-4 w-4" />
-            )}
-          </button>
+            <button
+              type="button"
+              onClick={toggleManual}
+              className={`flex h-5 cursor-pointer items-center gap-1 rounded-lg border px-1.5 transition-colors ${
+                isManual
+                  ? 'border-(--button-bg) bg-(--button-bg) text-(--text)'
+                  : 'border-(--border) text-(--meta-text) hover:bg-(--border)'
+              }`}
+            >
+              <TimerIcon className="h-4 w-4" />
+              {isManual ? (
+                <UpdateIcon className="h-4 w-4" />
+              ) : (
+                <Pencil1Icon className="h-4 w-4" />
+              )}
+            </button>
+          </TooltipWrapper>
 
           <IconButton
             onClick={() => onPreview(i)}
