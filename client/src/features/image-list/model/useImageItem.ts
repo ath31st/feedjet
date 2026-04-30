@@ -6,20 +6,11 @@ export const useImageItem = (
   globalDuration: number,
   onUpdateDuration: (name: string) => (val: number) => void,
 ) => {
-  const [isManual, setIsManual] = useState(
-    !!i.durationSeconds && Number(i.durationSeconds) !== Number(globalDuration),
-  );
+  const [isManual, setIsManual] = useState(false);
 
   useEffect(() => {
-    if (
-      !i.durationSeconds ||
-      Number(i.durationSeconds) === Number(globalDuration)
-    ) {
-      setIsManual(false);
-    } else {
-      setIsManual(true);
-    }
-  }, [globalDuration, i.durationSeconds]);
+    setIsManual(false);
+  }, []);
 
   const toggleManual = () => {
     const next = !isManual;

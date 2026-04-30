@@ -2,7 +2,13 @@ import { buildImageUrl, type AdminImageInfo } from '@/entities/image';
 import { formatBytes, formatSecondsToTime } from '@/shared/lib';
 import { RotationInterval } from '@/shared/ui';
 import { IconButton } from '@/shared/ui/common';
-import { Cross1Icon, EyeOpenIcon, TimerIcon } from '@radix-ui/react-icons';
+import {
+  Cross1Icon,
+  EyeOpenIcon,
+  Pencil1Icon,
+  TimerIcon,
+  UpdateIcon,
+} from '@radix-ui/react-icons';
 import * as Switch from '@radix-ui/react-switch';
 import { useImageItem } from '../model/useImageItem';
 
@@ -80,7 +86,9 @@ export function ImageItem({
                   />
                 </div>
               ) : (
-                <span>Длительность: {formatSecondsToTime(globalDuration)}</span>
+                <span>
+                  Длительность: {formatSecondsToTime(i.durationSeconds ?? 0)}
+                </span>
               )}
             </div>
           </div>
@@ -94,9 +102,7 @@ export function ImageItem({
               onUpdateActive(
                 i.fileName,
                 checked,
-                isManual
-                  ? (i.durationSeconds ?? globalDuration)
-                  : globalDuration,
+                i.durationSeconds ?? globalDuration,
               )
             }
             className="relative h-5 w-10 shrink-0 cursor-pointer rounded-full border border-(--border) transition-colors data-[state=checked]:bg-(--button-bg)"
@@ -113,10 +119,12 @@ export function ImageItem({
                 : 'border-(--border) text-(--meta-text) hover:bg-(--border)'
             }`}
           >
-            <TimerIcon className="h-3 w-3" />
-            <span className="font-bold text-xs uppercase">
-              {isManual ? 'Manual' : 'Global'}
-            </span>
+            <TimerIcon className="h-4 w-4" />
+            {isManual ? (
+              <UpdateIcon className="h-4 w-4" />
+            ) : (
+              <Pencil1Icon className="h-4 w-4" />
+            )}
           </button>
 
           <IconButton

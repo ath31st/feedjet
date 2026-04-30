@@ -45,7 +45,7 @@ export function ImageList({ kioskId, globalDuration }: ImageListProps) {
       >
         {(i, _, drag) => (
           <ImageItem
-            key={i.fileName}
+            key={`${kioskId}-${i.fileName}`}
             item={i}
             drag={drag}
             globalDuration={globalDuration}
