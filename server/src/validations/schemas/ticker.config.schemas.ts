@@ -1,5 +1,6 @@
 import z from 'zod';
 import { tickerDirections } from '@shared/types/ticker.config.js';
+import { kioskIdSchema } from './kiosk.schemas.js';
 
 const tickerDirectionSchema = z.enum(tickerDirections);
 
@@ -58,4 +59,14 @@ export const tickerConfigResponseSchema = z.object({
 
 export const tickerConfigParamsSchema = z.object({
   id: z.coerce.number().int().positive(),
+});
+
+export const tickerConfigUpdateInputSchema = z.object({
+  kioskId: kioskIdSchema,
+  data: tickerConfigUpdateSchema,
+});
+
+export const tickerConfigCreateInputSchema = z.object({
+  kioskId: kioskIdSchema,
+  data: tickerConfigCreateSchema,
 });

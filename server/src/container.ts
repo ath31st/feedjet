@@ -36,6 +36,7 @@ import { KioskControlService } from './services/kiosk.control.service.js';
 import { BirthdayWidgetTransformService } from './services/birthday.widget.transform.service.js';
 import { LogService } from './services/log.service.js';
 import { AdbClient } from './integration/adb.client.js';
+import { TickerConfigService } from './services/ticker.config.service.js';
 
 const sqlite = new Database(dbPath);
 export const db = drizzle(sqlite, { schema });
@@ -63,6 +64,7 @@ export const authService = new AuthService(userService);
 export const rssService = new RssService(db);
 export const feedConfigService = new FeedConfigService(db);
 export const uiConfigService = new UiConfigService(db);
+export const tickerConfigService = new TickerConfigService(db);
 export const scheduleEventService = new ScheduleEventService(db);
 export const birthdayService = new BirthdayService(db);
 export const birthdayFileService = new BirthdayFileService(

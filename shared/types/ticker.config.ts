@@ -21,17 +21,17 @@ export interface TickerConfig {
 
 export interface NewTickerConfig {
   text: string;
-  isActive: boolean;
-  speedPxPerSec: number;
+  isActive?: boolean;
+  speedPxPerSec?: number;
   direction: TickerDirection;
-  fontScale: number;
-  textColor: string;
-  backgroundColor: string;
-  backgroundOpacity: number;
-  height: number;
-  positionY: number;
-  paddingX: number;
-  isLooped: boolean;
+  fontScale?: number;
+  textColor?: string;
+  backgroundColor?: string;
+  backgroundOpacity?: number;
+  height?: number;
+  positionY?: number;
+  paddingX?: number;
+  isLooped?: boolean;
 }
 
 export interface UpdateTickerConfig {
