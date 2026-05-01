@@ -20,6 +20,12 @@ export const tickerConfigRouter = t.router({
     });
   }),
 
+  getDefault: protectedProcedure.query(() => {
+    return handleServiceCall(() => {
+      return tickerConfigService.getDefault();
+    });
+  }),
+
   create: protectedProcedure
     .input(tickerConfigCreateInputSchema)
     .mutation(({ input }) => {
@@ -35,6 +41,19 @@ export const tickerConfigRouter = t.router({
       return handleServiceCall(() => {
         const { kioskId, data } = input;
         const updated = tickerConfigService.update(kioskId, data);
+
+        eventBus.emit(`ticker-config:${updated.kioskId}`, updated);
+
+        return updated;
+      });
+    }),
+
+  upsert: protectedProcedure
+    .input(tickerConfigCreateInputSchema)
+    .mutation(({ input }) => {
+      return handleServiceCall(() => {
+        const { kioskId, data } = input;
+        const updated = tickerConfigService.upsert(kioskId, data);
 
         eventBus.emit(`ticker-config:${updated.kioskId}`, updated);
 

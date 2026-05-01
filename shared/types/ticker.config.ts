@@ -15,8 +15,6 @@ export interface TickerConfig {
   positionY: number;
   paddingX: number;
   isLooped: boolean;
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 export interface NewTickerConfig {

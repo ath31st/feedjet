@@ -13,6 +13,39 @@ export class TickerConfigService {
   private readonly db: DbType;
   private readonly logger = createServiceLogger('tickerConfigService');
 
+  /*
+   * Default values for the ticker config
+   *
+   * kioskId: 0
+   * text: is an empty string by default
+   * isActive: false
+   * speedPxPerSec: 50 (1-600px/sec)
+   * direction: 'left' or 'right'
+   * fontScale: 100 (50-300%)
+   * textColor: '#ffffff'
+   * backgroundColor: '#000000'
+   * backgroundOpacity: 100 (0-100%)
+   * height: 5 (0-100%)
+   * positionY: 0 (0-2000px)
+   * paddingX: 0 (0-200px)
+   * isLooped: true
+   */
+  private defaultConfig: TickerConfig = {
+    kioskId: 0,
+    text: '',
+    isActive: false,
+    speedPxPerSec: 50,
+    direction: 'left',
+    fontScale: 100,
+    textColor: '#ffffff',
+    backgroundColor: '#000000',
+    backgroundOpacity: 100,
+    height: 5,
+    positionY: 0,
+    paddingX: 0,
+    isLooped: true,
+  };
+
   constructor(db: DbType) {
     this.db = db;
   }
@@ -34,6 +67,10 @@ export class TickerConfigService {
     }
 
     return ticker;
+  }
+
+  getDefault(): TickerConfig {
+    return this.defaultConfig;
   }
 
   create(kioskId: number, data: NewTickerConfig): TickerConfig {
