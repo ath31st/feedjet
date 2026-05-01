@@ -54,19 +54,24 @@ export class TickerConfigService {
     return this.db.select().from(tickerConfigTable).all();
   }
 
-  get(kioskId: number): TickerConfig {
+  findByKioskId(kioskId: number): TickerConfig | null {
     const ticker = this.db
       .select()
       .from(tickerConfigTable)
       .where(eq(tickerConfigTable.kioskId, kioskId))
       .get();
 
-    if (!ticker) {
-      this.logger.warn({ kioskId, fn: 'get' }, 'Ticker config not found');
-      throw new TickerConfigServiceError(404, 'Ticker config not found');
-    }
+    return ticker || null;
+  }
 
-    return ticker;
+  get(kioskId: number): TickerConfig | null {
+    const ticker = this.db
+      .select()
+      .from(tickerConfigTable)
+      .where(eq(tickerConfigTable.kioskId, kioskId))
+      .get();
+
+    return ticker || null;
   }
 
   getDefault(): TickerConfig {
