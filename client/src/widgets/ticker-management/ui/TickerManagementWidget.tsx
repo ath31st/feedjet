@@ -1,3 +1,4 @@
+import { TickerConfigSettings } from '@/features/ticker-config-settings';
 import { SettingsCard } from '@/shared/ui/SettingsCard';
 
 export type TickerManagementWidgetProps = {
@@ -10,7 +11,7 @@ export function TickerManagementWidget({
   return (
     <div className="flex w-full flex-col gap-6">
       <SettingsCard title="Настройки бегущей строки" className="w-full">
-        <span>Not implemented {kioskId}</span>
+        <TickerConfigSettings kioskId={kioskId} />
       </SettingsCard>
     </div>
   );
