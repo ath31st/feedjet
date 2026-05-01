@@ -245,3 +245,29 @@ export const birthdayWidgetTransformTable = sqliteTable(
       .default(sql`(unixepoch())`),
   },
 );
+
+export const tickerConfigTable = sqliteTable('ticker_config', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  kioskId: integer('kiosk_id')
+    .notNull()
+    .references(() => kiosksTable.id, { onDelete: 'cascade' })
+    .unique(),
+  text: text('text').notNull(),
+  isActive: integer('is_active', { mode: 'boolean' }).notNull().default(false),
+  speedPxPerSec: integer('speed_px_per_sec').notNull().default(60),
+  direction: text('direction').notNull().$type<'left' | 'right'>(),
+  fontScale: integer('font_scale').notNull().default(100),
+  textColor: text('text_color').notNull().default('#ffffff'),
+  backgroundColor: text('background_color').notNull().default('#000000'),
+  backgroundOpacity: integer('background_opacity').notNull().default(100),
+  height: integer('height').notNull().default(50),
+  positionY: integer('position_y').notNull().default(0),
+  paddingX: integer('padding_x').notNull().default(0),
+  isLooped: integer('is_looped', { mode: 'boolean' }).notNull().default(true),
+  createdAt: integer('created_at', { mode: 'timestamp' })
+    .notNull()
+    .default(sql`(unixepoch())`),
+  updatedAt: integer('updated_at', { mode: 'timestamp' })
+    .notNull()
+    .default(sql`(unixepoch())`),
+});

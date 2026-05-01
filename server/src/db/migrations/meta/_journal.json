@@ -288,6 +288,13 @@
       "when": 1777022435914,
       "tag": "0040_majestic_prism",
       "breakpoints": true
+    },
+    {
+      "idx": 41,
+      "version": "6",
+      "when": 1777616967949,
+      "tag": "0041_spooky_impossible_man",
+      "breakpoints": true
     }
   ]
 }
