@@ -1,4 +1,4 @@
-import { t, tickerConfigService } from '../../container.js';
+import { eventBus, t, tickerConfigService } from '../../container.js';
 import { handleServiceCall } from '../error.handler.js';
 import { kioskIdInputSchema } from '../../validations/schemas/kiosk.schemas.js';
 import { protectedProcedure, publicProcedure } from '../../middleware/auth.js';
@@ -34,7 +34,11 @@ export const tickerConfigRouter = t.router({
     .mutation(({ input }) => {
       return handleServiceCall(() => {
         const { kioskId, data } = input;
-        return tickerConfigService.update(kioskId, data);
+        const updated = tickerConfigService.update(kioskId, data);
+
+        eventBus.emit(`ticker-config:${updated.kioskId}`, updated);
+
+        return updated;
       });
     }),
 

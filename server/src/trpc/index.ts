@@ -15,6 +15,7 @@ import { videoStorageRouter } from './routes/video.storage.route.js';
 import { kioskRouter } from './routes/kiosk.route.js';
 import { birthdayRouter } from './routes/birthday.route.js';
 import { createServiceLogger } from '../utils/pino.logger.js';
+import { tickerConfigRouter } from './routes/ticker.config.route.js';
 import { birthdayBackgroundRouter } from './routes/birthday.background.route.js';
 import { kioskHeartbeatRouter } from './routes/kiosk.heartbeat.route.js';
 import { imageStorageRouter } from './routes/image.storage.route.js';
@@ -34,6 +35,7 @@ const appRouter = t.router({
   auth: authRouter,
   control: controlRouter,
   uiConfig: uiConfigRouter,
+  tickerConfig: tickerConfigRouter,
   scheduleEvent: scheduleEventRouter,
   imageCache: imageCacheRouter,
   image: imageStorageRouter,

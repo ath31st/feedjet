@@ -16,6 +16,7 @@ export const unifiedSseHandler = createUnifiedSseHandler((kioskId) => {
     subs.push(
       { eventName: `control:${kioskId}`, messageType: 'control' },
       { eventName: `feed-config:${kioskId}`, messageType: 'feed-config' },
+      { eventName: `ticker-config:${kioskId}`, messageType: 'ticker-config' },
       { eventName: `ui-config:${kioskId}`, messageType: 'ui-config' },
       { eventName: `image:${kioskId}`, messageType: 'image' },
       { eventName: `video:${kioskId}`, messageType: 'video' },
