@@ -8,11 +8,28 @@ export const useGetTickerConfig = (kioskId: number) => {
   );
 };
 
+export const useGetDefaultTickerConfig = () => {
+  return useQuery(trpcWithProxy.tickerConfig.getDefault.queryOptions());
+};
+
 export const useCreateTickerConfig = () => {
   return useMutation(
     trpcWithProxy.tickerConfig.create.mutationOptions({
       onSuccess() {
         toast.success('Настройки бегущей строки созданы');
+        queryClient.invalidateQueries({
+          queryKey: trpcWithProxy.tickerConfig.getByKioskId.queryKey(),
+        });
+      },
+    }),
+  );
+};
+
+export const useUpsertTickerConfig = () => {
+  return useMutation(
+    trpcWithProxy.tickerConfig.upsert.mutationOptions({
+      onSuccess() {
+        toast.success('Настройки бегущей строки обновлены');
         queryClient.invalidateQueries({
           queryKey: trpcWithProxy.tickerConfig.getByKioskId.queryKey(),
         });

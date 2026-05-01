@@ -21,15 +21,11 @@ export const useTickerConfigStore = create<TickerConfigState>()((set) => ({
   initStore: async (kioskId: number) => {
     set({ loading: true });
     try {
-      const data = await trpcClient.tickerConfig.getByKioskId.query({
+      const ticker = await trpcClient.tickerConfig.getByKioskId.query({
         kioskId,
       });
       set({
-        tickerConfig: {
-          ...data,
-          createdAt: new Date(data.createdAt),
-          updatedAt: new Date(data.updatedAt),
-        },
+        tickerConfig: ticker,
         error: null,
         loading: false,
       });
