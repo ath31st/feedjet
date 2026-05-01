@@ -21,6 +21,7 @@ import { HelpItems as operatingHoursHelp } from '@/widgets/kiosk-work-schedule-m
 import { HelpItems as rssHelp } from '@/widgets/rss-management';
 import { HelpItems as videoHelp } from '@/widgets/video-content-management';
 import { HelpItems as imageHelp } from '@/widgets/image-content-management';
+import { TickerManagementWidget } from '@/widgets/ticker-management';
 
 export function AdminPage() {
   const kioskId = useKioskStore((s) => s.currentKiosk.id);
@@ -54,6 +55,7 @@ export function AdminPage() {
             <AdminTabTrigger value="schedule">
               Расписание мероприятий
             </AdminTabTrigger>
+            <AdminTabTrigger value="ticker">Бегущая строка</AdminTabTrigger>
             <AdminTabTrigger value="rss">RSS ленты новостей</AdminTabTrigger>
             <AdminTabTrigger value="video">Видео контент</AdminTabTrigger>
             <AdminTabTrigger value="image">Изображения</AdminTabTrigger>
@@ -82,6 +84,10 @@ export function AdminPage() {
 
             <Tabs.Content className="-mt-6" value="schedule">
               <ScheduleManagementWidget />
+            </Tabs.Content>
+
+            <Tabs.Content value="ticker">
+              <TickerManagementWidget kioskId={kioskId} />
             </Tabs.Content>
 
             <Tabs.Content value="video">
