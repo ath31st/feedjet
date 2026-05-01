@@ -5,6 +5,7 @@ import { protectedProcedure, publicProcedure } from '../../middleware/auth.js';
 import {
   tickerConfigCreateInputSchema,
   tickerConfigUpdateInputSchema,
+  tickerConfigUpsertInputSchema,
 } from '../../validations/schemas/ticker.config.schemas.js';
 
 export const tickerConfigRouter = t.router({
@@ -49,11 +50,10 @@ export const tickerConfigRouter = t.router({
     }),
 
   upsert: protectedProcedure
-    .input(tickerConfigCreateInputSchema)
+    .input(tickerConfigUpsertInputSchema)
     .mutation(({ input }) => {
       return handleServiceCall(() => {
-        const { kioskId, data } = input;
-        const updated = tickerConfigService.upsert(kioskId, data);
+        const updated = tickerConfigService.upsert(input);
 
         eventBus.emit(`ticker-config:${updated.kioskId}`, updated);
 

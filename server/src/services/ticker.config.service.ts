@@ -153,13 +153,13 @@ export class TickerConfigService {
     }
   }
 
-  upsert(kioskId: number, data: NewTickerConfig): TickerConfig {
+  upsert(data: TickerConfig): TickerConfig {
     this.logger.debug({ data, fn: 'upsert' }, 'Upserting ticker config');
 
     try {
       const saved = this.db
         .insert(tickerConfigTable)
-        .values({ ...data, kioskId })
+        .values(data)
         .onConflictDoUpdate({
           target: tickerConfigTable.kioskId,
           set: {

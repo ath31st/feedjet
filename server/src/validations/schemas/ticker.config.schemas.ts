@@ -19,6 +19,22 @@ export const tickerConfigCreateSchema = z.object({
   isLooped: z.boolean().optional(),
 });
 
+export const tickerConfigUpsertSchema = z.object({
+  kioskId: kioskIdSchema,
+  text: z.string().min(1).max(500),
+  isActive: z.boolean(),
+  speedPxPerSec: z.number().int().positive(),
+  direction: tickerDirectionSchema,
+  fontScale: z.number().int().min(10).max(300),
+  textColor: z.string().min(1).max(50),
+  backgroundColor: z.string().min(1).max(50),
+  backgroundOpacity: z.number().int().min(0).max(100),
+  height: z.number().int().positive(),
+  positionY: z.number().int().min(0).max(2000),
+  paddingX: z.number().int().min(0).max(200),
+  isLooped: z.boolean(),
+});
+
 export const tickerConfigUpdateSchema = z
   .object({
     text: z.string().min(1).max(500).optional(),
@@ -51,3 +67,5 @@ export const tickerConfigCreateInputSchema = z.object({
   kioskId: kioskIdSchema,
   data: tickerConfigCreateSchema,
 });
+
+export const tickerConfigUpsertInputSchema = tickerConfigUpsertSchema;
