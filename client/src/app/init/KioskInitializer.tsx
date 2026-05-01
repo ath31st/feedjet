@@ -5,6 +5,7 @@ import { useKioskInitialization } from './useKioskInitialization';
 import { useSseStream } from './useSseStream';
 import { useKioskStore } from '@/entities/kiosk';
 import { useImageStoreInit } from './useImageStoreInit';
+import { useTickerConfigStoreInit } from './useTickerConfigStoreInit';
 
 export function KioskInitializer() {
   useKioskInitialization();
@@ -14,6 +15,7 @@ export function KioskInitializer() {
 
   useUiConfigStoreInit(kioskId);
   useFeedConfigStoreInit();
+  useTickerConfigStoreInit(kioskId);
   useVideoStoreInit(kioskId);
   useImageStoreInit(kioskId);
 

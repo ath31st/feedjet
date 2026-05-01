@@ -1,12 +1,13 @@
 import { create } from 'zustand';
 import { trpcClient } from '@/shared/api';
 import type { TickerConfig } from '..';
+import { TRPCClientError } from '@trpc/client';
 
 interface TickerConfigState {
   tickerConfig: TickerConfig | null;
   loading: boolean;
   error: string | null;
-  fetchTickerConfig: (kioskId: number) => Promise<void>;
+  initStore: (kioskId: number) => Promise<void>;
   setConfig: (config: TickerConfig) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
@@ -17,7 +18,7 @@ export const useTickerConfigStore = create<TickerConfigState>()((set) => ({
   tickerConfig: null,
   loading: false,
   error: null,
-  fetchTickerConfig: async (kioskId: number) => {
+  initStore: async (kioskId: number) => {
     set({ loading: true });
     try {
       const data = await trpcClient.tickerConfig.getByKioskId.query({
@@ -33,6 +34,17 @@ export const useTickerConfigStore = create<TickerConfigState>()((set) => ({
         loading: false,
       });
     } catch (err) {
+      if (err instanceof TRPCClientError) {
+        if (err.data?.code === 'NOT_FOUND') {
+          set({
+            tickerConfig: null,
+            error: null,
+            loading: false,
+          });
+          return;
+        }
+      }
+
       set({
         error: err instanceof Error ? err.message : 'Unknown error',
         loading: false,

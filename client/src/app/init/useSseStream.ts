@@ -9,6 +9,8 @@ import { useVideoStore, type VideoMetadata } from '@/entities/video';
 import { useFeedConfigStore, type FeedConfig } from '@/entities/feed-config';
 import type { ControlEvent } from '@shared/types/control.event';
 import { useImageStore, type KioskImageInfo } from '@/entities/image';
+import type { TickerConfig } from '@/entities/ticker-config';
+import { useTickerConfigStore } from '@/entities/ticker-config';
 
 export function useSseStream() {
   const { currentKiosk } = useKioskStore();
@@ -17,6 +19,7 @@ export function useSseStream() {
 
   const setFeeds = useRssFeedStore((s) => s.setFeeds);
   const setUiConfig = useUiConfigStore((s) => s.setConfig);
+  const setTickerConfig = useTickerConfigStore((s) => s.setConfig);
   const setVideo = useVideoStore((s) => s.setVideos);
   const setImages = useImageStore((s) => s.setImages);
   const setFeedConfig = useFeedConfigStore((s) => s.setConfig);
@@ -51,6 +54,11 @@ export function useSseStream() {
             setFeedConfig(payload as FeedConfig);
             break;
 
+          case 'ticker-config':
+            console.log('SSE: Received TICKER CONFIG');
+            setTickerConfig(payload as TickerConfig);
+            break;
+
           case 'video':
             console.log('SSE: Received VIDEO');
             setVideo(payload as Array<VideoMetadata>);
@@ -72,7 +80,14 @@ export function useSseStream() {
         console.error('Error processing SSE message:', error, e.data);
       }
     },
-    [setFeeds, setUiConfig, setFeedConfig, setVideo, setImages],
+    [
+      setFeeds,
+      setUiConfig,
+      setFeedConfig,
+      setVideo,
+      setImages,
+      setTickerConfig,
+    ],
   );
 
   const streamUrl = `${SERVER_URL}${SSE_URL.STREAM(currentKioskId)}`;
