@@ -8,6 +8,7 @@ import {
 import { IconButton } from '@/shared/ui/common';
 import { ResetIcon, UpdateIcon } from '@radix-ui/react-icons';
 import { SaveIcon } from 'lucide-react';
+import { TickerView } from './TickerView';
 
 interface TickerConfigSettingsProps {
   kioskId: number;
@@ -31,8 +32,8 @@ export function TickerConfigSettings({ kioskId }: TickerConfigSettingsProps) {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col items-center gap-6 2xl:flex-row">
-        <div className="flex-1">
-          {/* <TickerPreview tickerData={localConfig} /> */}
+        <div className="relative h-100 w-177.75 overflow-hidden rounded-lg border border-(--border) bg-neutral-900">
+          <TickerView config={localConfig} showDebugBorder />
         </div>
 
         <FormField
@@ -52,7 +53,7 @@ export function TickerConfigSettings({ kioskId }: TickerConfigSettingsProps) {
               )
             }
             className={sharedInputStyles}
-            maxLength={200}
+            maxLength={1000}
           />
         </FormField>
 
