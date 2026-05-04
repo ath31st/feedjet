@@ -5,12 +5,17 @@ interface TextMarqueeProps {
   text: string;
   speed?: number;
   pauseOnHover?: boolean;
+  direction?: 'left' | 'right';
 }
+
+// biome-ignore lint/suspicious/noExplicitAny: take component from library
+const MarqueeComponent = (Marquee as any).default ?? Marquee;
 
 export function TextMarquee({
   text,
   speed = 50,
   pauseOnHover = true,
+  direction = 'left',
   ...rest
 }: TextMarqueeProps) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -19,7 +24,17 @@ export function TextMarquee({
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
-    setShouldScroll(el.scrollWidth > el.clientWidth);
+
+    const check = () => {
+      setShouldScroll(el.scrollWidth > el.clientWidth);
+    };
+
+    check();
+
+    const observer = new ResizeObserver(check);
+    observer.observe(el);
+
+    return () => observer.disconnect();
   }, []);
 
   return (
@@ -29,14 +44,15 @@ export function TextMarquee({
       {...rest}
     >
       {shouldScroll ? (
-        <Marquee
+        <MarqueeComponent
           gradient={false}
           speed={speed}
           pauseOnHover={pauseOnHover}
           play={true}
+          direction={direction}
         >
           <span className="mr-6">{text}</span>
-        </Marquee>
+        </MarqueeComponent>
       ) : (
         <span>{text}</span>
       )}
