@@ -18,3 +18,4 @@ export * from './geRemFromTailwindXl';
 export * from './formatSecondsToTime';
 export * from './getColorFromHex';
 export * from './useHorizontalWheelScroll';
+export * from './hexToRgba';

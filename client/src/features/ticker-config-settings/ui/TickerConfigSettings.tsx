@@ -62,7 +62,7 @@ export function TickerConfigSettings({ kioskId }: TickerConfigSettingsProps) {
             label="Скорость (в пикселях в секунду)"
             value={localConfig.speedPxPerSec}
             min={1}
-            max={600}
+            max={300}
             step={1}
             onChange={(val) =>
               setLocalConfig((prev) =>
@@ -85,10 +85,10 @@ export function TickerConfigSettings({ kioskId }: TickerConfigSettingsProps) {
           />
 
           <SliderControl
-            label="Высота (в пикселях)"
+            label="Высота (в %)"
             value={localConfig.height}
-            min={0}
-            max={2000}
+            min={2}
+            max={50}
             step={1}
             onChange={(val) =>
               setLocalConfig((prev) => (prev ? { ...prev, height: val } : prev))
@@ -96,10 +96,10 @@ export function TickerConfigSettings({ kioskId }: TickerConfigSettingsProps) {
           />
 
           <SliderControl
-            label="Расположение по Y (в пикселях)"
+            label="Расположение по Y (в %)"
             value={localConfig.positionY}
             min={0}
-            max={2000}
+            max={100}
             step={1}
             onChange={(val) =>
               setLocalConfig((prev) =>
@@ -109,10 +109,10 @@ export function TickerConfigSettings({ kioskId }: TickerConfigSettingsProps) {
           />
 
           <SliderControl
-            label="Горизонтальный отступ (в пикселях)"
+            label="Горизонтальный отступ (в %)"
             value={localConfig.paddingX}
             min={0}
-            max={200}
+            max={30}
             step={1}
             onChange={(val) =>
               setLocalConfig((prev) =>

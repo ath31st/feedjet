@@ -1,3 +1,4 @@
+import { hexToRgba } from '@/shared/lib';
 import { TextMarquee } from '@/shared/ui';
 import type { TickerConfig } from '@shared/types/ticker.config';
 
@@ -27,10 +28,10 @@ export function TickerView({ config, showDebugBorder }: TickerViewProps) {
           showDebugBorder ? 'border border-red-500' : ''
         }`}
         style={{
-          top: `${positionY}px`,
-          height: `${height}px`,
-          backgroundColor,
-          opacity: backgroundOpacity / 100,
+          top: `${positionY}%`,
+          transform: 'translateY(0%)',
+          height: `${height}%`,
+          backgroundColor: hexToRgba(backgroundColor, backgroundOpacity),
           display: 'flex',
           alignItems: 'center',
         }}
@@ -38,8 +39,8 @@ export function TickerView({ config, showDebugBorder }: TickerViewProps) {
         <div
           className="w-full"
           style={{
-            paddingLeft: `${paddingX}px`,
-            paddingRight: `${paddingX}px`,
+            paddingLeft: `${paddingX}%`,
+            paddingRight: `${paddingX}%`,
             color: textColor,
             fontSize: `calc(${fontScale} * 0.01 * 1cqw)`,
           }}
