@@ -1,12 +1,10 @@
 import { MonthTabs } from './MonthTabs';
 import { TransformPreview } from './TransformPreview';
-import { SliderControl } from './SliderControl';
-import { ColorControl } from './ColorControl';
 import { IconButton } from '@/shared/ui/common';
 import { ResetIcon, UpdateIcon } from '@radix-ui/react-icons';
 import { SaveIcon } from 'lucide-react';
 import * as Switch from '@radix-ui/react-switch';
-import { TooltipWrapper } from '@/shared/ui';
+import { TooltipWrapper, SliderControl, ColorControl } from '@/shared/ui';
 import { useBirthdayWidgetTransformSettings } from '../model/useBirthdayWidgetTransformSettings';
 
 export function BirthdayWidgetTransformSettings() {

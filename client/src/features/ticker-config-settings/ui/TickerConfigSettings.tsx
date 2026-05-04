@@ -1,6 +1,5 @@
-import { SliderControl } from '@/features/birthday-widget-transform-settings/ui/SliderControl';
 import { useTickerConfigSettings } from '../model/useTickerConfigSettings';
-import { ColorControl } from '@/features/birthday-widget-transform-settings/ui/ColorControl';
+import { ColorControl, SliderControl } from '@/shared/ui';
 import { IconButton } from '@/shared/ui/common';
 import { ResetIcon, UpdateIcon } from '@radix-ui/react-icons';
 import { SaveIcon } from 'lucide-react';
@@ -35,8 +34,8 @@ export function TickerConfigSettings({ kioskId }: TickerConfigSettingsProps) {
           <SliderControl
             label="Скорость (в пикселях в секунду)"
             value={localConfig.speedPxPerSec}
-            min={0}
-            max={100}
+            min={1}
+            max={600}
             step={1}
             onChange={(val) =>
               setLocalConfig((prev) =>
@@ -70,10 +69,10 @@ export function TickerConfigSettings({ kioskId }: TickerConfigSettingsProps) {
           />
 
           <SliderControl
-            label="Расположение по Y (в %)"
+            label="Расположение по Y (в пикселях)"
             value={localConfig.positionY}
-            min={10}
-            max={100}
+            min={0}
+            max={2000}
             step={1}
             onChange={(val) =>
               setLocalConfig((prev) =>
