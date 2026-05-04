@@ -1,5 +1,10 @@
 import { useTickerConfigSettings } from '../model/useTickerConfigSettings';
-import { ColorControl, SliderControl } from '@/shared/ui';
+import {
+  ColorControl,
+  FormField,
+  sharedInputStyles,
+  SliderControl,
+} from '@/shared/ui';
 import { IconButton } from '@/shared/ui/common';
 import { ResetIcon, UpdateIcon } from '@radix-ui/react-icons';
 import { SaveIcon } from 'lucide-react';
@@ -29,6 +34,27 @@ export function TickerConfigSettings({ kioskId }: TickerConfigSettingsProps) {
         <div className="flex-1">
           {/* <TickerPreview tickerData={localConfig} /> */}
         </div>
+
+        <FormField
+          id="ticker-text"
+          label="Текст бегущей строки"
+          required={false}
+          maxLength={1000}
+          currentLength={localConfig.text?.length}
+        >
+          <textarea
+            id="ticker-text"
+            rows={3}
+            value={localConfig.text}
+            onChange={(e) =>
+              setLocalConfig((prev) =>
+                prev ? { ...prev, text: e.target.value } : prev,
+              )
+            }
+            className={sharedInputStyles}
+            maxLength={200}
+          />
+        </FormField>
 
         <div className="grid w-full grid-cols-2 gap-x-4 gap-y-3">
           <SliderControl

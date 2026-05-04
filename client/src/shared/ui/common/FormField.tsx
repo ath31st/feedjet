@@ -23,7 +23,7 @@ export function FormField({
   disabled,
 }: FormFieldProps) {
   return (
-    <div className="space-y-1">
+    <div className="w-full space-y-1">
       <label
         htmlFor={id}
         className={`block font-medium text-sm ${disabled ? 'text-(--meta-text)' : ''}`}
