@@ -6,7 +6,7 @@ import {
 } from '@/entities/ticker-config';
 import { useEffect, useState } from 'react';
 
-export const useTickerConfigSettings = (kioskId: number) => {
+export const useTickerManagement = (kioskId: number) => {
   const { data: config, isLoading: isConfigLoading } =
     useGetTickerConfig(kioskId);
   const { data: defaultConfig } = useGetDefaultTickerConfig();
