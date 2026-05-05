@@ -45,12 +45,19 @@ export function TickerView({ config, showDebugBorder }: TickerViewProps) {
             fontSize: `calc(${fontScale} * 0.01 * 1cqw)`,
           }}
         >
-          <TextMarquee
-            text={text || 'Пример текста бегущей строки'}
-            speed={speedPxPerSec}
-            pauseOnHover={false}
-            direction={direction}
-          />
+          {config.isLooped ? (
+            <TextMarquee
+              key={`${text}-${speedPxPerSec}-${direction}`}
+              text={text || 'Пример текста бегущей строки'}
+              speed={speedPxPerSec}
+              pauseOnHover={false}
+              direction={direction}
+            />
+          ) : (
+            <div className="w-full overflow-hidden whitespace-nowrap">
+              <span>{text || 'Пример текста бегущей строки'}</span>
+            </div>
+          )}
         </div>
       </div>
     </div>

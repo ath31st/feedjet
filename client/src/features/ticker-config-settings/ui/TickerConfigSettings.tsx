@@ -5,7 +5,7 @@ import {
   sharedInputStyles,
   SliderControl,
 } from '@/shared/ui';
-import { IconButton } from '@/shared/ui/common';
+import { CommonSwitch, IconButton } from '@/shared/ui/common';
 import { ResetIcon, UpdateIcon } from '@radix-ui/react-icons';
 import { SaveIcon } from 'lucide-react';
 import { TickerView } from './TickerView';
@@ -156,6 +156,34 @@ export function TickerConfigSettings({ kioskId }: TickerConfigSettingsProps) {
                 )
               }
             />
+
+            <div className="flex flex-row items-center justify-between gap-6">
+              <span className="text-(--meta-text) text-xs">
+                Бегущая строка отключена / Включена
+              </span>
+              <CommonSwitch
+                checked={localConfig.isActive}
+                onCheckedChange={(checked) =>
+                  setLocalConfig((prev) =>
+                    prev ? { ...prev, isActive: checked } : prev,
+                  )
+                }
+              ></CommonSwitch>
+            </div>
+
+            <div className="flex flex-row items-center justify-between gap-6">
+              <span className="text-(--meta-text) text-xs">
+                Статичная строка / Цикл
+              </span>
+              <CommonSwitch
+                checked={localConfig.isLooped}
+                onCheckedChange={(checked) =>
+                  setLocalConfig((prev) =>
+                    prev ? { ...prev, isLooped: checked } : prev,
+                  )
+                }
+              ></CommonSwitch>
+            </div>
 
             <div className="flex flex-row items-center justify-center gap-6">
               <IconButton
