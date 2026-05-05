@@ -1,13 +1,18 @@
-import { hexToRgba } from '@/shared/lib';
+import { hexToRgba, isRotate90 } from '@/shared/lib';
 import { TextMarquee } from '@/shared/ui';
 import type { TickerConfig } from '@shared/types/ticker.config';
 
 interface TickerViewerProps {
   config: TickerConfig;
+  rotate?: number;
   showDebugBorder?: boolean;
 }
 
-export function TickerViewer({ config, showDebugBorder }: TickerViewerProps) {
+export function TickerViewer({
+  config,
+  showDebugBorder,
+  rotate,
+}: TickerViewerProps) {
   const {
     text,
     speedPxPerSec,
@@ -20,6 +25,10 @@ export function TickerViewer({ config, showDebugBorder }: TickerViewerProps) {
     positionY,
     paddingX,
   } = config;
+
+  const effectiveSpeed = isRotate90(rotate ?? 0)
+    ? speedPxPerSec / 200
+    : speedPxPerSec;
 
   return (
     <div className="absolute inset-0" style={{ containerType: 'size' }}>
@@ -49,7 +58,7 @@ export function TickerViewer({ config, showDebugBorder }: TickerViewerProps) {
             <TextMarquee
               key={`${text}-${speedPxPerSec}-${direction}`}
               text={text || 'Пример текста бегущей строки'}
-              speed={speedPxPerSec}
+              speed={effectiveSpeed}
               pauseOnHover={false}
               direction={direction}
             />
