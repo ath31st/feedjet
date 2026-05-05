@@ -1,6 +1,6 @@
 import type { DaySchedule } from '@/entities/kiosk-work-schedule';
 import { DAYS } from '@/shared/constant';
-import * as Switch from '@radix-ui/react-switch';
+import { CommonSwitch } from '@/shared/ui/common';
 
 interface DayScheduleCardProps {
   day: DaySchedule;
@@ -34,13 +34,10 @@ export function DayScheduleCard({ day, onChange }: DayScheduleCardProps) {
         />
       </div>
 
-      <Switch.Root
+      <CommonSwitch
         checked={day.isEnabled}
         onCheckedChange={(checked) => onChange({ ...day, isEnabled: checked })}
-        className="relative ml-auto h-5 w-10 shrink-0 cursor-pointer rounded-full border border-(--border) transition-colors data-[state=checked]:bg-(--button-bg)"
-      >
-        <Switch.Thumb className="block h-4 w-4 translate-x-px rounded-full bg-(--text) transition-transform data-[state=checked]:translate-x-5.25" />
-      </Switch.Root>
+      ></CommonSwitch>
     </div>
   );
 }

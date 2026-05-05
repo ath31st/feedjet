@@ -1,8 +1,7 @@
 import type { Kiosk } from '@/entities/kiosk';
-import { CommonButton } from '@/shared/ui/common';
+import { CommonButton, CommonSwitch } from '@/shared/ui/common';
 import { CheckIcon, ResetIcon } from '@radix-ui/react-icons';
 import { FormField, sharedInputStyles } from './common/FormField';
-import * as Switch from '@radix-ui/react-switch';
 
 type KioskFormData = {
   name?: string;
@@ -98,13 +97,10 @@ export function KioskForm({
           <span className="block font-medium text-sm">
             Конфигурация киоска включена
           </span>
-          <Switch.Root
+          <CommonSwitch
             checked={formData.isActive ?? false}
             onCheckedChange={(checked) => onChange('isActive', checked)}
-            className="relative h-5 w-10 shrink-0 cursor-pointer rounded-full border border-(--border) transition-colors data-[state=checked]:bg-(--button-bg)"
-          >
-            <Switch.Thumb className="block h-4 w-4 translate-x-px rounded-full bg-(--text) transition-transform data-[state=checked]:translate-x-5.25" />
-          </Switch.Root>
+          ></CommonSwitch>
         </div>
       )}
 

@@ -1,9 +1,8 @@
 import { MonthTabs } from './MonthTabs';
 import { TransformPreview } from './TransformPreview';
-import { IconButton } from '@/shared/ui/common';
+import { CommonSwitch, IconButton } from '@/shared/ui/common';
 import { ResetIcon, UpdateIcon } from '@radix-ui/react-icons';
 import { SaveIcon } from 'lucide-react';
-import * as Switch from '@radix-ui/react-switch';
 import { TooltipWrapper, SliderControl, ColorControl } from '@/shared/ui';
 import { useBirthdayWidgetTransformSettings } from '../model/useBirthdayWidgetTransformSettings';
 
@@ -214,13 +213,10 @@ export function BirthdayWidgetTransformSettings() {
               tooltip={`Показывать ${isHalfSetBirthdays ? 'весь список' : 'половину списка'}`}
             >
               <div className="flex items-center">
-                <Switch.Root
+                <CommonSwitch
                   checked={isHalfSetBirthdays ?? false}
                   onCheckedChange={(checked) => setHalfSetBirthdays(checked)}
-                  className="relative h-5 w-10 shrink-0 cursor-pointer rounded-full border border-(--border) transition-colors data-[state=checked]:bg-(--button-bg)"
-                >
-                  <Switch.Thumb className="block h-4 w-4 translate-x-px rounded-full bg-(--text) transition-transform data-[state=checked]:translate-x-5.25" />
-                </Switch.Root>
+                ></CommonSwitch>
               </div>
             </TooltipWrapper>
 

@@ -2,8 +2,7 @@ import { formatBytes } from '@/shared/lib';
 import { Cross1Icon, EyeOpenIcon } from '@radix-ui/react-icons';
 import { VideoPreviewDialog } from './VideoPreviewDialog';
 import { formatDuration } from '@/shared/lib/formatDuration';
-import { IconButton } from '@/shared/ui/common';
-import * as Switch from '@radix-ui/react-switch';
+import { CommonSwitch, IconButton } from '@/shared/ui/common';
 import { useVideoList } from '../model/useVideoList';
 import { DndSortableList } from '@/shared/ui';
 import type { AdminVideoInfo } from '@/entities/video';
@@ -82,16 +81,13 @@ export function VideoList({ kioskId }: VideoListProps) {
               </div>
 
               <div className="flex shrink-0 items-center gap-2">
-                <Switch.Root
+                <CommonSwitch
                   checked={v.isActive ?? false}
                   disabled={isUpdatingActive}
                   onCheckedChange={(checked) =>
                     handleToggleActive(v.fileName, checked)
                   }
-                  className="relative h-5 w-10 shrink-0 cursor-pointer rounded-full border border-(--border) transition-colors data-[state=checked]:bg-(--button-bg)"
-                >
-                  <Switch.Thumb className="block h-4 w-4 translate-x-px rounded-full bg-(--text) transition-transform data-[state=checked]:translate-x-5.25" />
-                </Switch.Root>
+                ></CommonSwitch>
 
                 <IconButton
                   disabled={isLoading}

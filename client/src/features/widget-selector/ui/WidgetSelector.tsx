@@ -1,4 +1,3 @@
-import * as Switch from '@radix-ui/react-switch';
 import {
   widgetTypes,
   widgetLabels,
@@ -6,6 +5,7 @@ import {
 } from '@shared/types/ui.config';
 import { useWidgetSelector } from '../model/useWidgetSelector';
 import { Calendar, Video, Image, Newspaper, Gift, Info } from 'lucide-react';
+import { CommonSwitch } from '@/shared/ui/common';
 
 interface WidgetSelectorProps {
   kioskId: number;
@@ -58,7 +58,7 @@ export function WidgetSelector({ kioskId }: WidgetSelectorProps) {
               </span>
             </div>
 
-            <Switch.Root
+            <CommonSwitch
               checked={isActive}
               onCheckedChange={(checked) => {
                 let next: string[];
@@ -70,10 +70,7 @@ export function WidgetSelector({ kioskId }: WidgetSelectorProps) {
                 }
                 handleWidgetChange(next);
               }}
-              className="relative h-5 w-10 shrink-0 cursor-pointer rounded-full border border-(--border) transition-colors data-[state=checked]:bg-(--button-bg)"
-            >
-              <Switch.Thumb className="block h-4 w-4 translate-x-px rounded-full bg-(--text) transition-transform data-[state=checked]:translate-x-5.25" />
-            </Switch.Root>
+            ></CommonSwitch>
           </li>
         );
       })}

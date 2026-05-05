@@ -1,7 +1,7 @@
 import { buildImageUrl, type AdminImageInfo } from '@/entities/image';
 import { formatBytes, formatSecondsToTime } from '@/shared/lib';
 import { RotationInterval, TooltipWrapper } from '@/shared/ui';
-import { IconButton } from '@/shared/ui/common';
+import { CommonSwitch, IconButton } from '@/shared/ui/common';
 import {
   Cross1Icon,
   EyeOpenIcon,
@@ -9,7 +9,6 @@ import {
   TimerIcon,
   UpdateIcon,
 } from '@radix-ui/react-icons';
-import * as Switch from '@radix-ui/react-switch';
 import { useImageItem } from '../model/useImageItem';
 
 interface ImageItemProps {
@@ -95,7 +94,7 @@ export function ImageItem({
         </div>
 
         <div className="flex shrink-0 items-center gap-2">
-          <Switch.Root
+          <CommonSwitch
             checked={i.isActive ?? false}
             disabled={isUpdatingActive}
             onCheckedChange={(checked) =>
@@ -105,10 +104,7 @@ export function ImageItem({
                 i.durationSeconds ?? globalDuration,
               )
             }
-            className="relative h-5 w-10 shrink-0 cursor-pointer rounded-full border border-(--border) transition-colors data-[state=checked]:bg-(--button-bg)"
-          >
-            <Switch.Thumb className="block h-4 w-4 translate-x-px rounded-full bg-(--text) transition-transform data-[state=checked]:translate-x-5.25" />
-          </Switch.Root>
+          ></CommonSwitch>
 
           <TooltipWrapper
             tooltip={
