@@ -6,6 +6,7 @@ import { LoadingThreeDotsJumping } from '@/shared/ui';
 import { useKioskParams } from '@/features/kiosk-params';
 import { useKioskRotation } from '@/features/kiosk-rotation';
 import { AnimatePresence, motion } from 'framer-motion';
+import { TickerRuntime } from '@/widgets/ticker-runtime';
 
 const FeedWidget = lazy(() => import('@/widgets/feed'));
 const ScheduleWidget = lazy(() => import('@/widgets/schedule'));
@@ -40,7 +41,11 @@ export function KioskPage() {
   }
 
   return (
-    <div className="h-screen w-screen">
+    <div className="relative h-screen w-screen">
+      <Rotator rotate={rotate}>
+        <TickerRuntime rotate={rotate} />
+      </Rotator>
+
       <AnimatePresence mode="wait">
         <motion.div
           key={currentWidgetKey}
