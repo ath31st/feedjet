@@ -24,6 +24,7 @@ import { integrationRouter } from './routes/integration.route.js';
 import { birthdayWidgetTransformRouter } from './routes/birthday.widget.transform.route.js';
 import { logRouter } from './routes/log.route.js';
 import { ZodError } from 'zod';
+import { scenarioRouter } from './routes/scenario.route.js';
 
 const logger = createServiceLogger('trpc');
 
@@ -49,6 +50,7 @@ const appRouter = t.router({
   kioskWorkSchedule: kioskWorkScheduleRouter,
   integration: integrationRouter,
   log: logRouter,
+  scenario: scenarioRouter,
 });
 
 export type AppRouter = typeof appRouter;
