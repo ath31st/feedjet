@@ -13,7 +13,7 @@ export function TickerRuntime({ rotate }: TickerRuntimeProps) {
   }
 
   return (
-    <div className="pointer-events-none absolute inset-0 z-50">
+    <div className="pointer-events-none absolute inset-0 z-60">
       <TickerViewer rotate={rotate} config={config} />
     </div>
   );
