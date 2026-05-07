@@ -3,11 +3,13 @@ import type { DayOfWeek } from '@shared/types/kiosk.work.schedule.js';
 import type { themes, widgetTypes } from '@shared/types/ui.config.js';
 import { sql } from 'drizzle-orm';
 import {
+  check,
   int,
   integer,
   primaryKey,
   sqliteTable,
   text,
+  uniqueIndex,
 } from 'drizzle-orm/sqlite-core';
 
 export const kiosksTable = sqliteTable('kiosks', {
@@ -271,3 +273,72 @@ export const tickerConfigTable = sqliteTable('ticker_config', {
     .notNull()
     .default(sql`(unixepoch())`),
 });
+
+export const scenariosTable = sqliteTable('scenarios', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  kioskId: integer('kiosk_id')
+    .notNull()
+    .references(() => kiosksTable.id, { onDelete: 'cascade' }),
+  name: text('name').notNull(),
+  isActive: integer('is_active', { mode: 'boolean' }).notNull().default(true),
+  createdAt: integer('created_at').notNull().default(sql`(unixepoch())`),
+  updatedAt: integer('updated_at').notNull().default(sql`(unixepoch())`),
+});
+
+export const scenarioItemsTable = sqliteTable(
+  'scenario_items',
+  {
+    id: integer('id').primaryKey({ autoIncrement: true }),
+    scenarioId: integer('scenario_id')
+      .notNull()
+      .references(() => scenariosTable.id, { onDelete: 'cascade' }),
+    type: text('type', { enum: ['widget', 'image', 'video'] }).notNull(),
+    widgetType: text('widget_type').$type<(typeof widgetTypes)[number]>(),
+    imageId: integer('image_id').references(() => imagesTable.id, {
+      onDelete: 'set null',
+    }),
+    videoId: integer('video_id').references(() => videosTable.id, {
+      onDelete: 'set null',
+    }),
+    order: integer('order').notNull().default(0),
+    isActive: integer('is_active', { mode: 'boolean' }).notNull().default(true),
+    durationSeconds: integer('duration_seconds').default(10),
+  },
+  (table) => [
+    uniqueIndex('scenario_items_scenario_sequence_unique').on(
+      table.scenarioId,
+      table.order,
+    ),
+
+    check(
+      'scenario_items_type_check',
+
+      sql`
+        (
+          ${table.type} = 'widget'
+          AND ${table.widgetType} IS NOT NULL
+          AND ${table.imageId} IS NULL
+          AND ${table.videoId} IS NULL
+        )
+
+        OR
+
+        (
+          ${table.type} = 'image'
+          AND ${table.imageId} IS NOT NULL
+          AND ${table.widgetType} IS NULL
+          AND ${table.videoId} IS NULL
+        )
+
+        OR
+
+        (
+          ${table.type} = 'video'
+          AND ${table.videoId} IS NOT NULL
+          AND ${table.widgetType} IS NULL
+          AND ${table.imageId} IS NULL
+        )
+      `,
+    ),
+  ],
+);
