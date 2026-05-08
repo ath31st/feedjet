@@ -83,4 +83,15 @@ export const videoStorageRouter = t.router({
   getDiskUsage: protectedProcedure.query(async () => {
     return videoStorageService.getDiskUsage();
   }),
+
+  listAllFiles: protectedProcedure.query(() => {
+    return videoStorageService.listAllVideos();
+  }),
+
+  deleteFileGlobal: protectedProcedure
+    .input(fileDeleteParamsSchema)
+    .mutation(async ({ input }) => {
+      await videoStorageService.delete(input.filename);
+      return { ok: true };
+    }),
 });

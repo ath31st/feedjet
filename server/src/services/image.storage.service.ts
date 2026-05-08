@@ -600,4 +600,24 @@ export class ImageStorageService extends FileStorageService {
       mtime: imagesTable.mtime,
     };
   }
+
+  listAllImages() {
+    return this.db
+      .select({
+        id: imagesTable.id,
+        name: imagesTable.name,
+        fileName: imagesTable.fileName,
+        format: imagesTable.format,
+        width: imagesTable.width,
+        height: imagesTable.height,
+        size: imagesTable.size,
+        thumbnail: imagesTable.thumbnail,
+        mtime: imagesTable.mtime,
+        folderId: imagesTable.folderId,
+        createdAt: imagesTable.createdAt,
+      })
+      .from(imagesTable)
+      .all()
+      .map((img) => ({ ...img, kind: 'image' as const }));
+  }
 }

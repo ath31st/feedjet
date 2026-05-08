@@ -100,4 +100,15 @@ export const imageStorageRouter = t.router({
   getDiskUsage: protectedProcedure.query(async () => {
     return imageStorageService.getDiskUsage();
   }),
+
+  listAllFiles: protectedProcedure.query(() => {
+    return imageStorageService.listAllImages();
+  }),
+
+  deleteFileGlobal: protectedProcedure
+    .input(fileDeleteParamsSchema)
+    .mutation(async ({ input }) => {
+      await imageStorageService.delete(input.filename);
+      return { ok: true };
+    }),
 });

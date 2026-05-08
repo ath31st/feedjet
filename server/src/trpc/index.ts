@@ -25,6 +25,7 @@ import { birthdayWidgetTransformRouter } from './routes/birthday.widget.transfor
 import { logRouter } from './routes/log.route.js';
 import { ZodError } from 'zod';
 import { scenarioRouter } from './routes/scenario.route.js';
+import { mediaFolderRouter } from './routes/media.folder.route.js';
 
 const logger = createServiceLogger('trpc');
 
@@ -51,6 +52,7 @@ const appRouter = t.router({
   integration: integrationRouter,
   log: logRouter,
   scenario: scenarioRouter,
+  mediaFolder: mediaFolderRouter,
 });
 
 export type AppRouter = typeof appRouter;

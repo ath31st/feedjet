@@ -364,4 +364,24 @@ export class VideoStorageService extends FileStorageService {
       mtime: videosTable.mtime,
     };
   }
+
+  listAllVideos() {
+    return this.db
+      .select({
+        id: videosTable.id,
+        name: videosTable.name,
+        fileName: videosTable.fileName,
+        format: videosTable.format,
+        duration: videosTable.duration,
+        width: videosTable.width,
+        height: videosTable.height,
+        size: videosTable.size,
+        folderId: videosTable.folderId,
+        createdAt: videosTable.createdAt,
+        mtime: videosTable.mtime,
+      })
+      .from(videosTable)
+      .all()
+      .map((v) => ({ ...v, kind: 'video' as const }));
+  }
 }
