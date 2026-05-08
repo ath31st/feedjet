@@ -2,7 +2,7 @@ export const scenarioItemTypes = ['widget', 'image', 'video'] as const;
 export type ScenarioItemType = (typeof scenarioItemTypes)[number];
 export const scenarioWidgetTypes = [
   'schedule',
-  'feed',
+  'rss',
   'birthday',
   'info',
   'weather',
