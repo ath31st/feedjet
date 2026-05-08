@@ -1,1 +1,0 @@
-ALTER TABLE `kiosk_integrations` ADD `description` text;

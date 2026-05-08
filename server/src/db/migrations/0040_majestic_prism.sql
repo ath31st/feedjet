@@ -1,1 +1,0 @@
-ALTER TABLE `kiosk_images` ADD `duration_seconds` integer DEFAULT 0 NOT NULL;

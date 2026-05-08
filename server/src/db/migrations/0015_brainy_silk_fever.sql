@@ -1,1 +1,0 @@
-CREATE UNIQUE INDEX `videos_name_unique` ON `videos` (`name`);

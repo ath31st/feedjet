@@ -1,1 +1,0 @@
-ALTER TABLE `birthday_widget_config` RENAME TO `birthday_widget_transform`;

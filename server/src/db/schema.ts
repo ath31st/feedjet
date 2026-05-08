@@ -11,6 +11,7 @@ import {
   text,
   uniqueIndex,
 } from 'drizzle-orm/sqlite-core';
+import type { AnySQLiteColumn } from 'drizzle-orm/sqlite-core';
 
 export const kiosksTable = sqliteTable('kiosks', {
   id: integer('id').primaryKey({ autoIncrement: true }),
@@ -105,6 +106,36 @@ export const scheduleEventsTable = sqliteTable('schedule_events', {
     .default(sql`(unixepoch())`),
 });
 
+export const mediaFoldersTable = sqliteTable(
+  'media_folders',
+  {
+    id: integer('id').primaryKey({
+      autoIncrement: true,
+    }),
+    name: text('name').notNull(),
+    parentId: integer('parent_id').references(
+      (): AnySQLiteColumn => mediaFoldersTable.id,
+      {
+        onDelete: 'cascade',
+      },
+    ),
+    createdAt: integer('created_at').notNull().default(sql`(unixepoch())`),
+    updatedAt: integer('updated_at').notNull().default(sql`(unixepoch())`),
+  },
+
+  (table) => [
+    uniqueIndex('media_folder_parent_name_unique').on(
+      table.parentId,
+      table.name,
+    ),
+
+    check(
+      'media_folder_not_self_parent',
+      sql`${table.id} != ${table.parentId}`,
+    ),
+  ],
+);
+
 export const videosTable = sqliteTable('videos', {
   id: integer('id').primaryKey({ autoIncrement: true }),
   name: text('name').notNull(),
@@ -115,6 +146,9 @@ export const videosTable = sqliteTable('videos', {
   height: integer('height').notNull(),
   size: integer('size').notNull(),
   mtime: integer('mtime').notNull(),
+  folderId: integer('folder_id').references(() => mediaFoldersTable.id, {
+    onDelete: 'set null',
+  }),
   createdAt: integer('created_at').notNull().default(sql`(unixepoch())`),
 });
 
@@ -142,6 +176,9 @@ export const imagesTable = sqliteTable('images', {
   size: integer('size').notNull(),
   thumbnail: text('thumbnail').notNull(),
   mtime: integer('mtime').notNull(),
+  folderId: integer('folder_id').references(() => mediaFoldersTable.id, {
+    onDelete: 'set null',
+  }),
   createdAt: integer('created_at').notNull().default(sql`(unixepoch())`),
 });
 

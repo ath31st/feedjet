@@ -1,1 +1,0 @@
-ALTER TABLE `ui_config` DROP COLUMN `active_widget`;
