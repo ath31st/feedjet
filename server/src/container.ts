@@ -38,8 +38,10 @@ import { LogService } from './services/log.service.js';
 import { AdbClient } from './integration/adb.client.js';
 import { TickerConfigService } from './services/ticker.config.service.js';
 import { ScenarioService } from './services/scenario.service.js';
+import { MediaFolderService } from './services/media.folder.service.js';
 
 const sqlite = new Database(dbPath);
+sqlite.pragma('foreign_keys = ON');
 export const db = drizzle(sqlite, { schema });
 export type DbType = typeof db;
 
@@ -95,6 +97,7 @@ export const kioskControlService = new KioskControlService(
   adbClient,
 );
 export const scenarioService = new ScenarioService(db);
+export const mediaFolderService = new MediaFolderService(db);
 export const logService = new LogService();
 
 export const t = initTRPC.context<Context>().create();
