@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "start": "node dist/server/src/index.js",
-    "prebuild": "drizzle-kit generate && drizzle-kit push",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
     "build": "tsc && tsc-alias",
     "type-check": "tsc --noEmit"
   },
