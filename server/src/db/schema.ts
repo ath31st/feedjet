@@ -342,11 +342,6 @@ export const scenarioItemsTable = sqliteTable(
     durationSeconds: integer('duration_seconds').default(10),
   },
   (table) => [
-    uniqueIndex('scenario_items_scenario_sequence_unique').on(
-      table.scenarioId,
-      table.order,
-    ),
-
     check(
       'scenario_items_type_check',
 

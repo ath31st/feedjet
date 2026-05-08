@@ -8,6 +8,13 @@
       "when": 1778229796503,
       "tag": "0000_spicy_norrin_radd",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1778232535984,
+      "tag": "0001_sturdy_tigra",
+      "breakpoints": true
     }
   ]
 }
