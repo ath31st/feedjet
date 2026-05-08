@@ -11,9 +11,11 @@ import type {
   ScenarioItem,
   UpsertScenarioItemInput,
 } from '@shared/types/scenario.js';
+import { createServiceLogger } from '../utils/pino.logger.js';
 
 export class ScenarioService {
   private readonly db: DbType;
+  private readonly logger = createServiceLogger('scenarioService');
 
   constructor(db: DbType) {
     this.db = db;
@@ -76,6 +78,11 @@ export class ScenarioService {
   }
 
   addItem(scenarioId: number, input: UpsertScenarioItemInput): ScenarioItem {
+    this.logger.debug(
+      { scenarioId, input, fn: 'addItem' },
+      'Adding scenario item',
+    );
+
     const maxOrder =
       this.db
         .select({
@@ -110,6 +117,11 @@ export class ScenarioService {
       Pick<ScenarioItem, 'isActive' | 'durationSeconds' | 'order'>
     >,
   ): void {
+    this.logger.debug(
+      { itemId, patch, fn: 'updateItem' },
+      'Updating scenario item',
+    );
+
     this.db
       .update(scenarioItemsTable)
       .set(patch)
@@ -118,6 +130,11 @@ export class ScenarioService {
   }
 
   reorderItems(scenarioId: number, orderedIds: number[]): void {
+    this.logger.debug(
+      { scenarioId, orderedIds, fn: 'reorderItems' },
+      'Reordering scenario items',
+    );
+
     this.db.transaction((tx) => {
       orderedIds.forEach((id, index) => {
         tx.update(scenarioItemsTable)
@@ -130,6 +147,8 @@ export class ScenarioService {
   }
 
   deleteItem(itemId: number): void {
+    this.logger.debug({ itemId, fn: 'deleteItem' }, 'Deleting scenario item');
+
     const item = this.db
       .select({ scenarioId: scenarioItemsTable.scenarioId })
       .from(scenarioItemsTable)
