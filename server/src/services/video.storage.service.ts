@@ -47,6 +47,7 @@ export class VideoStorageService extends FileStorageService {
   async upload(
     file: File,
     filename: string,
+    folderId: number | null = null,
   ): Promise<{ path: string; savedFileName: string }> {
     const nodeStream = webReadableToNode(file.stream());
 
@@ -57,10 +58,10 @@ export class VideoStorageService extends FileStorageService {
       this.removeVideoMetadataByFileName(filename);
     }
     meta = await this.getVideoMetadata(filename);
-    const savedFileName = this.saveVideoMetadata(meta);
+    const savedFileName = this.saveVideoMetadata(meta, folderId);
 
     this.logger.info(
-      { savedPath, savedFileName, fn: 'upload' },
+      { savedPath, savedFileName, folderId, fn: 'upload' },
       'Video uploaded',
     );
     return { path: savedPath, savedFileName };
@@ -193,16 +194,19 @@ export class VideoStorageService extends FileStorageService {
       .all();
   }
 
-  saveVideoMetadata(meta: VideoMetadata): string {
+  saveVideoMetadata(
+    meta: VideoMetadata,
+    folderId: number | null = null,
+  ): string {
     this.logger.debug(
-      { meta, fn: 'saveVideoMetadata' },
+      { meta, folderId, fn: 'saveVideoMetadata' },
       'Saving video metadata',
     );
 
     try {
       const { fileName } = this.db
         .insert(videosTable)
-        .values(meta)
+        .values({ ...meta, folderId })
         .returning({ fileName: videosTable.fileName })
         .get();
 

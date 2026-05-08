@@ -66,7 +66,7 @@ export class ImageStorageService extends FileStorageService {
     return this.allowedExtensions.includes(ext);
   }
 
-  async upload(file: File, fileName: string) {
+  async upload(file: File, fileName: string, folderId: number | null = null) {
     const ext = path.extname(file.name).toLowerCase();
 
     if (!this.allowedExtensions.includes(ext)) {
@@ -89,10 +89,10 @@ export class ImageStorageService extends FileStorageService {
       this.removeImageMetadataByFileName(fileName);
     }
     meta = await this.getImageMetadata(fileName);
-    const savedFileName = this.saveImageMetadata(meta);
+    const savedFileName = this.saveImageMetadata(meta, folderId);
 
     this.logger.info(
-      { savedPath, fn: 'upload' },
+      { savedPath, folderId, fn: 'upload' },
       'Image uploaded successfully',
     );
 
@@ -289,16 +289,19 @@ export class ImageStorageService extends FileStorageService {
       .all();
   }
 
-  private saveImageMetadata(meta: ImageMetadata): string {
+  private saveImageMetadata(
+    meta: ImageMetadata,
+    folderId: number | null = null,
+  ): string {
     this.logger.debug(
-      { meta, fn: 'saveVideoMetadata' },
-      'Saving video metadata',
+      { meta, folderId, fn: 'saveImageMetadata' },
+      'Saving image metadata',
     );
 
     try {
       const { fileName } = this.db
         .insert(imagesTable)
-        .values(meta)
+        .values({ ...meta, folderId })
         .returning({ fileName: imagesTable.fileName })
         .get();
 

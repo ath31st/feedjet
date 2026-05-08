@@ -16,10 +16,14 @@ export const videoStorageRouter = t.router({
     .mutation(async ({ input }) => {
       const file = input.get('file') as File;
       const filename = input.get('filename') as string;
+      const folderIdRaw = input.get('folderId');
+      const folderId =
+        folderIdRaw && folderIdRaw !== '' ? Number(folderIdRaw) : null;
 
       const { path, savedFileName } = await videoStorageService.upload(
         file,
         filename,
+        folderId,
       );
 
       return { ok: true, path, filename: savedFileName };
