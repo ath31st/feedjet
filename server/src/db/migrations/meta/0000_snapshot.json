@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "51f68484-acbe-482c-9167-caa4e9abaf53",
+  "id": "605bb4dc-b3d9-4b58-8f2f-6acf57a9dc57",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "birthday_widget_transform": {
@@ -1015,16 +1015,7 @@
           "default": 10
         }
       },
-      "indexes": {
-        "scenario_items_scenario_sequence_unique": {
-          "name": "scenario_items_scenario_sequence_unique",
-          "columns": [
-            "scenario_id",
-            "order"
-          ],
-          "isUnique": true
-        }
-      },
+      "indexes": {},
       "foreignKeys": {
         "scenario_items_scenario_id_scenarios_id_fk": {
           "name": "scenario_items_scenario_id_scenarios_id_fk",

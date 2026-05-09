@@ -175,7 +175,6 @@ CREATE TABLE `scenario_items` (
       )
 );
 --> statement-breakpoint
-CREATE UNIQUE INDEX `scenario_items_scenario_sequence_unique` ON `scenario_items` (`scenario_id`,`order`);--> statement-breakpoint
 CREATE TABLE `scenarios` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`kiosk_id` integer NOT NULL,

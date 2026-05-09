@@ -1,1 +1,0 @@
-DROP INDEX `scenario_items_scenario_sequence_unique`;
