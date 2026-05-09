@@ -11,6 +11,7 @@ import type { ControlEvent } from '@shared/types/control.event';
 import { useImageStore, type KioskImageInfo } from '@/entities/image';
 import type { TickerConfig } from '@/entities/ticker-config';
 import { useTickerConfigStore } from '@/entities/ticker-config';
+import { useScenarioStore, type Scenario } from '@/entities/scenario';
 
 export function useSseStream() {
   const { currentKiosk } = useKioskStore();
@@ -23,6 +24,7 @@ export function useSseStream() {
   const setVideo = useVideoStore((s) => s.setVideos);
   const setImages = useImageStore((s) => s.setImages);
   const setFeedConfig = useFeedConfigStore((s) => s.setConfig);
+  const setScenario = useScenarioStore((s) => s.setScenario);
 
   const onMessage = useCallback(
     (e: MessageEvent) => {
@@ -69,6 +71,13 @@ export function useSseStream() {
             setImages(payload as Array<KioskImageInfo>);
             break;
 
+          case 'scenario': {
+            console.log('SSE: Received SCENARIO');
+            const scenario = payload as Scenario;
+            setScenario(scenario);
+            break;
+          }
+
           case 'keepalive':
             console.log('SSE: Received KEEPALIVE');
             break;
@@ -87,6 +96,7 @@ export function useSseStream() {
       setVideo,
       setImages,
       setTickerConfig,
+      setScenario,
     ],
   );
 
