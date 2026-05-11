@@ -5,7 +5,6 @@ export const scenarioWidgetTypes = [
   'rss',
   'birthday',
   'info',
-  'weather',
 ] as const;
 export type ScenarioWidgetType = (typeof scenarioWidgetTypes)[number];
 
