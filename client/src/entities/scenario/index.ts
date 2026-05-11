@@ -7,3 +7,4 @@ export type {
   UpsertScenarioItemInput,
 } from '@shared/types/scenario';
 export * from './model/scenarioStore';
+export * from './const/widgetLabelIconConsts';
