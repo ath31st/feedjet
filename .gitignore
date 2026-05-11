@@ -27,6 +27,8 @@ dist-ssr
 .env.dev
 .env.prod
 *.db
+*.db-wal
+*.db-shm
 
 # ide
 .vscode
