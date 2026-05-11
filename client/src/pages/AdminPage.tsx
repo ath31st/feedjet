@@ -22,6 +22,8 @@ import { HelpItems as rssHelp } from '@/widgets/rss-management';
 import { HelpItems as videoHelp } from '@/widgets/video-content-management';
 import { HelpItems as imageHelp } from '@/widgets/image-content-management';
 import { TickerManagementWidget } from '@/widgets/ticker-management';
+import { ScenariosManagementWidget } from '@/widgets/scenarios-management';
+import { MediaManagementWidget } from '@/widgets/media-management';
 
 export function AdminPage() {
   const kioskId = useKioskStore((s) => s.currentKiosk.id);
@@ -49,6 +51,8 @@ export function AdminPage() {
           aria-label="Управление админ-панелью"
         >
           <div className="ml-56 flex shrink-0">
+            <AdminTabTrigger value="scenarios">Сценарии</AdminTabTrigger>
+            <AdminTabTrigger value="media-folder">Медиа</AdminTabTrigger>
             <AdminTabTrigger value="settings">
               Настройки виджетов
             </AdminTabTrigger>
@@ -57,8 +61,8 @@ export function AdminPage() {
             </AdminTabTrigger>
             <AdminTabTrigger value="ticker">Бегущая строка</AdminTabTrigger>
             <AdminTabTrigger value="rss">RSS ленты новостей</AdminTabTrigger>
-            <AdminTabTrigger value="video">Видео контент</AdminTabTrigger>
-            <AdminTabTrigger value="image">Изображения</AdminTabTrigger>
+            {/* <AdminTabTrigger value="video">Видео контент</AdminTabTrigger>
+            <AdminTabTrigger value="image">Изображения</AdminTabTrigger> */}
             <AdminTabTrigger value="birthdays">Дни рождения</AdminTabTrigger>
             <AdminTabTrigger value="kiosks">
               Конфигурации киосков
@@ -74,7 +78,15 @@ export function AdminPage() {
           <KioskSelectorWidget />
 
           <div className="w-full">
-            <Tabs.Content value="settings" className="flex flex-col gap-6">
+            <Tabs.Content value="scenarios">
+              <ScenariosManagementWidget />
+            </Tabs.Content>
+
+            <Tabs.Content value="media-folder">
+              <MediaManagementWidget />
+            </Tabs.Content>
+
+            <Tabs.Content value="settings">
               <AppearanceSettingsWidget kioskId={kioskId} />
             </Tabs.Content>
 
