@@ -1,12 +1,10 @@
 /** biome-ignore-all lint/a11y: disable all a11y rules */
 import type { ScenarioItem } from '@/entities/scenario';
 import { CommonSwitch, IconButton } from '@/shared/ui/common';
-import { Info, Video, GripVertical, Trash2 } from 'lucide-react';
+import { GripVertical, Trash2 } from 'lucide-react';
 import { DurationInput } from './DurationInput';
 import { Draggable } from '@hello-pangea/dnd';
-import { WIDGET_ICONS, WIDGET_LABELS } from '@/entities/scenario';
-import { buildImageUrl } from '@/entities/image';
-import { buildVideoUrl } from '@/entities/video';
+import { useItemRow } from '../model/useItemRow';
 
 export function ItemRow({
   item,
@@ -27,18 +25,7 @@ export function ItemRow({
   onClick: () => void;
   onPreview?: () => void;
 }) {
-  const Icon =
-    item.type === 'widget'
-      ? (WIDGET_ICONS[item.widgetType ?? 'weather'] ?? Info)
-      : item.type === 'image'
-        ? Image
-        : Video;
-  const label =
-    item.type === 'widget'
-      ? WIDGET_LABELS[item.widgetType ?? 'weather']
-      : item.type === 'image'
-        ? (item.imageName ?? 'Изображение')
-        : (item.videoName ?? 'Видео');
+  const { config, Icon, label } = useItemRow(item);
 
   return (
     <Draggable draggableId={String(item.id)} index={index}>
@@ -67,36 +54,16 @@ export function ItemRow({
             type="button"
             onClick={(e) => {
               e.stopPropagation();
-              if (
-                onPreview &&
-                (item.type === 'image' || item.type === 'video')
-              ) {
-                onPreview();
-              }
+              if (onPreview && config.canPreview) onPreview();
             }}
-            className={`flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-(--bg) text-(--accent) ${item.type === 'image' || item.type === 'video' ? 'cursor-zoom-in transition-transform hover:scale-105' : 'cursor-default'}`}
-            title={
-              item.type === 'image' || item.type === 'video'
-                ? 'Открыть превью'
-                : undefined
-            }
+            className={`flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-(--bg) text-(--accent) ${
+              config.canPreview
+                ? 'cursor-zoom-in transition-transform hover:scale-105'
+                : 'cursor-default'
+            }`}
+            title={config.canPreview ? 'Открыть превью' : undefined}
           >
-            {item.type === 'image' && item.imageThumbnail ? (
-              <img
-                src={buildImageUrl(item.imageThumbnail)}
-                alt={label}
-                className="h-full w-full object-cover"
-              />
-            ) : item.type === 'video' && item.videoFileName ? (
-              <video
-                src={buildVideoUrl(item.videoFileName)}
-                muted
-                preload="metadata"
-                className="h-full w-full object-cover"
-              />
-            ) : (
-              <Icon size={18} />
-            )}
+            {config.renderPreview?.(item) || <Icon size={28} />}
           </button>
 
           <div className="min-w-0 flex-1">
@@ -110,15 +77,11 @@ export function ItemRow({
               )}
             </div>
             <p className="text-(--text-muted) text-xs capitalize">
-              {item.type === 'widget'
-                ? 'Виджет'
-                : item.type === 'image'
-                  ? 'Изображение'
-                  : 'Видео'}
+              {config.getTypeName}
             </p>
           </div>
 
-          {item.type !== 'video' && (
+          {config.hasDuration && (
             <div onClick={(e) => e.stopPropagation()}>
               <DurationInput
                 value={item.durationSeconds ?? 10}
