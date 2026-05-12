@@ -332,10 +332,10 @@ export const scenarioItemsTable = sqliteTable(
     type: text('type', { enum: ['widget', 'image', 'video'] }).notNull(),
     widgetType: text('widget_type').$type<(typeof widgetTypes)[number]>(),
     imageId: integer('image_id').references(() => imagesTable.id, {
-      onDelete: 'set null',
+      onDelete: 'cascade',
     }),
     videoId: integer('video_id').references(() => videosTable.id, {
-      onDelete: 'set null',
+      onDelete: 'cascade',
     }),
     order: integer('order').notNull().default(0),
     isActive: integer('is_active', { mode: 'boolean' }).notNull().default(true),
