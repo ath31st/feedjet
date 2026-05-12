@@ -4,8 +4,9 @@ import { CommonSwitch, IconButton } from '@/shared/ui/common';
 import { Info, Video, GripVertical, Trash2 } from 'lucide-react';
 import { DurationInput } from './DurationInput';
 import { Draggable } from '@hello-pangea/dnd';
-import { SERVER_URL } from '@/shared/config';
 import { WIDGET_ICONS, WIDGET_LABELS } from '@/entities/scenario';
+import { buildImageUrl } from '@/entities/image';
+import { buildVideoUrl } from '@/entities/video';
 
 export function ItemRow({
   item,
@@ -47,7 +48,7 @@ export function ItemRow({
           {...provided.draggableProps}
           className={`flex items-center gap-3 rounded-lg border p-3 transition-all ${
             isCurrentlyPlaying
-              ? 'border-emerald-500 bg-emerald-500/10 shadow-[0_0_0_1px_rgba(16,185,129,0.25)] ring-2 ring-emerald-500/40'
+              ? 'border-(--border) bg-(--border)/20 ring-(--border)/40 ring-2'
               : 'border-(--border) bg-(--surface)'
           } ${snapshot.isDragging ? 'opacity-80 shadow-xl' : ''} ${
             !item.isActive ? 'opacity-50' : ''
@@ -73,7 +74,7 @@ export function ItemRow({
                 onPreview();
               }
             }}
-            className={`flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-md bg-(--bg) text-(--accent) ${item.type === 'image' || item.type === 'video' ? 'cursor-zoom-in transition-transform hover:scale-105' : 'cursor-default'}`}
+            className={`flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-(--bg) text-(--accent) ${item.type === 'image' || item.type === 'video' ? 'cursor-zoom-in transition-transform hover:scale-105' : 'cursor-default'}`}
             title={
               item.type === 'image' || item.type === 'video'
                 ? 'Открыть превью'
@@ -82,13 +83,13 @@ export function ItemRow({
           >
             {item.type === 'image' && item.imageThumbnail ? (
               <img
-                src={`${SERVER_URL}/images/${item.imageThumbnail}`}
+                src={buildImageUrl(item.imageThumbnail)}
                 alt={label}
                 className="h-full w-full object-cover"
               />
             ) : item.type === 'video' && item.videoFileName ? (
               <video
-                src={`${SERVER_URL}/videos/${item.videoFileName}`}
+                src={buildVideoUrl(item.videoFileName)}
                 muted
                 preload="metadata"
                 className="h-full w-full object-cover"
@@ -102,9 +103,9 @@ export function ItemRow({
             <div className="flex items-center gap-2">
               <p className="truncate font-medium text-sm">{label}</p>
               {isCurrentlyPlaying && (
-                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/20 px-2 py-0.5 font-semibold text-[10px] text-emerald-400 uppercase tracking-wider">
-                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
-                  играет
+                <span className="inline-flex items-center gap-1 rounded-full bg-(--border)/20 px-2 py-0.5 font-semibold text-[10px] uppercase tracking-wider">
+                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-(--border)" />
+                  online
                 </span>
               )}
             </div>

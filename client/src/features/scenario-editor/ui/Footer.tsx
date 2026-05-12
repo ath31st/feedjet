@@ -10,7 +10,7 @@ export function Footer({
   totalDuration,
 }: FooterProps) {
   return (
-    <div className="border-(--border) border-t px-4 py-2 text-(--text-muted) text-xs">
+    <div className="mt-2 text-(--text-muted) text-xs">
       {itemsCount} элем. · {activeItemsCount} активных · Цикл:{' '}
       {Math.floor(totalDuration / 60)}:
       {String(totalDuration % 60).padStart(2, '0')}

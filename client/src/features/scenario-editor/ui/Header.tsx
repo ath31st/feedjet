@@ -11,7 +11,7 @@ interface HeaderProps {
 
 export function Header({ isDirty, onAdd, onSave, onReset }: HeaderProps) {
   return (
-    <div className="flex items-center gap-3 border-(--border) border-b px-4 py-3">
+    <div className="mb-2 flex items-center gap-3">
       <h1 className="font-semibold text-lg">
         Сценарий
         {isDirty && (
