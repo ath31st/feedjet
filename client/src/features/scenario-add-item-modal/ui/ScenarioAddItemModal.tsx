@@ -1,5 +1,11 @@
 /** biome-ignore-all lint/a11y: disable all a11y rules */
-import { useAddScenarioItem } from '@/entities/scenario';
+import {
+  useAddScenarioItem,
+  WIDGET_DESCRIPTIONS,
+  WIDGET_HUES,
+  WIDGET_ICONS,
+  WIDGET_LABELS,
+} from '@/entities/scenario';
 import { trpcWithProxy } from '@/shared/api';
 import { SERVER_URL } from '@/shared/config';
 import { fmtBytes, fmtDuration } from '@/shared/lib';
@@ -14,7 +20,6 @@ import { toast } from 'sonner';
 import { ScenarioModal } from './ScenarioModal';
 import { ContentTabs } from './ContentTabs';
 import { cn } from './cn';
-import { WIDGET_ICONS, WIDGET_LABELS } from '@/entities/scenario';
 
 interface ScenarioAddItemModalProps {
   open: boolean;
@@ -186,20 +191,6 @@ interface AddItemModalContentProps {
   handleAddImage: (id: number) => void;
   handleAddVideo: (id: number) => void;
 }
-
-const WIDGET_DESCRIPTIONS: Record<ScenarioWidgetType, string> = {
-  birthday: 'Поздравления сотрудников по списку',
-  rss: 'Заголовки из RSS-источников',
-  schedule: 'Расписание мероприятий',
-  info: 'Часы, дата и прогноз погоды на 7 дней',
-};
-
-const WIDGET_HUES: Record<ScenarioWidgetType, number> = {
-  birthday: 320,
-  rss: 0,
-  schedule: 140,
-  info: 200,
-};
 
 function AddItemModalContent({
   open,
