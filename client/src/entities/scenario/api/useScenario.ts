@@ -16,6 +16,7 @@ export const useAddScenarioItem = (kioskId: number) =>
     trpcWithProxy.scenario.addItem.mutationOptions({
       onSuccess() {
         queryClient.invalidateQueries({ queryKey: scenarioKey(kioskId) });
+        toast.success('Элемент добавлен в сценарий');
       },
     }),
   );
@@ -25,6 +26,7 @@ export const useUpdateScenarioItem = (kioskId: number) =>
     trpcWithProxy.scenario.updateItem.mutationOptions({
       onSuccess() {
         queryClient.invalidateQueries({ queryKey: scenarioKey(kioskId) });
+        toast.success('Сценарий изменён');
       },
     }),
   );
@@ -34,6 +36,7 @@ export const useReorderScenarioItems = (kioskId: number) =>
     trpcWithProxy.scenario.reorderItems.mutationOptions({
       onSuccess() {
         queryClient.invalidateQueries({ queryKey: scenarioKey(kioskId) });
+        toast.success('Сценарий изменён');
       },
     }),
   );
@@ -47,4 +50,3 @@ export const useDeleteScenarioItem = (kioskId: number) =>
       },
     }),
   );
-
