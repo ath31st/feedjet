@@ -1,38 +1,40 @@
-import { lazy, Suspense } from 'react';
-import { SeasonOverlay, StaticBackground } from '@/shared/ui';
-import { useUiConfigStore } from '@/entities/ui-config';
-import { Rotator } from '@/shared/ui/Rotator';
-import { LoadingThreeDotsJumping } from '@/shared/ui';
-import { useKioskParams } from '@/features/kiosk-params';
-import { useKioskRotation } from '@/features/kiosk-rotation';
+import { Suspense } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
+import {
+  SeasonOverlay,
+  StaticBackground,
+  Rotator,
+  LoadingThreeDotsJumping,
+} from '@/shared/ui';
+import { useKioskParams } from '@/features/kiosk-params';
+import { useScenarioRotation } from '@/features/kiosk-rotation';
+import { ScenarioItemRenderer } from '@/features/scenario-renderer';
 import { TickerRuntime } from '@/widgets/ticker-runtime';
-
-const FeedWidget = lazy(() => import('@/widgets/feed'));
-const ScheduleWidget = lazy(() => import('@/widgets/schedule'));
-const VideoPlayerWidget = lazy(() => import('@/widgets/video-player'));
-const ImageViewerWidget = lazy(() => import('@/widgets/image-viewer'));
-const BirthdayWidget = lazy(() => import('@/widgets/birthday'));
-const InfoWidget = lazy(() => import('@/widgets/info'));
+import { useIframeBridge } from '@/features/kiosk-iframe-bridge';
 
 export function KioskPage() {
-  const { uiConfig, loading, initialized } = useUiConfigStore();
-  const widgets = uiConfig?.rotatingWidgets ?? [];
-  const interval = uiConfig?.autoSwitchIntervalMs ?? 0;
   const { rotate, animation } = useKioskParams();
   const {
+    scenarioLoading,
+    currentItem,
     index,
-    lockRotation,
     unlockRotation,
-    isSingleVideoWidget,
-    isSingleImageWidget,
-  } = useKioskRotation({
-    widgets,
-    interval,
-  });
-  const currentWidgetKey = widgets[index];
+    next,
+    prev,
+    togglePause,
+    userPaused,
+  } = useScenarioRotation();
 
-  if (loading || !initialized) {
+  useIframeBridge({
+    onNext: next,
+    onPrev: prev,
+    onTogglePause: togglePause,
+    userPaused,
+    currentItemId: currentItem?.id ?? null,
+    currentIndex: index,
+  });
+
+  if (scenarioLoading) {
     return (
       <div className="flex h-screen w-screen items-center justify-center">
         <LoadingThreeDotsJumping />
@@ -40,53 +42,56 @@ export function KioskPage() {
     );
   }
 
+  if (!currentItem) {
+    return (
+      <div className="relative h-screen w-screen">
+        <Rotator rotate={rotate}>
+          <StaticBackground />
+          <div className="flex h-screen w-screen items-center justify-center text-(--text-muted)">
+            <p className="text-2xl">Сценарий пуст</p>
+          </div>
+        </Rotator>
+      </div>
+    );
+  }
+
+  const itemKey = `${currentItem.id}-${currentItem.type}`;
+
   return (
     <div className="relative h-screen w-screen">
-      <Rotator rotate={rotate}>
-        <TickerRuntime rotate={rotate} />
-      </Rotator>
-
       <AnimatePresence mode="wait">
         <motion.div
-          key={currentWidgetKey}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 1.0 }}
+          //           key={currentWidgetKey}
+          //           initial={{ opacity: 0 }}
+          //           animate={{ opacity: 1 }}
+          //           exit={{ opacity: 0 }}
+          //           transition={{ duration: 1.0 }}
+          key={itemKey}
+          className="absolute inset-0"
+          initial={{ opacity: 0, scale: 1.04, y: 12 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.97, y: -10 }}
+          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+          style={{ willChange: 'opacity, transform' }}
         >
           <Rotator rotate={rotate}>
             <SeasonOverlay />
             <StaticBackground />
-
             <Suspense fallback={null}>
-              {currentWidgetKey === 'feed' && (
-                <FeedWidget rotate={rotate} animation={animation} />
-              )}
-              {currentWidgetKey === 'schedule' && (
-                <ScheduleWidget rotate={rotate} />
-              )}
-              {currentWidgetKey === 'video' && (
-                <VideoPlayerWidget
-                  onVideoStart={lockRotation}
-                  onVideoEnd={unlockRotation}
-                  isSingleVideoWidget={isSingleVideoWidget}
-                />
-              )}
-              {currentWidgetKey === 'image' && (
-                <ImageViewerWidget
-                  onViewStart={lockRotation}
-                  onViewEnd={unlockRotation}
-                  isSingleImageWidget={isSingleImageWidget}
-                />
-              )}
-              {currentWidgetKey === 'birthday' && (
-                <BirthdayWidget rotate={rotate} />
-              )}
-              {currentWidgetKey === 'info' && <InfoWidget rotate={rotate} />}
+              <ScenarioItemRenderer
+                item={currentItem}
+                rotate={rotate}
+                animation={animation}
+                onVideoEnd={unlockRotation}
+              />
             </Suspense>
           </Rotator>
         </motion.div>
       </AnimatePresence>
+
+      <Rotator rotate={rotate}>
+        <TickerRuntime rotate={rotate} />
+      </Rotator>
     </div>
   );
 }
