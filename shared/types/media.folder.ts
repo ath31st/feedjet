@@ -19,7 +19,6 @@ export interface MediaFileBase {
   size: number;
   folderId: number | null;
   createdAt: number;
-  updatedAt: number;
   mtime: number;
 }
 
