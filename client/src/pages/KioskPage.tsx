@@ -58,7 +58,7 @@ export function KioskPage() {
   const itemKey = `${currentItem.id}-${currentItem.type}`;
 
   return (
-    <div className="relative h-screen w-screen">
+    <div className="relative h-screen w-screen overflow-hidden">
       <AnimatePresence mode="wait">
         <motion.div
           //           key={currentWidgetKey}
