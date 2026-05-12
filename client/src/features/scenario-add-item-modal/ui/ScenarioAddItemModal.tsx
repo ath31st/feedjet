@@ -16,7 +16,6 @@ import type {
 import { useQuery } from '@tanstack/react-query';
 import { Plus } from 'lucide-react';
 import { useState, useMemo } from 'react';
-import { toast } from 'sonner';
 import { ScenarioModal } from './ScenarioModal';
 import { ContentTabs } from './ContentTabs';
 import { cn } from './cn';
@@ -85,7 +84,6 @@ export function ScenarioAddItemModal({
       },
       {
         onSuccess: () => {
-          toast.success('Виджет добавлен');
           onClose();
         },
       },
@@ -106,7 +104,6 @@ export function ScenarioAddItemModal({
       },
       {
         onSuccess: () => {
-          toast.success('Изображение добавлено');
           onClose();
         },
       },
@@ -118,7 +115,6 @@ export function ScenarioAddItemModal({
       { kioskId, item: { type: 'video', videoId, order: 0, isActive: true } },
       {
         onSuccess: () => {
-          toast.success('Видео добавлено');
           onClose();
         },
       },
