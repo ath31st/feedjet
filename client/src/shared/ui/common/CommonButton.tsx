@@ -18,7 +18,7 @@ export function CommonButton({
 }: CommonButtonProps) {
   const button = (
     <button
-      className="cursor-pointer rounded-lg border border-(--border) bg-(--button-bg) p-2 text-(--button-text) hover:bg-(--button-hover-bg)"
+      className={`rounded-lg border border-(--border) bg-(--button-bg) p-2 text-(--button-text) hover:bg-(--button-hover-bg) ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
       type={type}
       onClick={onClick}
       disabled={disabled}
