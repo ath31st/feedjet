@@ -6,19 +6,20 @@ import {
   WIDGET_ICONS,
   WIDGET_LABELS,
 } from '@/entities/scenario';
-import { trpcWithProxy } from '@/shared/api';
 import { SERVER_URL } from '@/shared/config';
 import { fmtBytes, fmtDuration } from '@/shared/lib';
 import type {
   ScenarioWidgetType,
   ScenarioItemType,
 } from '@shared/types/scenario';
-import { useQuery } from '@tanstack/react-query';
 import { Plus } from 'lucide-react';
 import { useState, useMemo } from 'react';
 import { ScenarioModal } from './ScenarioModal';
 import { ContentTabs } from './ContentTabs';
 import { cn } from './cn';
+import { useMediaFolderTree } from '@/entities/media-folder';
+import { useAllVideoList } from '@/entities/video';
+import { useAllImageList } from '@/entities/image';
 
 interface ScenarioAddItemModalProps {
   open: boolean;
@@ -34,15 +35,9 @@ export function ScenarioAddItemModal({
   const [tab, setTab] = useState<ScenarioItemType>('widget');
   const [folderFilter, setFolderFilter] = useState<number | null>(null);
   const addItem = useAddScenarioItem(kioskId);
-  const { data: allImages = [] } = useQuery(
-    trpcWithProxy.image.listAllFiles.queryOptions(),
-  );
-  const { data: allVideos = [] } = useQuery(
-    trpcWithProxy.videoFile.listAllFiles.queryOptions(),
-  );
-  const { data: folderTree = [] } = useQuery(
-    trpcWithProxy.mediaFolder.getTree.queryOptions(),
-  );
+  const { data: allImages = [] } = useAllImageList();
+  const { data: allVideos = [] } = useAllVideoList();
+  const { data: folderTree = [] } = useMediaFolderTree();
 
   const flatFolders = useMemo(() => {
     const out: Array<{ id: number; name: string; depth: number }> = [];

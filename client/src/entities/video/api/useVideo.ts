@@ -12,6 +12,10 @@ export const useActiveVideoList = (kioskId: number) => {
   );
 };
 
+export const useAllVideoList = () => {
+  return useQuery(trpcWithProxy.videoFile.listAllFiles.queryOptions());
+};
+
 export const useDiskUsage = () => {
   return useQuery(trpcWithProxy.videoFile.getDiskUsage.queryOptions());
 };
@@ -23,6 +27,30 @@ export const useRemoveVideoFile = () => {
         toast.success('Файл успешно удален');
         queryClient.invalidateQueries({
           queryKey: trpcWithProxy.videoFile.listFiles.queryKey(),
+        });
+        queryClient.invalidateQueries({
+          queryKey: trpcWithProxy.videoFile.getDiskUsage.queryKey(),
+        });
+      },
+      onError: (err: unknown) => {
+        if (err instanceof Error) {
+          toast.error(err.message || 'Ошибка при удалении файла');
+          return;
+        }
+      },
+    }),
+  );
+};
+
+export const useDeleteVideoGlobal = (folderId?: number | null) => {
+  return useMutation(
+    trpcWithProxy.videoFile.deleteFileGlobal.mutationOptions({
+      onSuccess: () => {
+        toast.success('Файл успешно удален');
+        queryClient.invalidateQueries({
+          queryKey: trpcWithProxy.mediaFolder.listMedia.queryKey(
+            folderId ? { folderId } : undefined,
+          ),
         });
         queryClient.invalidateQueries({
           queryKey: trpcWithProxy.videoFile.getDiskUsage.queryKey(),

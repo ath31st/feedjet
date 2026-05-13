@@ -12,6 +12,10 @@ export const useActiveImageList = (kioskId: number) => {
   );
 };
 
+export const useAllImageList = () => {
+  return useQuery(trpcWithProxy.image.listAllFiles.queryOptions());
+};
+
 export const useDiskUsage = () => {
   return useQuery(trpcWithProxy.image.getDiskUsage.queryOptions());
 };
@@ -23,6 +27,30 @@ export const useRemoveImageFile = () => {
         toast.success('Файл успешно удален');
         queryClient.invalidateQueries({
           queryKey: trpcWithProxy.image.listFiles.queryKey(),
+        });
+        queryClient.invalidateQueries({
+          queryKey: trpcWithProxy.image.getDiskUsage.queryKey(),
+        });
+      },
+      onError: (err: unknown) => {
+        if (err instanceof Error) {
+          toast.error(err.message || 'Ошибка при удалении файла');
+          return;
+        }
+      },
+    }),
+  );
+};
+
+export const useDeleteImageGlobal = (folderId?: number | null) => {
+  return useMutation(
+    trpcWithProxy.image.deleteFileGlobal.mutationOptions({
+      onSuccess: () => {
+        toast.success('Файл успешно удален');
+        queryClient.invalidateQueries({
+          queryKey: trpcWithProxy.mediaFolder.listMedia.queryKey(
+            folderId ? { folderId } : undefined,
+          ),
         });
         queryClient.invalidateQueries({
           queryKey: trpcWithProxy.image.getDiskUsage.queryKey(),
