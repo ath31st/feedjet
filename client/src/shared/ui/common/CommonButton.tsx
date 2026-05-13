@@ -1,9 +1,10 @@
+import type { MouseEventHandler } from 'react';
 import { TooltipWrapper } from '../TooltipWrapper';
 
 interface CommonButtonProps {
   type: 'button' | 'submit' | 'reset' | undefined;
   children: React.ReactNode;
-  onClick?: () => void;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
   disabled?: boolean;
   tooltip?: string;
 }

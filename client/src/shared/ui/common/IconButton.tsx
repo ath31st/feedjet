@@ -2,7 +2,7 @@ import type { MouseEventHandler, ReactNode } from 'react';
 import { TooltipWrapper } from '../TooltipWrapper';
 
 interface IconButtonProps {
-  onClick: MouseEventHandler<HTMLButtonElement>;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
   icon: ReactNode;
   disabled?: boolean;
   className?: string;
