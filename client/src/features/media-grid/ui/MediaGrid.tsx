@@ -1,31 +1,38 @@
 /** biome-ignore-all lint/a11y: disable all a11y rules */
 import { buildImageUrl } from '@/entities/image';
-import type { MediaFile } from '@/entities/media-folder';
+import { useMediaInFolder, type MediaFile } from '@/entities/media-folder';
 import { fmtBytes, fmtDuration } from '@/shared/lib';
+import { ConfirmActionDialog } from '@/shared/ui';
 import { CommonButton, IconButton } from '@/shared/ui/common';
 import { Folder, Image, Video, Trash2, Eye, X } from 'lucide-react';
+import { useMediaDelete } from '../model/useMediaDelete';
 
 interface MediaGridProps {
-  media: MediaFile[];
-  isLoading: boolean;
-
+  selectedFolderId: number | null;
   selectedFiles: Set<string>;
   setSelectedFiles: (set: Set<string>) => void;
 
   onToggleSelect: (key: string) => void;
   onPreview: (file: MediaFile) => void;
-  onDelete: (file: MediaFile) => void;
 }
 
 export function MediaGrid({
-  media,
-  isLoading,
+  selectedFolderId,
   selectedFiles,
   setSelectedFiles,
   onToggleSelect,
   onPreview,
-  onDelete,
 }: MediaGridProps) {
+  const { deleteFile } = useMediaDelete({
+    folderId: selectedFolderId,
+  });
+  const { data: media = [], isLoading } = useMediaInFolder(selectedFolderId);
+
+  const handleDeleteFile = (file: MediaFile) => {
+    deleteFile(file);
+    setSelectedFiles(new Set());
+  };
+
   if (isLoading) {
     return (
       <div className="flex-1 overflow-y-auto p-4">
@@ -96,11 +103,14 @@ export function MediaGrid({
                     }}
                   />
 
-                  <IconButton
-                    icon={<Trash2 size={22} />}
-                    onClick={(e) => {
+                  <ConfirmActionDialog
+                    confirmText="Удалить"
+                    description={`Файл «${file.name}» будет удалён. Все сценарии, в которых он используется, будут обновлены.`}
+                    trigger={<IconButton icon={<Trash2 size={22} />} />}
+                    title={'Удалить файл?'}
+                    onConfirm={(e) => {
                       e.stopPropagation();
-                      onDelete(file);
+                      handleDeleteFile(file);
                     }}
                   />
                 </div>
