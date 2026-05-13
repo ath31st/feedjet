@@ -1,6 +1,7 @@
 /** biome-ignore-all lint/a11y: disable all a11y rules */
 import { PlusIcon, SaveIcon } from 'lucide-react';
 import { CommonButton } from '@/shared/ui/common';
+import { ResetIcon } from '@radix-ui/react-icons';
 
 interface HeaderProps {
   isDirty: boolean;
@@ -24,16 +25,17 @@ export function Header({ isDirty, onAdd, onSave, onReset }: HeaderProps) {
 
       <div className="ml-auto flex items-center gap-2">
         {isDirty && (
-          <button
-            className="rounded-md px-3 py-1.5 text-(--text-muted) text-sm hover:bg-(--surface)"
+          <CommonButton
             onClick={onReset}
+            type="button"
+            tooltip="Отменить изменения"
           >
-            Отменить
-          </button>
+            <ResetIcon />
+          </CommonButton>
         )}
 
         <CommonButton onClick={onAdd} type="button" tooltip="Добавить элемент">
-          <PlusIcon size={16} />
+          <PlusIcon size={15} />
         </CommonButton>
 
         <CommonButton
@@ -42,7 +44,7 @@ export function Header({ isDirty, onAdd, onSave, onReset }: HeaderProps) {
           disabled={!isDirty}
           tooltip="Сохранить сценарий"
         >
-          <SaveIcon size={16} />
+          <SaveIcon size={15} />
         </CommonButton>
       </div>
     </div>
