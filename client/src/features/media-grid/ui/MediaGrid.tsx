@@ -2,14 +2,15 @@
 import { buildImageUrl } from '@/entities/image';
 import type { MediaFile } from '@/entities/media-folder';
 import { fmtBytes, fmtDuration } from '@/shared/lib';
-import { IconButton } from '@/shared/ui/common';
-import { Folder, Image, Video, Trash2, Eye } from 'lucide-react';
+import { CommonButton, IconButton } from '@/shared/ui/common';
+import { Folder, Image, Video, Trash2, Eye, X } from 'lucide-react';
 
 interface MediaGridProps {
   media: MediaFile[];
   isLoading: boolean;
 
   selectedFiles: Set<string>;
+  setSelectedFiles: (set: Set<string>) => void;
 
   onToggleSelect: (key: string) => void;
   onPreview: (file: MediaFile) => void;
@@ -20,6 +21,7 @@ export function MediaGrid({
   media,
   isLoading,
   selectedFiles,
+  setSelectedFiles,
   onToggleSelect,
   onPreview,
   onDelete,
@@ -119,6 +121,24 @@ export function MediaGrid({
           );
         })}
       </div>
+
+      {selectedFiles.size > 0 && (
+        <div className="flex items-center gap-3 px-4 py-2">
+          <span className="text-(--text-muted) text-sm">
+            Выбрано: {selectedFiles.size}
+          </span>
+          <CommonButton
+            type="button"
+            onClick={() => setSelectedFiles(new Set())}
+            disabled={selectedFiles.size === 0}
+          >
+            <div className="flex items-center gap-1">
+              <X size={14} />
+              <span className="text-xs">Снять выделение</span>
+            </div>
+          </CommonButton>
+        </div>
+      )}
     </div>
   );
 }
