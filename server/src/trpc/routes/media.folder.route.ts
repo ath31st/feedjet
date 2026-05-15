@@ -1,6 +1,13 @@
-import { z } from 'zod';
 import { t, mediaFolderService } from '../../container.js';
 import { protectedProcedure } from '../../middleware/auth.js';
+import {
+  createMediaFolderSchema,
+  renameMediaFolderSchema,
+  deleteMediaFolderSchema,
+  listMediaSchema,
+  assignImageFolderSchema,
+  assignVideoFolderSchema,
+} from '../../validations/schemas/media.folder.schemas.js';
 
 export const mediaFolderRouter = t.router({
   getTree: protectedProcedure.query(() => {
@@ -8,39 +15,37 @@ export const mediaFolderRouter = t.router({
   }),
 
   create: protectedProcedure
-    .input(z.object({ name: z.string().min(1), parentId: z.number().nullable() }))
+    .input(createMediaFolderSchema)
     .mutation(({ input }) => {
       return mediaFolderService.create(input.name, input.parentId);
     }),
 
   rename: protectedProcedure
-    .input(z.object({ id: z.number(), name: z.string().min(1) }))
+    .input(renameMediaFolderSchema)
     .mutation(({ input }) => {
       return mediaFolderService.rename(input.id, input.name);
     }),
 
   delete: protectedProcedure
-    .input(z.object({ id: z.number() }))
+    .input(deleteMediaFolderSchema)
     .mutation(({ input }) => {
       mediaFolderService.delete(input.id);
       return { success: true };
     }),
 
-  listMedia: protectedProcedure
-    .input(z.object({ folderId: z.number().nullable() }))
-    .query(({ input }) => {
-      return mediaFolderService.listAllMedia(input.folderId);
-    }),
+  listMedia: protectedProcedure.input(listMediaSchema).query(({ input }) => {
+    return mediaFolderService.listAllMedia(input.folderId);
+  }),
 
   assignImageFolder: protectedProcedure
-    .input(z.object({ imageId: z.number(), folderId: z.number().nullable() }))
+    .input(assignImageFolderSchema)
     .mutation(({ input }) => {
       mediaFolderService.assignImageToFolder(input.imageId, input.folderId);
       return { success: true };
     }),
 
   assignVideoFolder: protectedProcedure
-    .input(z.object({ videoId: z.number(), folderId: z.number().nullable() }))
+    .input(assignVideoFolderSchema)
     .mutation(({ input }) => {
       mediaFolderService.assignVideoToFolder(input.videoId, input.folderId);
       return { success: true };
