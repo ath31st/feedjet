@@ -81,7 +81,7 @@ export function FolderTreePanel({
         </div>
       )}
 
-      <aside className="flex w-70 shrink-0 flex-col">
+      <aside className="flex w-full shrink-0 flex-col gap-6">
         <div className="flex-1 overflow-y-auto">
           <div
             className={`flex cursor-pointer items-center gap-2 rounded-lg px-2 py-1 text-sm transition-colors ${
