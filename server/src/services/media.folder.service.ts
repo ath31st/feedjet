@@ -1,6 +1,6 @@
 import type { DbType } from '../container.js';
 import { mediaFoldersTable, imagesTable, videosTable } from '../db/schema.js';
-import { eq, isNull, sql } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 import type {
   MediaFolder,
   MediaFolderTree,
@@ -85,37 +85,21 @@ export class MediaFolderService {
   }
 
   listAllImages(folderId: number | null) {
-    if (folderId === null) {
-      return this.db
-        .select()
-        .from(imagesTable)
-        .where(isNull(imagesTable.folderId))
-        .all()
-        .map((img) => ({ ...img, kind: 'image' as const }));
-    }
-    return this.db
-      .select()
-      .from(imagesTable)
-      .where(eq(imagesTable.folderId, folderId))
-      .all()
-      .map((img) => ({ ...img, kind: 'image' as const }));
+    const query = this.db.select().from(imagesTable);
+    const rows =
+      folderId === null
+        ? query.all()
+        : query.where(eq(imagesTable.folderId, folderId)).all();
+    return rows.map((img) => ({ ...img, kind: 'image' as const }));
   }
 
   listAllVideos(folderId: number | null) {
-    if (folderId === null) {
-      return this.db
-        .select()
-        .from(videosTable)
-        .where(isNull(videosTable.folderId))
-        .all()
-        .map((v) => ({ ...v, kind: 'video' as const }));
-    }
-    return this.db
-      .select()
-      .from(videosTable)
-      .where(eq(videosTable.folderId, folderId))
-      .all()
-      .map((v) => ({ ...v, kind: 'video' as const }));
+    const query = this.db.select().from(videosTable);
+    const rows =
+      folderId === null
+        ? query.all()
+        : query.where(eq(videosTable.folderId, folderId)).all();
+    return rows.map((v) => ({ ...v, kind: 'video' as const }));
   }
 
   listAllMedia(folderId: number | null) {
