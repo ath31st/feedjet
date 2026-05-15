@@ -3,8 +3,7 @@ import { queryClient, trpcWithProxy } from '@/shared/api';
 import { toast } from 'sonner';
 
 const folderQueryKey = () => trpcWithProxy.mediaFolder.getTree.queryKey();
-const mediaQueryKey = (folderId: number | null) =>
-  trpcWithProxy.mediaFolder.listMedia.queryKey({ folderId });
+const mediaQueryKey = () => trpcWithProxy.mediaFolder.listMedia.queryKey();
 
 export const useMediaFolderTree = () =>
   useQuery(trpcWithProxy.mediaFolder.getTree.queryOptions());
@@ -46,11 +45,8 @@ export const useDeleteFolder = () =>
 export const useAssignImageFolder = () =>
   useMutation(
     trpcWithProxy.mediaFolder.assignImageFolder.mutationOptions({
-      onSuccess(_, vars) {
-        queryClient.invalidateQueries({
-          queryKey: mediaQueryKey(vars.folderId),
-        });
-        queryClient.invalidateQueries({ queryKey: mediaQueryKey(null) });
+      onSuccess() {
+        queryClient.invalidateQueries({ queryKey: mediaQueryKey() });
       },
     }),
   );
@@ -58,11 +54,8 @@ export const useAssignImageFolder = () =>
 export const useAssignVideoFolder = () =>
   useMutation(
     trpcWithProxy.mediaFolder.assignVideoFolder.mutationOptions({
-      onSuccess(_, vars) {
-        queryClient.invalidateQueries({
-          queryKey: mediaQueryKey(vars.folderId),
-        });
-        queryClient.invalidateQueries({ queryKey: mediaQueryKey(null) });
+      onSuccess() {
+        queryClient.invalidateQueries({ queryKey: mediaQueryKey() });
       },
     }),
   );

@@ -21,9 +21,7 @@ export function useMediaUpload({ folderId }: UseMediaUploadParams) {
 
   const invalidateMedia = () => {
     queryClient.invalidateQueries({
-      queryKey: trpcWithProxy.mediaFolder.listMedia.queryKey({
-        folderId,
-      }),
+      queryKey: trpcWithProxy.mediaFolder.listMedia.queryKey(),
     });
 
     queryClient.invalidateQueries({
