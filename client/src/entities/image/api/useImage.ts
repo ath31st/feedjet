@@ -42,15 +42,13 @@ export const useRemoveImageFile = () => {
   );
 };
 
-export const useDeleteImageGlobal = (folderId?: number | null) => {
+export const useDeleteImageGlobal = () => {
   return useMutation(
     trpcWithProxy.image.deleteFileGlobal.mutationOptions({
       onSuccess: () => {
         toast.success('Файл успешно удален');
         queryClient.invalidateQueries({
-          queryKey: trpcWithProxy.mediaFolder.listMedia.queryKey(
-            folderId ? { folderId } : undefined,
-          ),
+          queryKey: trpcWithProxy.mediaFolder.listMedia.queryKey(),
         });
         queryClient.invalidateQueries({
           queryKey: trpcWithProxy.image.getDiskUsage.queryKey(),

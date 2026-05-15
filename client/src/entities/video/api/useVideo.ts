@@ -42,15 +42,13 @@ export const useRemoveVideoFile = () => {
   );
 };
 
-export const useDeleteVideoGlobal = (folderId?: number | null) => {
+export const useDeleteVideoGlobal = () => {
   return useMutation(
     trpcWithProxy.videoFile.deleteFileGlobal.mutationOptions({
       onSuccess: () => {
         toast.success('Файл успешно удален');
         queryClient.invalidateQueries({
-          queryKey: trpcWithProxy.mediaFolder.listMedia.queryKey(
-            folderId ? { folderId } : undefined,
-          ),
+          queryKey: trpcWithProxy.mediaFolder.listMedia.queryKey(),
         });
         queryClient.invalidateQueries({
           queryKey: trpcWithProxy.videoFile.getDiskUsage.queryKey(),
