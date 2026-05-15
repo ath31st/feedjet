@@ -33,7 +33,7 @@ export function ItemRow({
         <div
           ref={provided.innerRef}
           {...provided.draggableProps}
-          className={`flex items-center gap-3 rounded-lg border p-3 transition-all ${
+          className={`mb-2 flex items-center gap-3 rounded-lg border p-3 transition-[background-color,border-color,box-shadow,opacity] ${
             isCurrentlyPlaying
               ? 'border-(--border) bg-(--border)/20 ring-(--border)/40 ring-2'
               : 'border-(--border) bg-(--surface)'
