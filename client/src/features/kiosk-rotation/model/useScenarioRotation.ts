@@ -7,22 +7,29 @@ export function useScenarioRotation() {
   const items: ScenarioItem[] = (scenario?.items ?? []).filter(
     (i) => i.isActive,
   );
-  const [index, setIndex] = useState(0);
+  const [currentItemId, setCurrentItemId] = useState<number | null>(null);
   const [isRotationLocked, setIsRotationLocked] = useState(false);
   const [userPaused, setUserPaused] = useState(false);
 
   const safeIndex = useMemo(() => {
     if (items.length === 0) return 0;
-    return Math.min(index, items.length - 1);
-  }, [index, items.length]);
+    const idx = items.findIndex((i) => i.id === currentItemId);
+    return idx === -1 ? 0 : idx;
+  }, [items, currentItemId]);
 
   const currentItem = items[safeIndex] ?? null;
 
   useEffect(() => {
-    if (index !== safeIndex) {
-      setIndex(safeIndex);
+    if (items.length === 0) {
+      if (currentItemId !== null) setCurrentItemId(null);
+      return;
     }
-  }, [index, safeIndex]);
+
+    const exists = items.some((i) => i.id === currentItemId);
+    if (!exists) {
+      setCurrentItemId(items[0].id);
+    }
+  }, [items, currentItemId]);
 
   const lockRotation = useEffectEvent(() => {
     setIsRotationLocked(true);
@@ -32,11 +39,13 @@ export function useScenarioRotation() {
     setIsRotationLocked(false);
 
     if (items.length === 0) {
-      setIndex(0);
+      setCurrentItemId(null);
       return;
     }
 
-    setIndex((prev) => (prev + 1) % items.length);
+    const idx = items.findIndex((i) => i.id === currentItemId);
+    const nextIdx = (Math.max(0, idx) + 1) % items.length;
+    setCurrentItemId(items[nextIdx].id);
   });
 
   const advance = useEffectEvent(() => {
@@ -44,19 +53,26 @@ export function useScenarioRotation() {
       return;
     }
 
-    setIndex((prev) => (prev + 1) % items.length);
+    const idx = items.findIndex((i) => i.id === currentItemId);
+    const nextIdx = (Math.max(0, idx) + 1) % items.length;
+    setCurrentItemId(items[nextIdx].id);
   });
 
   const next = useEffectEvent(() => {
     if (items.length === 0) return;
 
-    setIndex((prev) => (prev + 1) % items.length);
+    const idx = items.findIndex((i) => i.id === currentItemId);
+    const nextIdx = (Math.max(0, idx) + 1) % items.length;
+    setCurrentItemId(items[nextIdx].id);
   });
 
   const prev = useEffectEvent(() => {
     if (items.length === 0) return;
 
-    setIndex((prev) => (prev - 1 + items.length) % items.length);
+    const idx = items.findIndex((i) => i.id === currentItemId);
+    const base = idx === -1 ? 0 : idx;
+    const prevIdx = (base - 1 + items.length) % items.length;
+    setCurrentItemId(items[prevIdx].id);
   });
 
   const togglePause = useEffectEvent(() => {
@@ -90,6 +106,12 @@ export function useScenarioRotation() {
     userPaused,
     currentItem,
   ]);
+
+  const setIndex = useEffectEvent((idx: number) => {
+    if (items.length === 0) return;
+    const target = items[Math.max(0, Math.min(idx, items.length - 1))];
+    if (target) setCurrentItemId(target.id);
+  });
 
   return {
     scenarioLoading,
