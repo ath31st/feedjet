@@ -58,7 +58,7 @@ export function FolderNode({
   return (
     <div>
       <div
-        className={`group flex cursor-pointer items-center justify-between rounded-lg px-2 py-1 text-sm transition-colors ${
+        className={`group flex cursor-pointer items-center justify-between rounded-lg p-2 text-sm transition-colors ${
           isSelected ? 'bg-(--button-bg)' : 'hover:bg-(--button-hover-bg)'
         }`}
         style={{ paddingLeft: `${8 + depth * 16}px` }}
@@ -67,7 +67,7 @@ export function FolderNode({
         <div className="flex min-w-0 flex-1 items-center gap-1">
           {node.children.length > 0 ? (
             <button
-              className="shrink-0"
+              className="shrink-0 cursor-pointer"
               onClick={(e) => {
                 e.stopPropagation();
 
