@@ -23,9 +23,7 @@ export function MediaGrid({
   onToggleSelect,
   onPreview,
 }: MediaGridProps) {
-  const { deleteFile } = useMediaDelete({
-    folderId: selectedFolderId,
-  });
+  const { deleteFile } = useMediaDelete();
   const { data: media = [], isLoading } = useMediaInFolder(selectedFolderId);
 
   const handleDeleteFile = (file: MediaFile) => {
@@ -35,7 +33,7 @@ export function MediaGrid({
 
   if (isLoading) {
     return (
-      <div className="flex-1 overflow-y-auto p-4">
+      <div className="flex-1 overflow-y-auto p-2">
         <div className="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-3">
           {Array.from({ length: 12 }).map((_, i) => (
             <div
@@ -51,7 +49,7 @@ export function MediaGrid({
 
   if (media.length === 0) {
     return (
-      <div className="flex flex-1 flex-col items-center justify-center gap-3 p-4">
+      <div className="flex flex-1 flex-col items-center justify-center gap-3 p-2">
         <Folder size={48} strokeWidth={1} />
         <p className="text-2xl">Папка пуста</p>
       </div>
@@ -59,7 +57,7 @@ export function MediaGrid({
   }
 
   return (
-    <div className="flex-1 overflow-y-auto p-4">
+    <div className="flex-1 overflow-y-auto p-2">
       <div className="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-3">
         {media.map((file) => {
           const key = `${file.kind}-${file.id}`;
@@ -133,7 +131,7 @@ export function MediaGrid({
       </div>
 
       {selectedFiles.size > 0 && (
-        <div className="flex items-center gap-3 px-4 py-2">
+        <div className="flex items-center gap-3 p-2">
           <span className="text-(--text-muted) text-sm">
             Выбрано: {selectedFiles.size}
           </span>

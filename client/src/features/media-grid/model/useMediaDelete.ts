@@ -2,13 +2,9 @@ import type { MediaFile } from '@/entities/media-folder';
 import { useDeleteImageGlobal } from '@/entities/image';
 import { useDeleteVideoGlobal } from '@/entities/video';
 
-interface UseMediaDeleteParams {
-  folderId: number | null;
-}
-
-export function useMediaDelete({ folderId }: UseMediaDeleteParams) {
-  const { mutate: deleteImageMut } = useDeleteImageGlobal(folderId);
-  const { mutate: deleteVideoMut } = useDeleteVideoGlobal(folderId);
+export function useMediaDelete() {
+  const { mutate: deleteImageMut } = useDeleteImageGlobal();
+  const { mutate: deleteVideoMut } = useDeleteVideoGlobal();
 
   const deleteFile = (file: MediaFile) => {
     if (file.kind === 'image') {
