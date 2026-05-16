@@ -11,6 +11,7 @@ import {
 } from '@radix-ui/react-icons';
 
 import { useState } from 'react';
+import { ConfirmActionDialog } from '@/shared/ui';
 
 interface FolderNodeProps {
   node: MediaFolderTree;
@@ -142,10 +143,16 @@ export function FolderNode({
                   icon={<Pencil1Icon className="h-4 w-4 cursor-pointer" />}
                 />
 
-                <IconButton
-                  onClick={() => onDelete(node.id)}
-                  tooltip="Удалить папку"
-                  icon={<Cross1Icon className="h-4 w-4 cursor-pointer" />}
+                <ConfirmActionDialog
+                  title="Удаление папки"
+                  onConfirm={() => onDelete(node.id)}
+                  description={`Вы действительно хотите удалить папку "${node.name}"? Содержимое папки НЕ будет удалено и будет доступно в корневой папке.`}
+                  trigger={
+                    <IconButton
+                      tooltip="Удалить папку"
+                      icon={<Cross1Icon className="h-4 w-4 cursor-pointer" />}
+                    />
+                  }
                 />
               </>
             )}

@@ -1,16 +1,8 @@
 /** biome-ignore-all lint/a11y: disable all a11y rules */
-import { useState } from 'react';
-import {
-  useMediaFolderTree,
-  useMediaStats,
-  useCreateFolder,
-  useRenameFolder,
-  useDeleteFolder,
-  type MediaFolderTree,
-} from '@/entities/media-folder';
 import { Folder } from 'lucide-react';
 import { FolderNode } from './FolderNode';
 import { FolderCreateForm } from './FolderCreateForm';
+import { useFolderTreePanel } from '../model/useFolderTreePanel';
 
 interface FolderTreePanelProps {
   selectedFolderId: number | null;
@@ -21,54 +13,18 @@ export function FolderTreePanel({
   selectedFolderId,
   onSelectFolder,
 }: FolderTreePanelProps) {
-  const [renamingId, setRenamingId] = useState<number | null>(null);
-  const [renameValue, setRenameValue] = useState('');
-
-  const { data: tree = [] } = useMediaFolderTree();
-  const { data: stats } = useMediaStats();
-
-  const createFolder = useCreateFolder();
-  const renameFolder = useRenameFolder();
-  const deleteFolder = useDeleteFolder();
-
-  const handleRename = () => {
-    if (!renamingId || !renameValue.trim()) {
-      return;
-    }
-
-    renameFolder.mutate({
-      id: renamingId,
-      name: renameValue.trim(),
-    });
-
-    setRenamingId(null);
-    setRenameValue('');
-  };
-
-  const handleDelete = (id: number) => {
-    deleteFolder.mutate({ id });
-
-    if (selectedFolderId === id) {
-      onSelectFolder(null);
-    }
-  };
-
-  const handleCancelRename = () => {
-    setRenamingId(null);
-    setRenameValue('');
-  };
-
-  const handleStartRename = (folder: MediaFolderTree) => {
-    setRenamingId(folder.id);
-    setRenameValue(folder.name);
-  };
-
-  const handleCreateFolder = (name: string) => {
-    createFolder.mutate({
-      name,
-      parentId: selectedFolderId,
-    });
-  };
+  const {
+    tree,
+    stats,
+    renamingId,
+    renameValue,
+    handleCancelRename,
+    handleCreateFolder,
+    handleDelete,
+    handleRename,
+    handleStartRename,
+    setRenameValue,
+  } = useFolderTreePanel(selectedFolderId, onSelectFolder);
 
   return (
     <aside className="flex w-full shrink-0 flex-col gap-4">
