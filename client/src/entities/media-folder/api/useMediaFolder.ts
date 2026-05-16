@@ -18,6 +18,7 @@ export const useCreateFolder = () =>
   useMutation(
     trpcWithProxy.mediaFolder.create.mutationOptions({
       onSuccess() {
+        toast.success('Папка создана');
         queryClient.invalidateQueries({ queryKey: folderQueryKey() });
       },
     }),
@@ -27,6 +28,7 @@ export const useRenameFolder = () =>
   useMutation(
     trpcWithProxy.mediaFolder.rename.mutationOptions({
       onSuccess() {
+        toast.success('Папка переименована');
         queryClient.invalidateQueries({ queryKey: folderQueryKey() });
       },
     }),
@@ -46,6 +48,7 @@ export const useAssignImageFolder = () =>
   useMutation(
     trpcWithProxy.mediaFolder.assignImageFolder.mutationOptions({
       onSuccess() {
+        toast.success('Папка назначена');
         queryClient.invalidateQueries({ queryKey: mediaQueryKey() });
       },
     }),
@@ -55,6 +58,7 @@ export const useAssignVideoFolder = () =>
   useMutation(
     trpcWithProxy.mediaFolder.assignVideoFolder.mutationOptions({
       onSuccess() {
+        toast.success('Папка назначена');
         queryClient.invalidateQueries({ queryKey: mediaQueryKey() });
       },
     }),
