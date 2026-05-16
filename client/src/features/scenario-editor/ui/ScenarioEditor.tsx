@@ -3,13 +3,11 @@ import {
   useReorderScenarioItems,
   useUpdateScenarioItem,
 } from '@/entities/scenario';
-
 import type { ScenarioItem } from '@/entities/scenario';
 import { Header } from './Header';
 import { LoadingState } from './LoadingState';
 import { ItemsSortableList } from './ItemsSortableList';
 import { EmptyState } from './EmptyState';
-import { Footer } from './Footer';
 
 interface LightboxState {
   src: string;
@@ -47,11 +45,6 @@ export function ScenarioEditor({
   const updateItem = useUpdateScenarioItem(kioskId);
   const deleteItem = useDeleteScenarioItem(kioskId);
   const reorder = useReorderScenarioItems(kioskId);
-  const activeItems = items.filter((i) => i.isActive);
-  const totalDuration = activeItems.reduce(
-    (sum, i) => sum + (i.durationSeconds ?? 10),
-    0,
-  );
 
   return (
     <div className="flex flex-col">
@@ -81,14 +74,6 @@ export function ScenarioEditor({
           />
         )}
       </div>
-
-      {items.length > 0 && (
-        <Footer
-          itemsCount={items.length}
-          activeItemsCount={activeItems.length}
-          totalDuration={totalDuration}
-        />
-      )}
     </div>
   );
 }

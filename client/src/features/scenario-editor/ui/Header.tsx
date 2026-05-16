@@ -13,15 +13,15 @@ interface HeaderProps {
 export function Header({ isDirty, onAdd, onSave, onReset }: HeaderProps) {
   return (
     <div className="mb-2 flex items-center gap-3">
-      <h1 className="font-semibold text-lg">
-        Сценарий
+      <div className="flex items-center gap-2">
+        <h1 className="font-semibold text-lg">Сценарий</h1>
+
         {isDirty && (
-          <span
-            className="ml-1 inline-block h-2 w-2 rounded-full bg-amber-400"
-            title="Несохранённые изменения"
-          />
+          <span className="animate-pulse rounded-full border border-(--border) bg-(--button-hover-bg) px-2 py-0.5 text-xs">
+            не сохранен
+          </span>
         )}
-      </h1>
+      </div>
 
       <div className="ml-auto flex items-center gap-2">
         {isDirty && (
