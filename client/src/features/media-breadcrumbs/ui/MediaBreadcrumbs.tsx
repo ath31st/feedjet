@@ -1,19 +1,18 @@
 /** biome-ignore-all lint/a11y: disable all a11y rules */
 import { ChevronRight, FolderIcon } from 'lucide-react';
 import { buildBreadcrumbs } from '../model/useBuildBreadcrumbs';
-import type { MediaFolderTree } from '@/entities/media-folder';
+import { useMediaFolderTree } from '@/entities/media-folder';
 
 interface MediaBreadcrumbsProps {
-  tree: MediaFolderTree[];
   selectedFolderId: number | null;
   onSelect: (id: number | null) => void;
 }
 
 export function MediaBreadcrumbs({
-  tree,
   selectedFolderId,
   onSelect,
 }: MediaBreadcrumbsProps) {
+  const { data: tree = [] } = useMediaFolderTree();
   const breadcrumbs = buildBreadcrumbs(tree, selectedFolderId);
 
   return (
