@@ -9,6 +9,7 @@ import { RootLayout } from '../layouts/RootLayout';
 import { CommonLayout } from '../layouts/CommonLayout';
 import { KioskLayout } from '../layouts/KioskLayout';
 import { AdminLayout } from '../layouts/AdminLayout';
+import { ModeSetter } from './ModSetter';
 
 export const router = createBrowserRouter([
   {
@@ -22,7 +23,9 @@ export const router = createBrowserRouter([
             path: 'admin',
             element: (
               <ProtectedRoute>
-                <AdminLayout />
+                <ModeSetter mode="admin">
+                  <AdminLayout />
+                </ModeSetter>
               </ProtectedRoute>
             ),
             children: [{ index: true, element: <AdminPage /> }],
@@ -33,7 +36,11 @@ export const router = createBrowserRouter([
       },
       {
         path: '',
-        element: <KioskLayout />,
+        element: (
+          <ModeSetter mode="kiosk">
+            <KioskLayout />
+          </ModeSetter>
+        ),
         children: [
           { index: true, element: <KioskPage /> },
           { path: ':slug', element: <KioskPage /> },

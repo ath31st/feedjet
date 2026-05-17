@@ -16,15 +16,19 @@
   --without-theme: white;
 }
 
-html {
-  overflow-y: scroll;
-}
-
 body {
   margin: 0;
   background-color: var(--background);
   color: var(--text);
   font-family: "JetBrains Mono", sans-serif;
+}
+
+html[data-mode="admin"] {
+  overflow-y: scroll;
+}
+
+html[data-mode="kiosk"] {
+  overflow: hidden;
 }
 
 html body[data-scroll-locked] {
