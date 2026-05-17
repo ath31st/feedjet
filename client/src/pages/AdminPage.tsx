@@ -1,5 +1,6 @@
 import * as Tabs from '@radix-ui/react-tabs';
 import { useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 
 import { RssManagementWidget } from '@/widgets/rss-management';
 import { AppearanceSettingsWidget } from '@/widgets/appearance-settings';
@@ -28,7 +29,6 @@ import { HelpItems as imageHelp } from '@/widgets/image-content-management';
 
 import { useAdminHelp } from '@/features/admin-help-toggle';
 import { AdminTabTrigger, SlideSlot } from '@/shared/ui';
-import type { HelpItem } from '@/entities/help';
 
 import {
   LayoutGrid,
@@ -42,6 +42,7 @@ import {
   List,
   Folder,
 } from 'lucide-react';
+import type { HelpItem } from '@/entities/help';
 
 export function AdminPage() {
   const kioskId = useKioskStore((s) => s.currentKiosk.id);
@@ -123,10 +124,53 @@ export function AdminPage() {
       kioskSelector: true,
     },
     { value: 'logs', label: 'Логи', icon: List, kioskSelector: false },
-  ] as const;
+  ];
 
   const activeTab = adminTabs.find((t) => t.value === tab);
   const showKioskSelector = activeTab?.kioskSelector ?? false;
+
+  const renderTab = () => {
+    switch (tab) {
+      case 'scenarios':
+        return <ScenariosManagementWidget />;
+
+      case 'media-folder':
+        return <MediaManagementWidget />;
+
+      case 'settings':
+        return <AppearanceSettingsWidget kioskId={kioskId} />;
+
+      case 'schedule':
+        return <ScheduleManagementWidget />;
+
+      case 'ticker':
+        return <TickerManagementWidget kioskId={kioskId} />;
+
+      case 'rss':
+        return <RssManagementWidget kioskId={kioskId} />;
+
+      case 'birthdays':
+        return <BirthdaysManagement />;
+
+      case 'kiosks':
+        return <KioskManagement />;
+
+      case 'operating-hours':
+        return <KioskWorkScheduleManagement kioskId={kioskId} />;
+
+      case 'logs':
+        return <LogWidget />;
+
+      case 'video':
+        return <VideoContentManagementWidget kioskId={kioskId} />;
+
+      case 'image':
+        return <ImageContentManagementWidget kioskId={kioskId} />;
+
+      default:
+        return null;
+    }
+  };
 
   return (
     <div className="p-6">
@@ -162,54 +206,18 @@ export function AdminPage() {
               </div>
             </Tabs.List>
 
-            <div className="min-w-0 flex-1">
-              <Tabs.Content value="scenarios">
-                <ScenariosManagementWidget />
-              </Tabs.Content>
-
-              <Tabs.Content value="media-folder">
-                <MediaManagementWidget />
-              </Tabs.Content>
-
-              <Tabs.Content value="settings">
-                <AppearanceSettingsWidget kioskId={kioskId} />
-              </Tabs.Content>
-
-              <Tabs.Content value="rss">
-                <RssManagementWidget kioskId={kioskId} />
-              </Tabs.Content>
-
-              <Tabs.Content className="-mt-6" value="schedule">
-                <ScheduleManagementWidget />
-              </Tabs.Content>
-
-              <Tabs.Content value="ticker">
-                <TickerManagementWidget kioskId={kioskId} />
-              </Tabs.Content>
-
-              <Tabs.Content value="video">
-                <VideoContentManagementWidget kioskId={kioskId} />
-              </Tabs.Content>
-
-              <Tabs.Content value="image">
-                <ImageContentManagementWidget kioskId={kioskId} />
-              </Tabs.Content>
-
-              <Tabs.Content value="birthdays">
-                <BirthdaysManagement />
-              </Tabs.Content>
-
-              <Tabs.Content value="kiosks">
-                <KioskManagement />
-              </Tabs.Content>
-
-              <Tabs.Content value="operating-hours">
-                <KioskWorkScheduleManagement kioskId={kioskId} />
-              </Tabs.Content>
-
-              <Tabs.Content value="logs">
-                <LogWidget />
-              </Tabs.Content>
+            <div className="relative min-w-0 flex-1">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={tab}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.25 }}
+                >
+                  {renderTab()}
+                </motion.div>
+              </AnimatePresence>
             </div>
           </div>
 
