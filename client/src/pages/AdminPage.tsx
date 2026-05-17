@@ -27,7 +27,7 @@ import { HelpItems as videoHelp } from '@/widgets/video-content-management';
 import { HelpItems as imageHelp } from '@/widgets/image-content-management';
 
 import { useAdminHelp } from '@/features/admin-help-toggle';
-import { AdminTabTrigger } from '@/shared/ui';
+import { AdminTabTrigger, SlideSlot } from '@/shared/ui';
 import type { HelpItem } from '@/entities/help';
 
 export function AdminPage() {
@@ -54,6 +54,26 @@ export function AdminPage() {
   const helpItems = isHelpEnabled ? (helpMap[tab] ?? []) : [];
   const showHelp = isHelpEnabled && helpItems.length > 0;
 
+  const adminTabs = [
+    { value: 'scenarios', label: 'Сценарии', kioskSelector: true },
+    { value: 'media-folder', label: 'Медиа контент', kioskSelector: false },
+    { value: 'settings', label: 'Настройки оформления', kioskSelector: true },
+    {
+      value: 'schedule',
+      label: 'Расписание мероприятий',
+      kioskSelector: false,
+    },
+    { value: 'ticker', label: 'Бегущая строка', kioskSelector: true },
+    { value: 'rss', label: 'RSS ленты новостей', kioskSelector: false },
+    { value: 'birthdays', label: 'Дни рождения', kioskSelector: false },
+    { value: 'kiosks', label: 'Конфигурации киосков', kioskSelector: false },
+    { value: 'operating-hours', label: 'Режим работы', kioskSelector: true },
+    { value: 'logs', label: 'Логи', kioskSelector: false },
+  ] as const;
+
+  const activeTab = adminTabs.find((t) => t.value === tab);
+  const showKioskSelector = activeTab?.kioskSelector ?? false;
+
   return (
     <div className="p-6">
       <div className="absolute top-6 right-12">
@@ -64,9 +84,13 @@ export function AdminPage() {
         Панель администратора
       </h1>
 
-      <div className="mb-6 flex justify-center border-(--border) border-b-4">
+      <SlideSlot
+        show={showKioskSelector}
+        direction="up"
+        className="mb-6 border-(--border) border-b-4"
+      >
         <KioskSelectorWidget />
-      </div>
+      </SlideSlot>
 
       <Tabs.Root value={tab} onValueChange={setTab}>
         <div className="flex items-start gap-6">
@@ -76,30 +100,11 @@ export function AdminPage() {
               aria-label="Управление админ-панелью"
             >
               <div className="flex flex-col gap-2">
-                <AdminTabTrigger value="scenarios">Сценарии</AdminTabTrigger>
-                <AdminTabTrigger value="media-folder">
-                  Медиа контент
-                </AdminTabTrigger>
-                <AdminTabTrigger value="settings">
-                  Настройки оформления
-                </AdminTabTrigger>
-                <AdminTabTrigger value="schedule">
-                  Расписание мероприятий
-                </AdminTabTrigger>
-                <AdminTabTrigger value="ticker">Бегущая строка</AdminTabTrigger>
-                <AdminTabTrigger value="rss">
-                  RSS ленты новостей
-                </AdminTabTrigger>
-                <AdminTabTrigger value="birthdays">
-                  Дни рождения
-                </AdminTabTrigger>
-                <AdminTabTrigger value="kiosks">
-                  Конфигурации киосков
-                </AdminTabTrigger>
-                <AdminTabTrigger value="operating-hours">
-                  Режим работы
-                </AdminTabTrigger>
-                <AdminTabTrigger value="logs">Логи</AdminTabTrigger>
+                {adminTabs.map((t) => (
+                  <AdminTabTrigger key={t.value} value={t.value}>
+                    {t.label}
+                  </AdminTabTrigger>
+                ))}
               </div>
             </Tabs.List>
 
