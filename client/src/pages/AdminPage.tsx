@@ -52,17 +52,17 @@ export function AdminPage() {
         >
           <div className="ml-56 flex shrink-0">
             <AdminTabTrigger value="scenarios">Сценарии</AdminTabTrigger>
-            <AdminTabTrigger value="media-folder">Медиа</AdminTabTrigger>
+            <AdminTabTrigger value="media-folder">
+              Медиа контент
+            </AdminTabTrigger>
             <AdminTabTrigger value="settings">
-              Настройки виджетов
+              Настройки оформления
             </AdminTabTrigger>
             <AdminTabTrigger value="schedule">
               Расписание мероприятий
             </AdminTabTrigger>
             <AdminTabTrigger value="ticker">Бегущая строка</AdminTabTrigger>
             <AdminTabTrigger value="rss">RSS ленты новостей</AdminTabTrigger>
-            {/* <AdminTabTrigger value="video">Видео контент</AdminTabTrigger>
-            <AdminTabTrigger value="image">Изображения</AdminTabTrigger> */}
             <AdminTabTrigger value="birthdays">Дни рождения</AdminTabTrigger>
             <AdminTabTrigger value="kiosks">
               Конфигурации киосков
