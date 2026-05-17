@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { addWeeks, startOfWeek } from 'date-fns';
 
 export function useWeekSelector() {
@@ -14,5 +14,10 @@ export function useWeekSelector() {
 
   const [weekStart, setWeekStart] = useState(todayWeek);
 
-  return { weeks, weekStart, setWeekStart };
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  return { weeks, weekStart, setWeekStart, mounted };
 }
