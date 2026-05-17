@@ -2,7 +2,7 @@
 import type { ScenarioItem } from '@/entities/scenario';
 import { CommonSwitch, IconButton } from '@/shared/ui/common';
 import { GripVertical, Trash2 } from 'lucide-react';
-import { DurationInput } from './DurationInput';
+import { DurationInput } from '@/shared/ui/DurationInput';
 import { Draggable } from '@hello-pangea/dnd';
 import { useItemRow } from '../model/useItemRow';
 

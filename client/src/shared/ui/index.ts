@@ -26,3 +26,4 @@ export { KioskForm } from './KioskForm';
 export { IntegrationForm } from './IntegrationForm';
 export { SeasonOverlay } from './season-overlay/SeasonOverlay';
 export { BirthdayTransformView } from './BirthdayTransformView';
+export { DurationInput } from './DurationInput';
