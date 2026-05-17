@@ -34,7 +34,7 @@ export function AdminPage() {
   const kioskId = useKioskStore((s) => s.currentKiosk.id);
   const isKioskLoading = useKioskStore((s) => s.loading);
 
-  const [tab, setTab] = useState('settings');
+  const [tab, setTab] = useState('scenarios');
   const isHelpEnabled = useAdminHelp((s) => s.enabled);
 
   if (isKioskLoading || kioskId === -1) {
@@ -72,7 +72,7 @@ export function AdminPage() {
         <div className="flex items-start gap-6">
           <div className="flex flex-1 gap-6">
             <Tabs.List
-              className="scrollbar-hide flex w-60 flex-col"
+              className="scrollbar-hide flex w-60 shrink-0 flex-col"
               aria-label="Управление админ-панелью"
             >
               <div className="flex flex-col gap-2">
@@ -103,7 +103,7 @@ export function AdminPage() {
               </div>
             </Tabs.List>
 
-            <div className="w-full">
+            <div className="min-w-0 flex-1">
               <Tabs.Content value="scenarios">
                 <ScenariosManagementWidget />
               </Tabs.Content>
