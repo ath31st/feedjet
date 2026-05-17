@@ -30,6 +30,19 @@ import { useAdminHelp } from '@/features/admin-help-toggle';
 import { AdminTabTrigger, SlideSlot } from '@/shared/ui';
 import type { HelpItem } from '@/entities/help';
 
+import {
+  LayoutGrid,
+  Settings,
+  Calendar,
+  Radio,
+  Rss,
+  Cake,
+  Monitor,
+  Clock,
+  List,
+  Folder,
+} from 'lucide-react';
+
 export function AdminPage() {
   const kioskId = useKioskStore((s) => s.currentKiosk.id);
   const isKioskLoading = useKioskStore((s) => s.loading);
@@ -55,20 +68,61 @@ export function AdminPage() {
   const showHelp = isHelpEnabled && helpItems.length > 0;
 
   const adminTabs = [
-    { value: 'scenarios', label: 'Сценарии', kioskSelector: true },
-    { value: 'media-folder', label: 'Медиа контент', kioskSelector: false },
-    { value: 'settings', label: 'Настройки оформления', kioskSelector: true },
+    {
+      value: 'scenarios',
+      label: 'Сценарии',
+      icon: LayoutGrid,
+      kioskSelector: true,
+    },
+    {
+      value: 'media-folder',
+      label: 'Медиа контент',
+      icon: Folder,
+      kioskSelector: false,
+    },
+    {
+      value: 'settings',
+      label: 'Настройки оформления',
+      icon: Settings,
+      kioskSelector: true,
+    },
     {
       value: 'schedule',
       label: 'Расписание мероприятий',
+      icon: Calendar,
       kioskSelector: false,
     },
-    { value: 'ticker', label: 'Бегущая строка', kioskSelector: true },
-    { value: 'rss', label: 'RSS ленты новостей', kioskSelector: false },
-    { value: 'birthdays', label: 'Дни рождения', kioskSelector: false },
-    { value: 'kiosks', label: 'Конфигурации киосков', kioskSelector: false },
-    { value: 'operating-hours', label: 'Режим работы', kioskSelector: true },
-    { value: 'logs', label: 'Логи', kioskSelector: false },
+    {
+      value: 'ticker',
+      label: 'Бегущая строка',
+      icon: Radio,
+      kioskSelector: true,
+    },
+    {
+      value: 'rss',
+      label: 'RSS ленты новостей',
+      icon: Rss,
+      kioskSelector: false,
+    },
+    {
+      value: 'birthdays',
+      label: 'Дни рождения',
+      icon: Cake,
+      kioskSelector: false,
+    },
+    {
+      value: 'kiosks',
+      label: 'Конфигурации киосков',
+      icon: Monitor,
+      kioskSelector: false,
+    },
+    {
+      value: 'operating-hours',
+      label: 'Режим работы',
+      icon: Clock,
+      kioskSelector: true,
+    },
+    { value: 'logs', label: 'Логи', icon: List, kioskSelector: false },
   ] as const;
 
   const activeTab = adminTabs.find((t) => t.value === tab);
@@ -101,7 +155,7 @@ export function AdminPage() {
             >
               <div className="flex flex-col gap-2">
                 {adminTabs.map((t) => (
-                  <AdminTabTrigger key={t.value} value={t.value}>
+                  <AdminTabTrigger key={t.value} value={t.value} icon={t.icon}>
                     {t.label}
                   </AdminTabTrigger>
                 ))}
