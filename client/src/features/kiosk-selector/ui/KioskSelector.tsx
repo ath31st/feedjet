@@ -12,9 +12,7 @@ export function KioskSelector({
   onChange,
 }: KioskSelectorProps) {
   return (
-    <div className="relative flex flex-col">
-      <div className="absolute -top-6 bottom-0 left-50 w-0.5 bg-(--border)" />
-
+    <div className="scrollbar-hide relative flex flex-row flex-wrap gap-2 overflow-x-auto">
       {kiosks.map((k) => {
         const isActive = k.slug === activeKiosk?.slug;
         return (
@@ -22,7 +20,7 @@ export function KioskSelector({
             key={k.slug}
             type="button"
             onClick={() => onChange(k)}
-            className={`relative w-50 cursor-pointer px-6 py-2 font-medium text-md outline-none transition-colors hover:text-(--button-hover-bg) hover:text-var(--border) ${
+            className={`relative cursor-pointer px-4 py-2 font-medium text-md outline-none transition-colors hover:text-(--button-hover-bg) ${
               isActive
                 ? 'text-(--text) hover:text-(--text)'
                 : 'text-muted-foreground'
@@ -33,13 +31,13 @@ export function KioskSelector({
                 className="pointer-events-none absolute top-0 right-0 left-0 h-full"
                 style={{
                   background:
-                    'linear-gradient(to left, color-mix(in srgb, var(--border) 30%, transparent) 40%, transparent 100%)',
+                    'linear-gradient(to top, color-mix(in srgb, var(--border) 30%, transparent) 40%, transparent 100%)',
                 }}
               />
             )}
             <span
               title={k.name}
-              className="relative block overflow-hidden text-ellipsis"
+              className="relative block overflow-hidden text-ellipsis whitespace-nowrap"
             >
               {k.name}
             </span>

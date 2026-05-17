@@ -12,7 +12,6 @@ import { ImageContentManagementWidget } from '@/widgets/image-content-management
 import { useKioskStore } from '@/entities/kiosk';
 import { KioskWorkScheduleManagement } from '@/widgets/kiosk-work-schedule-management';
 import { LogWidget } from '@/widgets/log';
-import { useHorizontalWheelScroll } from '@/shared/lib';
 import { AdminHelpPanel } from '@/widgets/admin-help-panel';
 import { HelpItems as birthdaysHelp } from '@/widgets/birthdays-management';
 import { HelpItems as kiosksHelp } from '@/widgets/kiosk-management';
@@ -28,7 +27,6 @@ import { MediaManagementWidget } from '@/widgets/media-management';
 export function AdminPage() {
   const kioskId = useKioskStore((s) => s.currentKiosk.id);
   const isKioskLoading = useKioskStore((s) => s.loading);
-  const tabsRef = useHorizontalWheelScroll();
 
   if (isKioskLoading || kioskId === -1) {
     return null;
@@ -44,38 +42,43 @@ export function AdminPage() {
         Панель администратора
       </h1>
 
-      <Tabs.Root defaultValue="settings" className="w-full">
-        <Tabs.List
-          ref={tabsRef}
-          className="scrollbar-hide flex overflow-x-auto border-(--border) border-b-2"
-          aria-label="Управление админ-панелью"
-        >
-          <div className="ml-56 flex shrink-0">
-            <AdminTabTrigger value="scenarios">Сценарии</AdminTabTrigger>
-            <AdminTabTrigger value="media-folder">
-              Медиа контент
-            </AdminTabTrigger>
-            <AdminTabTrigger value="settings">
-              Настройки оформления
-            </AdminTabTrigger>
-            <AdminTabTrigger value="schedule">
-              Расписание мероприятий
-            </AdminTabTrigger>
-            <AdminTabTrigger value="ticker">Бегущая строка</AdminTabTrigger>
-            <AdminTabTrigger value="rss">RSS ленты новостей</AdminTabTrigger>
-            <AdminTabTrigger value="birthdays">Дни рождения</AdminTabTrigger>
-            <AdminTabTrigger value="kiosks">
-              Конфигурации киосков
-            </AdminTabTrigger>
-            <AdminTabTrigger value="operating-hours">
-              Режим работы
-            </AdminTabTrigger>
-            <AdminTabTrigger value="logs">Логи</AdminTabTrigger>
-          </div>
-        </Tabs.List>
+      <div className="mb-6 flex justify-center border-(--border) border-b-4">
+        <KioskSelectorWidget />
+      </div>
 
-        <div className="mt-6 flex w-full flex-row gap-6">
-          <KioskSelectorWidget />
+      <Tabs.Root
+        defaultValue="settings"
+        orientation="vertical"
+        className="w-full"
+      >
+        <div className="flex flex-row items-start gap-6">
+          <Tabs.List
+            className="scrollbar-hide flex w-60 flex-col"
+            aria-label="Управление админ-панелью"
+          >
+            <div className="flex flex-col gap-2">
+              <AdminTabTrigger value="scenarios">Сценарии</AdminTabTrigger>
+              <AdminTabTrigger value="media-folder">
+                Медиа контент
+              </AdminTabTrigger>
+              <AdminTabTrigger value="settings">
+                Настройки оформления
+              </AdminTabTrigger>
+              <AdminTabTrigger value="schedule">
+                Расписание мероприятий
+              </AdminTabTrigger>
+              <AdminTabTrigger value="ticker">Бегущая строка</AdminTabTrigger>
+              <AdminTabTrigger value="rss">RSS ленты новостей</AdminTabTrigger>
+              <AdminTabTrigger value="birthdays">Дни рождения</AdminTabTrigger>
+              <AdminTabTrigger value="kiosks">
+                Конфигурации киосков
+              </AdminTabTrigger>
+              <AdminTabTrigger value="operating-hours">
+                Режим работы
+              </AdminTabTrigger>
+              <AdminTabTrigger value="logs">Логи</AdminTabTrigger>
+            </div>
+          </Tabs.List>
 
           <div className="w-full">
             <Tabs.Content value="scenarios">
@@ -127,7 +130,7 @@ export function AdminPage() {
             </Tabs.Content>
           </div>
 
-          <div className="relative flex flex-col">
+          <div className="flex w-60 flex-col">
             <Tabs.Content value="settings">
               <AdminHelpPanel helpItems={appearanceHelp} />
             </Tabs.Content>

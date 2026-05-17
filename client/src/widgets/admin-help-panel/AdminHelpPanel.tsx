@@ -15,31 +15,27 @@ export function AdminHelpPanel({ helpItems }: HelpPanelProps) {
   if (!enabled || isEmpty) return null;
 
   return (
-    <>
-      <div className="absolute -top-6 right-50 bottom-0 w-0.5 bg-(--border)" />
-
-      <div className="flex w-50 flex-col gap-3 px-5">
-        {isEmpty ? (
-          <p className="text-center text-(--text-secondary) text-xs">
-            Справочная информация для этого раздела пока не добавлена.
-          </p>
-        ) : (
-          helpItems.map((item, index) => (
-            <div key={item.label}>
-              <HelpSectionButton
-                label={item.label}
-                onClick={() => setOpenDialog(index)}
-              />
-              <HelpDialog
-                title={item.title}
-                content={item.content}
-                open={openDialog === index}
-                onClose={() => setOpenDialog(null)}
-              />
-            </div>
-          ))
-        )}
-      </div>
-    </>
+    <div className="flex flex-col gap-2">
+      {isEmpty ? (
+        <p className="text-center text-(--text-secondary) text-xs">
+          Справочная информация для этого раздела пока не добавлена.
+        </p>
+      ) : (
+        helpItems.map((item, index) => (
+          <div key={item.label}>
+            <HelpSectionButton
+              label={item.label}
+              onClick={() => setOpenDialog(index)}
+            />
+            <HelpDialog
+              title={item.title}
+              content={item.content}
+              open={openDialog === index}
+              onClose={() => setOpenDialog(null)}
+            />
+          </div>
+        ))
+      )}
+    </div>
   );
 }

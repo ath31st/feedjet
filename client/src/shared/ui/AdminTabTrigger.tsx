@@ -1,4 +1,5 @@
 import * as Tabs from '@radix-ui/react-tabs';
+import { baseActionClass } from '../styles';
 
 interface AdminTabTriggerProps {
   value: string;
@@ -7,10 +8,7 @@ interface AdminTabTriggerProps {
 
 export function AdminTabTrigger({ value, children }: AdminTabTriggerProps) {
   return (
-    <Tabs.Trigger
-      value={value}
-      className={`relative w-36 cursor-pointer px-2 py-2 font-medium text-md text-muted-foreground outline-none transition-colors hover:text-(--button-hover-bg) data-[state=active]:border-none data-[state=active]:bg-linear-to-t data-[state=active]:from-[color-mix(in_srgb,var(--border)_30%,transparent)] data-[state=active]:to-transparent data-[state=active]:text-(--text)`}
-    >
+    <Tabs.Trigger value={value} className={baseActionClass}>
       {children}
     </Tabs.Trigger>
   );
