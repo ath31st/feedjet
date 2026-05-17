@@ -3,6 +3,7 @@ import { X } from 'lucide-react';
 import { PreviewMediaBase } from './PreviewMediaBase';
 import { Description } from './Description';
 import type { PreviewDescription } from '..';
+import { IconButton } from '@/shared/ui/common';
 
 interface PreviewModalProps {
   open: boolean;
@@ -40,13 +41,13 @@ export function PreviewModal({
         .join(' ')}
       onClick={onClose}
     >
-      <button
-        className="absolute top-6 right-6 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur transition-colors hover:bg-white/20"
-        onClick={onClose}
-        aria-label="Закрыть"
-      >
-        <X size={22} />
-      </button>
+      <div className="absolute top-6 right-6 z-10">
+        <IconButton
+          onClick={onClose}
+          icon={<X className="h-8 w-8 cursor-pointer" />}
+          ariaLabel="Закрыть"
+        />
+      </div>
 
       <div
         className="flex max-h-[calc(100vh-160px)] max-w-[calc(100vw-96px)] items-center justify-center"
