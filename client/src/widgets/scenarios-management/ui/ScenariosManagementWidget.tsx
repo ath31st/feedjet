@@ -1,13 +1,12 @@
-/** biome-ignore-all lint/a11y: disable all a11y rules */
 import { useKioskStore } from '@/entities/kiosk';
 import { ScenarioPreviewPlayer } from '@/features/scenario-preview-player';
 import { ScenarioEditor } from '@/features/scenario-editor';
-import { ScenarioPreviewModal } from '@/features/scenario-editor/ui/ScenarioPreviewModal';
 import { ScenarioAddItemModal } from '@/features/scenario-add-item-modal';
 import { SettingsCard } from '@/shared/ui';
 import { useScenarioManagement } from '../model/useScenarioManagement';
 import { usePlayerSync } from '../model/usePlayerSync';
 import { useModals } from '../model/useModals';
+import { PreviewModal } from '@/features/preview-modal';
 
 export function ScenariosManagementWidget() {
   const currentKiosk = useKioskStore((s) => s.currentKiosk);
@@ -77,7 +76,17 @@ export function ScenariosManagementWidget() {
         kioskId={effectiveKioskId}
       />
 
-      <ScenarioPreviewModal preview={previewContent} onClose={closePreview} />
+      {previewContent && (
+        <PreviewModal
+          open={!!previewContent}
+          kind={previewContent.kind}
+          src={previewContent.src}
+          alt={previewContent.name}
+          onClose={closePreview}
+          videoMuted
+          description={{ name: previewContent.name }}
+        />
+      )}
     </div>
   );
 }

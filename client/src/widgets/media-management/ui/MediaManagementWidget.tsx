@@ -1,11 +1,14 @@
 import { useState } from 'react';
 import type { MediaFile } from '@/entities/media-folder';
 import { FolderTreePanel } from '@/features/media-folder-tree-panel';
-import { MediaPreviewModal } from '@/features/media-preview-modal';
 import { MediaGrid } from '@/features/media-grid';
 import { SettingsCard } from '@/shared/ui';
 import { MediaBreadcrumbs } from '@/features/media-breadcrumbs';
 import { MediaUploadButton } from '@/features/media-upload-button';
+import { buildImageUrl } from '@/entities/image';
+import { buildVideoUrl } from '@/entities/video';
+import { buildMediaDescription } from '@/features/preview-modal';
+import { PreviewModal } from '@/features/preview-modal';
 
 export function MediaManagementWidget() {
   const [selectedFolderId, setSelectedFolderId] = useState<number | null>(null);
@@ -53,7 +56,21 @@ export function MediaManagementWidget() {
           onPreview={setPreview}
         />
 
-        <MediaPreviewModal file={preview} onClose={() => setPreview(null)} />
+        {preview && (
+          <PreviewModal
+            open={!!preview}
+            kind={preview.kind}
+            src={
+              preview?.kind === 'image'
+                ? buildImageUrl(preview.fileName)
+                : buildVideoUrl(preview.fileName)
+            }
+            alt={preview.name}
+            videoMuted
+            onClose={() => setPreview(null)}
+            description={buildMediaDescription(preview)}
+          />
+        )}
       </SettingsCard>
     </div>
   );
