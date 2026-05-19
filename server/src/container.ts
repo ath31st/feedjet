@@ -36,6 +36,7 @@ import { KioskControlService } from './services/kiosk.control.service.js';
 import { BirthdayWidgetTransformService } from './services/birthday.widget.transform.service.js';
 import { LogService } from './services/log.service.js';
 import { AdbClient } from './integration/adb.client.js';
+import { PhilipsJointSpaceClient } from './integration/philips.jointspace.client.js';
 import { TickerConfigService } from './services/ticker.config.service.js';
 import { ScenarioService } from './services/scenario.service.js';
 import { MediaFolderService } from './services/media.folder.service.js';
@@ -51,6 +52,7 @@ export const http = axios.create({
 
 export const fullyKioskClient = new FullyKioskClient(http);
 export const adbClient = new AdbClient();
+export const philipsJointSpaceClient = new PhilipsJointSpaceClient();
 
 export const imageCacheService = new ImageCacheService(cacheDir);
 export const videoStorageService = new VideoStorageService(db, fileStorageDir);
@@ -90,11 +92,15 @@ videoStorageService.syncWithDisk();
 imageStorageService.syncWithDisk();
 export const kioskWorkScheduleService = new KioskWorkScheduleService(db);
 export const kioskHeartbeatService = new KioskHeartbeatService();
-export const integrationService = new IntegrationService(db);
+export const integrationService = new IntegrationService(
+  db,
+  philipsJointSpaceClient,
+);
 export const kioskControlService = new KioskControlService(
   integrationService,
   fullyKioskClient,
   adbClient,
+  philipsJointSpaceClient,
 );
 export const scenarioService = new ScenarioService(db);
 export const mediaFolderService = new MediaFolderService(db);

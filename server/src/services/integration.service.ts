@@ -10,13 +10,17 @@ import { kioskIntegrationsTable } from '../db/schema.js';
 import { and, eq } from 'drizzle-orm';
 import { IntegrationError } from '../errors/integration.error.js';
 import { integrationMapper } from '../mappers/integration.mapper.js';
+import { PhilipsPairError } from '../errors/philips.pair.error.js';
+import type { PhilipsJointSpaceClient } from '../integration/philips.jointspace.client.js';
 
 export class IntegrationService {
   private readonly db: DbType;
+  private readonly philipsClient: PhilipsJointSpaceClient;
   private readonly logger = createServiceLogger('integrationService');
 
-  constructor(db: DbType) {
+  constructor(db: DbType, philipsClient: PhilipsJointSpaceClient) {
     this.db = db;
+    this.philipsClient = philipsClient;
   }
 
   getAll(): Integration[] {
@@ -83,6 +87,16 @@ export class IntegrationService {
       throw new IntegrationError(404, 'Integration not found');
     }
 
+    if (
+      input.type === 'philips_jointspace' &&
+      (input.login !== undefined || input.password !== undefined)
+    ) {
+      throw new IntegrationError(
+        400,
+        'Philips JointSpace credentials are managed via pairing, not direct edit',
+      );
+    }
+
     const updateData: Partial<{
       description: string;
       login: string;
@@ -136,6 +150,7 @@ export class IntegrationService {
 
   delete(kioskId: number): boolean {
     this.logger.debug({ kioskId, fn: 'delete' }, 'Deleting integration');
+    this.philipsClient.cancelPairing(kioskId);
     const result =
       this.db
         .delete(kioskIntegrationsTable)
@@ -156,11 +171,127 @@ export class IntegrationService {
     return !!integration;
   }
 
+  async pairPhilipsStart(kioskId: number, ip: string): Promise<void> {
+    this.logger.debug(
+      { kioskId, ip, fn: 'pairPhilipsStart' },
+      'Starting Philips pairing',
+    );
+
+    const existing = this.tryGetByKiosk(kioskId);
+    if (existing && existing.type !== 'philips_jointspace') {
+      throw new IntegrationError(
+        409,
+        `Kiosk already has '${existing.type}' integration. Delete it first.`,
+      );
+    }
+
+    try {
+      await this.philipsClient.startPairing(kioskId, ip);
+    } catch (error) {
+      this.logger.warn(
+        { kioskId, ip, fn: 'pairPhilipsStart' },
+        'Failed to start Philips pairing',
+      );
+      if (error instanceof PhilipsPairError) {
+        throw new IntegrationError(400, error.message);
+      }
+      throw new IntegrationError(
+        500,
+        `TV not found at ${ip}:1926. Check the network connection to TV and try again.`,
+      );
+    }
+  }
+
+  async pairPhilipsComplete(
+    kioskId: number,
+    pin: string,
+    description?: string,
+  ): Promise<Integration> {
+    this.logger.debug(
+      { kioskId, fn: 'pairPhilipsComplete' },
+      'Completing Philips pairing',
+    );
+
+    let creds: { deviceId: string; authKey: string };
+    try {
+      creds = await this.philipsClient.completePairing(kioskId, pin);
+    } catch (error) {
+      if (error instanceof PhilipsPairError) {
+        throw new IntegrationError(400, error.message);
+      }
+      this.logger.error(
+        { kioskId, fn: 'pairPhilipsComplete' },
+        'Unexpected error completing Philips pairing',
+        error,
+      );
+      throw new IntegrationError(500, 'Error completing Philips pairing');
+    }
+
+    const encryptedAuthKey = encrypt(creds.authKey);
+    const existing = this.tryGetByKiosk(kioskId);
+
+    try {
+      const row = existing
+        ? this.db
+            .update(kioskIntegrationsTable)
+            .set({
+              type: 'philips_jointspace',
+              login: creds.deviceId,
+              passwordEnc: encryptedAuthKey,
+              ...(description !== undefined ? { description } : {}),
+            })
+            .where(eq(kioskIntegrationsTable.kioskId, kioskId))
+            .returning()
+            .get()
+        : this.db
+            .insert(kioskIntegrationsTable)
+            .values({
+              kioskId,
+              type: 'philips_jointspace',
+              login: creds.deviceId,
+              passwordEnc: encryptedAuthKey,
+              description: description ?? null,
+            })
+            .returning()
+            .get();
+
+      this.logger.info(
+        { kioskId, fn: 'pairPhilipsComplete' },
+        'Philips pairing stored',
+      );
+      return integrationMapper.fromEntity(row);
+    } catch (error) {
+      this.logger.error(
+        { kioskId, fn: 'pairPhilipsComplete' },
+        'Failed to persist Philips pairing',
+        error,
+      );
+      throw new IntegrationError(500, 'Error persisting Philips pairing');
+    }
+  }
+
+  private tryGetByKiosk(kioskId: number): Integration | null {
+    const row = this.db
+      .select()
+      .from(kioskIntegrationsTable)
+      .where(eq(kioskIntegrationsTable.kioskId, kioskId))
+      .get();
+
+    return row ? integrationMapper.fromEntity(row) : null;
+  }
+
   private validate(input: NewIntegration | UpdateIntegration) {
     if (input.type === 'fully_kiosk') {
       if (!input.password) {
         throw new IntegrationError(400, 'Fully Kiosk requires password');
       }
+    }
+
+    if (input.type === 'philips_jointspace') {
+      throw new IntegrationError(
+        400,
+        'Philips JointSpace integration must be created via pairing',
+      );
     }
   }
 }

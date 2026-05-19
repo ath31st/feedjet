@@ -4,6 +4,8 @@ import { kioskIdInputSchema } from '../../validations/schemas/kiosk.schemas.js';
 import { protectedProcedure } from '../../middleware/auth.js';
 import {
   integrationCreateSchema,
+  integrationPairCompleteSchema,
+  integrationPairStartSchema,
   integrationUpdateSchema,
 } from '../../validations/schemas/integration.schemas.js';
 
@@ -58,4 +60,26 @@ export const integrationRouter = t.router({
       return { success: true };
     }),
   ),
+
+  pairPhilipsStart: protectedProcedure
+    .input(integrationPairStartSchema)
+    .mutation(({ input }) =>
+      handleServiceCall(async () => {
+        await integrationService.pairPhilipsStart(input.kioskId, input.ip);
+        return { success: true };
+      }),
+    ),
+
+  pairPhilipsComplete: protectedProcedure
+    .input(integrationPairCompleteSchema)
+    .mutation(({ input }) =>
+      handleServiceCall(async () => {
+        const integration = await integrationService.pairPhilipsComplete(
+          input.kioskId,
+          input.pin,
+          input.description,
+        );
+        return integration;
+      }),
+    ),
 });

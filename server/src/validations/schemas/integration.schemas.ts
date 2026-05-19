@@ -24,3 +24,26 @@ export const integrationUpdateSchema = z.object({
     password: integrationTextSchema.optional(),
   }),
 });
+
+const ipSchema = z
+  .string()
+  .min(7)
+  .max(45)
+  .regex(/^[0-9a-fA-F.:]+$/, 'Invalid IP address');
+
+const pinSchema = z
+  .string()
+  .min(1)
+  .max(16)
+  .regex(/^[0-9]+$/, 'PIN must contain only digits');
+
+export const integrationPairStartSchema = z.object({
+  kioskId: kioskIdSchema,
+  ip: ipSchema,
+});
+
+export const integrationPairCompleteSchema = z.object({
+  kioskId: kioskIdSchema,
+  pin: pinSchema,
+  description: integrationTextSchema.optional(),
+});

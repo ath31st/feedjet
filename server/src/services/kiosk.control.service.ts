@@ -4,21 +4,29 @@ import type { FullyKioskClient } from '../integration/fully.kiosk.client.js';
 import { decrypt } from '../utils/crypto.js';
 import { KioskControlError } from '../errors/kiosk.control.error.js';
 import type { AdbClient } from '../integration/adb.client.js';
+import type {
+  PhilipsJointSpaceClient,
+  PhilipsTarget,
+} from '../integration/philips.jointspace.client.js';
+import type { Integration } from '@shared/types/integration.js';
 
 export class KioskControlService {
   private readonly integrationService: IntegrationService;
   private readonly fullyKioskClient: FullyKioskClient;
   private readonly adbClient: AdbClient;
+  private readonly philipsClient: PhilipsJointSpaceClient;
   private readonly logger = createServiceLogger('kioskControlService');
 
   constructor(
     integrationService: IntegrationService,
     fullyKioskClient: FullyKioskClient,
     adbClient: AdbClient,
+    philipsClient: PhilipsJointSpaceClient,
   ) {
     this.integrationService = integrationService;
     this.fullyKioskClient = fullyKioskClient;
     this.adbClient = adbClient;
+    this.philipsClient = philipsClient;
   }
 
   async screenOn(kioskId: number, ip: string): Promise<void> {
@@ -41,6 +49,11 @@ export class KioskControlService {
           ip,
           password: decrypt(integration.passwordEnc),
         });
+        break;
+      case 'philips_jointspace':
+        await this.philipsClient.screenOn(
+          this.buildPhilipsTarget(integration, ip),
+        );
         break;
 
       default:
@@ -76,6 +89,11 @@ export class KioskControlService {
           password: decrypt(integration.passwordEnc),
         });
         break;
+      case 'philips_jointspace':
+        await this.philipsClient.screenOff(
+          this.buildPhilipsTarget(integration, ip),
+        );
+        break;
 
       default:
         throw new KioskControlError(
@@ -83,5 +101,22 @@ export class KioskControlService {
           `Screen control not supported for ${integration.type}`,
         );
     }
+  }
+
+  private buildPhilipsTarget(
+    integration: Integration,
+    ip: string,
+  ): PhilipsTarget {
+    if (!integration.login || !integration.passwordEnc) {
+      throw new KioskControlError(
+        400,
+        'Philips JointSpace integration is not paired',
+      );
+    }
+    return {
+      ip,
+      deviceId: integration.login,
+      authKey: decrypt(integration.passwordEnc),
+    };
   }
 }

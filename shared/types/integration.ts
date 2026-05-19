@@ -1,6 +1,7 @@
 export const integrationFull = [
   { type: 'fully_kiosk', label: 'Fully Kiosk' },
   { type: 'adb', label: 'ADB' },
+  { type: 'philips_jointspace', label: 'Philips JointSpace' },
   { type: 'other', label: 'Другое' },
 ] as const;
 
