@@ -1,4 +1,9 @@
-import { t, mediaFolderService } from '../../container.js';
+import {
+  t,
+  mediaFolderService,
+  imageStorageService,
+  videoStorageService,
+} from '../../container.js';
 import { protectedProcedure } from '../../middleware/auth.js';
 import {
   createMediaFolderSchema,
@@ -7,6 +12,8 @@ import {
   listMediaSchema,
   assignImageFolderSchema,
   assignVideoFolderSchema,
+  moveMediaBatchSchema,
+  deleteMediaBatchSchema,
 } from '../../validations/schemas/media.folder.schemas.js';
 
 export const mediaFolderRouter = t.router({
@@ -49,6 +56,39 @@ export const mediaFolderRouter = t.router({
     .mutation(({ input }) => {
       mediaFolderService.assignVideoToFolder(input.videoId, input.folderId);
       return { success: true };
+    }),
+
+  moveMediaBatch: protectedProcedure
+    .input(moveMediaBatchSchema)
+    .mutation(({ input }) => {
+      mediaFolderService.moveMediaBatch(
+        input.folderId,
+        input.imageIds,
+        input.videoIds,
+      );
+      return {
+        success: true,
+        movedCount: input.imageIds.length + input.videoIds.length,
+      };
+    }),
+
+  deleteMediaBatch: protectedProcedure
+    .input(deleteMediaBatchSchema)
+    .mutation(async ({ input }) => {
+      const { imageFileNames, videoFileNames } =
+        mediaFolderService.getFileNamesByIds(input.imageIds, input.videoIds);
+
+      for (const fileName of imageFileNames) {
+        await imageStorageService.delete(fileName);
+      }
+      for (const fileName of videoFileNames) {
+        await videoStorageService.delete(fileName);
+      }
+
+      return {
+        success: true,
+        deletedCount: imageFileNames.length + videoFileNames.length,
+      };
     }),
 
   stats: protectedProcedure.query(() => {

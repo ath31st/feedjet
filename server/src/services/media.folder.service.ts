@@ -1,6 +1,6 @@
 import type { DbType } from '../container.js';
 import { mediaFoldersTable, imagesTable, videosTable } from '../db/schema.js';
-import { eq, sql } from 'drizzle-orm';
+import { eq, inArray, sql } from 'drizzle-orm';
 import type {
   MediaFolder,
   MediaFolderTree,
@@ -82,6 +82,54 @@ export class MediaFolderService {
       .set({ folderId })
       .where(eq(videosTable.id, videoId))
       .run();
+  }
+
+  moveMediaBatch(
+    folderId: number | null,
+    imageIds: number[],
+    videoIds: number[],
+  ): void {
+    this.db.transaction((tx) => {
+      if (imageIds.length > 0) {
+        tx.update(imagesTable)
+          .set({ folderId })
+          .where(inArray(imagesTable.id, imageIds))
+          .run();
+      }
+      if (videoIds.length > 0) {
+        tx.update(videosTable)
+          .set({ folderId })
+          .where(inArray(videosTable.id, videoIds))
+          .run();
+      }
+    });
+  }
+
+  getFileNamesByIds(
+    imageIds: number[],
+    videoIds: number[],
+  ): { imageFileNames: string[]; videoFileNames: string[] } {
+    const imageFileNames =
+      imageIds.length === 0
+        ? []
+        : this.db
+            .select({ fileName: imagesTable.fileName })
+            .from(imagesTable)
+            .where(inArray(imagesTable.id, imageIds))
+            .all()
+            .map((r) => r.fileName);
+
+    const videoFileNames =
+      videoIds.length === 0
+        ? []
+        : this.db
+            .select({ fileName: videosTable.fileName })
+            .from(videosTable)
+            .where(inArray(videosTable.id, videoIds))
+            .all()
+            .map((r) => r.fileName);
+
+    return { imageFileNames, videoFileNames };
   }
 
   listAllImages(folderId: number | null) {
