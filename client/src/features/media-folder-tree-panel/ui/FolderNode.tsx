@@ -31,6 +31,9 @@ interface FolderNodeProps {
   onCancelRename: () => void;
 
   onDelete: (id: number) => void;
+
+  moveMode?: boolean;
+  isMovePending?: boolean;
 }
 
 export function FolderNode({
@@ -50,18 +53,27 @@ export function FolderNode({
   onCancelRename,
 
   onDelete,
+
+  moveMode = false,
+  isMovePending = false,
 }: FolderNodeProps) {
   const [expanded, setExpanded] = useState(false);
 
   const isSelected = selectedId === node.id;
   const isRenaming = renamingId === node.id;
 
+  const rowClass = moveMode
+    ? `border border-(--border) border-dashed hover:bg-(--button-hover-bg) ${
+        isMovePending ? 'pointer-events-none opacity-50' : ''
+      }`
+    : isSelected
+      ? 'bg-(--button-bg)'
+      : 'hover:bg-(--button-hover-bg)';
+
   return (
     <div>
       <div
-        className={`group flex cursor-pointer items-center justify-between rounded-lg p-2 text-sm transition-colors ${
-          isSelected ? 'bg-(--button-bg)' : 'hover:bg-(--button-hover-bg)'
-        }`}
+        className={`group flex cursor-pointer items-center justify-between rounded-lg p-2 text-sm transition-colors ${rowClass}`}
         style={{ paddingLeft: `${8 + depth * 16}px` }}
         onClick={() => onSelect(node.id)}
       >
@@ -85,13 +97,13 @@ export function FolderNode({
             <span className="w-3.5 shrink-0" />
           )}
 
-          {expanded || isSelected ? (
+          {expanded || (isSelected && !moveMode) ? (
             <FolderOpen size={14} className="shrink-0" />
           ) : (
             <Folder size={14} className="shrink-0" />
           )}
 
-          {isRenaming ? (
+          {isRenaming && !moveMode ? (
             <input
               autoFocus
               value={renameValue}
@@ -116,7 +128,7 @@ export function FolderNode({
           )}
         </div>
 
-        {isSelected && (
+        {isSelected && !moveMode && (
           <div
             className="flex items-center gap-1"
             onClick={(e) => e.stopPropagation()}
@@ -146,7 +158,7 @@ export function FolderNode({
                 <ConfirmActionDialog
                   title="Удаление папки"
                   onConfirm={() => onDelete(node.id)}
-                  description={`Вы действительно хотите удалить папку "${node.name}"? Содержимое папки НЕ будет удалено и будет доступно в корневой папке.`}
+                  description={`Вы действительно хотите удалить папку "${node.name}"? Содержимое папки НЕ будет удалено и будет доступно в корневой папке.`}
                   trigger={
                     <IconButton
                       tooltip="Удалить папку"
@@ -175,6 +187,8 @@ export function FolderNode({
             onDelete={onDelete}
             onSelect={onSelect}
             depth={depth + 1}
+            moveMode={moveMode}
+            isMovePending={isMovePending}
           />
         ))}
     </div>

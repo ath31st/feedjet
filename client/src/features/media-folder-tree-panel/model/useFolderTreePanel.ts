@@ -11,6 +11,9 @@ import { useState } from 'react';
 export function useFolderTreePanel(
   selectedFolderId: number | null,
   onSelectFolder: (id: number | null) => void,
+  onPickTargetFolder: ((folderId: number | null) => void) | undefined,
+  moveMode: boolean,
+  isMovePending: boolean,
 ) {
   const [renamingId, setRenamingId] = useState<number | null>(null);
   const [renameValue, setRenameValue] = useState('');
@@ -61,6 +64,15 @@ export function useFolderTreePanel(
     });
   };
 
+  const handleSelect = (id: number | null) => {
+    if (moveMode) {
+      if (isMovePending) return;
+      onPickTargetFolder?.(id);
+      return;
+    }
+    onSelectFolder(id);
+  };
+
   return {
     tree,
     stats,
@@ -72,5 +84,6 @@ export function useFolderTreePanel(
     handleCancelRename,
     handleStartRename,
     handleCreateFolder,
+    handleSelect,
   };
 }

@@ -63,3 +63,37 @@ export const useAssignVideoFolder = () =>
       },
     }),
   );
+
+export const useMoveMediaBatch = () =>
+  useMutation(
+    trpcWithProxy.mediaFolder.moveMediaBatch.mutationOptions({
+      onSuccess(data) {
+        toast.success(`Перемещено файлов: ${data.movedCount}`);
+        queryClient.invalidateQueries({ queryKey: mediaQueryKey() });
+      },
+      onError(err: unknown) {
+        if (err instanceof Error) {
+          toast.error(err.message || 'Ошибка при перемещении файлов');
+          return;
+        }
+        toast.error('Ошибка при перемещении файлов');
+      },
+    }),
+  );
+
+export const useDeleteMediaBatch = () =>
+  useMutation(
+    trpcWithProxy.mediaFolder.deleteMediaBatch.mutationOptions({
+      onSuccess(data) {
+        toast.success(`Удалено файлов: ${data.deletedCount}`);
+        queryClient.invalidateQueries({ queryKey: mediaQueryKey() });
+      },
+      onError(err: unknown) {
+        if (err instanceof Error) {
+          toast.error(err.message || 'Ошибка при удалении файлов');
+          return;
+        }
+        toast.error('Ошибка при удалении файлов');
+      },
+    }),
+  );
