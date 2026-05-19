@@ -103,7 +103,7 @@ export function AdminPage() {
       value: 'rss',
       label: 'RSS ленты новостей',
       icon: Rss,
-      kioskSelector: false,
+      kioskSelector: true,
     },
     {
       value: 'birthdays',
@@ -141,7 +141,11 @@ export function AdminPage() {
         return <AppearanceSettingsWidget kioskId={kioskId} />;
 
       case 'schedule':
-        return <ScheduleManagementWidget />;
+        return (
+          <div className="-mt-6">
+            <ScheduleManagementWidget />
+          </div>
+        );
 
       case 'ticker':
         return <TickerManagementWidget kioskId={kioskId} />;
