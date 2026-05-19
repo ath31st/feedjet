@@ -1,6 +1,12 @@
 import type { IntegrationType } from '@shared/types/integration.js';
 import type { DayOfWeek } from '@shared/types/kiosk.work.schedule.js';
-import type { themes, widgetTypes } from '@shared/types/ui.config.js';
+import type {
+  animationTypes,
+  screenRotations,
+  seasonOverlayModes,
+  themes,
+  widgetTypes,
+} from '@shared/types/ui.config.js';
 import { sql } from 'drizzle-orm';
 import {
   check,
@@ -83,6 +89,18 @@ export const uiConfigTable = sqliteTable('ui_config', {
     .notNull()
     .default(30000),
   theme: text('theme').notNull().$type<(typeof themes)[number]>(),
+  screenRotation: integer('screen_rotation')
+    .notNull()
+    .default(0)
+    .$type<(typeof screenRotations)[number]>(),
+  animationMode: text('animation_mode')
+    .notNull()
+    .default('full')
+    .$type<(typeof animationTypes)[number]>(),
+  seasonOverlay: text('season_overlay')
+    .notNull()
+    .default('auto')
+    .$type<(typeof seasonOverlayModes)[number]>(),
   createdAt: integer('created_at', { mode: 'timestamp' })
     .notNull()
     .default(sql`(unixepoch())`),
