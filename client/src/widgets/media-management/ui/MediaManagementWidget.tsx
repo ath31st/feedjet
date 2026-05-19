@@ -1,5 +1,3 @@
-import { useState } from 'react';
-import type { MediaFile } from '@/entities/media-folder';
 import { FolderTreePanel } from '@/features/media-folder-tree-panel';
 import { MediaGrid } from '@/features/media-grid';
 import { SettingsCard } from '@/shared/ui';
@@ -9,13 +7,23 @@ import { buildImageUrl } from '@/entities/image';
 import { buildVideoUrl } from '@/entities/video';
 import { buildMediaDescription } from '@/features/preview-modal';
 import { PreviewModal } from '@/features/preview-modal';
+import { useMediaManagementWidget } from '../model/useMediaManagementWidget';
 
 export function MediaManagementWidget() {
-  const [selectedFolderId, setSelectedFolderId] = useState<number | null>(null);
-  const [selectedFiles, setSelectedFiles] = useState<Set<string>>(
-    () => new Set(),
-  );
-  const [preview, setPreview] = useState<MediaFile | null>(null);
+  const {
+    preview,
+    setPreview,
+    handlePickTargetFolder,
+    handleStartMove,
+    handleCancelMove,
+    selectedFolderId,
+    setSelectedFolderId,
+    selectionTotal,
+    moveMode,
+    isMoving,
+    selectedFiles,
+    setSelectedFiles,
+  } = useMediaManagementWidget();
 
   return (
     <div className="flex w-full flex-row gap-6">
@@ -23,6 +31,11 @@ export function MediaManagementWidget() {
         <FolderTreePanel
           selectedFolderId={selectedFolderId}
           onSelectFolder={setSelectedFolderId}
+          moveMode={moveMode}
+          moveCount={selectionTotal}
+          onPickTargetFolder={handlePickTargetFolder}
+          onCancelMove={handleCancelMove}
+          isMovePending={isMoving}
         />
       </SettingsCard>
 
@@ -54,6 +67,8 @@ export function MediaManagementWidget() {
             });
           }}
           onPreview={setPreview}
+          onStartMove={handleStartMove}
+          moveMode={moveMode}
         />
 
         {preview && (
