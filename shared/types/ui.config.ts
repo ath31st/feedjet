@@ -3,6 +3,9 @@ export interface UiConfig {
   rotatingWidgets: WidgetType[];
   autoSwitchIntervalMs: number;
   theme: Theme;
+  screenRotation: ScreenRotation;
+  animationMode: AnimationType;
+  seasonOverlay: SeasonOverlayMode;
   kioskId: number;
   createdAt: Date;
   updatedAt: Date;
@@ -12,12 +15,18 @@ export interface NewUiConfig {
   theme: Theme;
   rotatingWidgets: WidgetType[];
   autoSwitchIntervalMs: number;
+  screenRotation: ScreenRotation;
+  animationMode: AnimationType;
+  seasonOverlay: SeasonOverlayMode;
 }
 
 export interface UpdateUiConfig {
   theme?: Theme;
   rotatingWidgets?: WidgetType[];
   autoSwitchIntervalMs?: number;
+  screenRotation?: ScreenRotation;
+  animationMode?: AnimationType;
+  seasonOverlay?: SeasonOverlayMode;
 }
 
 export const themesFull = [
@@ -68,4 +77,34 @@ export const widgetLabels: Record<WidgetType, string> = {
   feed: 'Новости',
   birthday: 'Дни рожд.',
   info: 'Информация',
+};
+
+export const screenRotations = [-180, -90, 0, 90, 180] as const;
+export type ScreenRotation = (typeof screenRotations)[number];
+
+export const animationTypes = ['full', 'lite'] as const;
+export type AnimationType = (typeof animationTypes)[number];
+
+export const seasonOverlayModes = [
+  'auto',
+  'winter',
+  'spring',
+  'summer',
+  'autumn',
+  'off',
+] as const;
+export type SeasonOverlayMode = (typeof seasonOverlayModes)[number];
+
+export const seasonOverlayLabels: Record<SeasonOverlayMode, string> = {
+  auto: 'Авто (по сезону)',
+  winter: 'Зима',
+  spring: 'Весна',
+  summer: 'Лето',
+  autumn: 'Осень',
+  off: 'Отключено',
+};
+
+export const animationLabels: Record<AnimationType, string> = {
+  full: 'Полная',
+  lite: 'Облегчённая',
 };

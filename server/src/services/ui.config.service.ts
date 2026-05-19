@@ -28,6 +28,9 @@ export class UiConfigService {
           rotatingWidgets: ['feed', 'schedule'],
           autoSwitchIntervalMs: 60000,
           theme: 'dark',
+          screenRotation: 0,
+          animationMode: 'lite',
+          seasonOverlay: 'auto',
         })
         .returning()
         .get();
