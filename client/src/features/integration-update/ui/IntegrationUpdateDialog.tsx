@@ -9,6 +9,7 @@ import { IntegrationForm } from '@/shared/ui';
 
 interface IntegrationUpdateDialogProps {
   integration: Integration;
+  kioskIp: string | null;
   open: boolean;
   onClose: () => void;
   onUpdate: (data: UpdateIntegration) => void;
@@ -17,6 +18,7 @@ interface IntegrationUpdateDialogProps {
 
 export function IntegrationUpdateDialog({
   integration,
+  kioskIp,
   open,
   onClose,
   onUpdate,
@@ -37,16 +39,19 @@ export function IntegrationUpdateDialog({
           </div>
 
           <Dialog.Description className="sr-only">
-            Форма для обновления новой интеграции
+            Форма для обновления новой интеграции
           </Dialog.Description>
 
           <IntegrationForm
             mode="update"
             integration={integration}
             formData={formData}
+            kioskId={integration.kioskId}
+            kioskIp={kioskIp}
             onChange={handleChange}
             onSubmit={handleSubmit}
             onCancel={handleCancel}
+            onPaired={onClose}
             onDelete={handleDelete}
           />
         </Dialog.Content>

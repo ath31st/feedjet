@@ -54,3 +54,29 @@ export const useGetAllIntegrations = () => {
 export const useExistsIntegration = (kioskId: number) => {
   return useQuery(trpcWithProxy.integration.exists.queryOptions({ kioskId }));
 };
+
+export const usePairPhilipsStart = () => {
+  return useMutation(
+    trpcWithProxy.integration.pairPhilipsStart.mutationOptions({
+      onError(error) {
+        toast.error(error.message || 'Не удалось запустить сопряжение');
+      },
+    }),
+  );
+};
+
+export const usePairPhilipsComplete = () => {
+  return useMutation(
+    trpcWithProxy.integration.pairPhilipsComplete.mutationOptions({
+      onSuccess() {
+        toast.success('Сопряжение с Philips TV завершён');
+        queryClient.invalidateQueries({
+          queryKey: trpcWithProxy.integration.getAll.queryKey(),
+        });
+      },
+      onError(error) {
+        toast.error(error.message || 'Не удалось завершить сопряжение');
+      },
+    }),
+  );
+};

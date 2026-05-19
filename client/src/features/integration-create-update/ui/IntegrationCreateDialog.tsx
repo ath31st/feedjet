@@ -5,12 +5,16 @@ import { IntegrationForm } from '@/shared/ui';
 
 interface IntegrationCreateDialogProps {
   open: boolean;
+  kioskId: number;
+  kioskIp: string | null;
   onClose: () => void;
   onCreate: (data: NewIntegration) => void;
 }
 
 export function IntegrationCreateDialog({
   open,
+  kioskId,
+  kioskIp,
   onClose,
   onCreate,
 }: IntegrationCreateDialogProps) {
@@ -29,15 +33,18 @@ export function IntegrationCreateDialog({
           </div>
 
           <Dialog.Description className="sr-only">
-            Форма для создания новой интеграции
+            Форма для создания новой интеграции
           </Dialog.Description>
 
           <IntegrationForm
             mode="create"
             formData={formData}
+            kioskId={kioskId}
+            kioskIp={kioskIp}
             onChange={handleChange}
             onSubmit={handleSubmit}
             onCancel={handleCancel}
+            onPaired={onClose}
           />
         </Dialog.Content>
       </Dialog.Portal>
