@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
-import { getCurrentSeason } from './useSeasonOverlay';
-
-const random = (min: number, max: number) => Math.random() * (max - min) + min;
+import { random, resolveSeason } from './useSeasonOverlay';
+import type { SeasonOverlayMode } from '@/entities/ui-config';
 
 const animationStyles = `
   /* WINTER and SPRING: FALL */
@@ -37,9 +36,13 @@ const animationStyles = `
   }
 `;
 
-export const SeasonOverlay = () => {
+interface SeasonOverlayProps {
+  mode: SeasonOverlayMode;
+}
+
+export const SeasonOverlay = ({ mode }: SeasonOverlayProps) => {
   const colors = ['#ffa500', '#d2691e', '#ffd700', '#a52a2a'];
-  const season = getCurrentSeason();
+  const season = resolveSeason(mode);
 
   const particlesData = useMemo(() => {
     const MAX_PARTICLES = 30;
@@ -200,6 +203,8 @@ export const SeasonOverlay = () => {
         return null;
     }
   }, [season]);
+
+  if (!season) return null;
 
   return (
     <div className="pointer-events-none absolute top-0 left-0 z-1 h-full w-full overflow-hidden">
