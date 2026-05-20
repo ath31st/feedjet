@@ -6,14 +6,12 @@ import {
   Rotator,
   LoadingThreeDotsJumping,
 } from '@/shared/ui';
-import { useKioskParams } from '@/features/kiosk-params';
 import { useScenarioRotation } from '@/features/kiosk-rotation';
 import { ScenarioItemRenderer } from '@/features/scenario-renderer';
 import { TickerRuntime } from '@/widgets/ticker-runtime';
 import { useIframeBridge } from '@/features/kiosk-iframe-bridge';
 
 export function KioskPage() {
-  const { rotate, animation } = useKioskParams();
   const {
     scenarioLoading,
     currentItem,
@@ -23,6 +21,9 @@ export function KioskPage() {
     prev,
     togglePause,
     userPaused,
+    rotate,
+    animation,
+    seasonOverlay,
   } = useScenarioRotation();
 
   useIframeBridge({
@@ -75,7 +76,7 @@ export function KioskPage() {
           style={{ willChange: 'opacity, transform' }}
         >
           <Rotator rotate={rotate}>
-            <SeasonOverlay />
+            <SeasonOverlay mode={seasonOverlay} />
             <StaticBackground />
             <Suspense fallback={null}>
               <ScenarioItemRenderer
