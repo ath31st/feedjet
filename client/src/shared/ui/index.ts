@@ -18,6 +18,7 @@ export * from './help/HelpSectionButton';
 export * from './PreviewDialogBase';
 export * from './SliderControl';
 export * from './ColorControl';
+export * from './AppearanceButton';
 export { DiskUsageView } from './disk-usage-view/DiskUsageView';
 export { DndSortableList } from './DndSortableList';
 export { ConfirmActionDialog } from './common/ConfirmActionDialog';
