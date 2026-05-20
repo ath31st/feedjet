@@ -1,8 +1,12 @@
 import { useEffect, useEffectEvent, useMemo, useState } from 'react';
 import type { ScenarioItem } from '@shared/types/scenario';
 import { useScenarioStore } from '@/entities/scenario';
+import { useUiConfigStore } from '@/entities/ui-config';
 
 export function useScenarioRotation() {
+  const rotate = useUiConfigStore((s) => s.uiConfig.screenRotation);
+  const animation = useUiConfigStore((s) => s.uiConfig.animationMode);
+  const seasonOverlay = useUiConfigStore((s) => s.uiConfig.seasonOverlay);
   const { scenario, loading: scenarioLoading } = useScenarioStore();
   const items: ScenarioItem[] = (scenario?.items ?? []).filter(
     (i) => i.isActive,
@@ -125,5 +129,8 @@ export function useScenarioRotation() {
     togglePause,
     next,
     prev,
+    rotate,
+    animation,
+    seasonOverlay,
   };
 }
