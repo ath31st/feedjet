@@ -1,12 +1,6 @@
-export const animationTypes = ['full', 'lite'] as const;
+import type { AnimationType } from '@/entities/ui-config';
 
-export type AnimationType = (typeof animationTypes)[number];
-
-export function parseAnimationParam(value: string | null): AnimationType {
-  return animationTypes.includes(value as AnimationType)
-    ? (value as AnimationType)
-    : 'full';
-}
+export type { AnimationType };
 
 export function isLiteAnimation(value: AnimationType): boolean {
   return value === 'lite';
