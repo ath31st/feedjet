@@ -18,14 +18,12 @@ export function ThemeSelector({ kioskId }: Props) {
   if (!current) return <p>Темы недоступны</p>;
 
   return (
-    <div className="flex flex-col gap-2">
-      <span className="text-(--text)">Цветовая тема:</span>
-
+    <div className="flex flex-col">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
         style={{ backgroundColor: current.color }}
-        className="flex h-8 cursor-pointer items-center justify-center rounded-lg transition-opacity hover:opacity-70"
+        className="flex h-10 cursor-pointer items-center justify-center rounded-lg transition-opacity hover:opacity-70"
       >
         <span
           className="font-medium"
@@ -42,7 +40,7 @@ export function ThemeSelector({ kioskId }: Props) {
         className={`overflow-hidden transition-all duration-300 ${open ? 'max-h-120 opacity-100' : 'max-h-0 opacity-0'}
         `}
       >
-        <div className="grid grid-cols-3 gap-2 rounded-lg border border-(--border) p-2">
+        <div className="mt-5 grid grid-cols-3 gap-2">
           {themesFull.map((t) => (
             <button
               key={t.name}
