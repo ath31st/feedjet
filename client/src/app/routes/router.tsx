@@ -8,6 +8,7 @@ import { UnauthorizedPage } from '@/pages/UnauthorizedPage';
 import { RootLayout } from '../layouts/RootLayout';
 import { CommonLayout } from '../layouts/CommonLayout';
 import { KioskLayout } from '../layouts/KioskLayout';
+import { PreviewLayout } from '../layouts/PreviewLayout';
 import { AdminLayout } from '../layouts/AdminLayout';
 import { ModeSetter } from './ModSetter';
 
@@ -33,6 +34,15 @@ export const router = createBrowserRouter([
           { path: 'login', element: <LoginPage /> },
           { path: '401', element: <UnauthorizedPage /> },
         ],
+      },
+      {
+        path: 'preview',
+        element: (
+          <ModeSetter mode="kiosk">
+            <PreviewLayout />
+          </ModeSetter>
+        ),
+        children: [{ path: ':slug', element: <KioskPage /> }],
       },
       {
         path: '',

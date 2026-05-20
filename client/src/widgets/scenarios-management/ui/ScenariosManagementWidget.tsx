@@ -37,7 +37,7 @@ export function ScenariosManagementWidget() {
     closePreview,
   } = useModals();
 
-  const previewSrc = kioskSlug ? `/${kioskSlug}` : '/';
+  const previewSrc = kioskSlug ? `/preview/${kioskSlug}` : '/';
 
   return (
     <div className="flex w-full flex-row items-start gap-6">
