@@ -1,7 +1,9 @@
 import { useEffect } from 'react';
 
+type Mode = 'admin' | 'kiosk';
+
 interface Props {
-  mode: string;
+  mode: Mode;
   children: React.ReactNode;
 }
 

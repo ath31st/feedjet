@@ -1,9 +1,9 @@
 import { useKioskStore } from '@/entities/kiosk';
+import { useKioskParams } from '@/features/kiosk-params';
 import { useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 
 export const useKioskInitialization = () => {
-  const { slug = 'default' } = useParams();
+  const { slug } = useKioskParams();
   const fetchKioskBySlug = useKioskStore((s) => s.fetchKioskBySlug);
 
   useEffect(() => {
