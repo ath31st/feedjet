@@ -68,7 +68,7 @@ export function KioskCard({ kiosk, actions, hasIntegration }: KioskCardProps) {
                 ip={hb.ip}
                 lastHeartbeat={hb.lastHeartbeat}
                 actions={
-                  !hasIntegration && (
+                  hasIntegration && (
                     <div className="ml-auto flex gap-2">
                       <KioskScreenOnAction kioskId={kiosk.id} kioskIp={hb.ip} />
                       <KioskScreenOffAction
