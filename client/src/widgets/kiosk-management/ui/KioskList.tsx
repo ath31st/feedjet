@@ -100,6 +100,8 @@ export function KioskList() {
           onCreate={(data) =>
             handleCreateIntegration(createIntegrationFor.id, data)
           }
+          kioskId={createIntegrationFor.id}
+          kioskIp={null}
         />
       )}
 
@@ -112,6 +114,7 @@ export function KioskList() {
             handleUpdateIntegration(editIntegration.kioskId, data)
           }
           onDelete={(kioskId) => handleDeleteIntegration(kioskId)}
+          kioskIp={null}
         />
       )}
 

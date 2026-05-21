@@ -57,7 +57,7 @@ export function KioskCard({ kiosk, actions, hasIntegration }: KioskCardProps) {
         </div>
 
         {kiosk.heartbeats.length > 0 && (
-          <div>
+          <div className="flex flex-col gap-2">
             <strong className="text-(--meta-text)">
               Подключенные устройства:
             </strong>
@@ -68,7 +68,7 @@ export function KioskCard({ kiosk, actions, hasIntegration }: KioskCardProps) {
                 ip={hb.ip}
                 lastHeartbeat={hb.lastHeartbeat}
                 actions={
-                  hasIntegration && (
+                  !hasIntegration && (
                     <div className="ml-auto flex gap-2">
                       <KioskScreenOnAction kioskId={kiosk.id} kioskIp={hb.ip} />
                       <KioskScreenOffAction
