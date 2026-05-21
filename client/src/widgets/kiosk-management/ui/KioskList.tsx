@@ -1,6 +1,5 @@
 import { LoadingThreeDotsJumping } from '@/shared/ui/LoadingThreeDotsJumping';
 import { KioskCard } from './KioskCard';
-import { ReloadKioskPageButton } from '@/features/reload-kiosk';
 import { useKioskList } from '../model/useKioskList';
 import { UpdateKioskDialog } from '@/features/kiosk-update';
 import { CommonButton } from '@/shared/ui/common';
@@ -85,8 +84,6 @@ export function KioskList() {
                     <Link2Icon />
                   </CommonButton>
                 )}
-
-                <ReloadKioskPageButton kioskId={kiosk.id} />
               </>
             }
           />
@@ -100,6 +97,8 @@ export function KioskList() {
           onCreate={(data) =>
             handleCreateIntegration(createIntegrationFor.id, data)
           }
+          kioskId={createIntegrationFor.id}
+          kioskIp={createIntegrationFor.ip}
         />
       )}
 
@@ -112,6 +111,7 @@ export function KioskList() {
             handleUpdateIntegration(editIntegration.kioskId, data)
           }
           onDelete={(kioskId) => handleDeleteIntegration(kioskId)}
+          kioskIp={editIntegration.ip}
         />
       )}
 
