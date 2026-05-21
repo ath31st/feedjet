@@ -31,7 +31,7 @@ export const HeartbeatCard = ({
   }
 
   return (
-    <div className={`flex flex-row items-center gap-2 text-sm ${colorClass}`}>
+    <div className={`flex flex-row items-center gap-6 text-sm ${colorClass}`}>
       <FullyKioskLink ip={ip} />
       <span>💓 {format(heartbeatDate, 'dd.MM.yyyy HH:mm:ss')}</span>
       {actions}
