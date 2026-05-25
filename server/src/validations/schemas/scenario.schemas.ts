@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import { scenarioWidgetTypes } from '@shared/types/scenario.js';
+import { kioskIdSchema } from './kiosk.schemas.js';
 
 const baseScenarioItemSchema = z.object({
   order: z.number().default(0),
@@ -36,17 +37,17 @@ export const scenarioItemSchema = z.discriminatedUnion('type', [
 ]);
 
 export const getScenarioByKioskSchema = z.object({
-  kioskId: z.number(),
+  kioskId: kioskIdSchema,
 });
 
 export const addScenarioItemSchema = z.object({
-  kioskId: z.number(),
+  kioskId: kioskIdSchema,
 
   item: scenarioItemSchema,
 });
 
 export const updateScenarioItemSchema = z.object({
-  kioskId: z.number(),
+  kioskId: kioskIdSchema,
   itemId: z.number(),
   patch: z.object({
     isActive: z.boolean().optional(),
@@ -56,12 +57,12 @@ export const updateScenarioItemSchema = z.object({
 });
 
 export const reorderScenarioItemsSchema = z.object({
-  kioskId: z.number(),
+  kioskId: kioskIdSchema,
   orderedIds: z.array(z.number()),
 });
 
 export const deleteScenarioItemSchema = z.object({
-  kioskId: z.number(),
+  kioskId: kioskIdSchema,
   itemId: z.number(),
 });
 
