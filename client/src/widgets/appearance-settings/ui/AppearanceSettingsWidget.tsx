@@ -12,20 +12,22 @@ export function AppearanceSettingsWidget({
   kioskId,
 }: AppearanceSettingsWidgetProps) {
   return (
-    <div className="flex w-full flex-row items-start gap-6">
-      <div className="flex w-full flex-col gap-6 md:w-1/2">
+    <div className="grid w-full grid-cols-1 items-start gap-6 xl:grid-cols-2">
+      <div className="flex flex-col gap-6">
         <SettingsCard title="Анимация">
           <AnimationModeSelector kioskId={kioskId} />
         </SettingsCard>
+
         <SettingsCard title="Выбор темы">
           <ThemeSelector kioskId={kioskId} />
         </SettingsCard>
       </div>
 
-      <div className="flex w-full flex-col gap-6 md:w-1/2">
+      <div className="flex flex-col gap-6">
         <SettingsCard title="Поворот экрана">
           <ScreenRotationSelector kioskId={kioskId} />
         </SettingsCard>
+
         <SettingsCard title="Сезонный эффект">
           <SeasonOverlaySelector kioskId={kioskId} />
         </SettingsCard>
