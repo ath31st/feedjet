@@ -1,4 +1,7 @@
-import type { IntegrationType } from '@shared/types/integration.js';
+import type {
+  IntegrationConfig,
+  IntegrationType,
+} from '@shared/types/integration.js';
 import type { DayOfWeek } from '@shared/types/kiosk.work.schedule.js';
 import type {
   animationTypes,
@@ -390,5 +393,29 @@ export const scenarioItemsTable = sqliteTable(
         )
       `,
     ),
+  ],
+);
+
+export const integrationsTable = sqliteTable(
+  'integrations',
+  {
+    id: integer('id').primaryKey({ autoIncrement: true }),
+    type: text('type').notNull().$type<IntegrationType>(),
+    host: text('host').notNull(),
+    port: integer('port').notNull(),
+    description: text('description'),
+    config: text('config', { mode: 'json' })
+      .notNull()
+      .$type<IntegrationConfig>(),
+    isActive: integer('is_active', { mode: 'boolean' }).notNull().default(true),
+    createdAt: integer('created_at', { mode: 'timestamp' })
+      .notNull()
+      .default(sql`(unixepoch())`),
+    updatedAt: integer('updated_at', { mode: 'timestamp' })
+      .notNull()
+      .default(sql`(unixepoch())`),
+  },
+  (table) => [
+    uniqueIndex('integration_host_port_unique').on(table.host, table.port),
   ],
 );

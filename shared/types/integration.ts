@@ -29,3 +29,28 @@ export interface UpdateIntegration {
   login?: string;
   password?: string;
 }
+
+export type FullyKioskConfig = {
+  login: string;
+  passwordEnc: string;
+};
+
+export type AdbConfig = {
+  port?: number;
+};
+
+export type PhilipsJointspaceConfig = {
+  deviceId: string;
+  authKey: string;
+};
+
+export type OtherIntegrationConfig = Record<string, unknown>;
+
+export type IntegrationConfigMap = {
+  fully_kiosk: FullyKioskConfig;
+  adb: AdbConfig;
+  philips_jointspace: PhilipsJointspaceConfig;
+  other: OtherIntegrationConfig;
+};
+
+export type IntegrationConfig = IntegrationConfigMap[IntegrationType];
