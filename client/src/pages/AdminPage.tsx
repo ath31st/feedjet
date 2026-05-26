@@ -5,12 +5,10 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { RssManagementWidget } from '@/widgets/rss-management';
 import { AppearanceSettingsWidget } from '@/widgets/appearance-settings';
 import { ScheduleManagementWidget } from '@/widgets/schedule-management';
-import { VideoContentManagementWidget } from '@/widgets/video-content-management';
 import { KioskManagement } from '@/widgets/kiosk-management';
 import { KioskSelectorWidget } from '@/widgets/kiosk-selector';
 import { Logout } from '@/features/auth';
 import { BirthdaysManagement } from '@/widgets/birthdays-management';
-import { ImageContentManagementWidget } from '@/widgets/image-content-management';
 import { useKioskStore } from '@/entities/kiosk';
 import { KioskWorkScheduleManagement } from '@/widgets/kiosk-work-schedule-management';
 import { LogWidget } from '@/widgets/log';
@@ -41,8 +39,10 @@ import {
   Clock,
   List,
   Folder,
+  Link2Icon,
 } from 'lucide-react';
 import type { HelpItem } from '@/entities/help';
+import { IntegrationManagement } from '@/widgets/integration-management';
 
 export function AdminPage() {
   const kiosk = useKioskStore((s) => s.currentKiosk);
@@ -121,6 +121,12 @@ export function AdminPage() {
       kioskSelector: false,
     },
     {
+      value: 'integrations',
+      label: 'Интеграции',
+      icon: Link2Icon,
+      kioskSelector: false,
+    },
+    {
       value: 'operating-hours',
       label: 'Режим работы',
       icon: Clock,
@@ -164,17 +170,14 @@ export function AdminPage() {
       case 'kiosks':
         return <KioskManagement />;
 
+      case 'integrations':
+        return <IntegrationManagement />;
+
       case 'operating-hours':
         return <KioskWorkScheduleManagement kioskId={kioskId} />;
 
       case 'logs':
         return <LogWidget />;
-
-      case 'video':
-        return <VideoContentManagementWidget kioskId={kioskId} />;
-
-      case 'image':
-        return <ImageContentManagementWidget kioskId={kioskId} />;
 
       default:
         return null;
