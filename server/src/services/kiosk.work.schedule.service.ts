@@ -125,7 +125,7 @@ export class KioskWorkScheduleService {
     const schedule = this.findDay(kioskId, day);
 
     return {
-      scheduleNotActive: !schedule || !schedule.isEnabled,
+      scheduleNotActive: !schedule?.isEnabled,
       isStartTime: schedule?.isEnabled && currentTime === schedule.startTime,
       isEndTime: schedule?.isEnabled && currentTime === schedule.endTime,
     };
