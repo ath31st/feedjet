@@ -1,5 +1,3 @@
-// ScenarioPreviewPlayer.tsx
-
 import { useCallback, useRef, useState } from 'react';
 import { Maximize2, X } from 'lucide-react';
 

@@ -1,4 +1,3 @@
-/** biome-ignore-all lint/a11y: disable all a11y rules */
 import { PlusIcon, SaveIcon } from 'lucide-react';
 import { CommonButton } from '@/shared/ui/common';
 import { ResetIcon } from '@radix-ui/react-icons';
