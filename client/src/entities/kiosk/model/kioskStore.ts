@@ -3,7 +3,7 @@ import type { Kiosk } from '..';
 import { trpcClient } from '@/shared/api';
 
 interface KioskState {
-  currentKiosk: Kiosk;
+  currentKiosk: Kiosk | null;
   loading: boolean;
   error: string | null;
 
@@ -13,17 +13,8 @@ interface KioskState {
   clearError: () => void;
 }
 
-const stubKiosk: Kiosk = {
-  id: -1,
-  name: 'Loading...',
-  slug: '',
-  isActive: false,
-  createdAt: new Date().toISOString(),
-  updatedAt: new Date().toISOString(),
-};
-
 export const useKioskStore = create<KioskState>()((set, _get) => ({
-  currentKiosk: stubKiosk,
+  currentKiosk: null,
   loading: false,
   error: null,
 

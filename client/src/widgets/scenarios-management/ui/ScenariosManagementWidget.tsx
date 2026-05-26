@@ -1,4 +1,3 @@
-import { useKioskStore } from '@/entities/kiosk';
 import { ScenarioPreviewPlayer } from '@/features/scenario-preview-player';
 import { ScenarioEditor } from '@/features/scenario-editor';
 import { ScenarioAddItemModal } from '@/features/scenario-add-item-modal';
@@ -8,11 +7,11 @@ import { usePlayerSync } from '../model/usePlayerSync';
 import { useModals } from '../model/useModals';
 import { PreviewModal } from '@/features/preview-modal';
 
-export function ScenariosManagementWidget() {
-  const currentKiosk = useKioskStore((s) => s.currentKiosk);
-  const effectiveKioskId = currentKiosk.id;
-  const kioskSlug = currentKiosk.slug || '';
-
+interface Props {
+  kioskId: number;
+  kioskSlug: string;
+}
+export function ScenariosManagementWidget({ kioskId, kioskSlug }: Props) {
   const {
     localItems,
     setLocalItems,
@@ -23,7 +22,7 @@ export function ScenariosManagementWidget() {
     totalDuration,
     handleSave,
     handleReset,
-  } = useScenarioManagement(effectiveKioskId);
+  } = useScenarioManagement(kioskId);
 
   const { iframeKey, paused, setPaused, currentPlayingItemId, reloadIframe } =
     usePlayerSync();
@@ -43,7 +42,7 @@ export function ScenariosManagementWidget() {
     <div className="flex w-full flex-row items-start gap-6">
       <SettingsCard title="Редактор сценариев" className="w-full md:w-1/2">
         <ScenarioEditor
-          kioskId={effectiveKioskId}
+          kioskId={kioskId}
           items={localItems}
           isDirty={isDirty}
           isLoading={isLoading}
@@ -65,7 +64,7 @@ export function ScenariosManagementWidget() {
           setPaused={setPaused}
           activeItemsCount={activeItemsCount}
           totalDuration={totalDuration}
-          effectiveKioskId={effectiveKioskId}
+          effectiveKioskId={kioskId}
           onReload={reloadIframe}
         />
       </SettingsCard>
@@ -73,7 +72,7 @@ export function ScenariosManagementWidget() {
       <ScenarioAddItemModal
         open={addModalOpen}
         onClose={closeAddModal}
-        kioskId={effectiveKioskId}
+        kioskId={kioskId}
       />
 
       {previewContent && (

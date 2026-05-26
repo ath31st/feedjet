@@ -45,15 +45,18 @@ import {
 import type { HelpItem } from '@/entities/help';
 
 export function AdminPage() {
-  const kioskId = useKioskStore((s) => s.currentKiosk.id);
+  const kiosk = useKioskStore((s) => s.currentKiosk);
   const isKioskLoading = useKioskStore((s) => s.loading);
 
   const [tab, setTab] = useState('scenarios');
   const isHelpEnabled = useAdminHelp((s) => s.enabled);
 
-  if (isKioskLoading || kioskId === -1) {
+  if (isKioskLoading || !kiosk) {
     return null;
   }
+
+  const kioskId = kiosk.id;
+  const kioskSlug = kiosk.slug;
 
   const helpMap: Record<string, HelpItem[]> = {
     settings: appearanceHelp,
@@ -132,7 +135,9 @@ export function AdminPage() {
   const renderTab = () => {
     switch (tab) {
       case 'scenarios':
-        return <ScenariosManagementWidget />;
+        return (
+          <ScenariosManagementWidget kioskId={kioskId} kioskSlug={kioskSlug} />
+        );
 
       case 'media-folder':
         return <MediaManagementWidget />;

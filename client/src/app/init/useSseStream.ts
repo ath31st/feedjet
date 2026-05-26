@@ -2,7 +2,6 @@ import { useCallback } from 'react';
 import { useEventSource } from '@/shared/api';
 
 import { SERVER_URL, SSE_URL } from '@/shared/config';
-import { useKioskStore } from '@/entities/kiosk';
 import { useRssFeedStore, type FeedItem } from '@/entities/feed';
 import { useUiConfigStore, type UiConfig } from '@/entities/ui-config';
 import { useVideoStore, type VideoMetadata } from '@/entities/video';
@@ -13,10 +12,8 @@ import type { TickerConfig } from '@/entities/ticker-config';
 import { useTickerConfigStore } from '@/entities/ticker-config';
 import { useScenarioStore, type Scenario } from '@/entities/scenario';
 
-export function useSseStream() {
-  const { currentKiosk } = useKioskStore();
-  const currentKioskId = currentKiosk?.id || 0;
-  console.log('SSE: currentKioskId', currentKioskId);
+export function useSseStream(kioskId: number) {
+  console.log('SSE: currentKioskId', kioskId);
 
   const setFeeds = useRssFeedStore((s) => s.setFeeds);
   const setUiConfig = useUiConfigStore((s) => s.setConfig);
@@ -100,7 +97,7 @@ export function useSseStream() {
     ],
   );
 
-  const streamUrl = `${SERVER_URL}${SSE_URL.STREAM(currentKioskId)}`;
+  const streamUrl = `${SERVER_URL}${SSE_URL.STREAM(kioskId)}`;
 
   useEventSource(streamUrl, onMessage);
 }
