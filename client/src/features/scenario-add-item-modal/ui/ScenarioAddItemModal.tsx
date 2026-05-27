@@ -10,7 +10,7 @@ import type {
   ScenarioItemType,
 } from '@shared/types/scenario';
 import { Plus } from 'lucide-react';
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { ScenarioModal } from './ScenarioModal';
 import { ContentTabs } from './ContentTabs';
 import { useMediaFolderTree } from '@/entities/media-folder';
@@ -18,7 +18,7 @@ import { useAllVideoList } from '@/entities/video';
 import { useAllImageList } from '@/entities/image';
 import { VideoGrid } from './VideoGrid';
 import { ImageGrid } from './ImageGrid';
-import { FolderFilterBar } from './FolderFilterBar';
+import { FolderFilterTree } from './FolderFilterTree';
 
 interface ScenarioAddItemModalProps {
   open: boolean;
@@ -37,25 +37,6 @@ export function ScenarioAddItemModal({
   const { data: allImages = [] } = useAllImageList();
   const { data: allVideos = [] } = useAllVideoList();
   const { data: folderTree = [] } = useMediaFolderTree();
-
-  const flatFolders = useMemo(() => {
-    const out: Array<{ id: number; name: string; depth: number }> = [];
-    const walk = (
-      nodes: Array<{
-        id: number;
-        name: string;
-        children: typeof nodes;
-      }>,
-      depth: number,
-    ) => {
-      for (const n of nodes) {
-        out.push({ id: n.id, name: n.name, depth });
-        walk(n.children, depth + 1);
-      }
-    };
-    walk(folderTree as never, 0);
-    return out;
-  }, [folderTree]);
 
   const filteredImages = allImages.filter((i) =>
     folderFilter === null ? true : i.folderId === folderFilter,
@@ -172,29 +153,33 @@ export function ScenarioAddItemModal({
       )}
 
       {(tab === 'image' || tab === 'video') && (
-        <>
-          <FolderFilterBar
-            folderFilter={folderFilter}
-            setFolderFilter={setFolderFilter}
-            flatFolders={flatFolders}
-          />
-
-          {tab === 'image' && (
-            <ImageGrid
-              allImages={allImages}
-              filteredImages={filteredImages}
-              onAddImage={handleAddImage}
+        <div className="flex flex-row gap-4">
+          <div className="w-64 shrink-0">
+            <FolderFilterTree
+              tree={folderTree}
+              selectedId={folderFilter}
+              onSelect={setFolderFilter}
             />
-          )}
+          </div>
 
-          {tab === 'video' && (
-            <VideoGrid
-              allVideos={allVideos}
-              filteredVideos={filteredVideos}
-              onAddVideo={handleAddVideo}
-            />
-          )}
-        </>
+          <div className="min-w-0 flex-1">
+            {tab === 'image' && (
+              <ImageGrid
+                allImages={allImages}
+                filteredImages={filteredImages}
+                onAddImage={handleAddImage}
+              />
+            )}
+
+            {tab === 'video' && (
+              <VideoGrid
+                allVideos={allVideos}
+                filteredVideos={filteredVideos}
+                onAddVideo={handleAddVideo}
+              />
+            )}
+          </div>
+        </div>
       )}
     </ScenarioModal>
   );
