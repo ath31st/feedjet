@@ -1,3 +1,5 @@
+import { FolderIcon } from 'lucide-react';
+
 interface FolderFilterBarProps {
   folderFilter: number | null;
   setFolderFilter: (id: number | null) => void;
@@ -11,18 +13,23 @@ export function FolderFilterBar({
 }: FolderFilterBarProps) {
   return (
     <div className="mb-4 flex flex-wrap items-center gap-1.5">
-      <span className="mr-1 font-medium text-xs">Папка:</span>
+      <div className="flex flex-row items-center gap-1">
+        <FolderIcon size={24} />
+        <span>:</span>
+      </div>
+
       <button
         type="button"
         onClick={() => setFolderFilter(null)}
         className={`h-8 rounded-md border px-3 text-xs transition-colors ${
           folderFilter === null
-            ? 'border-blue-500 bg-blue-500/10 text-blue-500'
-            : ''
+            ? 'border-(--border) bg-(--button-hover-bg)/10 font-medium ring-(--button-hover-bg)/90 ring-2'
+            : 'border-(--border) text-(--text-muted) hover:border-(--button-hover-bg)/50'
         }`}
       >
         Все файлы
       </button>
+
       {flatFolders.map((f) => (
         <button
           key={f.id}
@@ -30,12 +37,12 @@ export function FolderFilterBar({
           onClick={() => setFolderFilter(f.id)}
           className={`h-8 rounded-md border px-3 text-xs transition-colors ${
             folderFilter === f.id
-              ? 'border-blue-500 bg-blue-500/10 text-blue-500'
-              : ''
+              ? 'border-(--border) bg-(--button-hover-bg)/10 font-medium ring-(--button-hover-bg)/90 ring-2'
+              : 'border-(--border) text-(--text-muted) hover:border-(--button-hover-bg)/50'
           }`}
           style={{ paddingLeft: `${12 + f.depth * 8}px` }}
         >
-          {'/ '.repeat(f.depth)}
+          {'/'.repeat(f.depth)}
           {f.name}
         </button>
       ))}
