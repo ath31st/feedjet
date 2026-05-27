@@ -35,7 +35,6 @@ export function FolderFilterNode({
         }`}
         style={{ paddingLeft: `${8 + depth * 14}px` }}
       >
-        {/* toggle */}
         <button
           type="button"
           className="shrink-0"
@@ -55,14 +54,11 @@ export function FolderFilterNode({
           )}
         </button>
 
-        {/* icon */}
         {expanded ? <FolderOpen size={14} /> : <Folder size={14} />}
 
-        {/* label */}
         <span className="truncate">{node.name}</span>
       </button>
 
-      {/* children */}
       {expanded &&
         node.children.map((child) => (
           <FolderFilterNode

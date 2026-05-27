@@ -51,7 +51,6 @@ export function FolderFilterTree({ tree, selectedId, onSelect }: Props) {
 
   return (
     <aside className="mb-4 flex flex-col gap-2">
-      {/* root */}
       <button
         type="button"
         onClick={() => onSelect(null)}
@@ -65,7 +64,6 @@ export function FolderFilterTree({ tree, selectedId, onSelect }: Props) {
         Все файлы
       </button>
 
-      {/* tree */}
       <div className="flex flex-col">
         {tree.map((node) => (
           <FolderFilterNode
