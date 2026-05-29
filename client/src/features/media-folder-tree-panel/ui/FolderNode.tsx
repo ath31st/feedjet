@@ -1,37 +1,27 @@
 /** biome-ignore-all lint/a11y: disable all a11y rules */
 import type { MediaFolderTree } from '@/entities/media-folder';
 import { IconButton } from '@/shared/ui/common';
-import { ChevronDown, ChevronRight, Folder, FolderOpen } from 'lucide-react';
-
 import {
   Pencil1Icon,
   Cross1Icon,
   CheckIcon,
   ResetIcon,
 } from '@radix-ui/react-icons';
-
 import { useState } from 'react';
-import { ConfirmActionDialog } from '@/shared/ui';
+import { ConfirmActionDialog, FolderTreeItem } from '@/shared/ui';
 
 interface FolderNodeProps {
   node: MediaFolderTree;
-
   selectedId: number | null;
-
   renamingId: number | null;
   renameValue: string;
-
   depth?: number;
-
   onSelect: (id: number) => void;
-
   onStartRename: (node: MediaFolderTree) => void;
   onRenameValueChange: (value: string) => void;
   onRename: () => void;
   onCancelRename: () => void;
-
   onDelete: (id: number) => void;
-
   moveMode?: boolean;
   isMovePending?: boolean;
 }
@@ -39,21 +29,15 @@ interface FolderNodeProps {
 export function FolderNode({
   node,
   selectedId,
-
   renamingId,
   renameValue,
-
   depth = 0,
-
   onSelect,
-
   onStartRename,
   onRenameValueChange,
   onRename,
   onCancelRename,
-
   onDelete,
-
   moveMode = false,
   isMovePending = false,
 }: FolderNodeProps) {
@@ -62,73 +46,37 @@ export function FolderNode({
   const isSelected = selectedId === node.id;
   const isRenaming = renamingId === node.id;
 
-  const rowClass = moveMode
-    ? `border border-(--border) border-dashed hover:bg-(--button-hover-bg) ${
-        isMovePending ? 'pointer-events-none opacity-50' : ''
-      }`
-    : isSelected
-      ? 'bg-(--button-bg)'
-      : 'hover:bg-(--button-hover-bg)';
-
   return (
-    <div>
-      <div
-        className={`group flex cursor-pointer items-center justify-between rounded-lg p-2 text-sm transition-colors ${rowClass}`}
-        style={{ paddingLeft: `${8 + depth * 16}px` }}
-        onClick={() => onSelect(node.id)}
-      >
-        <div className="flex min-w-0 flex-1 items-center gap-1">
-          {node.children.length > 0 ? (
-            <button
-              className="shrink-0 cursor-pointer"
-              onClick={(e) => {
-                e.stopPropagation();
-
-                setExpanded((v) => !v);
-              }}
-            >
-              {expanded ? (
-                <ChevronDown size={14} />
-              ) : (
-                <ChevronRight size={14} />
-              )}
-            </button>
-          ) : (
-            <span className="w-3.5 shrink-0" />
-          )}
-
-          {expanded || (isSelected && !moveMode) ? (
-            <FolderOpen size={14} className="shrink-0" />
-          ) : (
-            <Folder size={14} className="shrink-0" />
-          )}
-
-          {isRenaming && !moveMode ? (
-            <input
-              autoFocus
-              value={renameValue}
-              onChange={(e) => onRenameValueChange(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  onRename();
-                }
-
-                if (e.key === 'Escape') {
-                  onCancelRename();
-                }
-              }}
-              onClick={(e) => e.stopPropagation()}
-              className="w-max rounded-lg border border-(--border) bg-transparent px-2 ring-(--border) focus:outline-none"
-              style={{
-                width: `${Math.max(renameValue.length, 1) + 2}ch`,
-              }}
-            />
-          ) : (
-            <div className="truncate">{node.name}</div>
-          )}
-        </div>
-
-        {isSelected && !moveMode && (
+    <FolderTreeItem
+      name={node.name}
+      depth={depth}
+      isSelected={isSelected}
+      isExpanded={expanded}
+      hasChildren={node.children.length > 0}
+      moveMode={moveMode}
+      isMovePending={isMovePending}
+      onToggleExpand={() => setExpanded((v) => !v)}
+      onClick={() => onSelect(node.id)}
+      renderTitle={() =>
+        isRenaming && !moveMode ? (
+          <input
+            autoFocus
+            value={renameValue}
+            onChange={(e) => onRenameValueChange(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') onRename();
+              if (e.key === 'Escape') onCancelRename();
+            }}
+            onClick={(e) => e.stopPropagation()}
+            className="w-max rounded-lg border border-(--border) bg-transparent px-2 ring-(--border) focus:outline-none"
+            style={{ width: `${Math.max(renameValue.length, 1) + 2}ch` }}
+          />
+        ) : (
+          <div className="truncate">{node.name}</div>
+        )
+      }
+      renderActions={() =>
+        isSelected && !moveMode ? (
           <div
             className="flex items-center gap-1"
             onClick={(e) => e.stopPropagation()}
@@ -138,13 +86,12 @@ export function FolderNode({
                 <IconButton
                   onClick={onRename}
                   tooltip="Сохранить изменения"
-                  icon={<CheckIcon className="h-4 w-4 cursor-pointer" />}
+                  icon={<CheckIcon className="h-4 w-4" />}
                 />
-
                 <IconButton
                   onClick={onCancelRename}
                   tooltip="Отменить редактирование"
-                  icon={<ResetIcon className="h-4 w-4 cursor-pointer" />}
+                  icon={<ResetIcon className="h-4 w-4" />}
                 />
               </>
             ) : (
@@ -152,9 +99,8 @@ export function FolderNode({
                 <IconButton
                   onClick={() => onStartRename(node)}
                   tooltip="Переименовать папку"
-                  icon={<Pencil1Icon className="h-4 w-4 cursor-pointer" />}
+                  icon={<Pencil1Icon className="h-4 w-4" />}
                 />
-
                 <ConfirmActionDialog
                   title="Удаление папки"
                   onConfirm={() => onDelete(node.id)}
@@ -162,16 +108,16 @@ export function FolderNode({
                   trigger={
                     <IconButton
                       tooltip="Удалить папку"
-                      icon={<Cross1Icon className="h-4 w-4 cursor-pointer" />}
+                      icon={<Cross1Icon className="h-4 w-4" />}
                     />
                   }
                 />
               </>
             )}
           </div>
-        )}
-      </div>
-
+        ) : null
+      }
+    >
       {expanded &&
         node.children.map((child) => (
           <FolderNode
@@ -191,6 +137,6 @@ export function FolderNode({
             isMovePending={isMovePending}
           />
         ))}
-    </div>
+    </FolderTreeItem>
   );
 }
