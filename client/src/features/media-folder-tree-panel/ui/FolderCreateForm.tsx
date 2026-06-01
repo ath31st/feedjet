@@ -24,7 +24,7 @@ export function FolderCreateForm({ onCreate }: FolderCreateFormProps) {
       <CommonButton type="button" onClick={() => setOpen((v) => !v)}>
         <div className="flex flex-row items-center gap-2">
           <Plus size={12} />
-          <span>Создать папку</span>
+          <span className="text-(--text)">Создать папку</span>
         </div>
       </CommonButton>
 

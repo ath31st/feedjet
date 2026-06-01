@@ -44,7 +44,7 @@ export function FolderTreeItem({
   return (
     <div>
       <div
-        className={`group flex cursor-pointer items-center justify-between rounded-lg p-2 text-sm transition-colors ${rowClass}`}
+        className={`group flex h-9.5 cursor-pointer items-center justify-between rounded-lg p-2 text-sm transition-colors ${rowClass}`}
         style={{ paddingLeft: `${8 + depth * 16}px` }}
         onClick={onClick}
       >
