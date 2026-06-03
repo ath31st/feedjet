@@ -8,31 +8,47 @@ const animationStyles = `
     0% { top: -10%; }
     100% { top: 110%; }
   }
+
   @keyframes rise {
     0% { top: 110%; }
     100% { top: -10%; }
   }
 
-  /* WINTER and SPRING: SWAY (horizontal) */
   @keyframes sway {
     0%, 100% { transform: translateX(0); }
     50% { transform: translateX(25px); }
   }
-  
+
   /* AUTUMN */
   @keyframes fallRotate {
-    0% { top: -10%; rotate(0deg); }
-    100% { top: 110%; rotate(360deg); }
+    0% { top: -10%; transform: rotate(0deg); }
+    100% { top: 110%; transform: rotate(360deg); }
   }
-  
-  /* SUMMER */
-  @keyframes spin-slow {
-    from { transform: translate(-50%, -50%) rotate(0deg); }
-    to { transform: translate(-50%, -50%) rotate(360deg); }
+
+  /* SUMMER - FIREFLIES */
+  @keyframes firefly {
+    0%, 100% {
+      opacity: 0;
+      transform: translate(0, 0) scale(0.6);
+    }
+    25% {
+      opacity: 0.5;
+    }
+    50% {
+      opacity: 1;
+      transform: translate(10px, -15px) scale(1);
+    }
+    75% {
+      opacity: 0.3;
+    }
   }
-  @keyframes sun-pulse {
-    0%, 100% { opacity: 0.8; transform: scaleY(1); }
-    50% { opacity: 1; transform: scaleY(1.1); }
+
+  @keyframes drift {
+    0% { transform: translate(0, 0); }
+    25% { transform: translate(8px, -12px); }
+    50% { transform: translate(-5px, -20px); }
+    75% { transform: translate(12px, -8px); }
+    100% { transform: translate(0, 0); }
   }
 `;
 
@@ -48,21 +64,32 @@ export const SeasonOverlay = ({ mode }: SeasonOverlayProps) => {
     const MAX_PARTICLES = 30;
 
     return Array.from({ length: MAX_PARTICLES }).map((_, id) => ({
-      id: id,
+      id,
 
+      leftPosition: `${random(0, 100)}%`,
+
+      // winter
       durationFall: random(10, 20),
       durationSway: random(3, 6),
       delay: random(0, 10),
       size: random(8, 14),
-      leftPosition: `${random(0, 100)}%`,
 
+      // spring
       durationRise: random(10, 18),
       delaySpring: random(0, 8),
       sizeSpring: random(10, 15),
 
+      // autumn
       colorIndex: Math.floor(random(0, colors.length)),
       durationFallRotate: random(10, 18),
       delayAutumn: random(0, 10),
+
+      // summer (fireflies)
+      topPosition: `${random(5, 95)}%`,
+      fireflySize: random(4, 10),
+      fireflyDuration: random(2, 5),
+      driftDuration: random(10, 20),
+      fireflyDelay: random(0, 6),
     }));
   }, [colors.length]);
 
@@ -149,56 +176,62 @@ export const SeasonOverlay = ({ mode }: SeasonOverlayProps) => {
     );
   };
 
-  const summerElements = Array.from({ length: 12 }).map((_, i) => i);
+  const renderSummer = () => {
+    const fireflies = particlesData.slice(0, 35);
 
-  const renderSummer = () => (
-    <div className="absolute -top-15 -right-15 h-60 w-60">
-      <div
-        className="relative h-full w-full rounded-full"
-        style={{
-          background:
-            'radial-gradient(circle at center, #ffeb3b 0%, #ffd700 40%, #ffa726 80%)',
-          boxShadow:
-            '0 0 80px rgba(255, 215, 0, 0.6), 0 0 120px rgba(255, 193, 7, 0.4), inset 0 0 40px rgba(255, 255, 255, 0.3)',
-        }}
-      >
-        <div
-          className="absolute top-1/2 left-1/2 h-0 w-0"
-          style={{ animation: 'spin-slow 30s linear infinite' }}
-        >
-          {summerElements.map((id) => (
+    return (
+      <>
+        {fireflies.map((p) => (
+          <div
+            key={p.id}
+            className="absolute"
+            style={{
+              left: p.leftPosition,
+              top: p.topPosition,
+
+              opacity: 0,
+              transform: 'translate(0, 0) scale(0.6)',
+
+              animation: `
+              drift ${p.driftDuration}s ease-in-out infinite,
+              firefly ${p.fireflyDuration}s ease-in-out infinite
+            `,
+              animationDelay: `
+              ${p.fireflyDelay}s,
+              ${p.fireflyDelay}s
+            `,
+            }}
+          >
             <div
-              key={id}
-              className="absolute origin-top-left"
-              style={{ transform: `rotate(${id * 30}deg)` }}
-            >
-              <div
-                className="absolute h-75 w-0.75"
-                style={{
-                  background:
-                    'linear-gradient(to bottom, rgba(255, 235, 59, 0.8) 0%, rgba(255, 215, 0, 0.4) 30%, rgba(255, 193, 7, 0.2) 60%, transparent 100%)',
-                  boxShadow: '0 0 10px rgba(255, 215, 0, 0.3)',
-                  animation: 'sun-pulse 3s ease-in-out infinite',
-                }}
-              />
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
+              style={{
+                width: `${p.fireflySize}px`,
+                height: `${p.fireflySize}px`,
+                borderRadius: '50%',
+                backgroundColor: '#fff59d',
+                boxShadow: `
+                0 0 6px rgba(255,255,180,0.9),
+                0 0 12px rgba(255,235,59,0.7),
+                0 0 18px rgba(255,235,59,0.4)
+              `,
+              }}
+            />
+          </div>
+        ))}
+      </>
+    );
+  };
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: no need to re-render
   const content = useMemo(() => {
     switch (season) {
       case 'winter':
         return renderWinter();
+      case 'spring':
+        return renderSpring();
       case 'autumn':
         return renderAutumn();
       case 'summer':
         return renderSummer();
-      case 'spring':
-        return renderSpring();
       default:
         return null;
     }
