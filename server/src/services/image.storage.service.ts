@@ -32,10 +32,15 @@ export class ImageStorageService extends FileStorageService {
   private readonly imageDir = 'images';
   private readonly allowedExtensions = [
     '.jpg',
+    '.JPG',
     '.jpeg',
+    '.JPEG',
     '.png',
+    '.PNG',
     '.webp',
+    '.WEBP',
     '.bmp',
+    '.BMP',
   ];
 
   constructor(
@@ -67,7 +72,7 @@ export class ImageStorageService extends FileStorageService {
   }
 
   async upload(file: File, fileName: string, folderId: number | null = null) {
-    const ext = path.extname(file.name).toLowerCase();
+    const ext = path.extname(file.name);
 
     if (!this.allowedExtensions.includes(ext)) {
       this.logger.error({ fn: 'upload', ext }, 'Unsupported file type');
