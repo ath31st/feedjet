@@ -8,6 +8,7 @@ import { buildMediaDescription } from '@/features/preview-modal';
 import { PreviewModal } from '@/features/preview-modal';
 import { useMediaManagementWidget } from '../model/useMediaManagementWidget';
 import { MediaSelectionToolbar } from '@/features/media-selection-toolbar';
+import { DiskUsageInfo } from '@/features/disk-usage-info';
 
 export function MediaManagementWidget() {
   const {
@@ -34,15 +35,19 @@ export function MediaManagementWidget() {
   return (
     <div className="flex w-full flex-row gap-6">
       <SettingsCard title="Папки" className="w-full md:w-1/5">
-        <FolderTreePanel
-          selectedFolderId={selectedFolderId}
-          onSelectFolder={setSelectedFolderId}
-          moveMode={moveMode}
-          moveCount={selectionTotal}
-          onPickTargetFolder={handlePickTargetFolder}
-          onCancelMove={handleCancelMove}
-          isMovePending={isMoving}
-        />
+        <div className="flex flex-col gap-6">
+          <FolderTreePanel
+            selectedFolderId={selectedFolderId}
+            onSelectFolder={setSelectedFolderId}
+            moveMode={moveMode}
+            moveCount={selectionTotal}
+            onPickTargetFolder={handlePickTargetFolder}
+            onCancelMove={handleCancelMove}
+            isMovePending={isMoving}
+          />
+
+          <DiskUsageInfo />
+        </div>
       </SettingsCard>
 
       <SettingsCard title="Управление медиа" className="w-full md:w-4/5">
