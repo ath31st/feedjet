@@ -38,7 +38,13 @@ export function useScenarioManagement(effectiveKioskId: number) {
   const activeItemsCount = localItems.filter((i) => i.isActive).length;
   const totalDuration = localItems
     .filter((i) => i.isActive)
-    .reduce((sum, i) => sum + (i.durationSeconds ?? 10), 0);
+    .reduce((sum, i) => {
+      if (i.type === 'video') {
+        return sum + (i.videoDuration ?? i.durationSeconds ?? 0);
+      }
+
+      return sum + (i.durationSeconds ?? 10);
+    }, 0);
 
   return {
     scenario,
