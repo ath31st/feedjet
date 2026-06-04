@@ -22,8 +22,6 @@ import { HelpItems as kiosksHelp } from '@/widgets/kiosk-management';
 import { HelpItems as appearanceHelp } from '@/widgets/appearance-settings';
 import { HelpItems as operatingHoursHelp } from '@/widgets/kiosk-work-schedule-management';
 import { HelpItems as rssHelp } from '@/widgets/rss-management';
-import { HelpItems as videoHelp } from '@/widgets/video-content-management';
-import { HelpItems as imageHelp } from '@/widgets/image-content-management';
 
 import { useAdminHelp } from '@/features/admin-help-toggle';
 import { AdminTabTrigger, SlideSlot } from '@/shared/ui';
@@ -61,8 +59,6 @@ export function AdminPage() {
   const helpMap: Record<string, HelpItem[]> = {
     settings: appearanceHelp,
     rss: rssHelp,
-    video: videoHelp,
-    image: imageHelp,
     birthdays: birthdaysHelp,
     kiosks: kiosksHelp,
     'operating-hours': operatingHoursHelp,
