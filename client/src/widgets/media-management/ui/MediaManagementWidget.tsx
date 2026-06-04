@@ -1,28 +1,34 @@
 import { FolderTreePanel } from '@/features/media-folder-tree-panel';
 import { MediaGrid } from '@/features/media-grid';
 import { SettingsCard } from '@/shared/ui';
-import { MediaBreadcrumbs } from '@/features/media-breadcrumbs';
 import { MediaUploadButton } from '@/features/media-upload-button';
 import { buildImageUrl } from '@/entities/image';
 import { buildVideoUrl } from '@/entities/video';
 import { buildMediaDescription } from '@/features/preview-modal';
 import { PreviewModal } from '@/features/preview-modal';
 import { useMediaManagementWidget } from '../model/useMediaManagementWidget';
+import { MediaSelectionToolbar } from '@/features/media-selection-toolbar';
 
 export function MediaManagementWidget() {
   const {
     preview,
     setPreview,
-    handlePickTargetFolder,
-    handleStartMove,
-    handleCancelMove,
+
     selectedFolderId,
     setSelectedFolderId,
-    selectionTotal,
-    moveMode,
-    isMoving,
+
     selectedFiles,
     setSelectedFiles,
+
+    selectionTotal,
+
+    moveMode,
+    isMoving,
+
+    handleBulkDelete,
+    handleStartMove,
+    handleCancelMove,
+    handlePickTargetFolder,
   } = useMediaManagementWidget();
 
   return (
@@ -40,10 +46,13 @@ export function MediaManagementWidget() {
       </SettingsCard>
 
       <SettingsCard title="Управление медиа" className="w-full md:w-4/5">
-        <div className="flex items-center p-2">
-          <MediaBreadcrumbs
-            selectedFolderId={selectedFolderId}
-            onSelect={setSelectedFolderId}
+        <div className="flex items-center justify-end gap-2 p-2">
+          <MediaSelectionToolbar
+            selectedCount={selectedFiles.size}
+            moveMode={moveMode}
+            onStartMove={handleStartMove}
+            onBulkDelete={handleBulkDelete}
+            onClearSelection={() => setSelectedFiles(new Set())}
           />
 
           <MediaUploadButton selectedFolderId={selectedFolderId} />
@@ -52,7 +61,6 @@ export function MediaManagementWidget() {
         <MediaGrid
           selectedFolderId={selectedFolderId}
           selectedFiles={selectedFiles}
-          setSelectedFiles={setSelectedFiles}
           onToggleSelect={(key) => {
             setSelectedFiles((prev) => {
               const next = new Set(prev);
@@ -67,8 +75,6 @@ export function MediaManagementWidget() {
             });
           }}
           onPreview={setPreview}
-          onStartMove={handleStartMove}
-          moveMode={moveMode}
         />
 
         {preview && (

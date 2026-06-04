@@ -4,46 +4,28 @@ import { buildVideoUrl } from '@/entities/video';
 import type { MediaFile } from '@/entities/media-folder';
 import { fmtBytes, fmtDuration } from '@/shared/lib';
 import { ConfirmActionDialog } from '@/shared/ui';
-import { CommonButton, IconButton } from '@/shared/ui/common';
-import {
-  Folder,
-  Image,
-  Video,
-  Trash2,
-  Eye,
-  X,
-  FolderInput,
-} from 'lucide-react';
+import { IconButton } from '@/shared/ui/common';
+import { Folder, Image, Video, Trash2, Eye } from 'lucide-react';
 import { useMediaGrid } from '../model/useMediaGrid';
 
 interface MediaGridProps {
   selectedFolderId: number | null;
   selectedFiles: Set<string>;
-  setSelectedFiles: (set: Set<string>) => void;
 
   onToggleSelect: (key: string) => void;
   onPreview: (file: MediaFile) => void;
-  onStartMove?: () => void;
-  moveMode?: boolean;
 }
 
 export function MediaGrid({
   selectedFolderId,
   selectedFiles,
-  setSelectedFiles,
   onToggleSelect,
   onPreview,
-  onStartMove,
-  moveMode = false,
 }: MediaGridProps) {
-  const {
-    handleBulkDelete,
-    handleDeleteFile,
-    isLoading,
-    media,
-    setFailedThumbs,
-    failedThumbs,
-  } = useMediaGrid({ selectedFolderId, selectedFiles, setSelectedFiles });
+  const { handleDeleteFile, isLoading, media, setFailedThumbs, failedThumbs } =
+    useMediaGrid({
+      selectedFolderId,
+    });
 
   if (isLoading) {
     return (
@@ -165,52 +147,6 @@ export function MediaGrid({
           );
         })}
       </div>
-
-      {selectedFiles.size > 0 && (
-        <div className="flex flex-wrap items-center gap-3 p-2">
-          <span className="text-(--text-muted) text-sm">
-            Выбрано: {selectedFiles.size}
-          </span>
-
-          <CommonButton
-            type="button"
-            onClick={() => onStartMove?.()}
-            disabled={moveMode || selectedFiles.size === 0}
-            tooltip="Выберите папку назначения в левой панели"
-          >
-            <div className="flex items-center gap-1">
-              <FolderInput size={14} />
-              <span className="text-xs">Переместить</span>
-            </div>
-          </CommonButton>
-
-          <ConfirmActionDialog
-            title="Удалить выбранные файлы?"
-            description={`Будет удалено файлов: ${selectedFiles.size}. Все сценарии, в которых они используются, будут обновлены.`}
-            confirmText="Удалить"
-            onConfirm={() => handleBulkDelete()}
-            trigger={
-              <CommonButton type="button" disabled={selectedFiles.size === 0}>
-                <div className="flex items-center gap-1">
-                  <Trash2 size={14} />
-                  <span className="text-xs">Удалить</span>
-                </div>
-              </CommonButton>
-            }
-          />
-
-          <CommonButton
-            type="button"
-            onClick={() => setSelectedFiles(new Set())}
-            disabled={selectedFiles.size === 0}
-          >
-            <div className="flex items-center gap-1">
-              <X size={14} />
-              <span className="text-xs">Снять выделение</span>
-            </div>
-          </CommonButton>
-        </div>
-      )}
     </div>
   );
 }
