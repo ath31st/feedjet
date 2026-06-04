@@ -4,10 +4,8 @@ import { useEventSource } from '@/shared/api';
 import { SERVER_URL, SSE_URL } from '@/shared/config';
 import { useRssFeedStore, type FeedItem } from '@/entities/feed';
 import { useUiConfigStore, type UiConfig } from '@/entities/ui-config';
-import { useVideoStore, type VideoMetadata } from '@/entities/video';
 import { useFeedConfigStore, type FeedConfig } from '@/entities/feed-config';
 import type { ControlEvent } from '@shared/types/control.event';
-import { useImageStore, type KioskImageInfo } from '@/entities/image';
 import type { TickerConfig } from '@/entities/ticker-config';
 import { useTickerConfigStore } from '@/entities/ticker-config';
 import { useScenarioStore, type Scenario } from '@/entities/scenario';
@@ -18,8 +16,6 @@ export function useSseStream(kioskId: number) {
   const setFeeds = useRssFeedStore((s) => s.setFeeds);
   const setUiConfig = useUiConfigStore((s) => s.setConfig);
   const setTickerConfig = useTickerConfigStore((s) => s.setConfig);
-  const setVideo = useVideoStore((s) => s.setVideos);
-  const setImages = useImageStore((s) => s.setImages);
   const setFeedConfig = useFeedConfigStore((s) => s.setConfig);
   const setScenario = useScenarioStore((s) => s.setScenario);
 
@@ -58,16 +54,6 @@ export function useSseStream(kioskId: number) {
             setTickerConfig(payload as TickerConfig);
             break;
 
-          case 'video':
-            console.log('SSE: Received VIDEO');
-            setVideo(payload as Array<VideoMetadata>);
-            break;
-
-          case 'image':
-            console.log('SSE: Received IMAGE');
-            setImages(payload as Array<KioskImageInfo>);
-            break;
-
           case 'scenario': {
             console.log('SSE: Received SCENARIO');
             const scenario = payload as Scenario;
@@ -86,15 +72,7 @@ export function useSseStream(kioskId: number) {
         console.error('Error processing SSE message:', error, e.data);
       }
     },
-    [
-      setFeeds,
-      setUiConfig,
-      setFeedConfig,
-      setVideo,
-      setImages,
-      setTickerConfig,
-      setScenario,
-    ],
+    [setFeeds, setUiConfig, setFeedConfig, setTickerConfig, setScenario],
   );
 
   const streamUrl = `${SERVER_URL}${SSE_URL.STREAM(kioskId)}`;
