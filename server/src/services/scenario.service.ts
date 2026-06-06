@@ -111,6 +111,45 @@ export class ScenarioService {
     return item as ScenarioItem;
   }
 
+  addItems(
+    scenarioId: number,
+    input: UpsertScenarioItemInput[],
+  ): ScenarioItem[] {
+    this.logger.debug(
+      { scenarioId, input, fn: 'addItems' },
+      'Adding scenario items',
+    );
+
+    const maxOrder =
+      this.db
+        .select({
+          max: sql<number>`COALESCE(MAX(${scenarioItemsTable.order}), -1)`,
+        })
+        .from(scenarioItemsTable)
+        .where(eq(scenarioItemsTable.scenarioId, scenarioId))
+        .get()?.max ?? -1;
+
+    const values = input.map((item, index) => ({
+      scenarioId,
+      type: item.type,
+      widgetType: item.widgetType ?? null,
+      imageId: item.imageId ?? null,
+      videoId: item.videoId ?? null,
+      order: maxOrder + index + 1,
+      isActive: item.isActive,
+      durationSeconds: item.durationSeconds ?? 10,
+    }));
+
+    const items = this.db
+      .insert(scenarioItemsTable)
+      .values(values)
+      .returning()
+      .all();
+
+    this.touchScenario(scenarioId);
+    return items as ScenarioItem[];
+  }
+
   updateItem(
     itemId: number,
     patch: Partial<

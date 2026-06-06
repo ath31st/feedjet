@@ -46,6 +46,12 @@ export const addScenarioItemSchema = z.object({
   item: scenarioItemSchema,
 });
 
+export const addScenarioItemsSchema = z.object({
+  kioskId: kioskIdSchema,
+
+  items: z.array(scenarioItemSchema),
+});
+
 export const updateScenarioItemSchema = z.object({
   kioskId: kioskIdSchema,
   itemId: z.number(),

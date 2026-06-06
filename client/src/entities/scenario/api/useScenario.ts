@@ -21,6 +21,16 @@ export const useAddScenarioItem = (kioskId: number) =>
     }),
   );
 
+export const useAddScenarioItems = (kioskId: number) =>
+  useMutation(
+    trpcWithProxy.scenario.addItems.mutationOptions({
+      onSuccess() {
+        queryClient.invalidateQueries({ queryKey: scenarioKey(kioskId) });
+        toast.success('Элементы добавлены в сценарий');
+      },
+    }),
+  );
+
 export const useUpdateScenarioItem = (kioskId: number) =>
   useMutation(
     trpcWithProxy.scenario.updateItem.mutationOptions({

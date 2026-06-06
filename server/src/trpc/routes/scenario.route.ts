@@ -2,6 +2,7 @@ import { t, scenarioService, eventBus } from '../../container.js';
 import { protectedProcedure, publicProcedure } from '../../middleware/auth.js';
 import {
   addScenarioItemSchema,
+  addScenarioItemsSchema,
   deleteScenarioItemSchema,
   getScenarioByKioskSchema,
   reorderScenarioItemsSchema,
@@ -30,6 +31,18 @@ export const scenarioRouter = t.router({
       emitScenario(input.kioskId);
 
       return item;
+    }),
+
+  addItems: protectedProcedure
+    .input(addScenarioItemsSchema)
+    .mutation(({ input }) => {
+      const scenario = scenarioService.ensureForKiosk(input.kioskId);
+
+      const items = scenarioService.addItems(scenario.id, input.items);
+
+      emitScenario(input.kioskId);
+
+      return items;
     }),
 
   updateItem: protectedProcedure
