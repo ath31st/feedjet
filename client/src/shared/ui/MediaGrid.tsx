@@ -3,29 +3,28 @@ import { buildImageUrl } from '@/entities/image';
 import { buildVideoUrl } from '@/entities/video';
 import type { MediaFile } from '@/entities/media-folder';
 import { fmtBytes, fmtDuration } from '@/shared/lib';
-import { ConfirmActionDialog } from '@/shared/ui';
-import { IconButton } from '@/shared/ui/common';
-import { Folder, Image, Video, Trash2, Eye } from 'lucide-react';
-import { useMediaGrid } from '../model/useMediaGrid';
+import { Folder, Image, Video } from 'lucide-react';
+import { useState } from 'react';
 
 interface MediaGridProps {
-  selectedFolderId: number | null;
   selectedFiles: Set<string>;
+  media: MediaFile[];
+  isLoading: boolean;
 
   onToggleSelect: (key: string) => void;
-  onPreview: (file: MediaFile) => void;
+  renderActions?: (file: MediaFile) => React.ReactNode;
 }
 
 export function MediaGrid({
-  selectedFolderId,
   selectedFiles,
+  media,
+  isLoading,
   onToggleSelect,
-  onPreview,
+  renderActions,
 }: MediaGridProps) {
-  const { handleDeleteFile, isLoading, media, setFailedThumbs, failedThumbs } =
-    useMediaGrid({
-      selectedFolderId,
-    });
+  const [failedThumbs, setFailedThumbs] = useState<Set<string>>(
+    () => new Set(),
+  );
 
   if (isLoading) {
     return (
@@ -110,26 +109,11 @@ export function MediaGrid({
                   <Video size={12} className="absolute bottom-1 left-1" />
                 )}
 
-                <div className="absolute inset-0 flex items-center justify-center gap-2 bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
-                  <IconButton
-                    icon={<Eye size={22} />}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onPreview(file);
-                    }}
-                  />
-
-                  <ConfirmActionDialog
-                    confirmText="Удалить"
-                    description={`Файл «${file.name}» будет удалён. Все сценарии, в которых он используется, будут обновлены.`}
-                    trigger={<IconButton icon={<Trash2 size={22} />} />}
-                    title={'Удалить файл?'}
-                    onConfirm={(e) => {
-                      e.stopPropagation();
-                      handleDeleteFile(file);
-                    }}
-                  />
-                </div>
+                {renderActions && (
+                  <div className="absolute inset-0 flex items-center justify-center gap-2 bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
+                    {renderActions(file)}
+                  </div>
+                )}
               </div>
 
               <div className="p-2">
