@@ -33,10 +33,10 @@ export function ItemRow({
         <div
           ref={provided.innerRef}
           {...provided.draggableProps}
-          className={`mb-2 flex items-center gap-3 rounded-lg border p-3 transition-[background-color,border-color,box-shadow,opacity] ${
+          className={`mb-2 flex items-center gap-3 rounded-lg border border-(--border) p-3 transition-[background-color,border-color,box-shadow,opacity] ${
             isCurrentlyPlaying
-              ? 'border-(--border) bg-(--border)/20 ring-(--border)/40 ring-2'
-              : 'border-(--border) bg-(--surface)'
+              ? 'bg-(--border)/20 ring-(--border)/40 ring-1'
+              : ''
           } ${snapshot.isDragging ? 'opacity-80 shadow-xl' : ''} ${
             !item.isActive ? 'opacity-50' : ''
           }`}
