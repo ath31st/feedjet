@@ -34,7 +34,7 @@ export function MediaSelectionToolbar({
         Выбрано: {selectedCount}
       </span>
 
-      <div className="grid grid-cols-3 gap-2">
+      <div className={`grid grid-cols-${mode === 'manage' ? 3 : 2} gap-2`}>
         {mode === 'manage' && onStartMove && onBulkDelete && (
           <>
             <CommonButton
@@ -82,18 +82,16 @@ export function MediaSelectionToolbar({
             <CommonButton type="button" onClick={onAddToScenario}>
               <div className="flex items-center justify-center gap-1">
                 <Plus size={14} />
-                <span className="text-xs">Добавить</span>
+                <span className="text-xs">Добавить в сценарий</span>
               </div>
             </CommonButton>
 
             <CommonButton type="button" onClick={onClearSelection}>
               <div className="flex items-center justify-center gap-1">
                 <X size={14} />
-                <span className="text-xs">Снять</span>
+                <span className="text-xs">Снять выделение</span>
               </div>
             </CommonButton>
-
-            <div />
           </>
         )}
       </div>

@@ -107,13 +107,15 @@ export function ScenarioAddItemModal({
           </div>
 
           <div className="flex min-w-0 flex-1 flex-col gap-2">
-            <MediaSelectionToolbar
-              mode="select"
-              selectedCount={selectedFiles.size}
-              onClearSelection={() => setSelectedFiles(new Set())}
-              onAddToScenario={handleAddSelected}
-              moveMode={false}
-            />
+            <div className="flex items-center justify-end px-2">
+              <MediaSelectionToolbar
+                mode="select"
+                selectedCount={selectedFiles.size}
+                onClearSelection={() => setSelectedFiles(new Set())}
+                onAddToScenario={handleAddSelected}
+                moveMode={false}
+              />
+            </div>
 
             <MediaGrid
               media={media}
