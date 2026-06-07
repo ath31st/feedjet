@@ -61,10 +61,10 @@ export function MediaGrid({
           return (
             <div
               key={key}
-              className={`group relative cursor-pointer overflow-hidden rounded-lg border transition-all ${
+              className={`group relative cursor-pointer overflow-hidden rounded-lg border border-(--border) transition-all ${
                 isSelected
-                  ? 'border-(--border) ring-(--button-hover-bg)/90 ring-2'
-                  : 'border-(--border) hover:border-(--button-hover-bg)/50'
+                  ? 'z-10 scale-[1.02] border-(--button-hover-bg) bg-(--button-bg) shadow-lg'
+                  : 'hover:border-(--button-hover-bg)/50'
               }`}
               onClick={() => onToggleSelect(key)}
             >
@@ -107,6 +107,12 @@ export function MediaGrid({
                   <Image size={12} className="absolute bottom-1 left-1" />
                 ) : (
                   <Video size={12} className="absolute bottom-1 left-1" />
+                )}
+
+                {isSelected && (
+                  <div className="absolute top-2 right-2 z-10 rounded bg-(--button-hover-bg) px-2 py-0.5 text-xs">
+                    ✓
+                  </div>
                 )}
 
                 {renderActions && (
