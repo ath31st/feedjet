@@ -1,8 +1,11 @@
+import { useDeleteImageGlobal } from '@/entities/image';
 import {
   useDeleteMediaBatch,
+  useMediaInFolder,
   useMoveMediaBatch,
   type MediaFile,
 } from '@/entities/media-folder';
+import { useDeleteVideoGlobal } from '@/entities/video';
 import { useMemo, useState } from 'react';
 
 function splitSelectionKeys(keys: Set<string>): {
@@ -29,6 +32,8 @@ function splitSelectionKeys(keys: Set<string>): {
 }
 
 export function useMediaManagementWidget() {
+  const { mutate: deleteImageMut } = useDeleteImageGlobal();
+  const { mutate: deleteVideoMut } = useDeleteVideoGlobal();
   const [selectedFolderId, setSelectedFolderId] = useState<number | null>(null);
   const [selectedFiles, setSelectedFiles] = useState<Set<string>>(
     () => new Set(),
@@ -41,6 +46,7 @@ export function useMediaManagementWidget() {
     () => splitSelectionKeys(selectedFiles),
     [selectedFiles],
   );
+  const { data: media = [], isLoading } = useMediaInFolder(selectedFolderId);
 
   const selectionTotal =
     selectionCounts.imageIds.length + selectionCounts.videoIds.length;
@@ -59,6 +65,18 @@ export function useMediaManagementWidget() {
         },
       },
     );
+  };
+
+  const handleDelete = (file: MediaFile) => {
+    deleteFile(file);
+  };
+
+  const deleteFile = (file: MediaFile) => {
+    if (file.kind === 'image') {
+      deleteImageMut({ filename: file.fileName });
+      return;
+    }
+    deleteVideoMut({ filename: file.fileName });
   };
 
   const handleStartMove = () => {
@@ -90,6 +108,9 @@ export function useMediaManagementWidget() {
   };
 
   return {
+    media,
+    isLoading,
+
     preview,
     setPreview,
 
@@ -104,6 +125,7 @@ export function useMediaManagementWidget() {
     moveMode,
     isMoving,
 
+    handleDelete,
     handleBulkDelete,
     handleStartMove,
     handleCancelMove,

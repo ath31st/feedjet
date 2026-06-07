@@ -1,17 +1,25 @@
 import { FolderTreePanel } from '@/features/media-folder-tree-panel';
-import { MediaGrid } from '@/features/media-grid';
-import { SettingsCard } from '@/shared/ui';
+import {
+  ConfirmActionDialog,
+  MediaGrid,
+  MediaSelectionToolbar,
+  SettingsCard,
+} from '@/shared/ui';
 import { MediaUploadButton } from '@/features/media-upload-button';
 import { buildImageUrl } from '@/entities/image';
 import { buildVideoUrl } from '@/entities/video';
 import { buildMediaDescription } from '@/features/preview-modal';
 import { PreviewModal } from '@/features/preview-modal';
 import { useMediaManagementWidget } from '../model/useMediaManagementWidget';
-import { MediaSelectionToolbar } from '@/features/media-selection-toolbar';
 import { DiskUsageInfo } from '@/features/disk-usage-info';
+import { IconButton } from '@/shared/ui/common';
+import { Eye, Trash2 } from 'lucide-react';
 
 export function MediaManagementWidget() {
   const {
+    media,
+    isLoading,
+
     preview,
     setPreview,
 
@@ -26,6 +34,7 @@ export function MediaManagementWidget() {
     moveMode,
     isMoving,
 
+    handleDelete,
     handleBulkDelete,
     handleStartMove,
     handleCancelMove,
@@ -54,6 +63,7 @@ export function MediaManagementWidget() {
         <div className="flex items-center justify-end gap-2 p-2">
           <MediaSelectionToolbar
             selectedCount={selectedFiles.size}
+            mode="manage"
             moveMode={moveMode}
             onStartMove={handleStartMove}
             onBulkDelete={handleBulkDelete}
@@ -64,7 +74,8 @@ export function MediaManagementWidget() {
         </div>
 
         <MediaGrid
-          selectedFolderId={selectedFolderId}
+          media={media}
+          isLoading={isLoading}
           selectedFiles={selectedFiles}
           onToggleSelect={(key) => {
             setSelectedFiles((prev) => {
@@ -79,7 +90,28 @@ export function MediaManagementWidget() {
               return next;
             });
           }}
-          onPreview={setPreview}
+          renderActions={(file) => (
+            <>
+              <IconButton
+                icon={<Eye size={22} />}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setPreview(file);
+                }}
+              />
+
+              <ConfirmActionDialog
+                confirmText="Удалить"
+                description={`Файл «${file.name}» будет удалён`}
+                trigger={<IconButton icon={<Trash2 size={22} />} />}
+                title="Удалить файл?"
+                onConfirm={(e) => {
+                  e.stopPropagation();
+                  handleDelete(file);
+                }}
+              />
+            </>
+          )}
         />
 
         {preview && (
