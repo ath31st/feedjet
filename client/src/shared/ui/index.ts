@@ -31,3 +31,5 @@ export { DurationInput } from './DurationInput';
 export { SlideSlot } from './SlideSlot';
 export * from './folder-tree-node/FolderTreeItem';
 export * from './folder-tree-node/FolderTreeContainer';
+export * from './MediaGrid';
+export * from './MediaSelectionToolbar';
