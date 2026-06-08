@@ -24,7 +24,7 @@
     "dotenv": "^17.2.0",
     "drizzle-orm": "^0.45.2",
     "express": "^5.2.1",
-    "fast-xml-parser": "^5.7.1",
+    "fast-xml-parser": "^5.8.0",
     "jsonwebtoken": "^9.0.2",
     "lru-cache": "^11.1.0",
     "node-cron": "^4.2.1",
@@ -46,7 +46,7 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.0.15",
     "drizzle-kit": "^0.31.10",
-    "tsc-alias": "^1.8.16",
+    "tsc-alias": "^1.8.17",
     "tsx": "^4.21.0",
     "typescript": "^5.8.3"
   }
