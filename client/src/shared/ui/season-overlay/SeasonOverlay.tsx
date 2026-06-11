@@ -61,7 +61,7 @@ export const SeasonOverlay = ({ mode }: SeasonOverlayProps) => {
   const season = resolveSeason(mode);
 
   const particlesData = useMemo(() => {
-    const MAX_PARTICLES = 30;
+    const MAX_PARTICLES = 50;
 
     return Array.from({ length: MAX_PARTICLES }).map((_, id) => ({
       id,
@@ -86,7 +86,7 @@ export const SeasonOverlay = ({ mode }: SeasonOverlayProps) => {
 
       // summer (fireflies)
       topPosition: `${random(5, 95)}%`,
-      fireflySize: random(4, 10),
+      fireflySize: random(6, 14),
       fireflyDuration: random(2, 5),
       driftDuration: random(10, 20),
       fireflyDelay: random(0, 6),
@@ -177,7 +177,7 @@ export const SeasonOverlay = ({ mode }: SeasonOverlayProps) => {
   };
 
   const renderSummer = () => {
-    const fireflies = particlesData.slice(0, 35);
+    const fireflies = particlesData.slice(0, 50);
 
     return (
       <>
