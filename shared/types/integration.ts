@@ -8,31 +8,35 @@ export const integrationFull = [
 export const integrationTypes = integrationFull.map((i) => i.type);
 export type IntegrationType = (typeof integrationTypes)[number];
 
-export interface Integration {
-  kioskId: number;
+export type Integration = {
+  id: number;
   type: IntegrationType;
-  description?: string;
-  login?: string;
-  passwordEnc?: string;
-}
+  host: string;
+  port: number;
+  description: string | null;
+  config: IntegrationConfig;
+  isActive: boolean;
+};
 
-export interface NewIntegration {
+export type NewIntegration = {
   type: IntegrationType;
+  host: string;
+  port: number;
   description?: string;
-  login?: string;
-  password?: string;
-}
+  config: IntegrationConfig;
+};
 
-export interface UpdateIntegration {
-  type: IntegrationType;
+export type UpdateIntegration = {
+  id: number;
+  host?: string;
+  port?: number;
   description?: string;
-  login?: string;
-  password?: string;
-}
+  config?: IntegrationConfig;
+};
 
 export type FullyKioskConfig = {
   login: string;
-  passwordEnc: string;
+  password: string;
 };
 
 export type AdbConfig = {
