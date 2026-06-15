@@ -193,7 +193,7 @@ export class IntegrationService {
     if (existing) {
       throw new IntegrationError(
         409,
-        `Integration already exists for '${existing.type}' integration. Delete it first.`,
+        'Philips integration already exists for this IP',
       );
     }
 

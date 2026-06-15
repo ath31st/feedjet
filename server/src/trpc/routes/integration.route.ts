@@ -1,9 +1,9 @@
 import { t, integrationService } from '../../container.js';
 import { handleServiceCall } from '../error.handler.js';
-import { kioskIdInputSchema } from '../../validations/schemas/kiosk.schemas.js';
 import { protectedProcedure } from '../../middleware/auth.js';
 import {
   integrationCreateSchema,
+  integrationIdInputSchema,
   integrationPairCompleteSchema,
   integrationPairStartSchema,
   integrationUpdateSchema,
@@ -16,11 +16,11 @@ export const integrationRouter = t.router({
     });
   }),
 
-  getByKioskId: protectedProcedure
-    .input(kioskIdInputSchema)
+  getById: protectedProcedure
+    .input(integrationIdInputSchema)
     .query(({ input }) => {
       return handleServiceCall(() => {
-        return integrationService.getByKiosk(input.kioskId);
+        return integrationService.getById(input.integrationId);
       });
     }),
 
@@ -28,10 +28,7 @@ export const integrationRouter = t.router({
     .input(integrationCreateSchema)
     .mutation(({ input }) =>
       handleServiceCall(() => {
-        const integration = integrationService.create(
-          input.kioskId,
-          input.data,
-        );
+        const integration = integrationService.create(input.data);
         return integration;
       }),
     ),
@@ -40,32 +37,33 @@ export const integrationRouter = t.router({
     .input(integrationUpdateSchema)
     .mutation(({ input }) =>
       handleServiceCall(() => {
-        const integration = integrationService.update(
-          input.kioskId,
-          input.update,
-        );
+        const integration = integrationService.update(input.data);
         return integration;
       }),
     ),
 
-  exists: protectedProcedure.input(kioskIdInputSchema).query(({ input }) => {
-    return handleServiceCall(() => {
-      return integrationService.exists(input.kioskId);
-    });
-  }),
-
-  delete: protectedProcedure.input(kioskIdInputSchema).mutation(({ input }) =>
-    handleServiceCall(() => {
-      integrationService.delete(input.kioskId);
-      return { success: true };
+  exists: protectedProcedure
+    .input(integrationIdInputSchema)
+    .query(({ input }) => {
+      return handleServiceCall(() => {
+        return integrationService.exists(input.integrationId);
+      });
     }),
-  ),
+
+  delete: protectedProcedure
+    .input(integrationIdInputSchema)
+    .mutation(({ input }) =>
+      handleServiceCall(() => {
+        integrationService.delete(input.integrationId);
+        return { success: true };
+      }),
+    ),
 
   pairPhilipsStart: protectedProcedure
     .input(integrationPairStartSchema)
     .mutation(({ input }) =>
       handleServiceCall(async () => {
-        await integrationService.pairPhilipsStart(input.kioskId, input.ip);
+        await integrationService.pairPhilipsStart(input.ip);
         return { success: true };
       }),
     ),
@@ -75,7 +73,8 @@ export const integrationRouter = t.router({
     .mutation(({ input }) =>
       handleServiceCall(async () => {
         const integration = await integrationService.pairPhilipsComplete(
-          input.kioskId,
+          input.integrationId,
+          input.ip,
           input.pin,
           input.description,
         );
