@@ -13,6 +13,7 @@ import { eq, and } from 'drizzle-orm';
 import { IntegrationError } from '../errors/integration.error.js';
 import { PhilipsPairError } from '../errors/philips.pair.error.js';
 import type { PhilipsJointSpaceClient } from '../integration/philips.jointspace.client.js';
+import { PORT } from '../config/philips.jointspace.client.config.js';
 
 export class IntegrationService {
   private readonly db: DbType;
@@ -161,7 +162,7 @@ export class IntegrationService {
 
   delete(integrationId: number): boolean {
     this.logger.debug({ integrationId, fn: 'delete' }, 'Deleting integration');
-    this.philipsClient.cancelPairing(integrationId);
+
     const result =
       this.db
         .delete(integrationsTable)
@@ -182,25 +183,25 @@ export class IntegrationService {
     return !!integration;
   }
 
-  async pairPhilipsStart(kioskId: number, ip: string): Promise<void> {
+  async pairPhilipsStart(ip: string): Promise<void> {
     this.logger.debug(
-      { kioskId, ip, fn: 'pairPhilipsStart' },
+      { ip, fn: 'pairPhilipsStart' },
       'Starting Philips pairing',
     );
 
-    const existing = this.findById(kioskId);
-    if (existing && existing.type !== 'philips_jointspace') {
+    const existing = this.findByIpAndPhilipsType(ip);
+    if (existing) {
       throw new IntegrationError(
         409,
-        `Kiosk already has '${existing.type}' integration. Delete it first.`,
+        `Integration already exists for '${existing.type}' integration. Delete it first.`,
       );
     }
 
     try {
-      await this.philipsClient.startPairing(kioskId, ip);
+      await this.philipsClient.startPairing(ip);
     } catch (error) {
       this.logger.warn(
-        { kioskId, ip, fn: 'pairPhilipsStart' },
+        { ip, fn: 'pairPhilipsStart' },
         'Failed to start Philips pairing',
       );
       if (error instanceof PhilipsPairError) {
@@ -215,6 +216,7 @@ export class IntegrationService {
 
   async pairPhilipsComplete(
     integrationId: number,
+    ip: string,
     pin: string,
     description?: string,
   ): Promise<Integration> {
@@ -226,7 +228,7 @@ export class IntegrationService {
     let creds: { deviceId: string; authKey: string };
 
     try {
-      creds = await this.philipsClient.completePairing(integrationId, pin);
+      creds = await this.philipsClient.completePairing(ip, pin);
     } catch (error) {
       if (error instanceof PhilipsPairError) {
         throw new IntegrationError(400, error.message);
@@ -265,8 +267,8 @@ export class IntegrationService {
             .values({
               id: integrationId,
               type: 'philips_jointspace',
-              host: '',
-              port: 0,
+              host: ip,
+              port: PORT,
               config,
               description: description ?? null,
             })
@@ -274,7 +276,7 @@ export class IntegrationService {
             .get();
 
       this.logger.info(
-        { kioskId: integrationId, fn: 'pairPhilipsComplete' },
+        { integrationId, fn: 'pairPhilipsComplete' },
         'Philips pairing stored',
       );
 
@@ -295,6 +297,21 @@ export class IntegrationService {
       .select()
       .from(integrationsTable)
       .where(eq(integrationsTable.id, integrationId))
+      .get();
+
+    return row ?? null;
+  }
+
+  private findByIpAndPhilipsType(ip: string): Integration | null {
+    const row = this.db
+      .select()
+      .from(integrationsTable)
+      .where(
+        and(
+          eq(integrationsTable.type, 'philips_jointspace'),
+          eq(integrationsTable.host, ip),
+        ),
+      )
       .get();
 
     return row ?? null;
