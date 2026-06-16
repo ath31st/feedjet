@@ -2,12 +2,10 @@ import type { Kiosk, NewKiosk, UpdateKiosk } from '@shared/types/kiosk.js';
 import type { DbType } from '../container.js';
 import type { FeedConfigService } from './feed.config.service.js';
 import type { UiConfigService } from './ui.config.service.js';
-import { kioskIntegrationsTable, kiosksTable } from '../db/schema.js';
+import { kiosksTable } from '../db/schema.js';
 import { KioskError } from '../errors/kiosk.error.js';
 import { eq, sql } from 'drizzle-orm';
 import { createServiceLogger } from '../utils/pino.logger.js';
-import type { Integration } from '@shared/types/integration.js';
-import { integrationMapper } from '../mappers/integration.mapper.js';
 
 export class KioskService {
   private readonly kioskLimit = 8;
@@ -136,29 +134,6 @@ export class KioskService {
       .where(eq(kiosksTable.isActive, true))
       .orderBy(kiosksTable.name, kiosksTable.id)
       .all();
-  }
-
-  getActiveWithIntegration(): Array<{
-    kiosk: Kiosk;
-    integration: Integration;
-  }> {
-    return this.db
-      .select({
-        kiosk: kiosksTable,
-        integration: kioskIntegrationsTable,
-      })
-      .from(kiosksTable)
-      .innerJoin(
-        kioskIntegrationsTable,
-        eq(kioskIntegrationsTable.kioskId, kiosksTable.id),
-      )
-      .where(eq(kiosksTable.isActive, true))
-      .orderBy(kiosksTable.name, kiosksTable.id)
-      .all()
-      .map((result) => ({
-        kiosk: result.kiosk,
-        integration: integrationMapper.fromEntity(result.integration),
-      }));
   }
 
   update(kioskId: number, data: UpdateKiosk): Kiosk {
