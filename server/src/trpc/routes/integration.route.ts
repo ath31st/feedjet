@@ -4,6 +4,7 @@ import { protectedProcedure } from '../../middleware/auth.js';
 import {
   integrationCreateSchema,
   integrationIdInputSchema,
+  integrationIpInputSchema,
   integrationPairCompleteSchema,
   integrationPairStartSchema,
   integrationUpdateSchema,
@@ -21,6 +22,14 @@ export const integrationRouter = t.router({
     .query(({ input }) => {
       return handleServiceCall(() => {
         return integrationService.getById(input.integrationId);
+      });
+    }),
+
+  getByIp: protectedProcedure
+    .input(integrationIpInputSchema)
+    .query(({ input }) => {
+      return handleServiceCall(() => {
+        return integrationService.getByIp(input.ip);
       });
     }),
 
@@ -47,6 +56,14 @@ export const integrationRouter = t.router({
     .query(({ input }) => {
       return handleServiceCall(() => {
         return integrationService.exists(input.integrationId);
+      });
+    }),
+
+  existByIp: protectedProcedure
+    .input(integrationIpInputSchema)
+    .query(({ input }) => {
+      return handleServiceCall(() => {
+        return integrationService.existByIp(input.ip);
       });
     }),
 

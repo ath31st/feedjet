@@ -107,3 +107,7 @@ export const integrationPairCompleteSchema = z.object({
 export const integrationIdInputSchema = z.object({
   integrationId: z.number().int().positive(),
 });
+
+export const integrationIpInputSchema = z.object({
+  ip: hostSchema,
+});

@@ -43,6 +43,20 @@ export class IntegrationService {
     return integration;
   }
 
+  getByIp(ip: string): Integration {
+    const integration = this.db
+      .select()
+      .from(integrationsTable)
+      .where(eq(integrationsTable.host, ip))
+      .get();
+
+    if (!integration) {
+      throw new IntegrationError(404, 'Integration not found');
+    }
+
+    return integration;
+  }
+
   create(data: NewIntegration): Integration {
     this.logger.debug({ input: data, fn: 'create' }, 'Creating integration');
 
@@ -178,6 +192,16 @@ export class IntegrationService {
       .select()
       .from(integrationsTable)
       .where(eq(integrationsTable.id, integrationId))
+      .get();
+
+    return !!integration;
+  }
+
+  existByIp(ip: string): boolean {
+    const integration = this.db
+      .select()
+      .from(integrationsTable)
+      .where(eq(integrationsTable.host, ip))
       .get();
 
     return !!integration;
