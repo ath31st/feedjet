@@ -1,56 +1,67 @@
 import { useState } from 'react';
-import {
-  integrationTypes,
-  type Integration,
-  type IntegrationType,
-  type UpdateIntegration,
+import type {
+  Integration,
+  IntegrationType,
+  IntegrationConfig,
+  UpdateIntegration,
 } from '@/entities/integration';
+
+type FormData = {
+  type: IntegrationType;
+  host: string;
+  port: number;
+  description?: string;
+};
 
 export function useUpdateIntegrationForm(
   integration: Integration,
   onUpdate: (data: UpdateIntegration) => void,
   onClose: () => void,
-  onDelete: (kioskId: number, type: IntegrationType) => void,
 ) {
-  const [formData, setFormData] = useState<UpdateIntegration>({
-    type: integrationTypes[0],
-    login: integration.login ?? '',
-    password: integration.passwordEnc ? '*****' : '',
+  const [formData, setFormData] = useState<FormData>({
+    type: integration.type,
+    host: integration.host,
+    port: integration.port,
     description: integration.description ?? '',
   });
+
+  const [config, setConfig] = useState<IntegrationConfig>(integration.config);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const trimmedData: UpdateIntegration = {
-      type: formData.type,
-      login:
-        formData.login && formData.login !== integration.login
-          ? formData.login.trim()
-          : undefined,
-      password:
-        formData.password && formData.password !== '*****'
-          ? formData.password.trim()
-          : undefined,
-      description:
-        formData.description && formData.description !== integration.description
-          ? formData.description.trim()
-          : undefined,
+    const payload: UpdateIntegration = {
+      id: integration.id,
+      type: integration.type,
     };
 
-    onUpdate(trimmedData);
-    setFormData({
-      type: integrationTypes[0],
-      login: '',
-      password: '',
-      description: '',
-    });
+    if (formData.host !== integration.host) {
+      payload.host = formData.host.trim();
+    }
+
+    if (formData.port !== integration.port) {
+      payload.port = formData.port;
+    }
+
+    if (formData.description !== (integration.description ?? '')) {
+      payload.description = formData.description?.trim();
+    }
+
+    if (formData.type !== integration.type) {
+      payload.type = formData.type;
+    }
+
+    if (JSON.stringify(config) !== JSON.stringify(integration.config)) {
+      payload.config = config;
+    }
+
+    onUpdate(payload);
     onClose();
   };
 
-  const handleChange = <K extends keyof UpdateIntegration>(
+  const handleChange = <K extends keyof FormData>(
     field: K,
-    value: UpdateIntegration[K],
+    value: FormData[K],
   ) => {
     setFormData((prev) => ({
       ...prev,
@@ -58,26 +69,26 @@ export function useUpdateIntegrationForm(
     }));
   };
 
-  const handleCancel = () => {
-    setFormData({
-      type: integrationTypes[0],
-      login: '',
-      password: '',
-      description: '',
-    });
-    onClose();
+  const handleConfigChange = (value: Partial<IntegrationConfig>) => {
+    setConfig(
+      (prev) =>
+        ({
+          ...prev,
+          ...value,
+        }) as IntegrationConfig,
+    );
   };
 
-  const handleDelete = () => {
-    onDelete(integration.kioskId, integration.type);
+  const handleCancel = () => {
     onClose();
   };
 
   return {
     formData,
-    handleSubmit,
+    config,
     handleChange,
+    handleConfigChange,
+    handleSubmit,
     handleCancel,
-    handleDelete,
   };
 }
