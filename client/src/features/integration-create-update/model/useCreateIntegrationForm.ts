@@ -1,40 +1,70 @@
 import { useState } from 'react';
-import { integrationTypes, type NewIntegration } from '@/entities/integration';
+import {
+  integrationTypes,
+  type IntegrationType,
+  type IntegrationConfig,
+  type NewIntegration,
+  type FullyKioskConfig,
+  type AdbConfig,
+  type PhilipsJointspaceConfig,
+} from '@/entities/integration';
+
+type IntegrationFormData = {
+  type: IntegrationType;
+  host: string;
+  port: number;
+  description?: string;
+};
+
+function getDefaultConfig(type: IntegrationType): IntegrationConfig {
+  switch (type) {
+    case 'fully_kiosk':
+      return {
+        login: '',
+        password: '',
+      };
+
+    case 'adb':
+      return {};
+
+    case 'philips_jointspace':
+      return {
+        deviceId: '',
+        authKey: '',
+      };
+  }
+}
+
+function createDefaultForm(ip: string | null): IntegrationFormData {
+  return {
+    type: integrationTypes[0],
+    host: ip ?? '',
+    port: 0,
+    description: '',
+  };
+}
 
 export function useCreateIntegrationForm(
+  ip: string | null,
   onCreate: (data: NewIntegration) => void,
   onClose: () => void,
 ) {
-  const [formData, setFormData] = useState<NewIntegration>({
-    type: integrationTypes[0],
-    login: '',
-    password: '',
-    description: '',
-  });
+  const [formData, setFormData] = useState<IntegrationFormData>(
+    createDefaultForm(ip),
+  );
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const [config, setConfig] = useState<IntegrationConfig>(
+    getDefaultConfig(integrationTypes[0]),
+  );
 
-    const trimmedData: NewIntegration = {
-      type: formData.type,
-      login: formData.login?.trim() || undefined,
-      password: formData.password?.trim() || undefined,
-      description: formData.description?.trim() || undefined,
-    };
-
-    onCreate(trimmedData);
-    setFormData({
-      type: integrationTypes[0],
-      login: '',
-      password: '',
-      description: '',
-    });
-    onClose();
+  const reset = () => {
+    setFormData(createDefaultForm(ip));
+    setConfig(getDefaultConfig(integrationTypes[0]));
   };
 
-  const handleChange = <K extends keyof NewIntegration>(
+  const handleChange = <K extends keyof IntegrationFormData>(
     field: K,
-    value: NewIntegration[K],
+    value: IntegrationFormData[K],
   ) => {
     setFormData((prev) => ({
       ...prev,
@@ -42,20 +72,74 @@ export function useCreateIntegrationForm(
     }));
   };
 
+  const handleConfigChange = (value: Partial<IntegrationConfig>) => {
+    setConfig(
+      (prev) =>
+        ({
+          ...prev,
+          ...value,
+        }) as IntegrationConfig,
+    );
+  };
+
+  const handleTypeChange = (type: IntegrationType) => {
+    setFormData((prev) => ({
+      ...prev,
+      type,
+    }));
+
+    setConfig(getDefaultConfig(type));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const base = {
+      host: formData.host.trim(),
+      port: formData.port,
+      description: formData.description?.trim() || undefined,
+    };
+
+    if (formData.type === 'fully_kiosk') {
+      onCreate({
+        ...base,
+        type: 'fully_kiosk',
+        config: config as FullyKioskConfig,
+      });
+    }
+
+    if (formData.type === 'adb') {
+      onCreate({
+        ...base,
+        type: 'adb',
+        config: config as AdbConfig,
+      });
+    }
+
+    if (formData.type === 'philips_jointspace') {
+      onCreate({
+        ...base,
+        type: 'philips_jointspace',
+        config: config as PhilipsJointspaceConfig,
+      });
+    }
+
+    reset();
+    onClose();
+  };
+
   const handleCancel = () => {
-    setFormData({
-      type: integrationTypes[0],
-      login: '',
-      password: '',
-      description: '',
-    });
+    reset();
     onClose();
   };
 
   return {
     formData,
-    handleSubmit,
+    config,
     handleChange,
+    handleConfigChange,
+    handleTypeChange,
+    handleSubmit,
     handleCancel,
   };
 }

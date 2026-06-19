@@ -5,21 +5,25 @@ import { IntegrationForm } from '@/shared/ui';
 
 interface IntegrationCreateDialogProps {
   open: boolean;
-  kioskId: number;
-  kioskIp: string | null;
+  ip: string | null;
   onClose: () => void;
   onCreate: (data: NewIntegration) => void;
 }
 
 export function IntegrationCreateDialog({
   open,
-  kioskId,
-  kioskIp,
+  ip,
   onClose,
   onCreate,
 }: IntegrationCreateDialogProps) {
-  const { formData, handleSubmit, handleChange, handleCancel } =
-    useCreateIntegrationForm(onCreate, onClose);
+  const {
+    formData,
+    config,
+    handleSubmit,
+    handleChange,
+    handleCancel,
+    handleConfigChange,
+  } = useCreateIntegrationForm(ip, onCreate, onClose);
 
   return (
     <Dialog.Root open={open} onOpenChange={onClose}>
@@ -39,12 +43,11 @@ export function IntegrationCreateDialog({
           <IntegrationForm
             mode="create"
             formData={formData}
-            kioskId={kioskId}
-            kioskIp={kioskIp}
+            config={config}
             onChange={handleChange}
+            onConfigChange={handleConfigChange}
             onSubmit={handleSubmit}
             onCancel={handleCancel}
-            onPaired={onClose}
           />
         </Dialog.Content>
       </Dialog.Portal>
