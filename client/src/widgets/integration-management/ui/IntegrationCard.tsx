@@ -1,6 +1,13 @@
 import type { Integration } from '@/entities/integration';
 import { IntegrationConfigInfo } from './IntegrationConfigInfo';
 import { integrationFull } from '@/entities/integration';
+import {
+  KioskScreenOffAction,
+  KioskScreenOnAction,
+} from '@/features/kiosk-screen-control';
+import { IconButton } from '@/shared/ui/common';
+import { Trash2 } from 'lucide-react';
+import { ReloadKioskPageButton } from '@/features/reload-kiosk';
 
 interface IntegrationCardProps {
   integration: Integration;
@@ -38,7 +45,17 @@ export function IntegrationCard({
         </div>
       </div>
 
-      <div className="flex items-center gap-2">{/* кнопки потом */}</div>
+      <div className="ml-auto flex gap-2">
+        <KioskScreenOnAction kioskId={0} kioskIp={'127.0.0.1'} />
+        <KioskScreenOffAction kioskId={0} kioskIp={'127.0.0.1'} />
+
+        <ReloadKioskPageButton kioskId={0} />
+
+        <IconButton
+          onClick={() => onDelete(integration.id)}
+          icon={<Trash2 className="h-4 w-4" />}
+        />
+      </div>
     </div>
   );
 }
