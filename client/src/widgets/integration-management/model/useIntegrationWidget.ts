@@ -14,9 +14,6 @@ export function useIntegrationWidget() {
   const [editIntegration, setEditIntegration] = useState<Integration | null>(
     null,
   );
-  const [createIntegrationFor, setCreateIntegrationFor] = useState<
-    string | null
-  >(null);
   const { data: heartbeats = [], isLoading: isLoadingHeartbeats } =
     useGetActiveHeartbeats();
   const { data: integrations = [], isLoading: isLoadingIntegrations } =
@@ -42,8 +39,6 @@ export function useIntegrationWidget() {
     isLoadingHeartbeats,
     integrations,
     isLoadingIntegrations,
-    createIntegrationFor,
-    setCreateIntegrationFor,
     editIntegration,
     setEditIntegration,
     handleCreateIntegration,
