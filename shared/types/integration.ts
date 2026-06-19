@@ -2,7 +2,6 @@ export const integrationFull = [
   { type: 'fully_kiosk', label: 'Fully Kiosk' },
   { type: 'adb', label: 'ADB' },
   { type: 'philips_jointspace', label: 'Philips JointSpace' },
-  { type: 'other', label: 'Другое' },
 ] as const;
 
 export const integrationTypes = integrationFull.map((i) => i.type);
@@ -18,43 +17,63 @@ export type Integration = {
   isActive: boolean;
 };
 
-export type NewIntegration = {
-  type: IntegrationType;
+type Base = {
   host: string;
   port: number;
   description?: string;
-  config: IntegrationConfig;
 };
 
-export type UpdateIntegration = {
+export type NewIntegration =
+  | ({
+      type: 'fully_kiosk';
+      config: FullyKioskConfig;
+    } & Base)
+  | ({
+      type: 'adb';
+      config: AdbConfig;
+    } & Base)
+  | ({
+      type: 'philips_jointspace';
+      config: PhilipsJointspaceConfig;
+    } & Base);
+
+type BaseUpdate = {
   id: number;
   host?: string;
   port?: number;
   description?: string;
-  config?: IntegrationConfig;
 };
+
+export type UpdateIntegration =
+  | ({
+      type: 'fully_kiosk';
+      config?: FullyKioskConfig;
+    } & BaseUpdate)
+  | ({
+      type: 'adb';
+      config?: AdbConfig;
+    } & BaseUpdate)
+  | ({
+      type: 'philips_jointspace';
+      config?: PhilipsJointspaceConfig;
+    } & BaseUpdate);
 
 export type FullyKioskConfig = {
   login: string;
   password: string;
 };
 
-export type AdbConfig = {
-  port?: number;
-};
+export type AdbConfig = Record<string, never>;
 
 export type PhilipsJointspaceConfig = {
   deviceId: string;
   authKey: string;
 };
 
-export type OtherIntegrationConfig = Record<string, unknown>;
-
 export type IntegrationConfigMap = {
   fully_kiosk: FullyKioskConfig;
   adb: AdbConfig;
   philips_jointspace: PhilipsJointspaceConfig;
-  other: OtherIntegrationConfig;
 };
 
 export type IntegrationConfig = IntegrationConfigMap[IntegrationType];
