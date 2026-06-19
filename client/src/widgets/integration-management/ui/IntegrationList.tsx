@@ -1,6 +1,7 @@
 import { LoadingThreeDotsJumping } from '@/shared/ui';
 import { IntegrationCard } from './IntegrationCard';
 import { useIntegrationWidget } from '../model/useIntegrationWidget';
+import { IntegrationUpdateDialog } from '@/features/integration-update';
 
 export function IntegrationList() {
   const {
@@ -22,11 +23,18 @@ export function IntegrationList() {
           key={integration.id}
           integration={integration}
           onDelete={handleDeleteIntegration}
-          editIntegration={editIntegration}
-          setEditIntegration={setEditIntegration}
-          onUpdate={handleUpdateIntegration}
+          onEdit={setEditIntegration}
         />
       ))}
+
+      {editIntegration && (
+        <IntegrationUpdateDialog
+          integration={editIntegration}
+          open={true}
+          onClose={() => setEditIntegration(null)}
+          onUpdate={handleUpdateIntegration}
+        />
+      )}
     </div>
   );
 }
