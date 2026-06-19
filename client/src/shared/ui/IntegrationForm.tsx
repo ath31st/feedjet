@@ -2,66 +2,56 @@ import {
   integrationFull,
   type Integration,
   type IntegrationType,
+  type IntegrationConfig,
+  type FullyKioskConfig,
 } from '@/entities/integration';
-import { PhilipsPairPanel } from '@/features/integration-philips-pair';
 import { CommonButton, SimpleDropdownMenu } from '@/shared/ui/common';
-import { CheckIcon, LinkBreak2Icon, ResetIcon } from '@radix-ui/react-icons';
+import { CheckIcon, ResetIcon } from '@radix-ui/react-icons';
 import { FormField, sharedInputStyles } from './common/FormField';
 
 export type IntegrationFormData = {
   type: IntegrationType;
+  host: string;
+  port: number;
   description?: string;
-  login?: string;
-  password?: string;
 };
 
 interface IntegrationFormProps {
   mode: 'create' | 'update';
   integration?: Integration;
+
   formData: IntegrationFormData;
-  kioskId: number;
-  kioskIp: string | null;
+  config: IntegrationConfig;
+
   onChange: <K extends keyof IntegrationFormData>(
     field: K,
     value: IntegrationFormData[K],
   ) => void;
+
+  onConfigChange: (value: Partial<IntegrationConfig>) => void;
+
   onSubmit: (e: React.FormEvent) => void;
   onCancel: () => void;
-  onPaired?: () => void;
-  onDelete?: () => void;
 }
 
 export function IntegrationForm({
   mode,
-  integration,
   formData,
-  kioskId,
-  kioskIp,
+  config,
   onChange,
+  onConfigChange,
   onSubmit,
   onCancel,
-  onPaired,
-  onDelete,
 }: IntegrationFormProps) {
   const isCreate = mode === 'create';
-  const isPhilips = formData.type === 'philips_jointspace';
-  const isPhilipsPaired = !!integration?.passwordEnc;
 
-  const handleFormSubmit = (e: React.FormEvent) => {
-    if (isCreate && isPhilips) {
-      e.preventDefault();
-      return;
-    }
-    onSubmit(e);
-  };
+  const typeLabel =
+    integrationFull.find((i) => i.type === formData.type)?.label ??
+    formData.type;
 
   return (
-    <form onSubmit={handleFormSubmit} className="space-y-2">
-      <FormField
-        id="integration-type"
-        label="Тип интеграции"
-        required={isCreate}
-      >
+    <form onSubmit={onSubmit} className="space-y-3">
+      <FormField id="type" label="Тип интеграции" required={isCreate}>
         {isCreate ? (
           <SimpleDropdownMenu
             value={formData.type}
@@ -73,105 +63,71 @@ export function IntegrationForm({
           />
         ) : (
           <input
-            id="integration-type"
-            type="text"
+            id="type"
             disabled
             className={sharedInputStyles}
-            value={
-              integrationFull.find((i) => i.type === integration?.type)
-                ?.label ?? formData.type
-            }
+            value={typeLabel}
           />
         )}
       </FormField>
 
-      {!isPhilips && (
+      <FormField id="host" label="Host">
+        <input
+          id="host"
+          className={sharedInputStyles}
+          value={formData.host}
+          onChange={(e) => onChange('host', e.target.value)}
+        />
+      </FormField>
+
+      <FormField id="port" label="Port">
+        <input
+          id="port"
+          type="number"
+          className={sharedInputStyles}
+          value={formData.port}
+          onChange={(e) => onChange('port', Number(e.target.value))}
+        />
+      </FormField>
+
+      {formData.type === 'fully_kiosk' && (
         <>
-          <FormField
-            id="integration-login"
-            label="Логин"
-            maxLength={100}
-            currentLength={formData.login?.length}
-          >
+          <FormField id="login" label="Login">
             <input
-              id="integration-login"
-              type="text"
               className={sharedInputStyles}
-              value={formData.login ?? ''}
-              onChange={(e) => onChange('login', e.target.value)}
+              value={(config as FullyKioskConfig).login}
+              onChange={(e) => onConfigChange({ login: e.target.value })}
             />
           </FormField>
 
-          <FormField
-            id="integration-password"
-            label="Пароль"
-            required={formData.type === 'fully_kiosk'}
-            hint={
-              mode === 'update'
-                ? 'Оставьте пустым, если не нужно менять'
-                : undefined
-            }
-            maxLength={100}
-            currentLength={formData.password?.length}
-          >
+          <FormField id="password" label="Password">
             <input
-              id="integration-password"
               type="password"
               className={sharedInputStyles}
-              value={formData.password ?? ''}
-              onChange={(e) => onChange('password', e.target.value)}
-              autoComplete="current-password"
-              required={formData.type === 'fully_kiosk'}
+              value={(config as FullyKioskConfig).password}
+              onChange={(e) => onConfigChange({ password: e.target.value })}
             />
           </FormField>
         </>
       )}
 
-      {isPhilips && (
-        <PhilipsPairPanel
-          kioskId={kioskId}
-          ip={kioskIp}
-          isPaired={isPhilipsPaired}
-          description={formData.description}
-          onPaired={onPaired}
-        />
-      )}
-
-      <FormField
-        id="integration-description"
-        label="Описание"
-        maxLength={500}
-        currentLength={formData.description?.length}
-      >
+      <FormField id="description" label="Описание">
         <textarea
-          id="integration-description"
           rows={3}
           className={sharedInputStyles}
           value={formData.description ?? ''}
           onChange={(e) => onChange('description', e.target.value)}
-          placeholder="Например: https://device.local или комментарий"
-          maxLength={200}
         />
       </FormField>
 
       <div className="flex justify-end gap-2">
-        {onDelete && (
-          <CommonButton
-            tooltip="Удалить интеграцию"
-            type="button"
-            onClick={onDelete}
-          >
-            <LinkBreak2Icon />
-          </CommonButton>
-        )}
         <CommonButton type="button" onClick={onCancel}>
           <ResetIcon />
         </CommonButton>
-        {!(isCreate && isPhilips) && (
-          <CommonButton type="submit">
-            <CheckIcon />
-          </CommonButton>
-        )}
+
+        <CommonButton type="submit">
+          <CheckIcon />
+        </CommonButton>
       </div>
     </form>
   );
