@@ -1,18 +1,13 @@
 import type { KioskWithHeartbeats } from '@/entities/kiosk';
 import type { ReactNode } from 'react';
 import { HeartbeatCard } from './HeartbeatCard';
-import {
-  KioskScreenOffAction,
-  KioskScreenOnAction,
-} from '@/features/kiosk-screen-control';
 
 interface KioskCardProps {
   kiosk: KioskWithHeartbeats;
   actions?: ReactNode;
-  hasIntegration: boolean;
 }
 
-export function KioskCard({ kiosk, actions, hasIntegration }: KioskCardProps) {
+export function KioskCard({ kiosk, actions }: KioskCardProps) {
   return (
     <div
       className={`rounded-lg border ${kiosk.isActive ? 'border-(--border)' : 'border-(--border-disabled)'} p-4`}
@@ -67,17 +62,6 @@ export function KioskCard({ kiosk, actions, hasIntegration }: KioskCardProps) {
                 key={hb.ip}
                 ip={hb.ip}
                 lastHeartbeat={hb.lastHeartbeat}
-                actions={
-                  hasIntegration && (
-                    <div className="ml-auto flex gap-2">
-                      <KioskScreenOnAction kioskId={kiosk.id} kioskIp={hb.ip} />
-                      <KioskScreenOffAction
-                        kioskId={kiosk.id}
-                        kioskIp={hb.ip}
-                      />
-                    </div>
-                  )
-                }
               />
             ))}
           </div>
