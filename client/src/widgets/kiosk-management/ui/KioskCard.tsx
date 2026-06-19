@@ -10,9 +10,9 @@ interface KioskCardProps {
 export function KioskCard({ kiosk, actions }: KioskCardProps) {
   return (
     <div
-      className={`rounded-lg border ${kiosk.isActive ? 'border-(--border)' : 'border-(--border-disabled)'} p-4`}
+      className={`rounded-lg border ${kiosk.isActive ? 'border-(--border)' : 'border-(--border-disabled)'} p-3`}
     >
-      <div className="mb-3 flex items-start justify-between">
+      <div className="mb-2 flex items-start justify-between">
         <h3
           className={`font-semibold text-lg ${kiosk.isActive ? '' : 'text-(--meta-text)'}`}
         >
@@ -22,7 +22,7 @@ export function KioskCard({ kiosk, actions }: KioskCardProps) {
         <div className="flex items-center gap-2">{actions}</div>
       </div>
 
-      <div className="space-y-2 text-(--card-text) text-sm">
+      <div className="text-(--card-text) text-sm">
         <div>
           <strong className="text-(--meta-text)">Slug:</strong> {kiosk.slug}
         </div>

@@ -33,24 +33,30 @@ export function IntegrationCard({
     integration.type;
 
   return (
-    <div className="flex justify-between rounded-lg border border-(--border) bg-(--card-bg) p-3">
+    <div className="flex items-start justify-between rounded-lg border border-(--border) bg-(--card-bg) p-3">
       <div className="min-w-0 flex-1">
-        <div className="font-semibold text-(--text-primary)">{typeLabel}</div>
+        <div className="mb-2 font-semibold">{typeLabel}</div>
 
-        <div className="text-(--text-meta) text-sm">
+        <div className="text-sm">
+          <strong className="text-(--meta-text)">Адрес:</strong>{' '}
           {integration.host}:{integration.port}
         </div>
 
         {integration.description && (
-          <div className="mt-1 text-sm">{integration.description}</div>
+          <div className="text-sm">
+            <strong className="text-(--meta-text)">Описание:</strong>{' '}
+            {integration.description}
+          </div>
         )}
 
-        <div className="mt-2 text-sm">
+        <div className="text-sm">
+          <strong className="text-(--meta-text)">Конфиг:</strong>{' '}
           <IntegrationConfigInfo integration={integration} />
         </div>
 
-        <div className="mt-2 text-xs">
-          {integration.isActive ? 'Активна' : 'Отключена'}
+        <div className="text-sm">
+          <strong className="text-(--meta-text)">Статус:</strong>{' '}
+          {integration.isActive ? 'Активен' : 'Неактивен'}
         </div>
       </div>
 
