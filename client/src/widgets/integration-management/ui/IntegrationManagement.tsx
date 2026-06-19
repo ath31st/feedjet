@@ -13,13 +13,15 @@ export function IntegrationManagement() {
     <div className="flex flex-col gap-6">
       <div className="flex w-full flex-row gap-6">
         <SettingsCard title="Создание интеграции" className="w-full md:w-2/5">
-          <div>
+          <div className="flex flex-col">
             <CommonButton
               onClick={() => setOpenCreateDialog(true)}
               type="button"
-              tooltip="Добавить интеграцию"
             >
-              <Link2Icon />
+              <div className="flex flex-row items-center justify-center gap-2">
+                <Link2Icon />
+                {'Добавить интеграцию'}
+              </div>
             </CommonButton>
           </div>
         </SettingsCard>
