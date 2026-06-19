@@ -1,22 +1,31 @@
-import type { Integration } from '@/entities/integration';
+import type { Integration, UpdateIntegration } from '@/entities/integration';
 import { IntegrationConfigInfo } from './IntegrationConfigInfo';
 import { integrationFull } from '@/entities/integration';
 import {
   KioskScreenOffAction,
   KioskScreenOnAction,
 } from '@/features/kiosk-screen-control';
-import { IconButton } from '@/shared/ui/common';
+import { CommonButton } from '@/shared/ui/common';
 import { Trash2 } from 'lucide-react';
 import { ReloadKioskPageButton } from '@/features/reload-kiosk';
+import { Pencil2Icon } from '@radix-ui/react-icons';
+import { IntegrationUpdateDialog } from '@/features/integration-update';
 
 interface IntegrationCardProps {
   integration: Integration;
-
   onDelete: (id: number) => void;
+
+  editIntegration: Integration | null;
+  setEditIntegration: (i: Integration | null) => void;
+
+  onUpdate: (data: UpdateIntegration) => void;
 }
 
 export function IntegrationCard({
   integration,
+  editIntegration,
+  setEditIntegration,
+  onUpdate,
   onDelete,
 }: IntegrationCardProps) {
   const typeLabel =
@@ -51,11 +60,27 @@ export function IntegrationCard({
 
         <ReloadKioskPageButton kioskId={0} />
 
-        <IconButton
-          onClick={() => onDelete(integration.id)}
-          icon={<Trash2 className="h-4 w-4" />}
-        />
+        <CommonButton
+          onClick={() => setEditIntegration(integration)}
+          type="button"
+          tooltip="Редактировать интеграцию"
+        >
+          <Pencil2Icon />
+        </CommonButton>
+
+        <CommonButton type="button" onClick={() => onDelete(integration.id)}>
+          <Trash2 className="h-4 w-4" />
+        </CommonButton>
       </div>
+
+      {editIntegration?.id === integration.id && (
+        <IntegrationUpdateDialog
+          integration={editIntegration}
+          open={true}
+          onClose={() => setEditIntegration(null)}
+          onUpdate={onUpdate}
+        />
+      )}
     </div>
   );
 }

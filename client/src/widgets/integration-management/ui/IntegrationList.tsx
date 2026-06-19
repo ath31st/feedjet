@@ -3,8 +3,14 @@ import { IntegrationCard } from './IntegrationCard';
 import { useIntegrationWidget } from '../model/useIntegrationWidget';
 
 export function IntegrationList() {
-  const { isLoadingIntegrations, integrations, handleDeleteIntegration } =
-    useIntegrationWidget();
+  const {
+    isLoadingIntegrations,
+    integrations,
+    handleDeleteIntegration,
+    editIntegration,
+    setEditIntegration,
+    handleUpdateIntegration,
+  } = useIntegrationWidget();
 
   if (isLoadingIntegrations) return <LoadingThreeDotsJumping />;
   if (!integrations?.length) return <p>Интеграции отсутствуют</p>;
@@ -16,6 +22,9 @@ export function IntegrationList() {
           key={integration.id}
           integration={integration}
           onDelete={handleDeleteIntegration}
+          editIntegration={editIntegration}
+          setEditIntegration={setEditIntegration}
+          onUpdate={handleUpdateIntegration}
         />
       ))}
     </div>

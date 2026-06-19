@@ -14,6 +14,8 @@ export function useIntegrationWidget() {
   const [editIntegration, setEditIntegration] = useState<Integration | null>(
     null,
   );
+  const [openCreateDialog, setOpenCreateDialog] = useState(false);
+
   const { data: heartbeats = [], isLoading: isLoadingHeartbeats } =
     useGetActiveHeartbeats();
   const { data: integrations = [], isLoading: isLoadingIntegrations } =
@@ -35,6 +37,8 @@ export function useIntegrationWidget() {
   };
 
   return {
+    openCreateDialog,
+    setOpenCreateDialog,
     heartbeats,
     isLoadingHeartbeats,
     integrations,
