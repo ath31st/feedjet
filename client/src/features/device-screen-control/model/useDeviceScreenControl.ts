@@ -1,16 +1,16 @@
 import { useKioskScreenOff, useKioskScreenOn } from '@/entities/kiosk-control';
 
-export const useKioskScreenControl = (kioskId: number, kioskIp: string) => {
+export const useDeviceScreenControl = (ip: string) => {
   const { mutate: screenOn, isPending: isScreenOnPending } = useKioskScreenOn();
   const { mutate: screenOff, isPending: isScreenOffPending } =
     useKioskScreenOff();
 
   const handleScreenOn = () => {
-    screenOn({ kioskId, kioskIp });
+    screenOn({ ip });
   };
 
   const handleScreenOff = () => {
-    screenOff({ kioskId, kioskIp });
+    screenOff({ ip });
   };
 
   return {

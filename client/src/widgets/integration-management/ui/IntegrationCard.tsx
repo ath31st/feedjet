@@ -2,9 +2,9 @@ import type { Integration } from '@/entities/integration';
 import { IntegrationConfigInfo } from './IntegrationConfigInfo';
 import { integrationFull } from '@/entities/integration';
 import {
-  KioskScreenOffAction,
-  KioskScreenOnAction,
-} from '@/features/kiosk-screen-control';
+  DeviceScreenOffAction,
+  DeviceScreenOnAction,
+} from '@/features/device-screen-control';
 import { CommonButton } from '@/shared/ui/common';
 import { Trash2 } from 'lucide-react';
 import { ReloadKioskPageButton } from '@/features/reload-kiosk';
@@ -54,8 +54,8 @@ export function IntegrationCard({
       </div>
 
       <div className="ml-auto flex gap-2">
-        <KioskScreenOnAction kioskId={0} kioskIp={'127.0.0.1'} />
-        <KioskScreenOffAction kioskId={0} kioskIp={'127.0.0.1'} />
+        <DeviceScreenOnAction ip={integration.host} />
+        <DeviceScreenOffAction ip={integration.host} />
 
         <ReloadKioskPageButton kioskId={0} />
 

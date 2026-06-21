@@ -8,7 +8,11 @@ import type {
   PhilipsJointSpaceClient,
   PhilipsTarget,
 } from '../integration/philips.jointspace.client.js';
-import type { Integration } from '@shared/types/integration.js';
+import type {
+  FullyKioskConfig,
+  Integration,
+  PhilipsJointspaceConfig,
+} from '@shared/types/integration.js';
 
 export class KioskControlService {
   private readonly integrationService: IntegrationService;
@@ -29,25 +33,19 @@ export class KioskControlService {
     this.philipsClient = philipsClient;
   }
 
-  async screenOn(kioskId: number, ip: string): Promise<void> {
-    this.logger.debug({ kioskId, ip, fn: 'screenOn' }, 'Requesting Screen ON');
+  async screenOn(ip: string): Promise<void> {
+    this.logger.debug({ ip, fn: 'screenOn' }, 'Requesting Screen ON');
 
-    const integration = this.integrationService.getByKiosk(kioskId);
+    const integration = this.integrationService.getByIp(ip);
 
     switch (integration.type) {
       case 'adb':
         await this.adbClient.screenOn({ ip });
         break;
       case 'fully_kiosk':
-        if (!integration.passwordEnc) {
-          throw new KioskControlError(
-            400,
-            'Fully Kiosk integration requires a password',
-          );
-        }
         await this.fullyKioskClient.screenOn({
           ip,
-          password: decrypt(integration.passwordEnc),
+          password: decrypt((integration.config as FullyKioskConfig).password),
         });
         break;
       case 'philips_jointspace':
@@ -68,25 +66,19 @@ export class KioskControlService {
     }
   }
 
-  async screenOff(kioskId: number, ip: string): Promise<void> {
-    this.logger.debug(
-      { kioskId, ip, fn: 'screenOff' },
-      'Requesting Screen OFF',
-    );
+  async screenOff(ip: string): Promise<void> {
+    this.logger.debug({ ip, fn: 'screenOff' }, 'Requesting Screen OFF');
 
-    const integration = this.integrationService.getByKiosk(kioskId);
+    const integration = this.integrationService.getByIp(ip);
 
     switch (integration.type) {
       case 'adb':
         await this.adbClient.screenOff({ ip });
         break;
       case 'fully_kiosk':
-        if (!integration.passwordEnc) {
-          throw new Error('Fully Kiosk integration requires a password');
-        }
         await this.fullyKioskClient.screenOff({
           ip,
-          password: decrypt(integration.passwordEnc),
+          password: decrypt((integration.config as FullyKioskConfig).password),
         });
         break;
       case 'philips_jointspace':
@@ -107,7 +99,9 @@ export class KioskControlService {
     integration: Integration,
     ip: string,
   ): PhilipsTarget {
-    if (!integration.login || !integration.passwordEnc) {
+    const philipsConfig = integration.config as PhilipsJointspaceConfig;
+
+    if (!philipsConfig.deviceId || !philipsConfig.authKey) {
       throw new KioskControlError(
         400,
         'Philips JointSpace integration is not paired',
@@ -115,8 +109,8 @@ export class KioskControlService {
     }
     return {
       ip,
-      deviceId: integration.login,
-      authKey: decrypt(integration.passwordEnc),
+      deviceId: philipsConfig.deviceId,
+      authKey: decrypt(philipsConfig.authKey),
     };
   }
 }
