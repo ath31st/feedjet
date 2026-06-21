@@ -401,7 +401,7 @@ export const integrationsTable = sqliteTable(
   {
     id: integer('id').primaryKey({ autoIncrement: true }),
     type: text('type').notNull().$type<IntegrationType>(),
-    host: text('host').notNull(),
+    ip: text('ip').notNull(),
     port: integer('port').notNull(),
     description: text('description'),
     config: text('config', { mode: 'json' })
@@ -416,6 +416,6 @@ export const integrationsTable = sqliteTable(
       .default(sql`(unixepoch())`),
   },
   (table) => [
-    uniqueIndex('integration_host_port_unique').on(table.host, table.port),
+    uniqueIndex('integration_host_port_unique').on(table.ip, table.port),
   ],
 );
