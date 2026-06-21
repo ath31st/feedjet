@@ -4,7 +4,7 @@ import {
   kioskService,
   kioskWorkScheduleService,
   kioskHeartbeatService,
-  kioskControlService,
+  deviceControlService,
 } from '../container.js';
 
 const CRON_KIOSK_WORK = '* * * * *';
@@ -78,7 +78,7 @@ export function startKioskWorkCron(): void {
 
           if (isStartTime) {
             await withTimeout(
-              kioskControlService.screenOn(kiosk.id, heartbeat.ip),
+              deviceControlService.screenOn(kiosk.id, heartbeat.ip),
               CONTROL_TIMEOUT_MS,
               'screenOn',
             );
@@ -89,7 +89,7 @@ export function startKioskWorkCron(): void {
             );
           } else if (isEndTime) {
             await withTimeout(
-              kioskControlService.screenOff(kiosk.id, heartbeat.ip),
+              deviceControlService.screenOff(kiosk.id, heartbeat.ip),
               CONTROL_TIMEOUT_MS,
               'screenOff',
             );

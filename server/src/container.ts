@@ -32,7 +32,7 @@ import { ImageStorageService } from './services/image.storage.service.js';
 import { KioskWorkScheduleService } from './services/kiosk.work.schedule.service.js';
 import { FullyKioskClient } from './integration/fully.kiosk.client.js';
 import { IntegrationService } from './services/integration.service.js';
-import { KioskControlService } from './services/kiosk.control.service.js';
+import { DeviceControlService } from './services/device.control.service.js';
 import { BirthdayWidgetTransformService } from './services/birthday.widget.transform.service.js';
 import { LogService } from './services/log.service.js';
 import { AdbClient } from './integration/adb.client.js';
@@ -96,7 +96,7 @@ export const integrationService = new IntegrationService(
   db,
   philipsJointSpaceClient,
 );
-export const kioskControlService = new KioskControlService(
+export const deviceControlService = new DeviceControlService(
   integrationService,
   fullyKioskClient,
   adbClient,

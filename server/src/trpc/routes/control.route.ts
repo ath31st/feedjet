@@ -1,4 +1,4 @@
-import { eventBus, kioskControlService, t } from '../../container.js';
+import { eventBus, deviceControlService, t } from '../../container.js';
 import { protectedProcedure } from '../../middleware/auth.js';
 import type { ControlEvent } from '@shared/types/control.event.js';
 import { kioskIdInputSchema } from '../../validations/schemas/kiosk.schemas.js';
@@ -18,14 +18,14 @@ export const controlRouter = t.router({
   screenOn: protectedProcedure
     .input(deviceControlInputSchema)
     .mutation(async ({ input }) => {
-      await kioskControlService.screenOn(input.ip);
+      await deviceControlService.screenOn(input.ip);
       return true;
     }),
 
   screenOff: protectedProcedure
     .input(deviceControlInputSchema)
     .mutation(async ({ input }) => {
-      await kioskControlService.screenOff(input.ip);
+      await deviceControlService.screenOff(input.ip);
       return true;
     }),
 });

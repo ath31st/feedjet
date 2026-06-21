@@ -14,12 +14,12 @@ import type {
   PhilipsJointspaceConfig,
 } from '@shared/types/integration.js';
 
-export class KioskControlService {
+export class DeviceControlService {
   private readonly integrationService: IntegrationService;
   private readonly fullyKioskClient: FullyKioskClient;
   private readonly adbClient: AdbClient;
   private readonly philipsClient: PhilipsJointSpaceClient;
-  private readonly logger = createServiceLogger('kioskControlService');
+  private readonly logger = createServiceLogger('deviceControlService');
 
   constructor(
     integrationService: IntegrationService,
