@@ -11,7 +11,7 @@ import {
 
 type IntegrationFormData = {
   type: IntegrationType;
-  host: string;
+  ip: string;
   port: number;
   description?: string;
 };
@@ -38,7 +38,7 @@ function getDefaultConfig(type: IntegrationType): IntegrationConfig {
 function createDefaultForm(ip: string | null): IntegrationFormData {
   return {
     type: integrationTypes[0],
-    host: ip ?? '',
+    ip: ip ?? '',
     port: 0,
     description: '',
   };
@@ -95,7 +95,7 @@ export function useCreateIntegrationForm(
     e.preventDefault();
 
     const base = {
-      host: formData.host.trim(),
+      ip: formData.ip.trim(),
       port: formData.port,
       description: formData.description?.trim() || undefined,
     };

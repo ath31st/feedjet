@@ -8,7 +8,7 @@ import type {
 
 type FormData = {
   type: IntegrationType;
-  host: string;
+  ip: string;
   port: number;
   description?: string;
 };
@@ -20,7 +20,7 @@ export function useUpdateIntegrationForm(
 ) {
   const [formData, setFormData] = useState<FormData>({
     type: integration.type,
-    host: integration.host,
+    ip: integration.ip,
     port: integration.port,
     description: integration.description ?? '',
   });
@@ -35,8 +35,8 @@ export function useUpdateIntegrationForm(
       type: integration.type,
     };
 
-    if (formData.host !== integration.host) {
-      payload.host = formData.host.trim();
+    if (formData.ip !== integration.ip) {
+      payload.ip = formData.ip.trim();
     }
 
     if (formData.port !== integration.port) {

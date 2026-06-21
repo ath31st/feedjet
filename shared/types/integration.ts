@@ -10,7 +10,7 @@ export type IntegrationType = (typeof integrationTypes)[number];
 export type Integration = {
   id: number;
   type: IntegrationType;
-  host: string;
+  ip: string;
   port: number;
   description: string | null;
   config: IntegrationConfig;
@@ -18,7 +18,7 @@ export type Integration = {
 };
 
 type Base = {
-  host: string;
+  ip: string;
   port: number;
   description?: string;
 };
@@ -39,7 +39,7 @@ export type NewIntegration =
 
 type BaseUpdate = {
   id: number;
-  host?: string;
+  ip?: string;
   port?: number;
   description?: string;
 };

@@ -1,6 +1,5 @@
 import { z } from 'zod';
 
-const hostSchema = z.string().min(1).max(255);
 const portSchema = z.number().int().min(1).max(65535);
 
 const fullyKioskConfigSchema = z.object({
@@ -20,7 +19,7 @@ const philipsJointspaceConfigSchema = z.object({
 const otherConfigSchema = z.record(z.string(), z.unknown());
 
 const baseIntegrationSchema = z.object({
-  host: hostSchema,
+  ip: z.ipv4(),
   port: portSchema,
   description: z.string().max(500).optional(),
 });
@@ -69,7 +68,7 @@ export const integrationUpdateSchema = z.object({
   data: z
     .object({
       id: z.number().int().positive(),
-      host: hostSchema.optional(),
+      ip: z.ipv4().optional(),
       port: portSchema.optional(),
       description: z.string().max(500).optional(),
       config: z
@@ -83,7 +82,7 @@ export const integrationUpdateSchema = z.object({
     })
     .refine(
       (data) =>
-        data.host !== undefined ||
+        data.ip !== undefined ||
         data.port !== undefined ||
         data.description !== undefined ||
         data.config !== undefined,
@@ -109,5 +108,5 @@ export const integrationIdInputSchema = z.object({
 });
 
 export const integrationIpInputSchema = z.object({
-  ip: hostSchema,
+  ip: z.ipv4(),
 });

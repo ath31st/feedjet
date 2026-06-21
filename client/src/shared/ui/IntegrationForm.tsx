@@ -11,7 +11,7 @@ import { FormField, sharedInputStyles } from './common/FormField';
 
 export type IntegrationFormData = {
   type: IntegrationType;
-  host: string;
+  ip: string;
   port: number;
   description?: string;
 };
@@ -71,12 +71,12 @@ export function IntegrationForm({
         )}
       </FormField>
 
-      <FormField id="host" label="Host">
+      <FormField id="ip" label="ip">
         <input
-          id="host"
+          id="ip"
           className={sharedInputStyles}
-          value={formData.host}
-          onChange={(e) => onChange('host', e.target.value)}
+          value={formData.ip}
+          onChange={(e) => onChange('ip', e.target.value)}
         />
       </FormField>
 

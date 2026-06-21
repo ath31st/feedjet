@@ -47,7 +47,7 @@ export class IntegrationService {
     const integration = this.db
       .select()
       .from(integrationsTable)
-      .where(eq(integrationsTable.host, ip))
+      .where(eq(integrationsTable.ip, ip))
       .get();
 
     if (!integration) {
@@ -75,7 +75,7 @@ export class IntegrationService {
         .insert(integrationsTable)
         .values({
           type: data.type,
-          host: data.host,
+          ip: data.ip,
           port: data.port,
           description: data.description ?? null,
           config,
@@ -106,7 +106,7 @@ export class IntegrationService {
 
     const updateData: Partial<{
       description: string;
-      host: string;
+      ip: string;
       port: number;
       config: IntegrationConfig;
     }> = {};
@@ -115,26 +115,23 @@ export class IntegrationService {
       updateData.description = data.description;
     }
 
-    if (data.host !== undefined || data.port !== undefined) {
-      const host = data.host ?? existing.host;
+    if (data.ip !== undefined || data.port !== undefined) {
+      const ip = data.ip ?? existing.ip;
       const port = data.port ?? existing.port;
 
       const conflict = this.db
         .select()
         .from(integrationsTable)
         .where(
-          and(
-            eq(integrationsTable.host, host),
-            eq(integrationsTable.port, port),
-          ),
+          and(eq(integrationsTable.ip, ip), eq(integrationsTable.port, port)),
         )
         .get();
 
       if (conflict && conflict.id !== existing.id) {
-        throw new IntegrationError(409, 'Host and port already in use');
+        throw new IntegrationError(409, 'Ip and port already in use');
       }
 
-      updateData.host = host;
+      updateData.ip = ip;
       updateData.port = port;
     }
 
@@ -201,7 +198,7 @@ export class IntegrationService {
     const integration = this.db
       .select()
       .from(integrationsTable)
-      .where(eq(integrationsTable.host, ip))
+      .where(eq(integrationsTable.ip, ip))
       .get();
 
     return !!integration;
@@ -291,7 +288,7 @@ export class IntegrationService {
             .values({
               id: integrationId,
               type: 'philips_jointspace',
-              host: ip,
+              ip: ip,
               port: PORT,
               config,
               description: description ?? null,
@@ -333,7 +330,7 @@ export class IntegrationService {
       .where(
         and(
           eq(integrationsTable.type, 'philips_jointspace'),
-          eq(integrationsTable.host, ip),
+          eq(integrationsTable.ip, ip),
         ),
       )
       .get();

@@ -32,7 +32,7 @@ export function IntegrationCard({
 
         <div className="text-sm">
           <strong className="text-(--meta-text)">Адрес:</strong>{' '}
-          {integration.host}:{integration.port}
+          {integration.ip}:{integration.port}
         </div>
 
         {integration.description && (
@@ -54,8 +54,8 @@ export function IntegrationCard({
       </div>
 
       <div className="ml-auto flex gap-2">
-        <DeviceScreenOnAction ip={integration.host} />
-        <DeviceScreenOffAction ip={integration.host} />
+        <DeviceScreenOnAction ip={integration.ip} />
+        <DeviceScreenOffAction ip={integration.ip} />
 
         <ReloadKioskPageButton kioskId={0} />
 
