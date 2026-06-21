@@ -1,17 +1,18 @@
 import { eventBus, deviceControlService, t } from '../../container.js';
 import { protectedProcedure } from '../../middleware/auth.js';
 import type { ControlEvent } from '@shared/types/control.event.js';
-import { kioskIdInputSchema } from '../../validations/schemas/kiosk.schemas.js';
 import { deviceControlInputSchema } from '../../validations/schemas/device.control.schemas.js';
+import { integrationIpInputSchema } from '../../validations/schemas/integration.schemas.js';
 
 export const controlRouter = t.router({
-  reloadKiosks: protectedProcedure
-    .input(kioskIdInputSchema)
+  reloadDevice: protectedProcedure
+    .input(integrationIpInputSchema)
     .mutation(({ input }) => {
       const event: ControlEvent = {
-        type: 'reload-kiosk',
+        command: 'reload-device',
+        targetIp: input.ip,
       };
-      eventBus.emit(`control:${input.kioskId}`, event);
+      eventBus.emit('control', event);
       return true;
     }),
 

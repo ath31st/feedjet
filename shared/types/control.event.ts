@@ -1,3 +1,4 @@
 export interface ControlEvent {
-  type: string;
+  command: string;
+  targetIp: string;
 }

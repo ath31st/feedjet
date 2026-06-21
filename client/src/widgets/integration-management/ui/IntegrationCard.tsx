@@ -7,7 +7,7 @@ import {
 } from '@/features/device-screen-control';
 import { CommonButton } from '@/shared/ui/common';
 import { Trash2 } from 'lucide-react';
-import { ReloadKioskPageButton } from '@/features/reload-kiosk';
+import { ReloadDevicePageButton } from '@/features/reload-device';
 import { Pencil2Icon } from '@radix-ui/react-icons';
 
 interface IntegrationCardProps {
@@ -57,7 +57,7 @@ export function IntegrationCard({
         <DeviceScreenOnAction ip={integration.ip} />
         <DeviceScreenOffAction ip={integration.ip} />
 
-        <ReloadKioskPageButton kioskId={0} />
+        <ReloadDevicePageButton ip={integration.ip} />
 
         <CommonButton
           onClick={() => onEdit(integration)}

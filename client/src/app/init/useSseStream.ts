@@ -33,7 +33,7 @@ export function useSseStream(kioskId: number) {
           case 'control': {
             console.log('SSE: Received CONTROL');
             const msg = payload as ControlEvent;
-            if (msg.type === 'reload-kiosk') {
+            if (msg.command === 'reload-device') {
               window.location.reload();
             }
             break;
