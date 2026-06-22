@@ -33,6 +33,7 @@ export class DeviceService {
           .update(devicesTable)
           .set({
             ip,
+            slug: payload.slug,
             userAgent: payload.userAgent,
             platform: payload.platform,
             lastSeenAt: now,
@@ -49,6 +50,7 @@ export class DeviceService {
         .values({
           deviceId: payload.deviceId,
           ip,
+          slug: payload.slug,
           userAgent: payload.userAgent,
           platform: payload.platform,
           firstSeenAt: now,

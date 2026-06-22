@@ -1,6 +1,7 @@
 export interface Device {
   deviceId: string;
   ip: string;
+  slug: string;
   userAgent: string;
   platform?: string | null;
   firstSeenAt: Date;
@@ -9,6 +10,7 @@ export interface Device {
 
 export type DeviceUpsertPayload = {
   deviceId: string;
+  slug: string;
   userAgent: string;
   platform?: string;
 };

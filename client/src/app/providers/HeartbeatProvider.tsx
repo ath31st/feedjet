@@ -1,4 +1,8 @@
-import { useDeviceStore, useSendHeartbeat } from '@/entities/device';
+import {
+  useDeviceStore,
+  useSendHeartbeat,
+  type DeviceUpsertPayload,
+} from '@/entities/device';
 import { useKioskParams } from '@/features/kiosk-params';
 import { useEffect, useEffectEvent } from 'react';
 
@@ -7,9 +11,9 @@ export function HeartbeatProvider({ children }: { children: React.ReactNode }) {
   const { slug } = useKioskParams();
   const deviceId = useDeviceStore((s) => s.deviceId);
 
-  const payload = {
-    slug,
+  const payload: DeviceUpsertPayload = {
     deviceId,
+    slug,
     userAgent: navigator.userAgent,
     platform: navigator.platform,
   };
