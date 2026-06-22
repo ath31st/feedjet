@@ -1,13 +1,21 @@
-import { useSendHeartbeat } from '@/features/kiosk-heartbeat';
+import { useDeviceStore, useSendHeartbeat } from '@/entities/device';
 import { useKioskParams } from '@/features/kiosk-params';
 import { useEffect, useEffectEvent } from 'react';
 
 export function HeartbeatProvider({ children }: { children: React.ReactNode }) {
-  const mutation = useSendHeartbeat();
+  const { mutate: registerDevice } = useSendHeartbeat();
   const { slug } = useKioskParams();
+  const deviceId = useDeviceStore((s) => s.deviceId);
+
+  const payload = {
+    slug,
+    deviceId,
+    userAgent: navigator.userAgent,
+    platform: navigator.platform,
+  };
 
   const sendHeartbeat = useEffectEvent(() => {
-    mutation.mutate({ slug });
+    registerDevice({ data: payload });
   });
 
   useEffect(() => {
