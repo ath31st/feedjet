@@ -1,24 +1,21 @@
+import { generateUUID } from '@/shared/lib';
 import { create } from 'zustand';
 
 interface DeviceState {
   deviceId: string;
-  initStore: () => void;
 }
 
-const STORAGE_KEY = 'device_id';
+export const useDeviceStore = create<DeviceState>()(() => {
+  const STORAGE_KEY = 'device_id';
 
-export const useDeviceStore = create<DeviceState>()((set) => ({
-  deviceId: '',
+  const existing = localStorage.getItem(STORAGE_KEY);
+  const deviceId = existing ?? generateUUID();
 
-  initStore: () => {
-    const existing = localStorage.getItem(STORAGE_KEY);
+  if (!existing) {
+    localStorage.setItem(STORAGE_KEY, deviceId);
+  }
 
-    const deviceId = existing ?? crypto.randomUUID();
-
-    if (!existing) {
-      localStorage.setItem(STORAGE_KEY, deviceId);
-    }
-
-    set({ deviceId });
-  },
-}));
+  return {
+    deviceId,
+  };
+});
