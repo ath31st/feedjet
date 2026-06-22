@@ -10,29 +10,23 @@ export function IntegrationManagement() {
     useIntegrationWidget();
 
   return (
-    <div className="flex flex-row gap-6">
-      <div className="flex w-full flex-col gap-6 md:w-2/5">
-        <SettingsCard title="Создание интеграции" className="w-full">
-          <div className="flex flex-col">
+    <div className="flex flex-col gap-6">
+      <SettingsCard title="Список интеграций" className="w-full">
+        <div className="flex w-full flex-col gap-6">
+          <div className="flex justify-end text-xs">
             <CommonButton
               onClick={() => setOpenCreateDialog(true)}
               type="button"
             >
               <div className="flex flex-row items-center justify-center gap-2">
-                <Link2Icon />
+                <Link2Icon size={14} />
                 {'Добавить интеграцию'}
               </div>
             </CommonButton>
           </div>
-        </SettingsCard>
 
-        <SettingsCard title="Устройства без интеграции" className="w-full">
-          <div />
-        </SettingsCard>
-      </div>
-
-      <SettingsCard title="Список интеграций" className="w-full md:w-3/5">
-        <IntegrationList />
+          <IntegrationList />
+        </div>
       </SettingsCard>
 
       {openCreateDialog && (

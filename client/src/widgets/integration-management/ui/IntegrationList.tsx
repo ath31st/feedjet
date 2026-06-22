@@ -17,7 +17,7 @@ export function IntegrationList() {
   if (!integrations?.length) return <p>Интеграции отсутствуют</p>;
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
       {integrations.map((integration) => (
         <IntegrationCard
           key={integration.id}
