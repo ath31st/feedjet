@@ -118,7 +118,7 @@ export function AdminPage() {
     },
     {
       value: 'integrations',
-      label: 'Интеграции',
+      label: 'Устройства и интеграции',
       icon: Link2Icon,
       kioskSelector: false,
     },

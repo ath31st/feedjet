@@ -10,9 +10,9 @@ export function IntegrationManagement() {
     useIntegrationWidget();
 
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex w-full flex-row gap-6">
-        <SettingsCard title="Создание интеграции" className="w-full md:w-2/5">
+    <div className="flex flex-row gap-6">
+      <div className="flex w-full flex-col gap-6 md:w-2/5">
+        <SettingsCard title="Создание интеграции" className="w-full">
           <div className="flex flex-col">
             <CommonButton
               onClick={() => setOpenCreateDialog(true)}
@@ -26,14 +26,12 @@ export function IntegrationManagement() {
           </div>
         </SettingsCard>
 
-        <SettingsCard
-          title="Устройства без интеграции"
-          className="w-full md:w-3/5"
-        >
+        <SettingsCard title="Устройства без интеграции" className="w-full">
           <div />
         </SettingsCard>
       </div>
-      <SettingsCard title="Список интеграций" className="w-full">
+
+      <SettingsCard title="Список интеграций" className="w-full md:w-3/5">
         <IntegrationList />
       </SettingsCard>
 

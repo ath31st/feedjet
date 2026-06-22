@@ -53,12 +53,13 @@ export function IntegrationCard({
         </div>
       </div>
 
-      <div className="ml-auto flex gap-2">
+      <div className="mr-4 ml-auto flex gap-2">
         <DeviceScreenOnAction ip={integration.ip} />
         <DeviceScreenOffAction ip={integration.ip} />
-
         <ReloadDevicePageButton ip={integration.ip} />
+      </div>
 
+      <div className="ml-auto flex gap-2">
         <CommonButton
           onClick={() => onEdit(integration)}
           type="button"
@@ -67,7 +68,11 @@ export function IntegrationCard({
           <Pencil2Icon />
         </CommonButton>
 
-        <CommonButton type="button" onClick={() => onDelete(integration.id)}>
+        <CommonButton
+          type="button"
+          onClick={() => onDelete(integration.id)}
+          tooltip="Удалить интеграцию"
+        >
           <Trash2 className="h-4 w-4" />
         </CommonButton>
       </div>
