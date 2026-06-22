@@ -419,3 +419,21 @@ export const integrationsTable = sqliteTable(
     uniqueIndex('integration_host_port_unique').on(table.ip, table.port),
   ],
 );
+
+export const devicesTable = sqliteTable(
+  'devices',
+  {
+    id: integer('id').primaryKey({ autoIncrement: true }),
+    deviceId: text('device_id').notNull().unique(),
+    ip: text('ip').notNull(),
+    userAgent: text('user_agent').notNull(),
+    platform: text('platform'),
+    firstSeenAt: integer('first_seen_at', { mode: 'timestamp' })
+      .notNull()
+      .default(sql`(unixepoch())`),
+    lastSeenAt: integer('last_seen_at', { mode: 'timestamp' })
+      .notNull()
+      .default(sql`(unixepoch())`),
+  },
+  (table) => [uniqueIndex('devices_device_id_unique').on(table.deviceId)],
+);
