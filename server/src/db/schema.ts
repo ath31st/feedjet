@@ -426,6 +426,7 @@ export const devicesTable = sqliteTable(
     id: integer('id').primaryKey({ autoIncrement: true }),
     deviceId: text('device_id').notNull().unique(),
     ip: text('ip').notNull(),
+    slug: text('slug').notNull(),
     userAgent: text('user_agent').notNull(),
     platform: text('platform'),
     firstSeenAt: integer('first_seen_at', { mode: 'timestamp' })
