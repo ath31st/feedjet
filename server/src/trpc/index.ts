@@ -26,6 +26,7 @@ import { logRouter } from './routes/log.route.js';
 import { ZodError } from 'zod';
 import { scenarioRouter } from './routes/scenario.route.js';
 import { mediaFolderRouter } from './routes/media.folder.route.js';
+import { deviceRouter } from './routes/device.route.js';
 
 const logger = createServiceLogger('trpc');
 
@@ -36,6 +37,7 @@ const appRouter = t.router({
   feedConfig: feedConfigRouter,
   auth: authRouter,
   control: controlRouter,
+  device: deviceRouter,
   uiConfig: uiConfigRouter,
   tickerConfig: tickerConfigRouter,
   scheduleEvent: scheduleEventRouter,

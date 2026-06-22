@@ -40,6 +40,7 @@ import { PhilipsJointSpaceClient } from './integration/philips.jointspace.client
 import { TickerConfigService } from './services/ticker.config.service.js';
 import { ScenarioService } from './services/scenario.service.js';
 import { MediaFolderService } from './services/media.folder.service.js';
+import { DeviceService } from './services/device.service.js';
 
 const sqlite = new Database(dbPath);
 sqlite.pragma('foreign_keys = ON');
@@ -96,6 +97,7 @@ export const integrationService = new IntegrationService(
   db,
   philipsJointSpaceClient,
 );
+export const deviceService = new DeviceService(db);
 export const deviceControlService = new DeviceControlService(
   integrationService,
   fullyKioskClient,
