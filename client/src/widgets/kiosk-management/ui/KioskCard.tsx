@@ -1,9 +1,8 @@
-import type { KioskWithHeartbeats } from '@/entities/kiosk';
+import type { Kiosk } from '@/entities/kiosk';
 import type { ReactNode } from 'react';
-import { HeartbeatCard } from './HeartbeatCard';
 
 interface KioskCardProps {
-  kiosk: KioskWithHeartbeats;
+  kiosk: Kiosk;
   actions?: ReactNode;
 }
 
@@ -50,22 +49,6 @@ export function KioskCard({ kiosk, actions }: KioskCardProps) {
           <strong className="text-(--meta-text)">Создан:</strong>{' '}
           {new Date(kiosk.createdAt).toLocaleDateString()}
         </div>
-
-        {kiosk.heartbeats.length > 0 && (
-          <div className="flex flex-col gap-2">
-            <strong className="text-(--meta-text)">
-              Подключенные устройства:
-            </strong>
-
-            {kiosk.heartbeats.map((hb) => (
-              <HeartbeatCard
-                key={hb.ip}
-                ip={hb.ip}
-                lastHeartbeat={hb.lastHeartbeat}
-              />
-            ))}
-          </div>
-        )}
       </div>
     </div>
   );

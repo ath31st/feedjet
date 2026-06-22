@@ -3,7 +3,6 @@ import { createServiceLogger } from '../utils/pino.logger.js';
 import {
   kioskService,
   kioskWorkScheduleService,
-  kioskHeartbeatService,
   deviceControlService,
 } from '../container.js';
 
@@ -46,66 +45,64 @@ export function startKioskWorkCron(): void {
 
     try {
       const activeKiosks = kioskService.getActive();
-      const heartbeats = kioskHeartbeatService.getActiveKiosks();
 
       if (activeKiosks.length === 0) {
         logger.info({ fn: 'startKioskWorkCron' }, 'Skip: No active kiosks');
         return;
       }
 
-      for (const kiosk of activeKiosks) {
-        try {
-          const heartbeat = heartbeats.find((hb) => hb.slug === kiosk.slug);
+      // for (const kiosk of activeKiosks) {
+      //   try {
 
-          if (!heartbeat || !heartbeat.ip) {
-            logger.info(
-              { slug: kiosk.slug, fn: 'startKioskWorkCron' },
-              'Skip: No heartbeat/IP found for active kiosk',
-            );
-            continue;
-          }
+      //     if (!heartbeat || !heartbeat.ip) {
+      //       logger.info(
+      //         { slug: kiosk.slug, fn: 'startKioskWorkCron' },
+      //         'Skip: No heartbeat/IP found for active kiosk',
+      //       );
+      //       continue;
+      //     }
 
-          const { isEndTime, isStartTime, scheduleNotActive } =
-            kioskWorkScheduleService.scheduleStatuses(kiosk.id);
+      //     const { isEndTime, isStartTime, scheduleNotActive } =
+      //       kioskWorkScheduleService.scheduleStatuses(kiosk.id);
 
-          if (scheduleNotActive) {
-            logger.info(
-              { slug: kiosk.slug, fn: 'startKioskWorkCron' },
-              'Skip: Schedule not active for active kiosk',
-            );
-            continue;
-          }
+      //     if (scheduleNotActive) {
+      //       logger.info(
+      //         { slug: kiosk.slug, fn: 'startKioskWorkCron' },
+      //         'Skip: Schedule not active for active kiosk',
+      //       );
+      //       continue;
+      //     }
 
-          if (isStartTime) {
-            await withTimeout(
-              deviceControlService.screenOn(heartbeat.ip),
-              CONTROL_TIMEOUT_MS,
-              'screenOn',
-            );
+      //     if (isStartTime) {
+      //       await withTimeout(
+      //         deviceControlService.screenOn(heartbeat.ip),
+      //         CONTROL_TIMEOUT_MS,
+      //         'screenOn',
+      //       );
 
-            logger.info(
-              { kioskId: kiosk.id, ip: heartbeat.ip },
-              'Screen ON command sent',
-            );
-          } else if (isEndTime) {
-            await withTimeout(
-              deviceControlService.screenOff(heartbeat.ip),
-              CONTROL_TIMEOUT_MS,
-              'screenOff',
-            );
+      //       logger.info(
+      //         { kioskId: kiosk.id, ip: heartbeat.ip },
+      //         'Screen ON command sent',
+      //       );
+      //     } else if (isEndTime) {
+      //       await withTimeout(
+      //         deviceControlService.screenOff(heartbeat.ip),
+      //         CONTROL_TIMEOUT_MS,
+      //         'screenOff',
+      //       );
 
-            logger.info(
-              { kioskId: kiosk.id, ip: heartbeat.ip },
-              'Screen OFF command sent',
-            );
-          }
-        } catch (kioskError) {
-          logger.error(
-            { error: kioskError, kioskId: kiosk.id, fn: 'startKioskWorkCron' },
-            'Failed to process kiosk work schedule',
-          );
-        }
-      }
+      //       logger.info(
+      //         { kioskId: kiosk.id, ip: heartbeat.ip },
+      //         'Screen OFF command sent',
+      //       );
+      //     }
+      //   } catch (kioskError) {
+      //     logger.error(
+      //       { error: kioskError, kioskId: kiosk.id, fn: 'startKioskWorkCron' },
+      //       'Failed to process kiosk work schedule',
+      //     );
+      //   }
+      // }
     } catch (globalError) {
       logger.error(
         { error: globalError, fn: 'startKioskWorkCron' },

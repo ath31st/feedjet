@@ -7,7 +7,6 @@ import {
   type NewIntegration,
   type UpdateIntegration,
 } from '@/entities/integration';
-import { useGetActiveHeartbeats } from '@/features/kiosk-heartbeat';
 import { useState } from 'react';
 
 export function useIntegrationWidget() {
@@ -16,8 +15,6 @@ export function useIntegrationWidget() {
   );
   const [openCreateDialog, setOpenCreateDialog] = useState(false);
 
-  const { data: heartbeats = [], isLoading: isLoadingHeartbeats } =
-    useGetActiveHeartbeats();
   const { data: integrations = [], isLoading: isLoadingIntegrations } =
     useGetAllIntegrations();
   const { mutate: createIntegration } = useCreateIntegration();
@@ -39,8 +36,6 @@ export function useIntegrationWidget() {
   return {
     openCreateDialog,
     setOpenCreateDialog,
-    heartbeats,
-    isLoadingHeartbeats,
     integrations,
     isLoadingIntegrations,
     editIntegration,

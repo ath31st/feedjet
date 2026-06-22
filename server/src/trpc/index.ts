@@ -17,7 +17,6 @@ import { birthdayRouter } from './routes/birthday.route.js';
 import { createServiceLogger } from '../utils/pino.logger.js';
 import { tickerConfigRouter } from './routes/ticker.config.route.js';
 import { birthdayBackgroundRouter } from './routes/birthday.background.route.js';
-import { kioskHeartbeatRouter } from './routes/kiosk.heartbeat.route.js';
 import { imageStorageRouter } from './routes/image.storage.route.js';
 import { kioskWorkScheduleRouter } from './routes/kiosk.work.schedule.route.js';
 import { integrationRouter } from './routes/integration.route.js';
@@ -46,7 +45,6 @@ const appRouter = t.router({
   weather: weatherForecastRouter,
   videoFile: videoStorageRouter,
   kiosk: kioskRouter,
-  kioskHeartbeat: kioskHeartbeatRouter,
   birthday: birthdayRouter,
   birthdayWidgetTransform: birthdayWidgetTransformRouter,
   birthdayBackground: birthdayBackgroundRouter,

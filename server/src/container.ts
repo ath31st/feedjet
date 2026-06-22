@@ -27,7 +27,6 @@ import { KioskService } from './services/kiosk.service.js';
 import { BirthdayService } from './services/birthday.service.js';
 import { BirthdayFileService } from './services/birthday.file.service.js';
 import { BirthdayBackgroundService } from './services/birthday.background.service.js';
-import { KioskHeartbeatService } from './services/kiosk.heartbeat.service.js';
 import { ImageStorageService } from './services/image.storage.service.js';
 import { KioskWorkScheduleService } from './services/kiosk.work.schedule.service.js';
 import { FullyKioskClient } from './integration/fully.kiosk.client.js';
@@ -92,7 +91,6 @@ kioskService.ensureDefaultKiosk();
 videoStorageService.syncWithDisk();
 imageStorageService.syncWithDisk();
 export const kioskWorkScheduleService = new KioskWorkScheduleService(db);
-export const kioskHeartbeatService = new KioskHeartbeatService();
 export const integrationService = new IntegrationService(
   db,
   philipsJointSpaceClient,
