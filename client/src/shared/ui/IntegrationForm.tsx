@@ -29,6 +29,7 @@ interface IntegrationFormProps {
   ) => void;
 
   onConfigChange: (value: Partial<IntegrationConfig>) => void;
+  onTypeChange?: (value: IntegrationType) => void;
 
   onSubmit: (e: React.FormEvent) => void;
   onCancel: () => void;
@@ -42,6 +43,7 @@ export function IntegrationForm({
   onConfigChange,
   onSubmit,
   onCancel,
+  onTypeChange,
 }: IntegrationFormProps) {
   const isCreate = mode === 'create';
 
@@ -52,14 +54,14 @@ export function IntegrationForm({
   return (
     <form onSubmit={onSubmit} className="space-y-3">
       <FormField id="type" label="Тип интеграции" required={isCreate}>
-        {isCreate ? (
+        {isCreate && onTypeChange ? (
           <SimpleDropdownMenu
             value={formData.type}
             options={integrationFull.map((i) => ({
               label: i.label,
               value: i.type,
             }))}
-            onSelect={(value) => onChange('type', value as IntegrationType)}
+            onSelect={(value) => onTypeChange(value as IntegrationType)}
           />
         ) : (
           <input

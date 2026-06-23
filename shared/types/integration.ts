@@ -1,7 +1,19 @@
 export const integrationFull = [
-  { type: 'fully_kiosk', label: 'Fully Kiosk' },
-  { type: 'adb', label: 'ADB' },
-  { type: 'philips_jointspace', label: 'Philips JointSpace' },
+  {
+    type: 'fully_kiosk',
+    label: 'Fully Kiosk',
+    defaultPort: 2323,
+  },
+  {
+    type: 'adb',
+    label: 'ADB',
+    defaultPort: 5555,
+  },
+  {
+    type: 'philips_jointspace',
+    label: 'Philips JointSpace',
+    defaultPort: 1926,
+  },
 ] as const;
 
 export const integrationTypes = integrationFull.map((i) => i.type);

@@ -23,6 +23,7 @@ export function IntegrationCreateDialog({
     handleChange,
     handleCancel,
     handleConfigChange,
+    handleTypeChange,
   } = useCreateIntegrationForm(ip, onCreate, onClose);
 
   return (
@@ -45,6 +46,7 @@ export function IntegrationCreateDialog({
             formData={formData}
             config={config}
             onChange={handleChange}
+            onTypeChange={handleTypeChange}
             onConfigChange={handleConfigChange}
             onSubmit={handleSubmit}
             onCancel={handleCancel}

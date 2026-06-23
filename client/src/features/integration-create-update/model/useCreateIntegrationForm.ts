@@ -7,6 +7,7 @@ import {
   type FullyKioskConfig,
   type AdbConfig,
   type PhilipsJointspaceConfig,
+  integrationFull,
 } from '@/entities/integration';
 
 type IntegrationFormData = {
@@ -14,6 +15,11 @@ type IntegrationFormData = {
   ip: string;
   port: number;
   description?: string;
+};
+
+const getDefaultPort = (type: IntegrationType): number => {
+  const found = integrationFull.find((i) => i.type === type);
+  return found?.defaultPort ?? 0;
 };
 
 function getDefaultConfig(type: IntegrationType): IntegrationConfig {
@@ -36,10 +42,12 @@ function getDefaultConfig(type: IntegrationType): IntegrationConfig {
 }
 
 function createDefaultForm(ip: string | null): IntegrationFormData {
+  const defaultType = integrationTypes[0];
+
   return {
-    type: integrationTypes[0],
+    type: defaultType,
     ip: ip ?? '',
-    port: 0,
+    port: getDefaultPort(defaultType),
     description: '',
   };
 }
@@ -86,6 +94,7 @@ export function useCreateIntegrationForm(
     setFormData((prev) => ({
       ...prev,
       type,
+      port: getDefaultPort(type),
     }));
 
     setConfig(getDefaultConfig(type));
