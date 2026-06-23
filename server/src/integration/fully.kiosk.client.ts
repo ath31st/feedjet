@@ -3,6 +3,7 @@ import { createServiceLogger } from '../utils/pino.logger.js';
 
 export interface FullyKioskTarget {
   ip: string;
+  port: number;
   password: string;
 }
 
@@ -10,14 +11,13 @@ export class FullyKioskClient {
   private readonly http: AxiosInstance;
   private readonly logger = createServiceLogger('fullyKioskClient');
   private readonly prefix = 'http://';
-  private readonly port = 2323;
 
   constructor(http: AxiosInstance) {
     this.http = http;
   }
 
-  private getBaseUrl(ip: string) {
-    return `${this.prefix}${ip}:${this.port}`;
+  private getBaseUrl(ip: string, port: number): string {
+    return `${this.prefix}${ip}:${port}`;
   }
 
   private async cmd(
@@ -26,7 +26,7 @@ export class FullyKioskClient {
     extraParams: Record<string, string | number | boolean> = {},
   ) {
     return this.http.get('/', {
-      baseURL: this.getBaseUrl(target.ip),
+      baseURL: this.getBaseUrl(target.ip, target.port),
       params: {
         cmd: command,
         password: target.password,
@@ -37,23 +37,29 @@ export class FullyKioskClient {
   }
 
   async screenOn(target: FullyKioskTarget) {
-    this.logger.debug({ targetIp: target.ip, fn: 'screenOn' }, 'Screen on');
+    this.logger.debug(
+      { targetIp: target.ip, port: target.port, fn: 'screenOn' },
+      'Screen on (fully kiosk)',
+    );
     return this.cmd(target, 'screenOn');
   }
 
   async screenOff(target: FullyKioskTarget) {
-    this.logger.debug({ targetIp: target.ip, fn: 'screenOff' }, 'Screen off');
+    this.logger.debug(
+      { targetIp: target.ip, port: target.port, fn: 'screenOff' },
+      'Screen off (fully kiosk)',
+    );
     return this.cmd(target, 'screenOff');
   }
 
   async getScreenshot(target: FullyKioskTarget): Promise<Buffer> {
     this.logger.debug(
       { targetIp: target.ip, fn: 'getScreenshot' },
-      'Get screenshot',
+      'Get screenshot (fully kiosk)',
     );
     return this.http
       .get('/', {
-        baseURL: this.getBaseUrl(target.ip),
+        baseURL: this.getBaseUrl(target.ip, target.port),
         params: {
           cmd: 'getScreenshot',
           password: target.password,

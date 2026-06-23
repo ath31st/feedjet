@@ -37,14 +37,16 @@ export class DeviceControlService {
     this.logger.debug({ ip, fn: 'screenOn' }, 'Requesting Screen ON');
 
     const integration = this.integrationService.getByIp(ip);
+    const port = integration.port;
 
     switch (integration.type) {
       case 'adb':
-        await this.adbClient.screenOn({ ip });
+        await this.adbClient.screenOn({ ip, port });
         break;
       case 'fully_kiosk':
         await this.fullyKioskClient.screenOn({
           ip,
+          port,
           password: decrypt((integration.config as FullyKioskConfig).password),
         });
         break;
@@ -70,14 +72,16 @@ export class DeviceControlService {
     this.logger.debug({ ip, fn: 'screenOff' }, 'Requesting Screen OFF');
 
     const integration = this.integrationService.getByIp(ip);
+    const port = integration.port;
 
     switch (integration.type) {
       case 'adb':
-        await this.adbClient.screenOff({ ip });
+        await this.adbClient.screenOff({ ip, port });
         break;
       case 'fully_kiosk':
         await this.fullyKioskClient.screenOff({
           ip,
+          port,
           password: decrypt((integration.config as FullyKioskConfig).password),
         });
         break;
