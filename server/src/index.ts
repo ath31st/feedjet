@@ -14,6 +14,7 @@ import { createServiceLogger } from './utils/pino.logger.js';
 import { unifiedSseHandler } from './sse/unified.sse.handlers.js';
 import { startSseKeepAliveCron } from './cron/sse.keep.alive.cron.js';
 import { startKioskWorkCron } from './cron/kiosk.work.cron.js';
+import { startDeviceCleanupCronJob } from './cron/device.cleanup.cron.js';
 
 const logger = createServiceLogger('main');
 
@@ -42,6 +43,7 @@ startRssCronJob();
 startImageCacheCleanupJob();
 startSseKeepAliveCron();
 startKioskWorkCron();
+startDeviceCleanupCronJob();
 
 app.listen(port, () => {
   logger.info(

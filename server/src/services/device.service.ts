@@ -1,4 +1,4 @@
-import { eq, desc } from 'drizzle-orm';
+import { eq, desc, sql } from 'drizzle-orm';
 import type { DbType } from '../container.js';
 import { devicesTable } from '../db/schema.js';
 import type { Device, DeviceUpsertPayload } from '@shared/types/device.js';
@@ -118,6 +118,51 @@ export class DeviceService {
         'Failed to delete device',
       );
       throw new DeviceError(500, 'Failed to delete device');
+    }
+  }
+
+  deleteOldDevices(daysThreshold: number): number {
+    try {
+      const cutoffDate = new Date();
+      cutoffDate.setDate(cutoffDate.getDate() - daysThreshold);
+
+      const cutoffStr = cutoffDate.toISOString();
+
+      const oldDevices = this.db
+        .select()
+        .from(devicesTable)
+        .where(sql`${devicesTable.lastSeenAt} < ${cutoffStr}`)
+        .all();
+
+      if (oldDevices.length === 0) {
+        this.logger.info(
+          { daysThreshold, fn: 'deleteOldDevices' },
+          'No old devices to delete',
+        );
+        return 0;
+      }
+
+      this.db
+        .delete(devicesTable)
+        .where(sql`${devicesTable.lastSeenAt} < ${cutoffStr}`)
+        .run();
+
+      this.logger.info(
+        {
+          deletedCount: oldDevices.length,
+          daysThreshold,
+          fn: 'deleteOldDevices',
+        },
+        `Deleted ${oldDevices.length} devices older than ${daysThreshold} days`,
+      );
+
+      return oldDevices.length;
+    } catch (err) {
+      this.logger.error(
+        { err, daysThreshold, fn: 'deleteOldDevices' },
+        'Failed to delete old devices',
+      );
+      throw new DeviceError(500, 'Failed to delete old devices');
     }
   }
 
