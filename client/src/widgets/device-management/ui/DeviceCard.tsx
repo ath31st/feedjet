@@ -35,13 +35,13 @@ export function DeviceCard({ device, onDelete }: DeviceCardProps) {
         </div>
 
         <div className="text-sm">
-          <strong className="text-(--meta-text)">Первое подключение:</strong>{' '}
-          {new Date(device.firstSeenAt).toLocaleString()}
+          <strong className="text-(--meta-text)">Последняя активность:</strong>{' '}
+          {new Date(device.lastSeenAt).toLocaleString()}
         </div>
 
         <div className="text-sm">
-          <strong className="text-(--meta-text)">Последнее подключение:</strong>{' '}
-          {new Date(device.lastSeenAt).toLocaleString()}
+          <strong className="text-(--meta-text)">С момента:</strong>{' '}
+          {new Date(device.firstSeenAt).toLocaleString()}
         </div>
       </div>
 

@@ -7,7 +7,6 @@ import {
 } from '@/features/device-screen-control';
 import { CommonButton } from '@/shared/ui/common';
 import { Trash2 } from 'lucide-react';
-import { ReloadDevicePageButton } from '@/features/reload-device';
 import { Pencil2Icon } from '@radix-ui/react-icons';
 
 interface IntegrationCardProps {
@@ -56,7 +55,6 @@ export function IntegrationCard({
       <div className="mr-4 ml-auto flex gap-2">
         <DeviceScreenOnAction ip={integration.ip} />
         <DeviceScreenOffAction ip={integration.ip} />
-        <ReloadDevicePageButton ip={integration.ip} />
       </div>
 
       <div className="ml-auto flex gap-2">
