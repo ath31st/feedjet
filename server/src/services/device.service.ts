@@ -1,7 +1,11 @@
 import { eq, desc, sql } from 'drizzle-orm';
 import type { DbType } from '../container.js';
 import { devicesTable } from '../db/schema.js';
-import type { Device, DeviceUpsertPayload } from '@shared/types/device.js';
+import type {
+  Device,
+  DeviceUpsertPayload,
+  DeviceWithIntegration,
+} from '@shared/types/device.js';
 import { createServiceLogger } from '../utils/pino.logger.js';
 import { DeviceError } from '../errors/device.error.js';
 
@@ -100,6 +104,27 @@ export class DeviceService {
         .all();
     } catch (err) {
       this.logger.error({ err, fn: 'getAll' }, 'Failed to get devices');
+      throw new DeviceError(500, 'Failed to get devices');
+    }
+  }
+
+  getAllWithIntegration(integrationIps: Set<string>): DeviceWithIntegration[] {
+    try {
+      const devices = this.db
+        .select()
+        .from(devicesTable)
+        .orderBy(desc(devicesTable.lastSeenAt))
+        .all();
+
+      return devices.map((device) => ({
+        ...device,
+        hasIntegration: integrationIps.has(device.ip),
+      }));
+    } catch (err) {
+      this.logger.error(
+        { err, fn: 'getAllWithIntegration' },
+        'Failed to get devices',
+      );
       throw new DeviceError(500, 'Failed to get devices');
     }
   }

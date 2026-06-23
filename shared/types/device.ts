@@ -14,3 +14,5 @@ export type DeviceUpsertPayload = {
   userAgent: string;
   platform?: string;
 };
+
+export type DeviceWithIntegration = Device & { hasIntegration: boolean };

@@ -1,4 +1,4 @@
-import { t, deviceService } from '../../container.js';
+import { t, deviceService, integrationService } from '../../container.js';
 import { handleServiceCall } from '../error.handler.js';
 import { protectedProcedure, publicProcedure } from '../../middleware/auth.js';
 import { extractRealIp } from '../../utils/extract.real.ip.js';
@@ -18,7 +18,10 @@ export const deviceRouter = t.router({
     ),
 
   getAllDevices: protectedProcedure.query(() => {
-    return deviceService.getAll();
+    const integrations = integrationService.getAll();
+    const integrationIps = new Set(integrations.map((i) => i.ip));
+
+    return deviceService.getAllWithIntegration(integrationIps);
   }),
 
   delete: protectedProcedure
