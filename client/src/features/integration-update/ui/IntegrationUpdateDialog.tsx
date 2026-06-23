@@ -17,6 +17,7 @@ export function IntegrationUpdateDialog({
   onUpdate,
 }: IntegrationUpdateDialogProps) {
   const {
+    config,
     formData,
     handleSubmit,
     handleChange,
@@ -42,7 +43,7 @@ export function IntegrationUpdateDialog({
           <IntegrationForm
             mode="update"
             integration={integration}
-            config={integration.config}
+            config={config}
             formData={formData}
             onChange={handleChange}
             onConfigChange={handleConfigChange}
