@@ -48,7 +48,7 @@ export function DeviceCard({ device, onDelete }: DeviceCardProps) {
       <div className="mr-4 ml-auto flex gap-2">
         <DeviceScreenOnAction ip={device.ip} />
         <DeviceScreenOffAction ip={device.ip} />
-        <ReloadDevicePageButton ip={device.ip} />
+        <ReloadDevicePageButton deviceId={device.deviceId} />
       </div>
 
       <div className="ml-auto flex gap-2">

@@ -14,6 +14,6 @@ export const deviceUpsertSchema = z.object({
   }),
 });
 
-export const deviceDeleteSchema = z.object({
+export const deviceIdInputSchema = z.object({
   deviceId: deviceIdSchema,
 });

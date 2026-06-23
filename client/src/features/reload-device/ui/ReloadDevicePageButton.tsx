@@ -3,11 +3,13 @@ import { useReloadDevicePageButton } from '../model/useReloadDevice';
 import { ReloadIcon } from '@radix-ui/react-icons';
 
 interface ReloadDevicePageButtonProps {
-  ip: string;
+  deviceId: string;
 }
 
-export function ReloadDevicePageButton({ ip }: ReloadDevicePageButtonProps) {
-  const { handleReload, isPending } = useReloadDevicePageButton(ip);
+export function ReloadDevicePageButton({
+  deviceId,
+}: ReloadDevicePageButtonProps) {
+  const { handleReload, isPending } = useReloadDevicePageButton(deviceId);
 
   return (
     <CommonButton

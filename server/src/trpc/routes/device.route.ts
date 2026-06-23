@@ -3,7 +3,7 @@ import { handleServiceCall } from '../error.handler.js';
 import { protectedProcedure, publicProcedure } from '../../middleware/auth.js';
 import { extractRealIp } from '../../utils/extract.real.ip.js';
 import {
-  deviceDeleteSchema,
+  deviceIdInputSchema,
   deviceUpsertSchema,
 } from '../../validations/schemas/device.schema.js';
 
@@ -21,7 +21,9 @@ export const deviceRouter = t.router({
     return deviceService.getAll();
   }),
 
-  delete: protectedProcedure.input(deviceDeleteSchema).mutation(({ input }) => {
-    return deviceService.delete(input.deviceId);
-  }),
+  delete: protectedProcedure
+    .input(deviceIdInputSchema)
+    .mutation(({ input }) => {
+      return deviceService.delete(input.deviceId);
+    }),
 });

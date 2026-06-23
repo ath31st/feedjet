@@ -2,15 +2,15 @@ import { eventBus, deviceControlService, t } from '../../container.js';
 import { protectedProcedure } from '../../middleware/auth.js';
 import type { ControlEvent } from '@shared/types/control.event.js';
 import { deviceControlInputSchema } from '../../validations/schemas/device.control.schemas.js';
-import { integrationIpInputSchema } from '../../validations/schemas/integration.schemas.js';
+import { deviceIdInputSchema } from '../../validations/schemas/device.schema.js';
 
 export const controlRouter = t.router({
   reloadDevice: protectedProcedure
-    .input(integrationIpInputSchema)
+    .input(deviceIdInputSchema)
     .mutation(({ input }) => {
       const event: ControlEvent = {
         command: 'reload-device',
-        targetIp: input.ip,
+        deviceId: input.deviceId,
       };
       eventBus.emit('control', event);
       return true;

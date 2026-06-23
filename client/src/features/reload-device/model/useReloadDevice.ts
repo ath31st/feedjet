@@ -1,13 +1,13 @@
 import { useMutation } from '@tanstack/react-query';
 import { trpcWithProxy } from '@/shared/api';
 
-export function useReloadDevicePageButton(ip: string) {
+export function useReloadDevicePageButton(deviceId: string) {
   const reload = useMutation(
     trpcWithProxy.control.reloadDevice.mutationOptions(),
   );
 
   const handleReload = () => {
-    reload.mutate({ ip });
+    reload.mutate({ deviceId });
   };
 
   return {
