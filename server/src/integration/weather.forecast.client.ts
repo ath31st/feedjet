@@ -3,6 +3,7 @@ import { weatherForecastMapper } from '../mappers/weather.forecast.mapper.js';
 import type { WeatherForecast } from '@shared/types/weather.forecast.js';
 import { LRUCache } from 'lru-cache';
 import { createServiceLogger } from '../utils/pino.logger.js';
+import { isErrorWithMessage } from '../utils/is.error.with.message.js';
 
 export class WeatherForecastClient {
   private readonly client: OpenWeatherAPI;
@@ -11,6 +12,7 @@ export class WeatherForecastClient {
   private readonly currentCacheTtl = 5 * 60 * 1000;
   private readonly dailyCacheTtl = 30 * 60 * 1000;
   private readonly cacheLimit = 10;
+  private readonly requestTimeoutMs = 3000;
 
   private currentCache = new LRUCache<string, WeatherForecast>({
     max: this.cacheLimit,
@@ -28,8 +30,26 @@ export class WeatherForecastClient {
     this.client.setUnits('metric');
   }
 
-  private getCacheKey(lat: number, lon: number) {
+  private getCacheKey(lat: number, lon: number): string {
     return `${lat}:${lon}`;
+  }
+
+  private async withTimeout<T>(promise: Promise<T>): Promise<T> {
+    let timeoutId: NodeJS.Timeout | undefined;
+
+    const timeoutPromise = new Promise<never>((_, reject) => {
+      timeoutId = setTimeout(() => {
+        reject(new Error('TIMEOUT'));
+      }, this.requestTimeoutMs);
+    });
+
+    try {
+      return await Promise.race([promise, timeoutPromise]);
+    } finally {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    }
   }
 
   async getCurrent(lat: number, lon: number): Promise<WeatherForecast | null> {
@@ -40,10 +60,10 @@ export class WeatherForecastClient {
     }
 
     try {
-      const data = await this.client.getCurrent({ coordinates: { lat, lon } });
+      const apiCall = this.client.getCurrent({ coordinates: { lat, lon } });
+      const data = await this.withTimeout(apiCall);
 
       const mapped = weatherForecastMapper.toWeatherForecast(data);
-
       this.currentCache.set(key, mapped);
 
       this.logger.info(
@@ -51,10 +71,14 @@ export class WeatherForecastClient {
         'Fetched current weather',
       );
       return mapped;
-    } catch (e) {
+    } catch (e: unknown) {
+      const isTimeout = isErrorWithMessage(e) && e.message === 'TIMEOUT';
+
       this.logger.error(
-        { e, lat, lon, fn: 'getCurrent' },
-        'Failed fetch current weather',
+        { e, lat, lon, fn: 'getCurrent', isTimeout },
+        isTimeout
+          ? `Weather request timed out (${this.requestTimeoutMs / 1000}s)`
+          : 'Failed fetch current weather',
       );
       return null;
     }
@@ -68,9 +92,10 @@ export class WeatherForecastClient {
     }
 
     try {
-      const data = await this.client.getForecast(this.limit, {
+      const apiCall = this.client.getForecast(this.limit, {
         coordinates: { lat, lon },
       });
+      const data = await this.withTimeout(apiCall);
 
       const mappedData = data.map((item) =>
         weatherForecastMapper.toWeatherForecast(item),
@@ -83,10 +108,12 @@ export class WeatherForecastClient {
         'Fetched forecast',
       );
       return mappedData;
-    } catch (e) {
+    } catch (e: unknown) {
+      const isTimeout = isErrorWithMessage(e) && e.message === 'TIMEOUT';
+
       this.logger.error(
-        { e, lat, lon, fn: 'getDailyForecast' },
-        'Failed fetch forecast',
+        { e, lat, lon, fn: 'getDailyForecast', isTimeout },
+        isTimeout ? 'Forecast request timed out (5s)' : 'Failed fetch forecast',
       );
       return [];
     }

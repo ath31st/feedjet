@@ -48,6 +48,7 @@ export type DbType = typeof db;
 
 export const http = axios.create({
   timeout: 2000,
+  timeoutErrorMessage: 'Request timeout',
 });
 
 export const fullyKioskClient = new FullyKioskClient(http);
