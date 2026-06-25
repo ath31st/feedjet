@@ -15,6 +15,7 @@ interface FormFieldProps {
 export function FormField({
   id,
   label,
+  error,
   hint,
   required,
   maxLength,
@@ -33,13 +34,16 @@ export function FormField({
 
       {children}
 
-      <div className="mt-1 flex justify-between">
-        {hint && <div className="text-(--meta-text) text-xs">{hint}</div>}
-        {maxLength !== undefined && currentLength !== undefined && (
-          <div className="ml-auto text-(--meta-text) text-xs">
-            {currentLength}/{maxLength} символов
-          </div>
-        )}
+      <div className="mt-1 flex flex-col gap-0.5">
+        <div className="flex justify-between">
+          {hint && <div className="text-(--meta-text) text-xs">{hint}</div>}
+          {maxLength !== undefined && currentLength !== undefined && (
+            <div className="ml-auto text-(--meta-text) text-xs">
+              {currentLength}/{maxLength} символов
+            </div>
+          )}
+        </div>
+        {error && <div className="text-red-500 text-xs">{error}</div>}
       </div>
     </div>
   );

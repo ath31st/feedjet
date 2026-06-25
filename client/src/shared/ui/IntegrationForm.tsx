@@ -8,6 +8,7 @@ import {
 import { CommonButton, SimpleDropdownMenu } from '@/shared/ui/common';
 import { CheckIcon, ResetIcon } from '@radix-ui/react-icons';
 import { FormField, sharedInputStyles } from './common/FormField';
+import { useState } from 'react';
 
 export type IntegrationFormData = {
   type: IntegrationType;
@@ -46,13 +47,62 @@ export function IntegrationForm({
   onTypeChange,
 }: IntegrationFormProps) {
   const isCreate = mode === 'create';
+  const [passwordConfirm, setPasswordConfirm] = useState('');
+  const [passwordError, setPasswordError] = useState('');
 
   const typeLabel =
     integrationFull.find((i) => i.type === formData.type)?.label ??
     formData.type;
 
+  const handlePasswordChange = (value: string) => {
+    onConfigChange({ password: value });
+    if (passwordConfirm && value !== passwordConfirm) {
+      setPasswordError('Пароли не совпадают');
+    } else if (passwordConfirm && value === passwordConfirm) {
+      setPasswordError('');
+    }
+  };
+
+  const handlePasswordConfirmChange = (value: string) => {
+    setPasswordConfirm(value);
+    const password = (config as FullyKioskConfig).password;
+
+    if (password && value.length >= password.length) {
+      if (value !== password) {
+        setPasswordError('Пароли не совпадают');
+      } else {
+        setPasswordError('');
+      }
+    } else {
+      setPasswordError('');
+    }
+  };
+
+  const handlePasswordConfirmBlur = () => {
+    const password = (config as FullyKioskConfig).password;
+    if (password && passwordConfirm !== password) {
+      setPasswordError('Пароли не совпадают');
+    } else {
+      setPasswordError('');
+    }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (formData.type === 'fully_kiosk') {
+      const password = (config as FullyKioskConfig).password;
+      if (password !== passwordConfirm) {
+        setPasswordError('Пароли не совпадают');
+        return;
+      }
+    }
+
+    onSubmit(e);
+  };
+
   return (
-    <form onSubmit={onSubmit} className="space-y-3">
+    <form onSubmit={handleSubmit} className="space-y-3">
       <FormField id="type" label="Тип интеграции" required={isCreate}>
         {isCreate && onTypeChange ? (
           <SimpleDropdownMenu
@@ -73,7 +123,7 @@ export function IntegrationForm({
         )}
       </FormField>
 
-      <FormField id="ip" label="ip">
+      <FormField id="ip" label="IP адрес">
         <input
           id="ip"
           className={sharedInputStyles}
@@ -82,7 +132,7 @@ export function IntegrationForm({
         />
       </FormField>
 
-      <FormField id="port" label="Port">
+      <FormField id="port" label="Порт">
         <input
           id="port"
           type="number"
@@ -94,7 +144,7 @@ export function IntegrationForm({
 
       {formData.type === 'fully_kiosk' && (
         <>
-          <FormField id="login" label="Login">
+          <FormField id="login" label="Логин">
             <input
               className={sharedInputStyles}
               value={(config as FullyKioskConfig).login}
@@ -102,12 +152,26 @@ export function IntegrationForm({
             />
           </FormField>
 
-          <FormField id="password" label="Password">
+          <FormField id="password" label="Пароль">
             <input
               type="password"
               className={sharedInputStyles}
               value={(config as FullyKioskConfig).password}
-              onChange={(e) => onConfigChange({ password: e.target.value })}
+              onChange={(e) => handlePasswordChange(e.target.value)}
+            />
+          </FormField>
+
+          <FormField
+            id="password-confirm"
+            label="Подтверждение пароля"
+            error={passwordError}
+          >
+            <input
+              type="password"
+              className={sharedInputStyles}
+              value={passwordConfirm}
+              onChange={(e) => handlePasswordConfirmChange(e.target.value)}
+              onBlur={handlePasswordConfirmBlur}
             />
           </FormField>
         </>
