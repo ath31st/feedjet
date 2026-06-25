@@ -9,16 +9,12 @@ const fullyKioskConfigSchema = z.object({
   password: z.string().min(1).max(255),
 });
 
-const adbConfigSchema = z.object({
-  port: z.number().int().min(1).max(65535).optional(),
-});
+const adbConfigSchema = z.object({}).strict();
 
 const philipsJointspaceConfigSchema = z.object({
   deviceId: z.string().min(1),
   authKey: z.string().min(1),
 });
-
-const otherConfigSchema = z.record(z.string(), z.unknown());
 
 const baseIntegrationSchema = z.object({
   ip: ipSchema,
@@ -45,12 +41,6 @@ const integrationDataSchema = z
       ...baseIntegrationSchema.shape,
       config: philipsJointspaceConfigSchema,
     }),
-
-    z.object({
-      type: z.literal('other'),
-      ...baseIntegrationSchema.shape,
-      config: otherConfigSchema,
-    }),
   ])
   .superRefine((data, ctx) => {
     if (data.type === 'philips_jointspace') {
@@ -73,14 +63,7 @@ export const integrationUpdateSchema = z.object({
       ip: ipSchema.optional(),
       port: portSchema.optional(),
       description: z.string().max(500).optional(),
-      config: z
-        .union([
-          fullyKioskConfigSchema,
-          adbConfigSchema,
-          philipsJointspaceConfigSchema,
-          otherConfigSchema,
-        ])
-        .optional(),
+      config: z.unknown().optional(),
     })
     .refine(
       (data) =>

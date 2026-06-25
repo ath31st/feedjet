@@ -49,26 +49,13 @@ export type NewIntegration =
       config: PhilipsJointspaceConfig;
     } & Base);
 
-type BaseUpdate = {
+export type UpdateIntegration = {
   id: number;
   ip?: string;
   port?: number;
   description?: string;
+  config?: unknown;
 };
-
-export type UpdateIntegration =
-  | ({
-      type: 'fully_kiosk';
-      config?: FullyKioskConfig;
-    } & BaseUpdate)
-  | ({
-      type: 'adb';
-      config?: AdbConfig;
-    } & BaseUpdate)
-  | ({
-      type: 'philips_jointspace';
-      config?: PhilipsJointspaceConfig;
-    } & BaseUpdate);
 
 export type FullyKioskConfig = {
   login: string;

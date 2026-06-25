@@ -136,22 +136,29 @@ export class IntegrationService {
     }
 
     if (data.config !== undefined) {
-      const mergedConfig = {
-        ...existing.config,
-        ...data.config,
-      };
+      switch (existing.type) {
+        case 'fully_kiosk': {
+          const cfg = data.config as Partial<FullyKioskConfig>;
 
-      if (existing.type === 'fully_kiosk') {
-        const cfg = mergedConfig as FullyKioskConfig;
+          const merged = {
+            ...existing.config,
+            ...cfg,
+          } as FullyKioskConfig;
 
-        updateData.config = {
-          ...cfg,
-          ...(cfg.password && {
-            password: encrypt(cfg.password),
-          }),
-        };
-      } else {
-        updateData.config = mergedConfig;
+          updateData.config = {
+            ...merged,
+            ...(merged.password && {
+              password: encrypt(merged.password),
+            }),
+          };
+
+          break;
+        }
+
+        case 'adb': {
+          updateData.config = existing.config;
+          break;
+        }
       }
     }
 
