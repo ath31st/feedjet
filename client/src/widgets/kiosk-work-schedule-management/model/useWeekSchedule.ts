@@ -1,4 +1,4 @@
-import { useExistsIntegration } from '@/entities/integration';
+import { useExistsByKioksId } from '@/entities/integration';
 import {
   useGetKioskWorkSchedules,
   useUpsertDayKioskWorkSchedule,
@@ -11,7 +11,7 @@ export function useWeekSchedule(kioskId: number) {
   const { data: schedulesData, isLoading } = useGetKioskWorkSchedules(kioskId);
   const upsertDay = useUpsertDayKioskWorkSchedule();
   const { data: existingIntegration, isLoading: isLoadingIntegration } =
-    useExistsIntegration(kioskId);
+    useExistsByKioksId(kioskId);
 
   const [schedules, setSchedules] = useState<DaySchedule[]>([]);
 

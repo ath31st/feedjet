@@ -55,14 +55,14 @@ export const useGetAllIntegrations = () => {
   return useQuery(trpcWithProxy.integration.getAll.queryOptions());
 };
 
-export const useExistsIntegration = (integrationId: number) => {
+export const useExistsByKioksId = (kioskId: number) => {
   return useQuery(
-    trpcWithProxy.integration.exists.queryOptions({ integrationId }),
+    trpcWithProxy.integration.existsByKioskId.queryOptions({ kioskId }),
   );
 };
 
-export const useExistByIpIntegration = (ip: string) => {
-  return useQuery(trpcWithProxy.integration.existByIp.queryOptions({ ip }));
+export const useExistsByIpIntegration = (ip: string) => {
+  return useQuery(trpcWithProxy.integration.existsByIp.queryOptions({ ip }));
 };
 
 export const usePairPhilipsStart = () => {

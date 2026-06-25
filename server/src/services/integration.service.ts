@@ -8,7 +8,7 @@ import type {
 import type { DbType } from '../container.js';
 import { encrypt } from '../utils/crypto.js';
 import { createServiceLogger } from '../utils/pino.logger.js';
-import { integrationsTable } from '../db/schema.js';
+import { devicesTable, integrationsTable, kiosksTable } from '../db/schema.js';
 import { eq, and } from 'drizzle-orm';
 import { IntegrationError } from '../errors/integration.error.js';
 import { PhilipsPairError } from '../errors/philips.pair.error.js';
@@ -194,7 +194,19 @@ export class IntegrationService {
     return !!integration;
   }
 
-  existByIp(ip: string): boolean {
+  existsByKioskId(kioskId: number): boolean {
+    const integrations = this.db
+      .select()
+      .from(integrationsTable)
+      .innerJoin(devicesTable, eq(integrationsTable.ip, devicesTable.ip))
+      .innerJoin(kiosksTable, eq(devicesTable.slug, kiosksTable.slug))
+      .where(eq(kiosksTable.id, kioskId))
+      .all();
+
+    return integrations.length > 0;
+  }
+
+  existsByIp(ip: string): boolean {
     const integration = this.db
       .select()
       .from(integrationsTable)

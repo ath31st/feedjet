@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { kioskIdSchema } from './kiosk.schemas.js';
 
 const ipSchema = z.ipv4();
 const portSchema = z.number().int().min(1).max(65535);
@@ -110,4 +111,8 @@ export const integrationIdInputSchema = z.object({
 
 export const integrationIpInputSchema = z.object({
   ip: ipSchema,
+});
+
+export const kioskIdInputSchema = z.object({
+  kioskId: kioskIdSchema,
 });

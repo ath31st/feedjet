@@ -8,6 +8,7 @@ import {
   integrationPairCompleteSchema,
   integrationPairStartSchema,
   integrationUpdateSchema,
+  kioskIdInputSchema,
 } from '../../validations/schemas/integration.schemas.js';
 
 export const integrationRouter = t.router({
@@ -51,19 +52,19 @@ export const integrationRouter = t.router({
       }),
     ),
 
-  exists: protectedProcedure
-    .input(integrationIdInputSchema)
+  existsByKioskId: protectedProcedure
+    .input(kioskIdInputSchema)
     .query(({ input }) => {
       return handleServiceCall(() => {
-        return integrationService.exists(input.integrationId);
+        return integrationService.existsByKioskId(input.kioskId);
       });
     }),
 
-  existByIp: protectedProcedure
+  existsByIp: protectedProcedure
     .input(integrationIpInputSchema)
     .query(({ input }) => {
       return handleServiceCall(() => {
-        return integrationService.existByIp(input.ip);
+        return integrationService.existsByIp(input.ip);
       });
     }),
 
