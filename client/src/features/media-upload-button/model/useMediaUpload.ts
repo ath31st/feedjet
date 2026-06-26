@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
-import { queryClient, trpcWithProxy } from '@/shared/api';
 import { toast } from 'sonner';
+import { useUploadImage } from '@/entities/image';
+import { useUploadVideo } from '@/entities/video';
 
 interface UploadingFile {
   name: string;
@@ -18,28 +18,8 @@ interface UseMediaUploadParams {
 
 export function useMediaUpload({ folderId }: UseMediaUploadParams) {
   const [uploading, setUploading] = useState<UploadingFile[]>([]);
-
-  const invalidateMedia = () => {
-    queryClient.invalidateQueries({
-      queryKey: trpcWithProxy.mediaFolder.listMedia.queryKey(),
-    });
-
-    queryClient.invalidateQueries({
-      queryKey: trpcWithProxy.mediaFolder.stats.queryKey(),
-    });
-  };
-
-  const uploadImageMut = useMutation(
-    trpcWithProxy.image.uploadFile.mutationOptions({
-      onSuccess: invalidateMedia,
-    }),
-  );
-
-  const uploadVideoMut = useMutation(
-    trpcWithProxy.videoFile.uploadFile.mutationOptions({
-      onSuccess: invalidateMedia,
-    }),
-  );
+  const uploadImage = useUploadImage();
+  const uploadVideo = useUploadVideo();
 
   const handleUploadFiles = useCallback(
     async (files: FileList | File[]) => {
@@ -88,9 +68,9 @@ export function useMediaUpload({ folderId }: UseMediaUploadParams) {
 
         try {
           if (isImage) {
-            await uploadImageMut.mutateAsync(fd as unknown as FormData);
+            await uploadImage.mutateAsync(fd as unknown as FormData);
           } else {
-            await uploadVideoMut.mutateAsync(fd as unknown as FormData);
+            await uploadVideo.mutateAsync(fd as unknown as FormData);
           }
 
           clearInterval(interval);
@@ -116,7 +96,7 @@ export function useMediaUpload({ folderId }: UseMediaUploadParams) {
         }
       }
     },
-    [folderId, uploadImageMut, uploadVideoMut],
+    [folderId, uploadImage, uploadVideo],
   );
 
   return {

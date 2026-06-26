@@ -2,44 +2,22 @@ import { useQuery, useMutation } from '@tanstack/react-query';
 import { trpcWithProxy, queryClient } from '@/shared/api';
 import { toast } from 'sonner';
 
-export const useVideoMetadataList = (kioskId: number) => {
-  return useQuery(trpcWithProxy.videoFile.listFiles.queryOptions({ kioskId }));
-};
-
-export const useActiveVideoList = (kioskId: number) => {
-  return useQuery(
-    trpcWithProxy.videoFile.listActiveVideos.queryOptions({ kioskId }),
-  );
-};
-
-export const useAllVideoList = () => {
-  return useQuery(trpcWithProxy.videoFile.listAllFiles.queryOptions());
-};
-
 export const useDiskUsage = () => {
   return useQuery(trpcWithProxy.videoFile.getDiskUsage.queryOptions());
 };
 
-export const useRemoveVideoFile = () => {
-  return useMutation(
-    trpcWithProxy.videoFile.deleteFile.mutationOptions({
-      onSuccess: () => {
-        toast.success('Файл успешно удален');
-        queryClient.invalidateQueries({
-          queryKey: trpcWithProxy.videoFile.listFiles.queryKey(),
-        });
-        queryClient.invalidateQueries({
-          queryKey: trpcWithProxy.videoFile.getDiskUsage.queryKey(),
-        });
-      },
-      onError: (err: unknown) => {
-        if (err instanceof Error) {
-          toast.error(err.message || 'Ошибка при удалении файла');
-          return;
-        }
-      },
-    }),
-  );
+const invalidateMedia = () => {
+  queryClient.invalidateQueries({
+    queryKey: trpcWithProxy.mediaFolder.listMedia.queryKey(),
+  });
+
+  queryClient.invalidateQueries({
+    queryKey: trpcWithProxy.mediaFolder.stats.queryKey(),
+  });
+
+  queryClient.invalidateQueries({
+    queryKey: trpcWithProxy.videoFile.getDiskUsage.queryKey(),
+  });
 };
 
 export const useDeleteVideoGlobal = () => {
@@ -47,12 +25,7 @@ export const useDeleteVideoGlobal = () => {
     trpcWithProxy.videoFile.deleteFileGlobal.mutationOptions({
       onSuccess: () => {
         toast.success('Файл успешно удален');
-        queryClient.invalidateQueries({
-          queryKey: trpcWithProxy.mediaFolder.listMedia.queryKey(),
-        });
-        queryClient.invalidateQueries({
-          queryKey: trpcWithProxy.videoFile.getDiskUsage.queryKey(),
-        });
+        invalidateMedia();
       },
       onError: (err: unknown) => {
         if (err instanceof Error) {
@@ -71,12 +44,7 @@ export const useUploadVideo = () => {
         toast.success(`Файл ${data.filename} успешно загружен`, {
           id: ctx?.toastId,
         });
-        queryClient.invalidateQueries({
-          queryKey: trpcWithProxy.videoFile.listFiles.queryKey(),
-        });
-        queryClient.invalidateQueries({
-          queryKey: trpcWithProxy.videoFile.getDiskUsage.queryKey(),
-        });
+        invalidateMedia();
       },
       onError: (err: unknown, _variables, ctx) => {
         if (ctx?.toastId)
@@ -86,51 +54,6 @@ export const useUploadVideo = () => {
       },
       onMutate: (data: FormData) => {
         return { toastId: toast.loading(`Загрузка ${data.get('filename')}…`) };
-      },
-    }),
-  );
-};
-
-export const useUpdateVideoOrder = () => {
-  return useMutation(
-    trpcWithProxy.videoFile.updateVideoOrder.mutationOptions({
-      onSuccess: () => {
-        toast.success('Порядок успешно обновлен');
-        queryClient.invalidateQueries({
-          queryKey: trpcWithProxy.videoFile.listFiles.queryKey(),
-        });
-      },
-      onError: (err: unknown) => {
-        if (err instanceof Error) {
-          toast.error(err.message || 'Ошибка при обновлении порядка');
-          return;
-        }
-      },
-    }),
-  );
-};
-
-export const useUpdateIsActive = () => {
-  return useMutation(
-    trpcWithProxy.videoFile.updateIsActive.mutationOptions({
-      onSuccess: (data) => {
-        toast.success(
-          `Файл ${data ? 'добавлен в список проигрывания' : 'удален из списка проигрывания'}`,
-        );
-        queryClient.invalidateQueries({
-          queryKey: trpcWithProxy.videoFile.listFiles.queryKey(),
-        });
-      },
-      onError: (err: unknown) => {
-        queryClient.invalidateQueries({
-          queryKey: trpcWithProxy.videoFile.listFiles.queryKey(),
-        });
-        if (err instanceof Error) {
-          toast.error(
-            err.message || 'Ошибка при обновлении списка проигрывания',
-          );
-          return;
-        }
       },
     }),
   );

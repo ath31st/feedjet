@@ -1,45 +1,19 @@
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { trpcWithProxy, queryClient } from '@/shared/api';
 import { toast } from 'sonner';
 
-export const useImageMetadataList = (kioskId: number) => {
-  return useQuery(trpcWithProxy.image.listFiles.queryOptions({ kioskId }));
-};
+const invalidateMedia = () => {
+  queryClient.invalidateQueries({
+    queryKey: trpcWithProxy.mediaFolder.listMedia.queryKey(),
+  });
 
-export const useActiveImageList = (kioskId: number) => {
-  return useQuery(
-    trpcWithProxy.image.listActiveImages.queryOptions({ kioskId }),
-  );
-};
+  queryClient.invalidateQueries({
+    queryKey: trpcWithProxy.mediaFolder.stats.queryKey(),
+  });
 
-export const useAllImageList = () => {
-  return useQuery(trpcWithProxy.image.listAllFiles.queryOptions());
-};
-
-export const useDiskUsage = () => {
-  return useQuery(trpcWithProxy.image.getDiskUsage.queryOptions());
-};
-
-export const useRemoveImageFile = () => {
-  return useMutation(
-    trpcWithProxy.image.deleteFile.mutationOptions({
-      onSuccess: () => {
-        toast.success('Файл успешно удален');
-        queryClient.invalidateQueries({
-          queryKey: trpcWithProxy.image.listFiles.queryKey(),
-        });
-        queryClient.invalidateQueries({
-          queryKey: trpcWithProxy.image.getDiskUsage.queryKey(),
-        });
-      },
-      onError: (err: unknown) => {
-        if (err instanceof Error) {
-          toast.error(err.message || 'Ошибка при удалении файла');
-          return;
-        }
-      },
-    }),
-  );
+  queryClient.invalidateQueries({
+    queryKey: trpcWithProxy.videoFile.getDiskUsage.queryKey(),
+  });
 };
 
 export const useDeleteImageGlobal = () => {
@@ -47,12 +21,7 @@ export const useDeleteImageGlobal = () => {
     trpcWithProxy.image.deleteFileGlobal.mutationOptions({
       onSuccess: () => {
         toast.success('Файл успешно удален');
-        queryClient.invalidateQueries({
-          queryKey: trpcWithProxy.mediaFolder.listMedia.queryKey(),
-        });
-        queryClient.invalidateQueries({
-          queryKey: trpcWithProxy.image.getDiskUsage.queryKey(),
-        });
+        invalidateMedia();
       },
       onError: (err: unknown) => {
         if (err instanceof Error) {
@@ -71,12 +40,7 @@ export const useUploadImage = () => {
         toast.success(`Файл ${data.filename} успешно загружен`, {
           id: ctx?.toastId,
         });
-        queryClient.invalidateQueries({
-          queryKey: trpcWithProxy.image.listFiles.queryKey(),
-        });
-        queryClient.invalidateQueries({
-          queryKey: trpcWithProxy.image.getDiskUsage.queryKey(),
-        });
+        invalidateMedia();
       },
       onError: (err: unknown, _variables, ctx) => {
         if (ctx?.toastId)
@@ -86,75 +50,6 @@ export const useUploadImage = () => {
       },
       onMutate: (data: FormData) => {
         return { toastId: toast.loading(`Загрузка ${data.get('filename')}…`) };
-      },
-    }),
-  );
-};
-
-export const useUpdateImageOrder = () => {
-  return useMutation(
-    trpcWithProxy.image.updateImageOrder.mutationOptions({
-      onSuccess: () => {
-        toast.success('Порядок успешно обновлен');
-        queryClient.invalidateQueries({
-          queryKey: trpcWithProxy.image.listFiles.queryKey(),
-        });
-      },
-      onError: (err: unknown) => {
-        if (err instanceof Error) {
-          toast.error(err.message || 'Ошибка при обновлении порядка');
-          return;
-        }
-      },
-    }),
-  );
-};
-
-export const useUpdateKioskImage = () => {
-  return useMutation(
-    trpcWithProxy.image.updateKioskImage.mutationOptions({
-      onSuccess: (data) => {
-        toast.success(
-          `Файл ${data ? 'добавлен в список отображения' : 'удален из списка отображения'}`,
-        );
-        queryClient.invalidateQueries({
-          queryKey: trpcWithProxy.image.listFiles.queryKey(),
-        });
-      },
-      onError: (err: unknown) => {
-        queryClient.invalidateQueries({
-          queryKey: trpcWithProxy.image.listFiles.queryKey(),
-        });
-        if (err instanceof Error) {
-          toast.error(
-            err.message || 'Ошибка при обновлении списка отображения',
-          );
-          return;
-        }
-      },
-    }),
-  );
-};
-
-export const useUpdateImageDurations = () => {
-  return useMutation(
-    trpcWithProxy.image.updateImageDurations.mutationOptions({
-      onSuccess: () => {
-        toast.success(`Продолжительность показа успешно изменена`);
-        queryClient.invalidateQueries({
-          queryKey: trpcWithProxy.image.listFiles.queryKey(),
-        });
-      },
-      onError: (err: unknown) => {
-        queryClient.invalidateQueries({
-          queryKey: trpcWithProxy.image.listFiles.queryKey(),
-        });
-        if (err instanceof Error) {
-          toast.error(
-            err.message || 'Ошибка при обновлении продолжительности показа',
-          );
-          return;
-        }
       },
     }),
   );
