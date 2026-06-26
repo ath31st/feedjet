@@ -4,6 +4,7 @@ import {
   kioskService,
   kioskWorkScheduleService,
   deviceControlService,
+  integrationService,
 } from '../container.js';
 
 const CRON_KIOSK_WORK = '* * * * *';
@@ -51,58 +52,75 @@ export function startKioskWorkCron(): void {
         return;
       }
 
-      // for (const kiosk of activeKiosks) {
-      //   try {
+      for (const kiosk of activeKiosks) {
+        try {
+          const { isEndTime, isStartTime, scheduleNotActive } =
+            kioskWorkScheduleService.scheduleStatuses(kiosk.id);
 
-      //     if (!heartbeat || !heartbeat.ip) {
-      //       logger.info(
-      //         { slug: kiosk.slug, fn: 'startKioskWorkCron' },
-      //         'Skip: No heartbeat/IP found for active kiosk',
-      //       );
-      //       continue;
-      //     }
+          if (scheduleNotActive) {
+            logger.info(
+              { slug: kiosk.slug, fn: 'startKioskWorkCron' },
+              'Skip: Schedule not active for active kiosk',
+            );
+            continue;
+          }
 
-      //     const { isEndTime, isStartTime, scheduleNotActive } =
-      //       kioskWorkScheduleService.scheduleStatuses(kiosk.id);
+          const ips = integrationService.getIpsByKioskId(kiosk.id);
 
-      //     if (scheduleNotActive) {
-      //       logger.info(
-      //         { slug: kiosk.slug, fn: 'startKioskWorkCron' },
-      //         'Skip: Schedule not active for active kiosk',
-      //       );
-      //       continue;
-      //     }
+          if (ips.length === 0) {
+            logger.info(
+              { slug: kiosk.slug, kioskId: kiosk.id, fn: 'startKioskWorkCron' },
+              'Skip: No integration IPs found for active kiosk',
+            );
+            continue;
+          }
 
-      //     if (isStartTime) {
-      //       await withTimeout(
-      //         deviceControlService.screenOn(heartbeat.ip),
-      //         CONTROL_TIMEOUT_MS,
-      //         'screenOn',
-      //       );
-
-      //       logger.info(
-      //         { kioskId: kiosk.id, ip: heartbeat.ip },
-      //         'Screen ON command sent',
-      //       );
-      //     } else if (isEndTime) {
-      //       await withTimeout(
-      //         deviceControlService.screenOff(heartbeat.ip),
-      //         CONTROL_TIMEOUT_MS,
-      //         'screenOff',
-      //       );
-
-      //       logger.info(
-      //         { kioskId: kiosk.id, ip: heartbeat.ip },
-      //         'Screen OFF command sent',
-      //       );
-      //     }
-      //   } catch (kioskError) {
-      //     logger.error(
-      //       { error: kioskError, kioskId: kiosk.id, fn: 'startKioskWorkCron' },
-      //       'Failed to process kiosk work schedule',
-      //     );
-      //   }
-      // }
+          if (isStartTime || isEndTime) {
+            for (const ip of ips) {
+              (async () => {
+                try {
+                  if (isStartTime) {
+                    await withTimeout(
+                      deviceControlService.screenOn(ip),
+                      CONTROL_TIMEOUT_MS,
+                      'screenOn',
+                    );
+                    logger.info(
+                      { kioskId: kiosk.id, ip },
+                      'Screen ON command sent successfully',
+                    );
+                  } else if (isEndTime) {
+                    await withTimeout(
+                      deviceControlService.screenOff(ip),
+                      CONTROL_TIMEOUT_MS,
+                      'screenOff',
+                    );
+                    logger.info(
+                      { kioskId: kiosk.id, ip },
+                      'Screen OFF command sent successfully',
+                    );
+                  }
+                } catch (ipError) {
+                  logger.error(
+                    {
+                      error: ipError,
+                      kioskId: kiosk.id,
+                      ip,
+                      fn: 'startKioskWorkCron',
+                    },
+                    'Failed to send command to specific IP (background)',
+                  );
+                }
+              })();
+            }
+          }
+        } catch (kioskError) {
+          logger.error(
+            { error: kioskError, kioskId: kiosk.id, fn: 'startKioskWorkCron' },
+            'Failed to process kiosk work schedule',
+          );
+        }
+      }
     } catch (globalError) {
       logger.error(
         { error: globalError, fn: 'startKioskWorkCron' },

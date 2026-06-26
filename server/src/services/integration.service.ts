@@ -57,6 +57,18 @@ export class IntegrationService {
     return integration;
   }
 
+  getIpsByKioskId(kioskId: number): string[] {
+    const rows = this.db
+      .select({ ip: integrationsTable.ip })
+      .from(integrationsTable)
+      .innerJoin(devicesTable, eq(integrationsTable.ip, devicesTable.ip))
+      .innerJoin(kiosksTable, eq(devicesTable.slug, kiosksTable.slug))
+      .where(eq(kiosksTable.id, kioskId))
+      .all();
+
+    return [...new Set(rows.map((row) => row.ip))];
+  }
+
   create(data: NewIntegration): Integration {
     this.logger.debug({ input: data, fn: 'create' }, 'Creating integration');
 
