@@ -1,15 +1,9 @@
-import { t, eventBus, imageStorageService } from '../../container.js';
-import { publicProcedure, protectedProcedure } from '../../middleware/auth.js';
+import { t, imageStorageService } from '../../container.js';
+import { protectedProcedure } from '../../middleware/auth.js';
 import {
   fileDeleteParamsSchema,
   fileParamsSchema,
 } from '../../validations/schemas/file.storage.validation.js';
-import {
-  batchUpdateImageDurationSchema,
-  batchUpdateImageOrderSchema,
-  updateKioskImageSchema,
-} from '../../validations/schemas/image.schemas.js';
-import { kioskIdInputSchema } from '../../validations/schemas/kiosk.schemas.js';
 
 export const imageStorageRouter = t.router({
   uploadFile: protectedProcedure
@@ -30,83 +24,8 @@ export const imageStorageRouter = t.router({
       return { ok: true, path, filename: savedFileName };
     }),
 
-  listFiles: protectedProcedure.input(kioskIdInputSchema).query(({ input }) => {
-    const images = imageStorageService.listAdminImages(input.kioskId);
-    return images;
-  }),
-
-  listActiveImages: publicProcedure
-    .input(kioskIdInputSchema)
-    .query(({ input }) => {
-      const images = imageStorageService.listActiveImagesByKiosk(input.kioskId);
-      return images;
-    }),
-
-  updateImageOrder: protectedProcedure
-    .input(batchUpdateImageOrderSchema)
-    .mutation(async ({ input }) => {
-      const result = await imageStorageService.updateImageOrderBatch(
-        input.kioskId,
-        input.updates,
-      );
-      const activeImages = imageStorageService.listActiveImagesByKiosk(
-        input.kioskId,
-      );
-      eventBus.emit(`image:${input.kioskId}`, activeImages);
-
-      return result;
-    }),
-
-  updateImageDurations: protectedProcedure
-    .input(batchUpdateImageDurationSchema)
-    .mutation(async ({ input }) => {
-      const result = await imageStorageService.updateImageDurationBatch(
-        input.kioskId,
-        input.updates,
-      );
-      const activeImages = imageStorageService.listActiveImagesByKiosk(
-        input.kioskId,
-      );
-      eventBus.emit(`image:${input.kioskId}`, activeImages);
-
-      return result;
-    }),
-
-  updateKioskImage: protectedProcedure
-    .input(updateKioskImageSchema)
-    .mutation(async ({ input }) => {
-      const result = await imageStorageService.update(
-        input.fileName,
-        input.kioskId,
-        input.isActive,
-        input.durationSeconds,
-      );
-      const activeImages = imageStorageService.listActiveImagesByKiosk(
-        input.kioskId,
-      );
-      eventBus.emit(`image:${input.kioskId}`, activeImages);
-
-      return result;
-    }),
-
-  deleteFile: protectedProcedure
-    .input(fileDeleteParamsSchema.and(kioskIdInputSchema))
-    .mutation(async ({ input }) => {
-      await imageStorageService.delete(input.filename);
-      const activeImages = imageStorageService.listActiveImagesByKiosk(
-        input.kioskId,
-      );
-      eventBus.emit(`image:${input.kioskId}`, activeImages);
-
-      return { ok: true };
-    }),
-
   getDiskUsage: protectedProcedure.query(async () => {
     return imageStorageService.getDiskUsage();
-  }),
-
-  listAllFiles: protectedProcedure.query(() => {
-    return imageStorageService.listAllImages();
   }),
 
   deleteFileGlobal: protectedProcedure
