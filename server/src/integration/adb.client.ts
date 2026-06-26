@@ -2,6 +2,7 @@ import { createServiceLogger } from '../utils/pino.logger.js';
 
 export interface AdbTarget {
   ip: string;
+  port: number;
 }
 
 import * as AdbLib from '@devicefarmer/adbkit';
@@ -17,10 +18,9 @@ const Adb =
 export class AdbClient {
   private readonly client = Adb.createClient();
   private readonly logger = createServiceLogger('adbClient');
-  private readonly defaultPort = 5555;
 
   private async getDevice(target: AdbTarget) {
-    const serial = `${target.ip}:${this.defaultPort}`;
+    const serial = `${target.ip}:${target.port}`;
 
     const devices = await this.client.listDevices();
     const deviceInfo = devices.find(
@@ -28,15 +28,15 @@ export class AdbClient {
     );
 
     if (!deviceInfo) {
-      await this.client.connect(target.ip, this.defaultPort);
+      await this.client.connect(target.ip, target.port);
     } else if (deviceInfo.type === 'offline') {
       this.logger.warn({ serial }, 'Device offline. Reconnecting...');
 
       try {
-        await this.client.disconnect(target.ip, this.defaultPort);
+        await this.client.disconnect(target.ip, target.port);
       } catch {}
 
-      await this.client.connect(target.ip, this.defaultPort);
+      await this.client.connect(target.ip, target.port);
     }
 
     return this.client.getDevice(serial);
@@ -79,10 +79,18 @@ export class AdbClient {
   }
 
   async screenOn(target: AdbTarget) {
+    this.logger.debug(
+      { targetIp: target.ip, port: target.port, fn: 'screenOff' },
+      'Screen on (ADB)',
+    );
     return this.ensureScreenState(target, true);
   }
 
   async screenOff(target: AdbTarget) {
+    this.logger.debug(
+      { targetIp: target.ip, port: target.port, fn: 'screenOff' },
+      'Screen off (ADB)',
+    );
     return this.ensureScreenState(target, false);
   }
 
@@ -106,7 +114,7 @@ export class AdbClient {
 
   async connect(target: AdbTarget) {
     this.logger.info({ targetIp: target.ip, fn: 'connect' }, 'ADB connect');
-    return this.client.connect(target.ip, this.defaultPort);
+    return this.client.connect(target.ip, target.port);
   }
 
   async disconnect(target: AdbTarget) {
@@ -114,7 +122,7 @@ export class AdbClient {
       { targetIp: target.ip, fn: 'disconnect' },
       'ADB disconnect',
     );
-    return this.client.disconnect(target.ip, this.defaultPort);
+    return this.client.disconnect(target.ip, target.port);
   }
 
   private async isScreenOn(target: AdbTarget): Promise<boolean> {

@@ -1,31 +1,32 @@
-import { eventBus, kioskControlService, t } from '../../container.js';
+import { eventBus, deviceControlService, t } from '../../container.js';
 import { protectedProcedure } from '../../middleware/auth.js';
 import type { ControlEvent } from '@shared/types/control.event.js';
-import { kioskIdInputSchema } from '../../validations/schemas/kiosk.schemas.js';
-import { kioskControlInputSchema } from '../../validations/schemas/kiosk.control.schemas.js';
+import { deviceControlInputSchema } from '../../validations/schemas/device.control.schemas.js';
+import { deviceIdInputSchema } from '../../validations/schemas/device.schema.js';
 
 export const controlRouter = t.router({
-  reloadKiosks: protectedProcedure
-    .input(kioskIdInputSchema)
+  reloadDevice: protectedProcedure
+    .input(deviceIdInputSchema)
     .mutation(({ input }) => {
       const event: ControlEvent = {
-        type: 'reload-kiosk',
+        command: 'reload-device',
+        deviceId: input.deviceId,
       };
-      eventBus.emit(`control:${input.kioskId}`, event);
+      eventBus.emit('control', event);
       return true;
     }),
 
   screenOn: protectedProcedure
-    .input(kioskControlInputSchema)
+    .input(deviceControlInputSchema)
     .mutation(async ({ input }) => {
-      await kioskControlService.screenOn(input.kioskId, input.kioskIp);
+      await deviceControlService.screenOn(input.ip);
       return true;
     }),
 
   screenOff: protectedProcedure
-    .input(kioskControlInputSchema)
+    .input(deviceControlInputSchema)
     .mutation(async ({ input }) => {
-      await kioskControlService.screenOff(input.kioskId, input.kioskIp);
+      await deviceControlService.screenOff(input.ip);
       return true;
     }),
 });

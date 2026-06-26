@@ -1,0 +1,1 @@
+ALTER TABLE `devices` ADD `slug` text NOT NULL;

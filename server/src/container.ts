@@ -27,12 +27,11 @@ import { KioskService } from './services/kiosk.service.js';
 import { BirthdayService } from './services/birthday.service.js';
 import { BirthdayFileService } from './services/birthday.file.service.js';
 import { BirthdayBackgroundService } from './services/birthday.background.service.js';
-import { KioskHeartbeatService } from './services/kiosk.heartbeat.service.js';
 import { ImageStorageService } from './services/image.storage.service.js';
 import { KioskWorkScheduleService } from './services/kiosk.work.schedule.service.js';
 import { FullyKioskClient } from './integration/fully.kiosk.client.js';
 import { IntegrationService } from './services/integration.service.js';
-import { KioskControlService } from './services/kiosk.control.service.js';
+import { DeviceControlService } from './services/device.control.service.js';
 import { BirthdayWidgetTransformService } from './services/birthday.widget.transform.service.js';
 import { LogService } from './services/log.service.js';
 import { AdbClient } from './integration/adb.client.js';
@@ -40,6 +39,7 @@ import { PhilipsJointSpaceClient } from './integration/philips.jointspace.client
 import { TickerConfigService } from './services/ticker.config.service.js';
 import { ScenarioService } from './services/scenario.service.js';
 import { MediaFolderService } from './services/media.folder.service.js';
+import { DeviceService } from './services/device.service.js';
 
 const sqlite = new Database(dbPath);
 sqlite.pragma('foreign_keys = ON');
@@ -48,6 +48,7 @@ export type DbType = typeof db;
 
 export const http = axios.create({
   timeout: 2000,
+  timeoutErrorMessage: 'Request timeout',
 });
 
 export const fullyKioskClient = new FullyKioskClient(http);
@@ -91,12 +92,12 @@ kioskService.ensureDefaultKiosk();
 videoStorageService.syncWithDisk();
 imageStorageService.syncWithDisk();
 export const kioskWorkScheduleService = new KioskWorkScheduleService(db);
-export const kioskHeartbeatService = new KioskHeartbeatService();
 export const integrationService = new IntegrationService(
   db,
   philipsJointSpaceClient,
 );
-export const kioskControlService = new KioskControlService(
+export const deviceService = new DeviceService(db);
+export const deviceControlService = new DeviceControlService(
   integrationService,
   fullyKioskClient,
   adbClient,

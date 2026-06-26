@@ -3,8 +3,8 @@ import { createServiceLogger } from '../utils/pino.logger.js';
 import {
   kioskService,
   kioskWorkScheduleService,
-  kioskHeartbeatService,
-  kioskControlService,
+  deviceControlService,
+  integrationService,
 } from '../container.js';
 
 const CRON_KIOSK_WORK = '* * * * *';
@@ -46,7 +46,6 @@ export function startKioskWorkCron(): void {
 
     try {
       const activeKiosks = kioskService.getActive();
-      const heartbeats = kioskHeartbeatService.getActiveKiosks();
 
       if (activeKiosks.length === 0) {
         logger.info({ fn: 'startKioskWorkCron' }, 'Skip: No active kiosks');
@@ -55,16 +54,6 @@ export function startKioskWorkCron(): void {
 
       for (const kiosk of activeKiosks) {
         try {
-          const heartbeat = heartbeats.find((hb) => hb.slug === kiosk.slug);
-
-          if (!heartbeat || !heartbeat.ip) {
-            logger.info(
-              { slug: kiosk.slug, fn: 'startKioskWorkCron' },
-              'Skip: No heartbeat/IP found for active kiosk',
-            );
-            continue;
-          }
-
           const { isEndTime, isStartTime, scheduleNotActive } =
             kioskWorkScheduleService.scheduleStatuses(kiosk.id);
 
@@ -76,28 +65,54 @@ export function startKioskWorkCron(): void {
             continue;
           }
 
-          if (isStartTime) {
-            await withTimeout(
-              kioskControlService.screenOn(kiosk.id, heartbeat.ip),
-              CONTROL_TIMEOUT_MS,
-              'screenOn',
-            );
+          const ips = integrationService.getIpsByKioskId(kiosk.id);
 
+          if (ips.length === 0) {
             logger.info(
-              { kioskId: kiosk.id, ip: heartbeat.ip },
-              'Screen ON command sent',
+              { slug: kiosk.slug, kioskId: kiosk.id, fn: 'startKioskWorkCron' },
+              'Skip: No integration IPs found for active kiosk',
             );
-          } else if (isEndTime) {
-            await withTimeout(
-              kioskControlService.screenOff(kiosk.id, heartbeat.ip),
-              CONTROL_TIMEOUT_MS,
-              'screenOff',
-            );
+            continue;
+          }
 
-            logger.info(
-              { kioskId: kiosk.id, ip: heartbeat.ip },
-              'Screen OFF command sent',
-            );
+          if (isStartTime || isEndTime) {
+            for (const ip of ips) {
+              (async () => {
+                try {
+                  if (isStartTime) {
+                    await withTimeout(
+                      deviceControlService.screenOn(ip),
+                      CONTROL_TIMEOUT_MS,
+                      'screenOn',
+                    );
+                    logger.info(
+                      { kioskId: kiosk.id, ip },
+                      'Screen ON command sent successfully',
+                    );
+                  } else if (isEndTime) {
+                    await withTimeout(
+                      deviceControlService.screenOff(ip),
+                      CONTROL_TIMEOUT_MS,
+                      'screenOff',
+                    );
+                    logger.info(
+                      { kioskId: kiosk.id, ip },
+                      'Screen OFF command sent successfully',
+                    );
+                  }
+                } catch (ipError) {
+                  logger.error(
+                    {
+                      error: ipError,
+                      kioskId: kiosk.id,
+                      ip,
+                      fn: 'startKioskWorkCron',
+                    },
+                    'Failed to send command to specific IP (background)',
+                  );
+                }
+              })();
+            }
           }
         } catch (kioskError) {
           logger.error(

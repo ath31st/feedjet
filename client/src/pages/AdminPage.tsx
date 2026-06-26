@@ -38,9 +38,11 @@ import {
   List,
   Folder,
   Link2Icon,
+  MonitorSmartphone,
 } from 'lucide-react';
 import type { HelpItem } from '@/entities/help';
 import { IntegrationManagement } from '@/widgets/integration-management';
+import { DeviceManagement } from '@/widgets/device-management';
 
 export function AdminPage() {
   const kiosk = useKioskStore((s) => s.currentKiosk);
@@ -117,6 +119,12 @@ export function AdminPage() {
       kioskSelector: false,
     },
     {
+      value: 'devices',
+      label: 'Устройства',
+      icon: MonitorSmartphone,
+      kioskSelector: false,
+    },
+    {
       value: 'integrations',
       label: 'Интеграции',
       icon: Link2Icon,
@@ -165,6 +173,9 @@ export function AdminPage() {
 
       case 'kiosks':
         return <KioskManagement />;
+
+      case 'devices':
+        return <DeviceManagement />;
 
       case 'integrations':
         return <IntegrationManagement />;

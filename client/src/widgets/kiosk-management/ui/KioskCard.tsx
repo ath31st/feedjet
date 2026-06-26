@@ -1,23 +1,17 @@
-import type { KioskWithHeartbeats } from '@/entities/kiosk';
+import type { Kiosk } from '@/entities/kiosk';
 import type { ReactNode } from 'react';
-import { HeartbeatCard } from './HeartbeatCard';
-import {
-  KioskScreenOffAction,
-  KioskScreenOnAction,
-} from '@/features/kiosk-screen-control';
 
 interface KioskCardProps {
-  kiosk: KioskWithHeartbeats;
+  kiosk: Kiosk;
   actions?: ReactNode;
-  hasIntegration: boolean;
 }
 
-export function KioskCard({ kiosk, actions, hasIntegration }: KioskCardProps) {
+export function KioskCard({ kiosk, actions }: KioskCardProps) {
   return (
     <div
-      className={`rounded-lg border ${kiosk.isActive ? 'border-(--border)' : 'border-(--border-disabled)'} p-4`}
+      className={`rounded-lg border ${kiosk.isActive ? 'border-(--border)' : 'border-(--border-disabled)'} p-3`}
     >
-      <div className="mb-3 flex items-start justify-between">
+      <div className="mb-2 flex items-start justify-between">
         <h3
           className={`font-semibold text-lg ${kiosk.isActive ? '' : 'text-(--meta-text)'}`}
         >
@@ -27,7 +21,7 @@ export function KioskCard({ kiosk, actions, hasIntegration }: KioskCardProps) {
         <div className="flex items-center gap-2">{actions}</div>
       </div>
 
-      <div className="space-y-2 text-(--card-text) text-sm">
+      <div className="text-(--card-text) text-sm">
         <div>
           <strong className="text-(--meta-text)">Slug:</strong> {kiosk.slug}
         </div>
@@ -55,33 +49,6 @@ export function KioskCard({ kiosk, actions, hasIntegration }: KioskCardProps) {
           <strong className="text-(--meta-text)">Создан:</strong>{' '}
           {new Date(kiosk.createdAt).toLocaleDateString()}
         </div>
-
-        {kiosk.heartbeats.length > 0 && (
-          <div className="flex flex-col gap-2">
-            <strong className="text-(--meta-text)">
-              Подключенные устройства:
-            </strong>
-
-            {kiosk.heartbeats.map((hb) => (
-              <HeartbeatCard
-                key={hb.ip}
-                ip={hb.ip}
-                lastHeartbeat={hb.lastHeartbeat}
-                actions={
-                  hasIntegration && (
-                    <div className="ml-auto flex gap-2">
-                      <KioskScreenOnAction kioskId={kiosk.id} kioskIp={hb.ip} />
-                      <KioskScreenOffAction
-                        kioskId={kiosk.id}
-                        kioskIp={hb.ip}
-                      />
-                    </div>
-                  )
-                }
-              />
-            ))}
-          </div>
-        )}
       </div>
     </div>
   );

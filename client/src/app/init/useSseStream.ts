@@ -9,6 +9,7 @@ import type { ControlEvent } from '@shared/types/control.event';
 import type { TickerConfig } from '@/entities/ticker-config';
 import { useTickerConfigStore } from '@/entities/ticker-config';
 import { useScenarioStore, type Scenario } from '@/entities/scenario';
+import { useDeviceStore } from '@/entities/device';
 
 export function useSseStream(kioskId: number) {
   console.log('SSE: currentKioskId', kioskId);
@@ -18,6 +19,7 @@ export function useSseStream(kioskId: number) {
   const setTickerConfig = useTickerConfigStore((s) => s.setConfig);
   const setFeedConfig = useFeedConfigStore((s) => s.setConfig);
   const setScenario = useScenarioStore((s) => s.setScenario);
+  const deviceId = useDeviceStore((s) => s.deviceId);
 
   const onMessage = useCallback(
     (e: MessageEvent) => {
@@ -32,8 +34,11 @@ export function useSseStream(kioskId: number) {
 
           case 'control': {
             console.log('SSE: Received CONTROL');
-            const msg = payload as ControlEvent;
-            if (msg.type === 'reload-kiosk') {
+            const event = payload as ControlEvent;
+            if (
+              event.deviceId === deviceId &&
+              event.command === 'reload-device'
+            ) {
               window.location.reload();
             }
             break;
@@ -72,7 +77,14 @@ export function useSseStream(kioskId: number) {
         console.error('Error processing SSE message:', error, e.data);
       }
     },
-    [setFeeds, setUiConfig, setFeedConfig, setTickerConfig, setScenario],
+    [
+      setFeeds,
+      setUiConfig,
+      setFeedConfig,
+      setTickerConfig,
+      setScenario,
+      deviceId,
+    ],
   );
 
   const streamUrl = `${SERVER_URL}${SSE_URL.STREAM(kioskId)}`;

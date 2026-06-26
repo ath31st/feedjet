@@ -59,13 +59,22 @@ export function InfoWidget({ rotate }: InfoWidgetProps) {
 
             <div className="mr-10 h-full border-(--border) border-2"></div>
 
-            <WeatherForecast
-              locationTitle={locationTitle}
-              dailyForecast={dailyForecast ?? []}
-              currentWeather={currentWeather ?? null}
-              isLoadingDaily={isLoadingDaily}
-              isLoadingCurrent={isLoadingCurrent}
-            />
+            {isLoadingCurrent || isLoadingDaily ? (
+              <div className="flex h-full flex-1 items-center justify-center">
+                <LoadingThreeDotsJumping />
+                <span className="ml-10 text-2xl">
+                  Получение данных о погоде
+                </span>
+              </div>
+            ) : (
+              <WeatherForecast
+                locationTitle={locationTitle}
+                dailyForecast={dailyForecast ?? []}
+                currentWeather={currentWeather ?? null}
+                isLoadingDaily={isLoadingDaily}
+                isLoadingCurrent={isLoadingCurrent}
+              />
+            )}
           </div>
         ) : (
           <div className="flex h-full w-full flex-col px-4 py-10">
@@ -74,13 +83,22 @@ export function InfoWidget({ rotate }: InfoWidgetProps) {
 
             <div className="mb-10 w-full border-(--border) border-2"></div>
 
-            <WeatherForecast
-              locationTitle={locationTitle}
-              dailyForecast={dailyForecast ?? []}
-              currentWeather={currentWeather ?? null}
-              isLoadingDaily={isLoadingDaily}
-              isLoadingCurrent={isLoadingCurrent}
-            />
+            {isLoadingCurrent || isLoadingDaily ? (
+              <div className="flex h-full flex-1 items-center justify-center">
+                <LoadingThreeDotsJumping />
+                <span className="ml-10 text-2xl">
+                  Получение данных о погоде
+                </span>
+              </div>
+            ) : (
+              <WeatherForecast
+                locationTitle={locationTitle}
+                dailyForecast={dailyForecast ?? []}
+                currentWeather={currentWeather ?? null}
+                isLoadingDaily={isLoadingDaily}
+                isLoadingCurrent={isLoadingCurrent}
+              />
+            )}
           </div>
         )}
       </div>

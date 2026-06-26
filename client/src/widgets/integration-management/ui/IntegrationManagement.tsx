@@ -1,9 +1,42 @@
 import { SettingsCard } from '@/shared/ui';
+import { IntegrationList } from './IntegrationList';
+import { IntegrationCreateDialog } from '@/features/integration-create-update';
+import { useIntegrationWidget } from '../model/useIntegrationWidget';
+import { CommonButton } from '@/shared/ui/common';
+import { Link2Icon } from 'lucide-react';
 
 export function IntegrationManagement() {
+  const { handleCreateIntegration, openCreateDialog, setOpenCreateDialog } =
+    useIntegrationWidget();
+
   return (
-    <SettingsCard title="Управление интеграциями" className="w-full">
-      <div>Здесь пока ничего нет</div>
-    </SettingsCard>
+    <div className="flex flex-col gap-6">
+      <SettingsCard title="Список интеграций" className="w-full">
+        <div className="flex w-full flex-col gap-6">
+          <div className="flex justify-end text-xs">
+            <CommonButton
+              onClick={() => setOpenCreateDialog(true)}
+              type="button"
+            >
+              <div className="flex flex-row items-center justify-center gap-2">
+                <Link2Icon size={14} />
+                {'Добавить интеграцию'}
+              </div>
+            </CommonButton>
+          </div>
+
+          <IntegrationList />
+        </div>
+      </SettingsCard>
+
+      {openCreateDialog && (
+        <IntegrationCreateDialog
+          open={true}
+          onClose={() => setOpenCreateDialog(false)}
+          onCreate={(data) => handleCreateIntegration(data)}
+          ip={null}
+        />
+      )}
+    </div>
   );
 }

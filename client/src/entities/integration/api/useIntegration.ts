@@ -41,18 +41,28 @@ export const useUpdateIntegration = () => {
   );
 };
 
-export const useGetIntegrationByKiosk = (kioskId: number) => {
+export const useGetIntegrationById = (integrationId: number) => {
   return useQuery(
-    trpcWithProxy.integration.getByKioskId.queryOptions({ kioskId }),
+    trpcWithProxy.integration.getById.queryOptions({ integrationId }),
   );
+};
+
+export const useGetIntegrationByIp = (ip: string) => {
+  return useQuery(trpcWithProxy.integration.getByIp.queryOptions({ ip }));
 };
 
 export const useGetAllIntegrations = () => {
   return useQuery(trpcWithProxy.integration.getAll.queryOptions());
 };
 
-export const useExistsIntegration = (kioskId: number) => {
-  return useQuery(trpcWithProxy.integration.exists.queryOptions({ kioskId }));
+export const useExistsByKioksId = (kioskId: number) => {
+  return useQuery(
+    trpcWithProxy.integration.existsByKioskId.queryOptions({ kioskId }),
+  );
+};
+
+export const useExistsByIpIntegration = (ip: string) => {
+  return useQuery(trpcWithProxy.integration.existsByIp.queryOptions({ ip }));
 };
 
 export const usePairPhilipsStart = () => {

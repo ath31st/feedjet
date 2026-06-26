@@ -50,11 +50,11 @@ export class PhilipsJointSpaceClient {
     rejectUnauthorized: false,
     keepAlive: true,
   });
-  private readonly pending = new Map<number, PendingPair>();
+  private readonly pending = new Map<string, PendingPair>();
 
-  async startPairing(kioskId: number, ip: string): Promise<void> {
+  async startPairing(ip: string): Promise<void> {
     this.logger.info(
-      { kioskId, ip, fn: 'startPairing' },
+      { ip, fn: 'startPairing' },
       'Starting Philips JointSpace pairing',
     );
 
@@ -80,7 +80,7 @@ export class PhilipsJointSpaceClient {
       );
     }
 
-    this.pending.set(kioskId, {
+    this.pending.set(ip, {
       ip,
       deviceId,
       authKey: String(parsed.auth_key),
@@ -89,28 +89,26 @@ export class PhilipsJointSpaceClient {
     });
 
     this.logger.debug(
-      { kioskId, ip, fn: 'startPairing' },
+      { ip, fn: 'startPairing' },
       'Pairing initiated, awaiting PIN',
     );
   }
 
-  async completePairing(kioskId: number, pin: string): Promise<PairCompletion> {
+  async completePairing(ip: string, pin: string): Promise<PairCompletion> {
     this.logger.info(
-      { kioskId, fn: 'completePairing' },
+      { fn: 'completePairing' },
       'Completing Philips JointSpace pairing',
     );
 
-    const pending = this.pending.get(kioskId);
+    const pending = this.pending.get(ip);
     if (!pending) {
       throw new PhilipsPairError(
-        'Нет активной сессии pairing. Начните привязку заново.',
+        'Нет активной сессии привязки. Начните привязку заново.',
       );
     }
     if (pending.expiresAt < Date.now()) {
-      this.pending.delete(kioskId);
-      throw new PhilipsPairError(
-        'Сессия pairing истекла. Начните привязку заново.',
-      );
+      this.pending.delete(ip);
+      throw new PhilipsPairError('Сессия истекла. Начните привязку заново.');
     }
 
     const hmac = crypto.createHmac('sha256', PHILIPS_SECRET);
@@ -137,7 +135,7 @@ export class PhilipsJointSpaceClient {
     });
 
     if (res.status !== 200) {
-      this.pending.delete(kioskId);
+      this.pending.delete(ip);
       throw new PhilipsPairError(
         `TV отклонил grant (status ${res.status}). Проверьте PIN.`,
       );
@@ -145,18 +143,18 @@ export class PhilipsJointSpaceClient {
 
     const parsed = this.parseJson(res.body);
     if (parsed?.error_id !== 'SUCCESS') {
-      this.pending.delete(kioskId);
+      this.pending.delete(ip);
       throw new PhilipsPairError(
         `Pairing не подтверждён: ${parsed?.error_text ?? 'неизвестная ошибка'}`,
       );
     }
 
-    this.pending.delete(kioskId);
+    this.pending.delete(ip);
     return { deviceId: pending.deviceId, authKey: pending.authKey };
   }
 
-  cancelPairing(kioskId: number): void {
-    this.pending.delete(kioskId);
+  cancelPairing(ip: string): void {
+    this.pending.delete(ip);
   }
 
   async getPowerState(target: PhilipsTarget): Promise<PowerState> {

@@ -20,3 +20,4 @@ export * from './getColorFromHex';
 export * from './useHorizontalWheelScroll';
 export * from './hexToRgba';
 export * from './formatters';
+export * from './generateUUID';

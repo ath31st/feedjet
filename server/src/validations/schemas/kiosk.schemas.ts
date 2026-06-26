@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const kioskIdSchema = z.number().int().positive().max(999999);
-const kioskSlugSchema = z
+export const kioskSlugSchema = z
   .string()
   .min(1)
   .max(50)

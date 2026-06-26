@@ -2,6 +2,8 @@ import { CreateKioskDialog } from '@/features/kiosk-create';
 import { SettingsCard } from '@/shared/ui/SettingsCard';
 import { KioskList } from './KioskList';
 import { useKioskManagement } from '../model/useKioskManagement';
+import { CommonButton } from '@/shared/ui/common';
+import { PlusIcon } from 'lucide-react';
 
 export function KioskManagement() {
   const {
@@ -16,20 +18,23 @@ export function KioskManagement() {
   return (
     <SettingsCard title="Конфигурации киосков" className="w-full">
       <div className="flex w-full flex-col gap-6">
-        <KioskList />
+        <div className="flex justify-end text-xs">
+          <CommonButton
+            type="button"
+            onClick={() => !isLimitReached && setIsDialogOpen(true)}
+            disabled={isLimitReached}
+            tooltip={
+              isLimitReached ? `Достигнут лимит (${kioskLimit})` : undefined
+            }
+          >
+            <div className="flex flex-row items-center justify-center gap-2">
+              <PlusIcon size={14} />
+              {`Добавить конфигурацию (${kiosksLength}/${kioskLimit})`}
+            </div>
+          </CommonButton>
+        </div>
 
-        <button
-          type="button"
-          onClick={() => !isLimitReached && setIsDialogOpen(true)}
-          disabled={isLimitReached}
-          className={`flex w-1/4 items-center justify-center gap-2 rounded-lg border border-(--border) px-4 py-2 text-sm ${
-            isLimitReached
-              ? 'cursor-not-allowed bg-(--border) text-(--button-text)'
-              : 'cursor-pointer bg-(--button-bg) text-(--button-text) hover:bg-(--button-hover-bg)'
-          }`}
-        >
-          Добавить конфигурацию ({kiosksLength}/{kioskLimit})
-        </button>
+        <KioskList />
       </div>
 
       <CreateKioskDialog
