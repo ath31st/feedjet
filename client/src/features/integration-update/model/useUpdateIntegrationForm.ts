@@ -32,7 +32,6 @@ export function useUpdateIntegrationForm(
 
     const payload: UpdateIntegration = {
       id: integration.id,
-      type: integration.type,
     };
 
     if (formData.ip !== integration.ip) {
@@ -45,10 +44,6 @@ export function useUpdateIntegrationForm(
 
     if (formData.description !== (integration.description ?? '')) {
       payload.description = formData.description?.trim();
-    }
-
-    if (formData.type !== integration.type) {
-      payload.type = formData.type;
     }
 
     if (JSON.stringify(config) !== JSON.stringify(integration.config)) {

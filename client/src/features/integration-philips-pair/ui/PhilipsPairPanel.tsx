@@ -4,7 +4,7 @@ import { CheckIcon, ReloadIcon } from '@radix-ui/react-icons';
 import { usePhilipsPair } from '../model/usePhilipsPair';
 
 interface PhilipsPairPanelProps {
-  ip: string | null;
+  ip: string;
   isPaired: boolean;
   description?: string;
   onPaired?: () => void;
