@@ -203,41 +203,6 @@ export const imagesTable = sqliteTable('images', {
   createdAt: integer('created_at').notNull().default(sql`(unixepoch())`),
 });
 
-export const kioskVideosTable = sqliteTable(
-  'kiosk_videos',
-  {
-    kioskId: integer('kiosk_id')
-      .notNull()
-      .references(() => kiosksTable.id, { onDelete: 'cascade' }),
-    videoId: integer('video_id')
-      .notNull()
-      .references(() => videosTable.id, { onDelete: 'cascade' }),
-    isActive: integer('is_active', { mode: 'boolean' })
-      .notNull()
-      .default(false),
-    order: integer('order').notNull().default(0),
-  },
-  (table) => [primaryKey({ columns: [table.kioskId, table.videoId] })],
-);
-
-export const kioskImagesTable = sqliteTable(
-  'kiosk_images',
-  {
-    kioskId: integer('kiosk_id')
-      .notNull()
-      .references(() => kiosksTable.id, { onDelete: 'cascade' }),
-    imageId: integer('image_id')
-      .notNull()
-      .references(() => imagesTable.id, { onDelete: 'cascade' }),
-    isActive: integer('is_active', { mode: 'boolean' })
-      .notNull()
-      .default(false),
-    durationSeconds: integer('duration_seconds').notNull().default(0),
-    order: integer('order').notNull().default(0),
-  },
-  (table) => [primaryKey({ columns: [table.kioskId, table.imageId] })],
-);
-
 export const kioskWorkScheduleTable = sqliteTable(
   'kiosk_work_schedule',
   {
@@ -263,22 +228,6 @@ export const kioskWorkScheduleTable = sqliteTable(
     }),
   ],
 );
-
-export const kioskIntegrationsTable = sqliteTable('kiosk_integrations', {
-  kioskId: integer('kiosk_id')
-    .primaryKey()
-    .references(() => kiosksTable.id, { onDelete: 'cascade' }),
-  type: text('type').notNull().$type<IntegrationType>(),
-  description: text('description'),
-  login: text('login'),
-  passwordEnc: text('password'),
-  createdAt: integer('created_at', { mode: 'timestamp' })
-    .notNull()
-    .default(sql`(unixepoch())`),
-  updatedAt: integer('updated_at', { mode: 'timestamp' })
-    .notNull()
-    .default(sql`(unixepoch())`),
-});
 
 export const birthdayWidgetTransformTable = sqliteTable(
   'birthday_widget_transform',
