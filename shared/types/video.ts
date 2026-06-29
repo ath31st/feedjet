@@ -9,18 +9,3 @@ export interface VideoMetadata {
   mtime: number;
   createdAt: number;
 }
-
-export interface AdminVideoInfo extends VideoMetadata {
-  isActive: boolean | null;
-  order: number | null;
-}
-
-export interface KioskVideoInfo extends VideoMetadata {
-  isActive: boolean;
-  order: number;
-}
-
-export interface VideoOrderUpdate {
-  fileName: string;
-  order: number;
-}
