@@ -13,12 +13,11 @@ export type PairStatus =
   | 'error';
 
 interface UsePhilipsPairArgs {
-  kioskId: number;
-  ip: string | null;
+  ip: string;
   onSuccess?: () => void;
 }
 
-export function usePhilipsPair({ kioskId, ip, onSuccess }: UsePhilipsPairArgs) {
+export function usePhilipsPair({ ip, onSuccess }: UsePhilipsPairArgs) {
   const [status, setStatus] = useState<PairStatus>('idle');
   const [pin, setPin] = useState('');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -44,7 +43,7 @@ export function usePhilipsPair({ kioskId, ip, onSuccess }: UsePhilipsPairArgs) {
     setErrorMessage(null);
     setStatus('starting');
     startMutation.mutate(
-      { kioskId, ip },
+      { ip },
       {
         onSuccess: () => {
           setStatus('awaitingPin');
@@ -67,7 +66,7 @@ export function usePhilipsPair({ kioskId, ip, onSuccess }: UsePhilipsPairArgs) {
     setStatus('completing');
     completeMutation.mutate(
       {
-        kioskId,
+        ip,
         pin: pin.trim(),
         description: description?.trim() || undefined,
       },

@@ -82,7 +82,6 @@ export const integrationPairStartSchema = z.object({
 });
 
 export const integrationPairCompleteSchema = z.object({
-  integrationId: z.number().int().positive(),
   ip: z.ipv4(),
   pin: z.string().min(1).max(20),
   description: z.string().max(500).optional(),

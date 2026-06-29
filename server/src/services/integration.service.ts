@@ -30,11 +30,7 @@ export class IntegrationService {
   }
 
   getById(integrationId: number): Integration {
-    const integration = this.db
-      .select()
-      .from(integrationsTable)
-      .where(eq(integrationsTable.id, integrationId))
-      .get();
+    const integration = this.findById(integrationId);
 
     if (!integration) {
       throw new IntegrationError(404, 'Integration not found');
@@ -267,13 +263,12 @@ export class IntegrationService {
   }
 
   async pairPhilipsComplete(
-    integrationId: number,
     ip: string,
     pin: string,
     description?: string,
   ): Promise<Integration> {
     this.logger.debug(
-      { integrationId, fn: 'pairPhilipsComplete' },
+      { fn: 'pairPhilipsComplete' },
       'Completing Philips pairing',
     );
 
@@ -287,7 +282,7 @@ export class IntegrationService {
       }
 
       this.logger.error(
-        { integrationId, fn: 'pairPhilipsComplete' },
+        { fn: 'pairPhilipsComplete' },
         'Unexpected error completing Philips pairing',
         error,
       );
@@ -295,7 +290,7 @@ export class IntegrationService {
       throw new IntegrationError(500, 'Error completing Philips pairing');
     }
 
-    const existing = this.findById(integrationId);
+    const existing = this.findByIpAndPhilipsType(ip);
 
     const config = {
       deviceId: creds.deviceId,
@@ -311,13 +306,12 @@ export class IntegrationService {
               config,
               ...(description !== undefined ? { description } : {}),
             })
-            .where(eq(integrationsTable.id, integrationId))
+            .where(eq(integrationsTable.ip, ip))
             .returning()
             .get()
         : this.db
             .insert(integrationsTable)
             .values({
-              id: integrationId,
               type: 'philips_jointspace',
               ip: ip,
               port: PORT,
@@ -327,15 +321,12 @@ export class IntegrationService {
             .returning()
             .get();
 
-      this.logger.info(
-        { integrationId, fn: 'pairPhilipsComplete' },
-        'Philips pairing stored',
-      );
+      this.logger.info({ fn: 'pairPhilipsComplete' }, 'Philips pairing stored');
 
       return integration;
     } catch (error) {
       this.logger.error(
-        { integrationId, fn: 'pairPhilipsComplete' },
+        { fn: 'pairPhilipsComplete' },
         'Failed to persist Philips pairing',
         error,
       );

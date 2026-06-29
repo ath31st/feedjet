@@ -91,7 +91,6 @@ export const integrationRouter = t.router({
     .mutation(({ input }) =>
       handleServiceCall(async () => {
         const integration = await integrationService.pairPhilipsComplete(
-          input.integrationId,
           input.ip,
           input.pin,
           input.description,

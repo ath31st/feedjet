@@ -4,7 +4,6 @@ import { CheckIcon, ReloadIcon } from '@radix-ui/react-icons';
 import { usePhilipsPair } from '../model/usePhilipsPair';
 
 interface PhilipsPairPanelProps {
-  kioskId: number;
   ip: string | null;
   isPaired: boolean;
   description?: string;
@@ -12,7 +11,6 @@ interface PhilipsPairPanelProps {
 }
 
 export function PhilipsPairPanel({
-  kioskId,
   ip,
   isPaired,
   description,
@@ -20,7 +18,6 @@ export function PhilipsPairPanel({
 }: PhilipsPairPanelProps) {
   const { status, pin, setPin, errorMessage, start, complete, reset } =
     usePhilipsPair({
-      kioskId,
       ip,
       onSuccess: () => onPaired?.(),
     });
