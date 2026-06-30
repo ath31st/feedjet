@@ -6,32 +6,14 @@ interface WeekScheduleProps {
 }
 
 export function WeekSchedule({ kioskId }: WeekScheduleProps) {
-  const {
-    isLoading,
-    schedules,
-    handleChange,
-    isLoadingIntegration,
-    hasIntegration,
-  } = useWeekSchedule(kioskId);
+  const { isLoading, schedules, handleChange, isLoadingIntegration } =
+    useWeekSchedule(kioskId);
 
   if (isLoading || isLoadingIntegration) return <div>Загрузка...</div>;
 
   return (
     <div className="relative flex flex-col gap-2">
-      {!hasIntegration && (
-        <div className="mb-4 rounded-lg border border-(--border) bg-(--border-disabled) p-3">
-          <p>
-            <strong>Внимание:</strong> Управление расписанием недоступно. Не
-            настроена интеграция. Пожалуйста, проверьте конфигурацию киоска.
-          </p>
-        </div>
-      )}
-
-      <div
-        className={
-          !hasIntegration ? 'pointer-events-none select-none opacity-50' : ''
-        }
-      >
+      <div>
         <div className="flex flex-col gap-2">
           {schedules.map((d) => (
             <DayScheduleCard
