@@ -2,6 +2,7 @@ import * as Dialog from '@radix-ui/react-dialog';
 import type { NewIntegration } from '@/entities/integration';
 import { useCreateIntegrationForm } from '../model/useCreateIntegrationForm';
 import { IntegrationForm } from '@/shared/ui';
+import { PhilipsCreateFlow } from './PhilipsCreateFlow';
 
 interface IntegrationCreateDialogProps {
   open: boolean;
@@ -41,16 +42,25 @@ export function IntegrationCreateDialog({
             Форма для создания новой интеграции
           </Dialog.Description>
 
-          <IntegrationForm
-            mode="create"
-            formData={formData}
-            config={config}
-            onChange={handleChange}
-            onTypeChange={handleTypeChange}
-            onConfigChange={handleConfigChange}
-            onSubmit={handleSubmit}
-            onCancel={handleCancel}
-          />
+          {formData.type === 'philips_jointspace' ? (
+            <PhilipsCreateFlow
+              formData={formData}
+              onChange={handleChange}
+              onTypeChange={handleTypeChange}
+              onClose={onClose}
+            />
+          ) : (
+            <IntegrationForm
+              mode="create"
+              formData={formData}
+              config={config}
+              onChange={handleChange}
+              onTypeChange={handleTypeChange}
+              onConfigChange={handleConfigChange}
+              onSubmit={handleSubmit}
+              onCancel={handleCancel}
+            />
+          )}
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>

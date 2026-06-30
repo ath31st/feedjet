@@ -9,13 +9,7 @@ import {
   type PhilipsJointspaceConfig,
   integrationFull,
 } from '@/entities/integration';
-
-type IntegrationFormData = {
-  type: IntegrationType;
-  ip: string;
-  port: number;
-  description?: string;
-};
+import type { IntegrationFormData } from '@/shared/ui';
 
 const getDefaultPort = (type: IntegrationType): number => {
   const found = integrationFull.find((i) => i.type === type);
