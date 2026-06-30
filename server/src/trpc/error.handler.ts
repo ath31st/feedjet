@@ -1,12 +1,15 @@
 import { TRPCError } from '@trpc/server';
 import { ServiceError } from '../errors/service.error.js';
 
-export function handleServiceCall<T>(fn: () => T): T {
+export async function handleServiceCall<T>(
+  fn: () => Promise<T> | T,
+): Promise<T> {
   try {
-    return fn();
+    return await fn();
   } catch (error) {
     if (error instanceof ServiceError) {
       let trpcCode: TRPCError['code'];
+
       switch (error.code) {
         case 400:
           trpcCode = 'BAD_REQUEST';
@@ -27,7 +30,10 @@ export function handleServiceCall<T>(fn: () => T): T {
           trpcCode = 'INTERNAL_SERVER_ERROR';
       }
 
-      throw new TRPCError({ code: trpcCode, message: error.message });
+      throw new TRPCError({
+        code: trpcCode,
+        message: error.message,
+      });
     }
 
     throw new TRPCError({
