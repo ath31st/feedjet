@@ -256,7 +256,7 @@ export class IntegrationService {
         throw new IntegrationError(400, error.message);
       }
       throw new IntegrationError(
-        500,
+        404,
         `TV not found at ${ip}:1926. Check the network connection to TV and try again.`,
       );
     }
