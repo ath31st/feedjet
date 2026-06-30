@@ -57,8 +57,7 @@ export function PhilipsPairPanel({
           </>
         ) : (
           <span className="text-yellow-500">
-            ⚠ У киоска нет активного heartbeat. Запустите клиент на TV, чтобы
-            появился IP для привязки.
+            ⚠ Введите IP-адрес Philips TV.
           </span>
         )}
       </div>
@@ -124,6 +123,26 @@ export function PhilipsPairPanel({
 
       {status === 'completing' && (
         <div className="text-sm">Подтверждаю PIN…</div>
+      )}
+
+      {status === 'success' && (
+        <div className="space-y-3 py-1 text-center">
+          <div className="flex items-center justify-center gap-1 font-medium text-green-500 text-sm">
+            <CheckIcon className="h-4 w-4" /> Сопряжение выполнено успешно!
+          </div>
+          <div className="text-(--meta-text) text-xs">
+            Телевизор успешно сохранил авторизацию.
+          </div>
+          <div className="flex justify-center">
+            <CommonButton
+              type="button"
+              onClick={() => onPaired?.()}
+              tooltip="Закрыть окно сопряжения"
+            >
+              Готово
+            </CommonButton>
+          </div>
+        </div>
       )}
 
       {errorMessage && (
