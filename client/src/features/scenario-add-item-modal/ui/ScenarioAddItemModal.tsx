@@ -107,7 +107,13 @@ export function ScenarioAddItemModal({
           </div>
 
           <div className="flex min-w-0 flex-1 flex-col gap-2">
-            <div className="flex items-center justify-end px-2">
+            <div
+              className={`flex items-center justify-end px-2 transition-all duration-300 ease-in-out ${
+                selectedFiles.size > 0
+                  ? 'translate-y-0 opacity-100'
+                  : 'pointer-events-none -translate-y-full opacity-0'
+              }`}
+            >
               <MediaSelectionToolbar
                 mode="select"
                 selectedCount={selectedFiles.size}
