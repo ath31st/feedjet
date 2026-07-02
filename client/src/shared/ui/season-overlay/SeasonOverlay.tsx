@@ -177,7 +177,7 @@ export const SeasonOverlay = ({ mode }: SeasonOverlayProps) => {
   };
 
   const renderSummer = () => {
-    const fireflies = particlesData.slice(0, 50);
+    const fireflies = particlesData.slice(0, 40);
 
     return (
       <>
