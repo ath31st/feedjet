@@ -6,8 +6,7 @@ import {
   DeviceScreenOnAction,
 } from '@/features/device-screen-control';
 import { CommonButton } from '@/shared/ui/common';
-import { Trash2 } from 'lucide-react';
-import { Pencil2Icon } from '@radix-ui/react-icons';
+import { Pencil, Trash2 } from 'lucide-react';
 
 interface IntegrationCardProps {
   integration: Integration;
@@ -27,7 +26,7 @@ export function IntegrationCard({
   return (
     <div className="flex items-start justify-between rounded-lg border border-(--border) bg-(--card-bg) p-3">
       <div className="min-w-0 flex-1">
-        <div className="mb-2 font-semibold">{typeLabel}</div>
+        <div className="mb-2 font-semibold text-lg">{typeLabel}</div>
 
         <div className="text-sm">
           <strong className="text-(--meta-text)">Адрес:</strong>{' '}
@@ -63,7 +62,7 @@ export function IntegrationCard({
           type="button"
           tooltip="Редактировать интеграцию"
         >
-          <Pencil2Icon />
+          <Pencil size={15} />
         </CommonButton>
 
         <CommonButton
@@ -71,7 +70,7 @@ export function IntegrationCard({
           onClick={() => onDelete(integration.id)}
           tooltip="Удалить интеграцию"
         >
-          <Trash2 className="h-4 w-4" />
+          <Trash2 size={15} />
         </CommonButton>
       </div>
     </div>

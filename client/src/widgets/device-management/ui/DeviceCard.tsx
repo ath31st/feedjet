@@ -6,17 +6,40 @@ import { CommonButton } from '@/shared/ui/common';
 import { Trash2 } from 'lucide-react';
 import { ReloadDevicePageButton } from '@/features/reload-device';
 import type { Device } from '@/entities/device';
+import copy from 'copy-to-clipboard';
+import { Copy } from 'lucide-react';
+import { toast } from 'sonner';
 
 interface DeviceCardProps {
   device: Device;
   onDelete: (id: string) => void;
 }
 
+const handleCopyIp = async (ip: string) => {
+  const ok = await copy(ip);
+
+  if (ok) {
+    toast.success('IP скопирован');
+  } else {
+    toast.error('Не удалось скопировать IP');
+  }
+};
+
 export function DeviceCard({ device, onDelete }: DeviceCardProps) {
   return (
     <div className="flex items-start justify-between rounded-lg border border-(--border) bg-(--card-bg) p-3">
       <div className="min-w-0 flex-1">
-        <div className="mb-2 font-semibold">{device.ip}</div>
+        <div className="mb-2 flex items-center gap-2">
+          <span className="select-all font-semibold text-lg">{device.ip}</span>
+
+          <CommonButton
+            type="button"
+            onClick={() => handleCopyIp(device.ip)}
+            tooltip="Скопировать IP"
+          >
+            <Copy size={15} />
+          </CommonButton>
+        </div>
 
         <div className="text-sm">
           <strong className="text-(--meta-text)">Slug:</strong> {device.slug}
@@ -61,7 +84,7 @@ export function DeviceCard({ device, onDelete }: DeviceCardProps) {
           onClick={() => onDelete(device.deviceId)}
           tooltip="Удалить устройство"
         >
-          <Trash2 className="h-4 w-4" />
+          <Trash2 size={15} />
         </CommonButton>
       </div>
     </div>
