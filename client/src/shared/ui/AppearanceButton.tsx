@@ -20,7 +20,7 @@ export function AppearanceButton<T>({
       type="button"
       disabled={disabled}
       onClick={() => onClick(value)}
-      className={`rounded-lg border p-2 font-medium hover:bg-(--button-hover-bg) ${
+      className={`cursor-pointer rounded-lg border p-2 font-medium hover:bg-(--button-hover-bg) ${
         isActive
           ? 'border-(--border) bg-(--button-bg) text-(--text)'
           : 'border-(--border)'

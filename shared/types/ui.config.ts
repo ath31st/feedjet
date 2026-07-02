@@ -96,12 +96,12 @@ export const seasonOverlayModes = [
 export type SeasonOverlayMode = (typeof seasonOverlayModes)[number];
 
 export const seasonOverlayLabels: Record<SeasonOverlayMode, string> = {
-  auto: 'Авто (по сезону)',
+  auto: 'Авто',
   winter: 'Зима',
   spring: 'Весна',
   summer: 'Лето',
   autumn: 'Осень',
-  off: 'Отключено',
+  off: 'Откл',
 };
 
 export const animationLabels: Record<AnimationType, string> = {

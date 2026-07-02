@@ -50,7 +50,7 @@ export function ThemeSelector({ kioskId }: Props) {
                 backgroundColor: t.color,
                 color: getColorFromHex(t.color),
               }}
-              className="flex items-center justify-center gap-1 rounded-lg p-2 transition-opacity hover:opacity-80"
+              className="flex cursor-pointer items-center justify-center gap-1 rounded-lg p-2 transition-opacity hover:opacity-80"
             >
               {t.name === theme && <CheckIcon className="h-4 w-4" />}
               <span className="font-medium text-xs">{t.name}</span>
