@@ -20,7 +20,7 @@ export function KioskSelector({
             key={k.slug}
             type="button"
             onClick={() => onChange(k)}
-            className={`relative cursor-pointer px-4 py-2 font-medium text-md outline-none transition-colors hover:text-(--button-hover-bg) ${
+            className={`relative min-w-40 max-w-40 cursor-pointer overflow-hidden px-4 py-2 font-medium text-md transition-[max-width] duration-300 hover:max-w-96 ${
               isActive
                 ? 'text-(--text) hover:text-(--text)'
                 : 'text-muted-foreground'
