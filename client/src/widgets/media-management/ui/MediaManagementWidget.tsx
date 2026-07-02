@@ -60,17 +60,25 @@ export function MediaManagementWidget() {
       </SettingsCard>
 
       <SettingsCard title="Управление медиа" className="w-full md:w-4/5">
-        <div className="flex items-center justify-end gap-2 p-2">
-          <MediaSelectionToolbar
-            selectedCount={selectedFiles.size}
-            mode="manage"
-            moveMode={moveMode}
-            onStartMove={handleStartMove}
-            onBulkDelete={handleBulkDelete}
-            onClearSelection={() => setSelectedFiles(new Set())}
-          />
-
+        <div className="relative flex items-center justify-end gap-2 overflow-hidden p-2">
           <MediaUploadButton selectedFolderId={selectedFolderId} />
+
+          <div
+            className={`absolute right-0 flex items-center gap-2 transition-all duration-300 ease-in-out ${
+              selectedFiles.size > 0
+                ? 'translate-x-0 opacity-100'
+                : 'pointer-events-none translate-x-full opacity-0'
+            }`}
+          >
+            <MediaSelectionToolbar
+              selectedCount={selectedFiles.size}
+              mode="manage"
+              moveMode={moveMode}
+              onStartMove={handleStartMove}
+              onBulkDelete={handleBulkDelete}
+              onClearSelection={() => setSelectedFiles(new Set())}
+            />
+          </div>
         </div>
 
         <MediaGrid
