@@ -15,7 +15,7 @@ export function AdminTabTrigger({
 }: AdminTabTriggerProps) {
   return (
     <Tabs.Trigger value={value} className={baseActionClass}>
-      <div className="flex items-center gap-2">
+      <div className="flex cursor-pointer items-center gap-2">
         {Icon && <Icon className="h-4 w-4 shrink-0" />}
         <span className="truncate">{children}</span>
       </div>
