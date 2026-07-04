@@ -56,9 +56,11 @@ export function IntegrationForm({
 
   const handlePasswordChange = (value: string) => {
     onConfigChange({ password: value });
-    if (passwordConfirm && value !== passwordConfirm) {
+    const isEmptyInUpdate = mode === 'update' && !value && !passwordConfirm;
+
+    if (!isEmptyInUpdate && passwordConfirm && value !== passwordConfirm) {
       setPasswordError('Пароли не совпадают');
-    } else if (passwordConfirm && value === passwordConfirm) {
+    } else {
       setPasswordError('');
     }
   };
@@ -66,13 +68,10 @@ export function IntegrationForm({
   const handlePasswordConfirmChange = (value: string) => {
     setPasswordConfirm(value);
     const password = (config as FullyKioskConfig).password;
+    const isEmptyInUpdate = mode === 'update' && !password && !value;
 
-    if (password && value.length >= password.length) {
-      if (value !== password) {
-        setPasswordError('Пароли не совпадают');
-      } else {
-        setPasswordError('');
-      }
+    if (!isEmptyInUpdate && password && value !== password) {
+      setPasswordError('Пароли не совпадают');
     } else {
       setPasswordError('');
     }
@@ -80,7 +79,9 @@ export function IntegrationForm({
 
   const handlePasswordConfirmBlur = () => {
     const password = (config as FullyKioskConfig).password;
-    if (password && passwordConfirm !== password) {
+    const isEmptyInUpdate = mode === 'update' && !password && !passwordConfirm;
+
+    if (!isEmptyInUpdate && password && passwordConfirm !== password) {
       setPasswordError('Пароли не совпадают');
     } else {
       setPasswordError('');
@@ -92,7 +93,9 @@ export function IntegrationForm({
 
     if (formData.type === 'fully_kiosk') {
       const password = (config as FullyKioskConfig).password;
-      if (password !== passwordConfirm) {
+      const shouldValidate = mode === 'create' || passwordConfirm !== '';
+
+      if (shouldValidate && password !== passwordConfirm) {
         setPasswordError('Пароли не совпадают');
         return;
       }
