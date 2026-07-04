@@ -3,12 +3,12 @@ import type {
   IntegrationType,
 } from '@shared/types/integration.js';
 import type { DayOfWeek } from '@shared/types/kiosk.work.schedule.js';
+import type { scenarioWidgetTypes } from '@shared/types/scenario.js';
 import type {
   animationTypes,
   screenRotations,
   seasonOverlayModes,
   themes,
-  widgetTypes,
 } from '@shared/types/ui.config.js';
 import { sql } from 'drizzle-orm';
 import {
@@ -85,12 +85,6 @@ export const uiConfigTable = sqliteTable('ui_config', {
     .notNull()
     .references(() => kiosksTable.id, { onDelete: 'cascade' })
     .unique(),
-  rotatingWidgets: text('rotating_widgets', { mode: 'json' })
-    .notNull()
-    .$type<Array<(typeof widgetTypes)[number]>>(),
-  autoSwitchIntervalMs: integer('auto_switch_interval_ms')
-    .notNull()
-    .default(30000),
   theme: text('theme').notNull().$type<(typeof themes)[number]>(),
   screenRotation: integer('screen_rotation')
     .notNull()
@@ -300,7 +294,8 @@ export const scenarioItemsTable = sqliteTable(
       .notNull()
       .references(() => scenariosTable.id, { onDelete: 'cascade' }),
     type: text('type', { enum: ['widget', 'image', 'video'] }).notNull(),
-    widgetType: text('widget_type').$type<(typeof widgetTypes)[number]>(),
+    widgetType:
+      text('widget_type').$type<(typeof scenarioWidgetTypes)[number]>(),
     imageId: integer('image_id').references(() => imagesTable.id, {
       onDelete: 'cascade',
     }),

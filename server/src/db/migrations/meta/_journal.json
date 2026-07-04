@@ -57,6 +57,13 @@
       "when": 1782741135474,
       "tag": "0007_nervous_silhouette",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1783192835307,
+      "tag": "0008_abandoned_squirrel_girl",
+      "breakpoints": true
     }
   ]
 }
