@@ -15,4 +15,4 @@ export type DeviceUpsertPayload = {
   platform?: string;
 };
 
-export type DeviceWithIntegration = Device & { hasIntegration: boolean };
+export type DeviceFull = Device & { hasIntegration: boolean };

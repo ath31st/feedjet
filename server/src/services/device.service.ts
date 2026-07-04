@@ -4,7 +4,7 @@ import { devicesTable } from '../db/schema.js';
 import type {
   Device,
   DeviceUpsertPayload,
-  DeviceWithIntegration,
+  DeviceFull,
 } from '@shared/types/device.js';
 import { createServiceLogger } from '../utils/pino.logger.js';
 import { DeviceError } from '../errors/device.error.js';
@@ -108,13 +108,9 @@ export class DeviceService {
     }
   }
 
-  getAllWithIntegration(integrationIps: Set<string>): DeviceWithIntegration[] {
+  getAllFull(integrationIps: Set<string>): DeviceFull[] {
     try {
-      const devices = this.db
-        .select()
-        .from(devicesTable)
-        .orderBy(desc(devicesTable.lastSeenAt))
-        .all();
+      const devices = this.getAll();
 
       return devices.map((device) => ({
         ...device,

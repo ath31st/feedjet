@@ -18,10 +18,9 @@ export const deviceRouter = t.router({
     ),
 
   getAllDevices: protectedProcedure.query(() => {
-    const integrations = integrationService.getAll();
-    const integrationIps = new Set(integrations.map((i) => i.ip));
+    const integrationIps = integrationService.getIntegrationIps();
 
-    return deviceService.getAllWithIntegration(integrationIps);
+    return deviceService.getAllFull(integrationIps);
   }),
 
   delete: protectedProcedure

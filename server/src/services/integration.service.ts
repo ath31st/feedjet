@@ -65,6 +65,16 @@ export class IntegrationService {
     return [...new Set(rows.map((row) => row.ip))];
   }
 
+  getIntegrationIps(): Set<string> {
+    return new Set(
+      this.db
+        .select({ ip: integrationsTable.ip })
+        .from(integrationsTable)
+        .all()
+        .map((row) => row.ip),
+    );
+  }
+
   create(data: NewIntegration): Integration {
     this.logger.debug({ input: data, fn: 'create' }, 'Creating integration');
 
