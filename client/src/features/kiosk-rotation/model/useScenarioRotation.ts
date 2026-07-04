@@ -2,6 +2,7 @@ import { useEffect, useEffectEvent, useMemo, useState } from 'react';
 import type { ScenarioItem } from '@shared/types/scenario';
 import { useScenarioStore } from '@/entities/scenario';
 import { useUiConfigStore } from '@/entities/ui-config';
+import { useMatch } from 'react-router-dom';
 
 export function useScenarioRotation() {
   const rotate = useUiConfigStore((s) => s.uiConfig.screenRotation);
@@ -14,6 +15,7 @@ export function useScenarioRotation() {
   const [currentItemId, setCurrentItemId] = useState<number | null>(null);
   const [isRotationLocked, setIsRotationLocked] = useState(false);
   const [userPaused, setUserPaused] = useState(false);
+  const isPreview = useMatch('/preview/*') !== null;
 
   const safeIndex = useMemo(() => {
     if (items.length === 0) return 0;
@@ -132,5 +134,6 @@ export function useScenarioRotation() {
     rotate,
     animation,
     seasonOverlay,
+    isPreview,
   };
 }

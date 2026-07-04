@@ -35,6 +35,7 @@ interface ScenarioItemRendererProps {
   rotate: number;
   animation: AnimationType;
   onVideoEnd: () => void;
+  isPreview?: boolean;
 }
 
 export const ScenarioItemRenderer = ({
@@ -42,6 +43,7 @@ export const ScenarioItemRenderer = ({
   rotate,
   animation,
   onVideoEnd,
+  isPreview,
 }: ScenarioItemRendererProps) => {
   if (item.type === 'widget' && item.widgetType) {
     return (
@@ -58,7 +60,13 @@ export const ScenarioItemRenderer = ({
   }
 
   if (item.type === 'video' && item.videoFileName) {
-    return <VideoItemView fileName={item.videoFileName} onEnd={onVideoEnd} />;
+    return (
+      <VideoItemView
+        fileName={item.videoFileName}
+        onEnd={onVideoEnd}
+        isPreview={isPreview}
+      />
+    );
   }
 
   return null;

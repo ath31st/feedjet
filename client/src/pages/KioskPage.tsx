@@ -24,6 +24,7 @@ export function KioskPage() {
     rotate,
     animation,
     seasonOverlay,
+    isPreview,
   } = useScenarioRotation();
 
   useIframeBridge({
@@ -83,6 +84,7 @@ export function KioskPage() {
                 item={currentItem}
                 rotate={rotate}
                 animation={animation}
+                isPreview={isPreview}
                 onVideoEnd={unlockRotation}
               />
             </Suspense>
