@@ -2,7 +2,6 @@ import { uiConfigTable } from '../db/schema.js';
 import { eq } from 'drizzle-orm';
 import type { DbType } from '../container.js';
 import type { UiConfig, UpdateUiConfig } from '@shared/types/ui.config.js';
-import { themes, widgetTypes } from '@shared/types/ui.config.js';
 import { UiConfigError } from '../errors/ui.config.error.js';
 import { createServiceLogger } from '../utils/pino.logger.js';
 
@@ -25,8 +24,6 @@ export class UiConfigService {
         .insert(uiConfigTable)
         .values({
           kioskId,
-          rotatingWidgets: ['feed', 'schedule'],
-          autoSwitchIntervalMs: 60000,
           theme: 'dark',
           screenRotation: 0,
           animationMode: 'lite',
@@ -103,13 +100,5 @@ export class UiConfigService {
       );
       throw new UiConfigError(500, 'Failed to fetch ui config');
     }
-  }
-
-  getAllowedWidgets() {
-    return widgetTypes;
-  }
-
-  getAllowedThemes() {
-    return themes;
   }
 }

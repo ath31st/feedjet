@@ -1,6 +1,4 @@
 export type {
-  WidgetType,
-  widgetTypes,
   Theme,
   UiConfig,
   ScreenRotation,

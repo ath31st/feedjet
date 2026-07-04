@@ -18,8 +18,6 @@ interface UiConfigState {
 const DEFAULT_CONFIG: UiConfig = {
   id: 0,
   theme: (localStorage.getItem('theme') as Theme) || ('dark' as Theme),
-  rotatingWidgets: ['feed', 'schedule'],
-  autoSwitchIntervalMs: 30000,
   screenRotation: 0,
   animationMode: 'lite',
   seasonOverlay: 'auto',

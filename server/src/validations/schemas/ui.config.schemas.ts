@@ -3,12 +3,8 @@ import {
   animationTypes,
   seasonOverlayModes,
   themes,
-  widgetTypes,
 } from '@shared/types/ui.config.js';
 import { kioskIdInputSchema, kioskIdSchema } from './kiosk.schemas.js';
-
-const widgetTypeSchema = z.enum(widgetTypes);
-export type WidgetTypeSchema = z.infer<typeof widgetTypeSchema>;
 
 const themeSchema = z.enum(themes);
 export type ThemeSchema = z.infer<typeof themeSchema>;
@@ -25,10 +21,6 @@ const seasonOverlaySchema = z.enum(seasonOverlayModes);
 
 export const uiConfigSchema = z.object({
   theme: themeSchema,
-  rotatingWidgets: z
-    .array(widgetTypeSchema)
-    .min(1, 'At least one widget must be included in rotation'),
-  autoSwitchIntervalMs: z.number().int().nonnegative(),
   screenRotation: screenRotationSchema,
   animationMode: animationModeSchema,
   seasonOverlay: seasonOverlaySchema,
@@ -37,8 +29,6 @@ export const uiConfigSchema = z.object({
 export const uiConfigUpdateSchema = z
   .object({
     theme: themeSchema.optional(),
-    rotatingWidgets: z.array(widgetTypeSchema).min(1).optional(),
-    autoSwitchIntervalMs: z.number().int().nonnegative().optional(),
     screenRotation: screenRotationSchema.optional(),
     animationMode: animationModeSchema.optional(),
     seasonOverlay: seasonOverlaySchema.optional(),

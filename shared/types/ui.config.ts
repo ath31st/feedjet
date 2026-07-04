@@ -1,7 +1,5 @@
 export interface UiConfig {
   id: number;
-  rotatingWidgets: WidgetType[];
-  autoSwitchIntervalMs: number;
   theme: Theme;
   screenRotation: ScreenRotation;
   animationMode: AnimationType;
@@ -13,8 +11,6 @@ export interface UiConfig {
 
 export interface NewUiConfig {
   theme: Theme;
-  rotatingWidgets: WidgetType[];
-  autoSwitchIntervalMs: number;
   screenRotation: ScreenRotation;
   animationMode: AnimationType;
   seasonOverlay: SeasonOverlayMode;
@@ -22,8 +18,6 @@ export interface NewUiConfig {
 
 export interface UpdateUiConfig {
   theme?: Theme;
-  rotatingWidgets?: WidgetType[];
-  autoSwitchIntervalMs?: number;
   screenRotation?: ScreenRotation;
   animationMode?: AnimationType;
   seasonOverlay?: SeasonOverlayMode;
@@ -59,25 +53,6 @@ export const themesFull = [
 
 export const themes = themesFull.map((t) => t.name);
 export type Theme = (typeof themes)[number];
-
-export const widgetTypes = [
-  'schedule',
-  'video',
-  'image',
-  'feed',
-  'birthday',
-  'info',
-];
-export type WidgetType = (typeof widgetTypes)[number];
-
-export const widgetLabels: Record<WidgetType, string> = {
-  schedule: 'Расписание',
-  video: 'Видео',
-  image: 'Изображения',
-  feed: 'Новости',
-  birthday: 'Дни рожд.',
-  info: 'Информация',
-};
 
 export const screenRotations = [-180, -90, 0, 90, 180] as const;
 export type ScreenRotation = (typeof screenRotations)[number];
