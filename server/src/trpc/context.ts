@@ -18,6 +18,14 @@ export async function createContext({ req, res }: CreateExpressContextOptions) {
     } catch (_err) {}
   }
 
+  // TODO: ленивый способ достать организацию по юзеру по необходимости
+  // const getOrganization = async () => {
+  //   if (!user?.organizationId) return null;
+  //   const orgEntity = await organizationService.findById(user.organizationId);
+  //   return orgEntity ? organizationMapper.toDTO(orgEntity) : null;
+  // };
+
+  // return { req, res, user, getOrganization };
   return { req, res, user };
 }
 
