@@ -28,6 +28,7 @@ import { BirthdayService } from './services/birthday.service.js';
 import { BirthdayFileService } from './services/birthday.file.service.js';
 import { BirthdayBackgroundService } from './services/birthday.background.service.js';
 import { ImageStorageService } from './services/image.storage.service.js';
+import { LogoStorageService } from './services/logo.storage.service.js';
 import { KioskWorkScheduleService } from './services/kiosk.work.schedule.service.js';
 import { FullyKioskClient } from './integration/fully.kiosk.client.js';
 import { IntegrationService } from './services/integration.service.js';
@@ -58,6 +59,7 @@ export const philipsJointSpaceClient = new PhilipsJointSpaceClient();
 export const imageCacheService = new ImageCacheService(cacheDir);
 export const videoStorageService = new VideoStorageService(db, fileStorageDir);
 export const imageStorageService = new ImageStorageService(db, fileStorageDir);
+export const logoStorageService = new LogoStorageService(db, fileStorageDir);
 
 const openWeatherClient = new OpenWeatherAPI({ key: openWeatherApiKey });
 export const weatherForecastClient = new WeatherForecastClient(

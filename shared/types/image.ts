@@ -1,11 +1,14 @@
-export interface ImageMetadata {
+export interface BaseImageMetadata {
   name: string;
   fileName: string;
+  format: string;
   width: number;
   height: number;
-  format: string;
   size: number;
   createdAt: number;
-  thumbnail: string;
   mtime: number;
+}
+
+export interface ImageMetadata extends BaseImageMetadata {
+  thumbnail: string;
 }
