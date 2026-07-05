@@ -1,10 +1,11 @@
 import type { DbType } from '../container.js';
 import { logosTable } from '../db/schema.js';
-import { eq } from 'drizzle-orm';
+import { eq, desc } from 'drizzle-orm';
 import { BaseImageStorageService } from './base.image.storage.service.js';
 import { ImageStorageServiceError } from '../errors/image.error.js';
 import type { BaseImageMetadata } from '@shared/types/image.js';
 import type { Logo } from '@shared/types/logo.js';
+import { LogoStorageError } from '../errors/logo.storage.error.js';
 
 export class LogoStorageService extends BaseImageStorageService {
   private readonly db: DbType;
@@ -15,41 +16,70 @@ export class LogoStorageService extends BaseImageStorageService {
     this.db = db;
   }
 
+  // TODO: после ввода организаций, нужно будет сделать выборку по организации
   findCurrentLogo(): Logo | null {
-    return this.db.select().from(logosTable).get() ?? null;
+    try {
+      return (
+        this.db
+          .select()
+          .from(logosTable)
+          .orderBy(desc(logosTable.id))
+          .limit(1)
+          .get() ?? null
+      );
+    } catch (err) {
+      this.logger.error(
+        { err, fn: 'findCurrentLogo' },
+        'Failed to find current logo',
+      );
+      throw new LogoStorageError(500, 'Failed to find current logo');
+    }
   }
 
   async replace(file: File, fileName: string) {
-    const currentLogo = this.findCurrentLogo();
+    try {
+      const currentLogo = this.findCurrentLogo();
 
-    if (currentLogo) {
-      await this.delete(currentLogo.fileName);
+      if (currentLogo) {
+        await this.delete(currentLogo.fileName);
+      }
+
+      const nodeStream = this.getNodeStream(file);
+      const savedPath = await this.saveImageStream(nodeStream, fileName);
+
+      const meta = await this.getImageMetadata(fileName);
+      const savedFileName = this.saveLogoMetadata(meta);
+
+      this.logger.info(
+        { savedPath, fn: 'replace' },
+        'Logo replaced successfully',
+      );
+
+      return {
+        path: savedPath,
+        savedFileName,
+      };
+    } catch (err) {
+      this.logger.error({ err, fn: 'replace' }, 'Failed to replace logo');
+      throw new LogoStorageError(500, 'Failed to replace logo');
     }
-
-    const nodeStream = this.getNodeStream(file);
-    const savedPath = await this.saveImageStream(nodeStream, fileName);
-
-    const meta = await this.getImageMetadata(fileName);
-    const savedFileName = this.saveLogoMetadata(meta);
-
-    this.logger.info(
-      { savedPath, fn: 'replace' },
-      'Logo replaced successfully',
-    );
-
-    return {
-      path: savedPath,
-      savedFileName,
-    };
   }
 
   async delete(fileName: string) {
-    this.removeLogoMetadataByFileName(fileName);
+    try {
+      this.removeLogoMetadataByFileName(fileName);
 
-    if (await this.exists(this.getFilePath(fileName))) {
-      await this.remove(fileName);
+      if (await this.exists(this.getFilePath(fileName))) {
+        await this.remove(fileName);
 
-      this.logger.info({ fileName, fn: 'delete' }, 'Logo deleted successfully');
+        this.logger.info(
+          { fileName, fn: 'delete' },
+          'Logo deleted successfully',
+        );
+      }
+    } catch (err) {
+      this.logger.error({ err, fn: 'delete' }, 'Failed to delete logo');
+      throw new LogoStorageError(500, 'Failed to delete logo');
     }
   }
 
@@ -101,7 +131,7 @@ export class LogoStorageService extends BaseImageStorageService {
         'Error removing logo metadata',
       );
 
-      throw new ImageStorageServiceError(500, 'Error removing logo metadata');
+      throw new LogoStorageError(500, 'Error removing logo metadata');
     }
   }
 }
