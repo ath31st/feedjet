@@ -43,9 +43,6 @@ export const brandingConfigTable = sqliteTable('branding_config', {
   scheduleHeaderTitle: text('schedule_header_title')
     .notNull()
     .default('Расписание организации'),
-  logoImageId: integer('logo_image_id').references(() => logosTable.id, {
-    onDelete: 'set null',
-  }),
   createdAt: integer('created_at', { mode: 'timestamp' })
     .notNull()
     .default(sql`(unixepoch())`),

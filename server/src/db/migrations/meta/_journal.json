@@ -71,6 +71,13 @@
       "when": 1783240831921,
       "tag": "0009_chilly_pandemic",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "6",
+      "when": 1783248272595,
+      "tag": "0010_minor_medusa",
+      "breakpoints": true
     }
   ]
 }
