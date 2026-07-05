@@ -41,6 +41,7 @@ import { TickerConfigService } from './services/ticker.config.service.js';
 import { ScenarioService } from './services/scenario.service.js';
 import { MediaFolderService } from './services/media.folder.service.js';
 import { DeviceService } from './services/device.service.js';
+import { BrandingConfigService } from './services/branding.config.service.js';
 
 const sqlite = new Database(dbPath);
 sqlite.pragma('foreign_keys = ON');
@@ -72,6 +73,7 @@ export const authService = new AuthService(userService);
 export const rssService = new RssService(db);
 export const feedConfigService = new FeedConfigService(db);
 export const uiConfigService = new UiConfigService(db);
+export const brandingConfigService = new BrandingConfigService(db);
 export const tickerConfigService = new TickerConfigService(db);
 export const scheduleEventService = new ScheduleEventService(db);
 export const birthdayService = new BirthdayService(db);

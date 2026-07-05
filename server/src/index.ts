@@ -7,6 +7,7 @@ import {
   birthdayBackgroundService,
   imageCacheService,
   imageStorageService,
+  logoStorageService,
   videoStorageService,
 } from './container.js';
 import { startImageCacheCleanupJob } from './cron/image.cache.cron.js';
@@ -32,6 +33,8 @@ const videoStorageBaseDir = videoStorageService.getBaseDir();
 app.use('/videos', express.static(videoStorageBaseDir));
 const imageStorageBaseDir = imageStorageService.getBaseDir();
 app.use('/images', express.static(imageStorageBaseDir));
+const logoStorageBaseDir = logoStorageService.getBaseDir();
+app.use('/logos', express.static(logoStorageBaseDir));
 const backgroundStorageDir = birthdayBackgroundService.getBaseDir();
 app.use('/backgrounds', express.static(backgroundStorageDir));
 app.use(cors());
