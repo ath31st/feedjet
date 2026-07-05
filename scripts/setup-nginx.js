@@ -71,6 +71,7 @@ const absFileStorageDir = path.isAbsolute(fileStorageDirValue)
 
 const absVideosDir = path.join(absFileStorageDir, 'videos');
 const absImagesDir = path.join(absFileStorageDir, 'images');
+const absLogosDir = path.join(absFileStorageDir, 'logos');
 const absBackgroundsDir = path.join(absFileStorageDir, 'backgrounds');
 
 // certs
@@ -111,6 +112,7 @@ const nginxConf = template
   .replace(/{{\s*CACHE_DIR\s*}}/g, absCacheDir)
   .replace(/{{\s*VIDEO_DIR\s*}}/g, absVideosDir)
   .replace(/{{\s*IMAGE_DIR\s*}}/g, absImagesDir)
+  .replace(/{{\s*LOGO_DIR\s*}}/g, absLogosDir)
   .replace(/{{\s*BACKGROUND_DIR\s*}}/g, absBackgroundsDir)
   .replace(/{{\s*CERT_PATH\s*}}/g, crtPath)
   .replace(/{{\s*KEY_PATH\s*}}/g, keyPath);
@@ -119,8 +121,9 @@ fs.writeFileSync(nginxConfOutput, nginxConf, 'utf-8');
 
 console.log(`✅ nginx.conf обновлён: ${path.relative(projectRoot, nginxConfOutput)}`);
 console.log(`📁 cacheDir: ${absCacheDir}`);
-console.log(`📁 videoDir: ${absVideosDir}`);
-console.log(`📁 imageDir: ${absImagesDir}`);
-console.log(`📁 backgroundDir: ${absBackgroundsDir}`);
+console.log(`📁 videosDir: ${absVideosDir}`);
+console.log(`📁 imagesDir: ${absImagesDir}`);
+console.log(`📁 logosDir: ${absLogosDir}`);
+console.log(`📁 backgroundsDir: ${absBackgroundsDir}`);
 console.log(`📄 certs: ${crtPath}, ${keyPath}`);
 console.log(`🚀 Запусти: sudo nginx -c "${nginxConfOutput}"`);

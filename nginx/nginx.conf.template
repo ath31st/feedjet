@@ -76,6 +76,11 @@ http {
             add_header Cache-Control "public";
         }
 
+        location /logos/ {
+            alias {{LOGO_DIR}}/;
+            add_header Cache-Control "public";
+        }
+
         location /backgrounds/ {
             alias {{BACKGROUND_DIR}}/;
             add_header Cache-Control "public";
