@@ -16,9 +16,7 @@ export class LogoStorageService extends BaseImageStorageService {
   }
 
   findCurrentLogo(): Logo | null {
-    const logo = this.db.select().from(logosTable).get();
-
-    return logo || null;
+    return this.db.select().from(logosTable).get() ?? null;
   }
 
   async replace(file: File, fileName: string) {
