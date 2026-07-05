@@ -64,6 +64,13 @@
       "when": 1783192835307,
       "tag": "0008_abandoned_squirrel_girl",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "6",
+      "when": 1783240831921,
+      "tag": "0009_chilly_pandemic",
+      "breakpoints": true
     }
   ]
 }

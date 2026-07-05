@@ -37,6 +37,38 @@ export const kiosksTable = sqliteTable('kiosks', {
     .default(sql`(unixepoch())`),
 });
 
+export const brandingConfigTable = sqliteTable('branding_config', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  organizationName: text('organization_name').notNull().default('Организация'),
+  scheduleHeaderTitle: text('schedule_header_title')
+    .notNull()
+    .default('Расписание организации'),
+  logoImageId: integer('logo_image_id').references(() => logosTable.id, {
+    onDelete: 'set null',
+  }),
+  createdAt: integer('created_at', { mode: 'timestamp' })
+    .notNull()
+    .default(sql`(unixepoch())`),
+  updatedAt: integer('updated_at', { mode: 'timestamp' })
+    .notNull()
+    .default(sql`(unixepoch())`),
+});
+
+export const logosTable = sqliteTable('logos', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  fileName: text('file_name').unique().notNull(),
+  originalName: text('original_name').notNull(),
+  size: integer('size').notNull(),
+  width: integer('width'),
+  height: integer('height'),
+  createdAt: integer('created_at', { mode: 'timestamp' })
+    .notNull()
+    .default(sql`(unixepoch())`),
+  updatedAt: integer('updated_at', { mode: 'timestamp' })
+    .notNull()
+    .default(sql`(unixepoch())`),
+});
+
 export const usersTable = sqliteTable('users', {
   id: int().primaryKey({ autoIncrement: true }),
   login: text().notNull().unique(),
