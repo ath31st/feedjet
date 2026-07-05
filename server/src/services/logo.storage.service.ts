@@ -4,6 +4,7 @@ import { eq } from 'drizzle-orm';
 import { BaseImageStorageService } from './base.image.storage.service.js';
 import { ImageStorageServiceError } from '../errors/image.error.js';
 import type { BaseImageMetadata } from '@shared/types/image.js';
+import type { Logo } from '@shared/types/logo.js';
 
 export class LogoStorageService extends BaseImageStorageService {
   private readonly db: DbType;
@@ -14,8 +15,14 @@ export class LogoStorageService extends BaseImageStorageService {
     this.db = db;
   }
 
+  findCurrentLogo(): Logo | null {
+    const logo = this.db.select().from(logosTable).get();
+
+    return logo || null;
+  }
+
   async replace(file: File, fileName: string) {
-    const currentLogo = this.getCurrentLogo();
+    const currentLogo = this.findCurrentLogo();
 
     if (currentLogo) {
       await this.delete(currentLogo.fileName);
@@ -98,9 +105,5 @@ export class LogoStorageService extends BaseImageStorageService {
 
       throw new ImageStorageServiceError(500, 'Error removing logo metadata');
     }
-  }
-
-  private getCurrentLogo() {
-    return this.db.select().from(logosTable).get();
   }
 }

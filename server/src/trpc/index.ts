@@ -26,6 +26,7 @@ import { ZodError } from 'zod';
 import { scenarioRouter } from './routes/scenario.route.js';
 import { mediaFolderRouter } from './routes/media.folder.route.js';
 import { deviceRouter } from './routes/device.route.js';
+import { logoStorageRouter } from './routes/logo.storage.route.js';
 
 const logger = createServiceLogger('trpc');
 
@@ -42,6 +43,7 @@ const appRouter = t.router({
   scheduleEvent: scheduleEventRouter,
   imageCache: imageCacheRouter,
   image: imageStorageRouter,
+  logo: logoStorageRouter,
   weather: weatherForecastRouter,
   videoFile: videoStorageRouter,
   kiosk: kioskRouter,
