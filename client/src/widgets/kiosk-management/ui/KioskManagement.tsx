@@ -1,9 +1,9 @@
-import { CreateKioskDialog } from '@/features/kiosk-create';
 import { SettingsCard } from '@/shared/ui/SettingsCard';
 import { KioskList } from './KioskList';
 import { useKioskManagement } from '../model/useKioskManagement';
 import { CommonButton } from '@/shared/ui/common';
 import { PlusIcon } from 'lucide-react';
+import { KioskDialog } from '@/features/kiosk-form';
 
 export function KioskManagement() {
   const {
@@ -37,7 +37,8 @@ export function KioskManagement() {
         <KioskList />
       </div>
 
-      <CreateKioskDialog
+      <KioskDialog
+        mode="create"
         open={isDialogOpen}
         onClose={() => setIsDialogOpen(false)}
         onCreate={handleCreateKiosk}

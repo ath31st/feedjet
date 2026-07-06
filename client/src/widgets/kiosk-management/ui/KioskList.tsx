@@ -1,10 +1,10 @@
 import { LoadingThreeDotsJumping } from '@/shared/ui/LoadingThreeDotsJumping';
 import { KioskCard } from './KioskCard';
 import { useKioskList } from '../model/useKioskList';
-import { UpdateKioskDialog } from '@/features/kiosk-update';
 import { CommonButton } from '@/shared/ui/common';
 import { Pencil1Icon, TrashIcon } from '@radix-ui/react-icons';
 import { ConfirmActionDialog } from '@/shared/ui';
+import { KioskDialog } from '@/features/kiosk-form';
 
 export function KioskList() {
   const {
@@ -56,11 +56,12 @@ export function KioskList() {
       </div>
 
       {editKiosk && (
-        <UpdateKioskDialog
+        <KioskDialog
+          mode="update"
           kiosk={editKiosk}
-          open={true}
+          open={!!editKiosk}
           onClose={() => setEditKiosk(null)}
-          onUpdate={(data) => handleUpdate(editKiosk.id, data)}
+          onUpdate={handleUpdate}
         />
       )}
     </>
