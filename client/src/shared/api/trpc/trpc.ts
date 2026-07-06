@@ -30,6 +30,10 @@ function handleUnauthorized(): void {
   window.location.href = '/login';
 }
 
+function handleForbidden(): void {
+  window.location.href = '/403';
+}
+
 export const trpcClient = createTRPCClient<AppRouter>({
   links: [
     splitLink({
@@ -52,6 +56,10 @@ export const trpcClient = createTRPCClient<AppRouter>({
             handleUnauthorized();
           }
 
+          if (response.status === 403) {
+            handleForbidden();
+          }
+
           return response;
         },
       }),
@@ -71,6 +79,10 @@ export const trpcClient = createTRPCClient<AppRouter>({
 
           if (response.status === 401) {
             handleUnauthorized();
+          }
+
+          if (response.status === 403) {
+            handleForbidden();
           }
 
           return response;
