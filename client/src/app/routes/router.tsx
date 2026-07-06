@@ -11,6 +11,7 @@ import { KioskLayout } from '../layouts/KioskLayout';
 import { PreviewLayout } from '../layouts/PreviewLayout';
 import { AdminLayout } from '../layouts/AdminLayout';
 import { ModeSetter } from './ModSetter';
+import { ForbiddenPage } from '@/pages/ForbiddenPage';
 
 export const router = createBrowserRouter([
   {
@@ -33,6 +34,7 @@ export const router = createBrowserRouter([
           },
           { path: 'login', element: <LoginPage /> },
           { path: '401', element: <UnauthorizedPage /> },
+          { path: '403', element: <ForbiddenPage /> },
         ],
       },
       {

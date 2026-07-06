@@ -1,14 +1,8 @@
 export function NotFoundPage() {
   return (
     <div className="flex min-h-screen items-center justify-center">
-      <div
-        className="rounded-lg border-2 p-12 text-2xl"
-        style={{
-          borderColor: 'var(--border)',
-          backgroundColor: 'var(--card-bg)',
-        }}
-      >
-        Страница не найдена (404)
+      <div className="rounded-lg border border-(--border) bg-(--card-bg) p-12">
+        <h1 className="text-4xl">Страница не найдена</h1>
       </div>
     </div>
   );
