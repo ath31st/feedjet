@@ -12,6 +12,7 @@ import { PreviewLayout } from '../layouts/PreviewLayout';
 import { AdminLayout } from '../layouts/AdminLayout';
 import { ModeSetter } from './ModSetter';
 import { ForbiddenPage } from '@/pages/ForbiddenPage';
+import { SuperAdminPage } from '@/pages/SuperAdminPage';
 
 export const router = createBrowserRouter([
   {
@@ -31,6 +32,17 @@ export const router = createBrowserRouter([
               </ProtectedRoute>
             ),
             children: [{ index: true, element: <AdminPage /> }],
+          },
+          {
+            path: 'super-admin',
+            element: (
+              <ProtectedRoute>
+                <ModeSetter mode="admin">
+                  <AdminLayout />
+                </ModeSetter>
+              </ProtectedRoute>
+            ),
+            children: [{ index: true, element: <SuperAdminPage /> }],
           },
           { path: 'login', element: <LoginPage /> },
           { path: '401', element: <UnauthorizedPage /> },
