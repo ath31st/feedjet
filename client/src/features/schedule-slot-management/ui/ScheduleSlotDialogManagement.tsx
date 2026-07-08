@@ -5,10 +5,10 @@ import { ScheduleSlotEventList } from './ScheduleSlotEventList';
 import { CommonButton } from '@/shared/ui/common';
 import { format, parseISO } from 'date-fns';
 import { ru } from 'date-fns/locale';
-import { useManageScheduleSlotDialog } from '../model/useManageScheduleSlotDialog';
+import { useScheduleSlotManagementDialog } from '../model/useScheduleSlotManagementDialog';
 import { PlusIcon } from '@radix-ui/react-icons';
 
-interface ManageScheduleSlotDialogProps {
+interface Props {
   date: string;
   startTime: string;
   events: ScheduleEvent[];
@@ -19,7 +19,7 @@ interface ManageScheduleSlotDialogProps {
   onDelete: (id: number) => void;
 }
 
-export function ManageScheduleSlotDialog({
+export function ScheduleSlotManagementDialog({
   date,
   startTime,
   events,
@@ -28,7 +28,7 @@ export function ManageScheduleSlotDialog({
   onCreate,
   onUpdate,
   onDelete,
-}: ManageScheduleSlotDialogProps) {
+}: Props) {
   const {
     mode,
     editing,
@@ -36,7 +36,7 @@ export function ManageScheduleSlotDialog({
     handleEdit,
     handleFormSubmit,
     handleCancel,
-  } = useManageScheduleSlotDialog({ onCreate, onUpdate });
+  } = useScheduleSlotManagementDialog({ onCreate, onUpdate });
 
   return (
     <Dialog.Root open={open} onOpenChange={onClose}>

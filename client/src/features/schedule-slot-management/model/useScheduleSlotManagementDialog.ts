@@ -3,7 +3,7 @@ import type { ScheduleEvent, NewScheduleEvent } from '@/entities/schedule';
 
 type Mode = 'view' | 'create' | 'edit';
 
-export function useManageScheduleSlotDialog(params: {
+export function useScheduleSlotManagementDialog(params: {
   onCreate: (data: NewScheduleEvent) => void;
   onUpdate: (id: number, data: NewScheduleEvent) => void;
 }) {

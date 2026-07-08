@@ -1,7 +1,7 @@
 import { format, startOfWeek } from 'date-fns';
 import { ru } from 'date-fns/locale';
 import { useScheduleGrid } from '@/entities/schedule';
-import { ManageScheduleSlotDialog } from '@/features/manage-schedule-slot';
+import { ScheduleSlotManagementDialog } from '@/features/schedule-slot-management';
 import React from 'react';
 
 interface ScheduleGridProps {
@@ -79,7 +79,7 @@ export function ScheduleGrid({
       </div>
 
       {selectedSlot && (
-        <ManageScheduleSlotDialog
+        <ScheduleSlotManagementDialog
           date={selectedSlot.date}
           startTime={selectedSlot.startTime}
           events={getEventsForSlot(selectedSlot.date, selectedSlot.startTime)}
