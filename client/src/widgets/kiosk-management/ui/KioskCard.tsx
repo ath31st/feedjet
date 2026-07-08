@@ -1,4 +1,5 @@
 import type { Kiosk } from '@/entities/kiosk';
+import { CardField, CardTitle, EntityCard } from '@/shared/ui';
 import type { ReactNode } from 'react';
 
 interface KioskCardProps {
@@ -8,48 +9,31 @@ interface KioskCardProps {
 
 export function KioskCard({ kiosk, actions }: KioskCardProps) {
   return (
-    <div
-      className={`rounded-lg border ${kiosk.isActive ? 'border-(--border)' : 'border-(--border-disabled)'} p-3`}
+    <EntityCard
+      actions={actions}
+      className={kiosk.isActive ? '' : 'border-(--border-disabled)'}
     >
-      <div className="mb-2 flex items-start justify-between">
-        <h3
-          className={`font-semibold text-lg ${kiosk.isActive ? '' : 'text-(--meta-text)'}`}
-        >
-          {kiosk.name}
-        </h3>
+      <CardTitle className={kiosk.isActive ? undefined : 'text-(--meta-text)'}>
+        {kiosk.name}
+      </CardTitle>
 
-        <div className="flex items-center gap-2">{actions}</div>
-      </div>
+      <CardField label="Slug">{kiosk.slug}</CardField>
 
-      <div className="text-(--card-text) text-sm">
-        <div>
-          <strong className="text-(--meta-text)">Slug:</strong> {kiosk.slug}
-        </div>
+      {kiosk.description && (
+        <CardField label="Описание">{kiosk.description}</CardField>
+      )}
 
-        {kiosk.description && (
-          <div>
-            <strong className="text-(--meta-text)">Описание:</strong>{' '}
-            {kiosk.description}
-          </div>
-        )}
+      {kiosk.location && (
+        <CardField label="Местоположение">{kiosk.location}</CardField>
+      )}
 
-        {kiosk.location && (
-          <div>
-            <strong className="text-(--meta-text)">Местоположение:</strong>{' '}
-            {kiosk.location}
-          </div>
-        )}
+      <CardField label="Статус">
+        {kiosk.isActive ? 'Активен' : 'Неактивен'}
+      </CardField>
 
-        <div>
-          <strong className="text-(--meta-text)">Статус:</strong>{' '}
-          {kiosk.isActive ? 'Активен' : 'Неактивен'}
-        </div>
-
-        <div>
-          <strong className="text-(--meta-text)">Создан:</strong>{' '}
-          {new Date(kiosk.createdAt).toLocaleDateString()}
-        </div>
-      </div>
-    </div>
+      <CardField label="Создан">
+        {new Date(kiosk.createdAt).toLocaleDateString()}
+      </CardField>
+    </EntityCard>
   );
 }

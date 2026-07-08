@@ -7,6 +7,7 @@ import {
 } from '@/features/device-screen-control';
 import { CommonButton } from '@/shared/ui/common';
 import { Pencil, Trash2 } from 'lucide-react';
+import { CardField, CardTitle, EntityCard } from '@/shared/ui';
 
 interface IntegrationCardProps {
   integration: Integration;
@@ -24,55 +25,50 @@ export function IntegrationCard({
     integration.type;
 
   return (
-    <div className="flex items-start justify-between rounded-lg border border-(--border) bg-(--card-bg) p-3">
-      <div className="min-w-0 flex-1">
-        <div className="mb-2 font-semibold text-lg">{typeLabel}</div>
+    <EntityCard
+      controls={
+        <>
+          <DeviceScreenOnAction ip={integration.ip} />
+          <DeviceScreenOffAction ip={integration.ip} />
+        </>
+      }
+      actions={
+        <>
+          <CommonButton
+            onClick={() => onEdit(integration)}
+            type="button"
+            tooltip="Редактировать интеграцию"
+          >
+            <Pencil size={15} />
+          </CommonButton>
 
-        <div className="text-sm">
-          <strong className="text-(--meta-text)">Адрес:</strong>{' '}
-          {integration.ip}:{integration.port}
-        </div>
+          <CommonButton
+            type="button"
+            onClick={() => onDelete(integration.id)}
+            tooltip="Удалить интеграцию"
+          >
+            <Trash2 size={15} />
+          </CommonButton>
+        </>
+      }
+    >
+      <CardTitle>{typeLabel}</CardTitle>
 
-        {integration.description && (
-          <div className="text-sm">
-            <strong className="text-(--meta-text)">Описание:</strong>{' '}
-            {integration.description}
-          </div>
-        )}
+      <CardField label="Адрес">
+        {integration.ip}:{integration.port}
+      </CardField>
 
-        <div className="text-sm">
-          <strong className="text-(--meta-text)">Конфиг:</strong>{' '}
-          <IntegrationConfigInfo integration={integration} />
-        </div>
+      {integration.description && (
+        <CardField label="Описание">{integration.description}</CardField>
+      )}
 
-        <div className="text-sm">
-          <strong className="text-(--meta-text)">Статус:</strong>{' '}
-          {integration.isActive ? 'Активен' : 'Неактивен'}
-        </div>
-      </div>
+      <CardField label="Конфиг">
+        <IntegrationConfigInfo integration={integration} />
+      </CardField>
 
-      <div className="mr-4 ml-auto flex gap-2">
-        <DeviceScreenOnAction ip={integration.ip} />
-        <DeviceScreenOffAction ip={integration.ip} />
-      </div>
-
-      <div className="ml-auto flex gap-2">
-        <CommonButton
-          onClick={() => onEdit(integration)}
-          type="button"
-          tooltip="Редактировать интеграцию"
-        >
-          <Pencil size={15} />
-        </CommonButton>
-
-        <CommonButton
-          type="button"
-          onClick={() => onDelete(integration.id)}
-          tooltip="Удалить интеграцию"
-        >
-          <Trash2 size={15} />
-        </CommonButton>
-      </div>
-    </div>
+      <CardField label="Статус">
+        {integration.isActive ? 'Активен' : 'Неактивен'}
+      </CardField>
+    </EntityCard>
   );
 }
