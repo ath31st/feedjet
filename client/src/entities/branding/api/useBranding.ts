@@ -6,20 +6,6 @@ export const useGetCurrentConfig = () => {
   return useQuery(trpcWithProxy.brandingConfig.getCurrentConfig.queryOptions());
 };
 
-export const useCreateDefaultBrandingConfig = () => {
-  return useMutation(
-    trpcWithProxy.brandingConfig.createDefaultConfig.mutationOptions({
-      onSuccess() {
-        toast.success('Конфигурация брендинга создана');
-
-        queryClient.invalidateQueries({
-          queryKey: trpcWithProxy.brandingConfig.getCurrentConfig.queryKey(),
-        });
-      },
-    }),
-  );
-};
-
 export const useGetConfigById = (brandingConfigId: number) => {
   return useQuery(
     trpcWithProxy.brandingConfig.getConfig.queryOptions({

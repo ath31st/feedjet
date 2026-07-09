@@ -39,7 +39,12 @@ export class BrandingConfigService {
     }
   }
 
-  createDefaultConfig(): BrandingConfig {
+  getConfigOrCreateDefault() {
+    const config = this.findCurrentConfig();
+    return config ?? this.createDefaultConfig();
+  }
+
+  private createDefaultConfig(): BrandingConfig {
     this.logger.debug(
       { fn: 'createDefaultConfig' },
       'Creating default branding config',
