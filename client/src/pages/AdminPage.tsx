@@ -39,10 +39,12 @@ import {
   Folder,
   Link2Icon,
   MonitorSmartphone,
+  Building2,
 } from 'lucide-react';
 import type { HelpItem } from '@/entities/help';
 import { IntegrationManagement } from '@/widgets/integration-management';
 import { DeviceManagement } from '@/widgets/device-management';
+import { BrandingConfigManagementWidget } from '@/widgets/branding-config-management';
 
 export function AdminPage() {
   const kiosk = useKioskStore((s) => s.currentKiosk);
@@ -87,6 +89,11 @@ export function AdminPage() {
       label: 'Настройки оформления',
       icon: Settings,
       kioskSelector: true,
+    },
+    {
+      value: 'organization',
+      label: 'Организация',
+      icon: Building2,
     },
     {
       value: 'schedule',
@@ -154,6 +161,9 @@ export function AdminPage() {
 
       case 'settings':
         return <AppearanceSettingsWidget kioskId={kioskId} />;
+
+      case 'organization':
+        return <BrandingConfigManagementWidget />;
 
       case 'schedule':
         return (
