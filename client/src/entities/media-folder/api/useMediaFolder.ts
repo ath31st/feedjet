@@ -44,26 +44,6 @@ export const useDeleteFolder = () =>
     }),
   );
 
-export const useAssignImageFolder = () =>
-  useMutation(
-    trpcWithProxy.mediaFolder.assignImageFolder.mutationOptions({
-      onSuccess() {
-        toast.success('Папка назначена');
-        queryClient.invalidateQueries({ queryKey: mediaQueryKey() });
-      },
-    }),
-  );
-
-export const useAssignVideoFolder = () =>
-  useMutation(
-    trpcWithProxy.mediaFolder.assignVideoFolder.mutationOptions({
-      onSuccess() {
-        toast.success('Папка назначена');
-        queryClient.invalidateQueries({ queryKey: mediaQueryKey() });
-      },
-    }),
-  );
-
 export const useMoveMediaBatch = () =>
   useMutation(
     trpcWithProxy.mediaFolder.moveMediaBatch.mutationOptions({
