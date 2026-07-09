@@ -1,4 +1,4 @@
-import { t, eventBus, brandingConfigService } from '../../container.js';
+import { t, brandingConfigService } from '../../container.js';
 import { protectedProcedure, publicProcedure } from '../../middleware/auth.js';
 import {
   brandingConfigGetInputSchema,
