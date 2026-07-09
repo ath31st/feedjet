@@ -27,6 +27,7 @@ import { scenarioRouter } from './routes/scenario.route.js';
 import { mediaFolderRouter } from './routes/media.folder.route.js';
 import { deviceRouter } from './routes/device.route.js';
 import { logoStorageRouter } from './routes/logo.storage.route.js';
+import { brandingConfigRouter } from './routes/branding.config.route.js';
 
 const logger = createServiceLogger('trpc');
 
@@ -39,6 +40,7 @@ const appRouter = t.router({
   control: controlRouter,
   device: deviceRouter,
   uiConfig: uiConfigRouter,
+  brandingConfig: brandingConfigRouter,
   tickerConfig: tickerConfigRouter,
   scheduleEvent: scheduleEventRouter,
   imageCache: imageCacheRouter,

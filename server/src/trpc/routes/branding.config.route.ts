@@ -7,7 +7,7 @@ import {
 import { handleServiceCall } from '../error.handler.js';
 
 export const brandingConfigRouter = t.router({
-  getBrandingConfig: publicProcedure.query(() =>
+  getCurrentConfig: publicProcedure.query(() =>
     handleServiceCall(() => {
       return brandingConfigService.findCurrentConfig();
     }),
