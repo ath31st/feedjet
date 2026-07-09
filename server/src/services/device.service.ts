@@ -147,12 +147,12 @@ export class DeviceService {
       const cutoffDate = new Date();
       cutoffDate.setDate(cutoffDate.getDate() - daysThreshold);
 
-      const cutoffStr = cutoffDate.toISOString();
+      const cutoffTimestampInSeconds = Math.floor(cutoffDate.getTime() / 1000);
 
       const oldDevices = this.db
         .select()
         .from(devicesTable)
-        .where(sql`${devicesTable.lastSeenAt} < ${cutoffStr}`)
+        .where(sql`${devicesTable.lastSeenAt} < ${cutoffTimestampInSeconds}`)
         .all();
 
       if (oldDevices.length === 0) {
@@ -165,7 +165,7 @@ export class DeviceService {
 
       this.db
         .delete(devicesTable)
-        .where(sql`${devicesTable.lastSeenAt} < ${cutoffStr}`)
+        .where(sql`${devicesTable.lastSeenAt} < ${cutoffTimestampInSeconds}`)
         .run();
 
       this.logger.info(
