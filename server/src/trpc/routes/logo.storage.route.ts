@@ -10,7 +10,7 @@ export const logoStorageRouter = t.router({
     return logoStorageService.findCurrentLogo();
   }),
 
-  setLogo: protectedProcedure
+  uploadLogo: protectedProcedure
     .input(fileParamsSchema)
     .mutation(async ({ input }) => {
       const file = input.get('file') as File;
