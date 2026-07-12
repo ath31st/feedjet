@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useUiConfigStore } from '@/entities/ui-config/model/uiConfigStore';
+import { useUiConfigStore } from '@/entities/ui-config';
 
 export function useUiConfigStoreInit(kioskId: number) {
   const fetchUiConfig = useUiConfigStore((s) => s.fetchUiConfig);

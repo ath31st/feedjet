@@ -1,4 +1,4 @@
-import { FormField, sharedInputStyles } from '@/shared/ui/common/FormField';
+import { FormField, sharedInputStyles } from '@/shared/ui';
 import { SimpleDropdownMenu } from '@/shared/ui/common';
 import { PhilipsPairPanel } from './PhilipsPairPanel';
 import type { IntegrationFormData } from '@/shared/ui';

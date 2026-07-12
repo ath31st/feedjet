@@ -1,4 +1,4 @@
-import { useKioskStore } from '@/entities/kiosk/model/kioskStore';
+import { useKioskStore } from '@/entities/kiosk';
 import { useEffect } from 'react';
 
 export function AdminInitializer() {

@@ -1,5 +1,5 @@
 import { CommonButton } from '@/shared/ui/common';
-import { FormField, sharedInputStyles } from '@/shared/ui/common/FormField';
+import { FormField, sharedInputStyles } from '@/shared/ui';
 import { CheckIcon, ReloadIcon } from '@radix-ui/react-icons';
 import { usePhilipsPair } from '../model/usePhilipsPair';
 
