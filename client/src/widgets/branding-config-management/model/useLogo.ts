@@ -3,7 +3,7 @@ import {
   useDeleteLogo,
   useGetLogo,
   useUploadLogo,
-} from '@/entities/logo';
+} from '@/entities/branding';
 
 export const useLogo = () => {
   const { data: logo, isLoading } = useGetLogo();
