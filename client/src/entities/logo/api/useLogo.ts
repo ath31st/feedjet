@@ -1,6 +1,10 @@
 import { queryClient, trpcWithProxy } from '@/shared/api';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
+
+export const useGetLogo = () => {
+  return useQuery(trpcWithProxy.logo.getLogo.queryOptions());
+};
 
 export const useUploadLogo = () => {
   return useMutation(
