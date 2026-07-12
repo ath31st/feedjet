@@ -29,7 +29,7 @@ export function ScheduleWidget({ rotate }: ScheduleWidgetProps) {
   const headerTitle = useBrandingConfigStore(
     (s) => s.config?.scheduleHeaderTitle,
   );
-  const companyLogoUrl = useBrandingConfigStore((s) => s.logoUrl);
+  const organizationLogoUrl = useBrandingConfigStore((s) => s.logoUrl);
   const { locationTitle, locationLon, locationLat } = useEnv();
   const {
     data: dailyForecast,
@@ -72,7 +72,7 @@ export function ScheduleWidget({ rotate }: ScheduleWidgetProps) {
       <ScheduleHeader
         isEffectiveXl={isEffectiveXl}
         title={headerTitle}
-        logoUrl={companyLogoUrl}
+        logoUrl={organizationLogoUrl}
       />
 
       <div

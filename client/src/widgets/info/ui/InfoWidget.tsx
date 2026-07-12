@@ -16,8 +16,10 @@ interface InfoWidgetProps {
 }
 
 export function InfoWidget({ rotate }: InfoWidgetProps) {
-  const companyName = useBrandingConfigStore((s) => s.config?.organizationName);
-  const companyLogoUrl = useBrandingConfigStore((s) => s.logoUrl);
+  const organizationName = useBrandingConfigStore(
+    (s) => s.config?.organizationName,
+  );
+  const organizationLogoUrl = useBrandingConfigStore((s) => s.logoUrl);
   const { locationTitle, locationLon, locationLat } = useEnv();
   const {
     data: dailyForecast,
@@ -50,8 +52,8 @@ export function InfoWidget({ rotate }: InfoWidgetProps) {
     <div className="flex h-full w-full flex-col">
       <InfoHeader
         isEffectiveXl={isEffectiveXl}
-        title={companyName}
-        logoUrl={companyLogoUrl}
+        title={organizationName}
+        logoUrl={organizationLogoUrl}
       />
 
       <div className="mt-6 w-full border-(--border) border-2"></div>
