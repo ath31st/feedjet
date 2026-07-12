@@ -1,4 +1,5 @@
 export * from '@shared/types/branding.config';
+export * from '@shared/types/logo';
 export * from './api/useBranding';
 export * from './model/brandingConfigStore';
 export * from './api/useLogo';
