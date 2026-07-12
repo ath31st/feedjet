@@ -13,6 +13,7 @@ export const useLogo = () => {
   const handleUploadLogo = (file: File) => {
     const formData = new FormData();
     formData.append('file', file);
+    formData.append('filename', file.name);
 
     uploadLogo(formData);
   };

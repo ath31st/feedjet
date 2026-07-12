@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { useLogo } from '../model/useLogo';
-import defaultLogo from '@/shared/assets/digital_eagle.svg';
+import defaultLogo from '@/shared/assets/default_logo.svg';
 import { Trash, Upload } from 'lucide-react';
 import { CommonButton } from '@/shared/ui/common';
 
@@ -18,7 +18,7 @@ export function LogoUploader() {
   const imageSrc = logoUrl ?? defaultLogo;
 
   return (
-    <div className="relative overflow-hidden rounded-lg">
+    <div className="relative h-150 overflow-hidden rounded-lg">
       <img
         src={isLoading ? defaultLogo : imageSrc}
         alt="Логотип организации"
@@ -33,7 +33,7 @@ export function LogoUploader() {
         onChange={handleSelectFile}
       />
 
-      <div className="absolute top-2 right-2 flex gap-2">
+      <div className="absolute right-2 bottom-2 flex gap-2">
         <CommonButton
           type="button"
           disabled={isDeleting || isLoading || logoUrl === null}
