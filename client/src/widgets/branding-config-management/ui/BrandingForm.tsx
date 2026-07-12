@@ -21,13 +21,13 @@ export function BrandingForm() {
       <FormField
         id="organization-name"
         label="Наименование организации"
-        maxLength={200}
+        maxLength={50}
         currentLength={watch('organizationName').length}
       >
         <input
           id="organization-name"
           type="text"
-          maxLength={200}
+          maxLength={50}
           placeholder="Название организации"
           className={sharedInputStyles}
           {...register('organizationName')}
@@ -37,13 +37,13 @@ export function BrandingForm() {
       <FormField
         id="schedule-header-title"
         label="Заголовок расписания"
-        maxLength={200}
+        maxLength={50}
         currentLength={watch('scheduleHeaderTitle').length}
       >
         <input
           id="schedule-header-title"
           type="text"
-          maxLength={200}
+          maxLength={50}
           placeholder="Расписание мероприятий"
           className={sharedInputStyles}
           {...register('scheduleHeaderTitle')}
