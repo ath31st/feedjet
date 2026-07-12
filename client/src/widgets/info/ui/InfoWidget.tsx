@@ -9,13 +9,16 @@ import { InfoHeader } from './InfoHeader';
 import { DigitalClock } from '@/shared/ui';
 import { InfoDate } from './InfoDate';
 import { useAutoWeatherRefetch } from '../model/useAutoWeatherRefetch';
+import { useBrandingConfigStore } from '@/entities/branding';
 
 interface InfoWidgetProps {
   rotate: number;
 }
 
 export function InfoWidget({ rotate }: InfoWidgetProps) {
-  const { companyName, locationTitle, locationLon, locationLat } = useEnv();
+  const companyName = useBrandingConfigStore((s) => s.config?.organizationName);
+  const companyLogoUrl = useBrandingConfigStore((s) => s.logoUrl);
+  const { locationTitle, locationLon, locationLat } = useEnv();
   const {
     data: dailyForecast,
     isLoading: isLoadingDaily,
@@ -45,7 +48,11 @@ export function InfoWidget({ rotate }: InfoWidgetProps) {
 
   return (
     <div className="flex h-full w-full flex-col">
-      <InfoHeader isEffectiveXl={isEffectiveXl} title={companyName} />
+      <InfoHeader
+        isEffectiveXl={isEffectiveXl}
+        title={companyName}
+        logoUrl={companyLogoUrl}
+      />
 
       <div className="mt-6 w-full border-(--border) border-2"></div>
 

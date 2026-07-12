@@ -19,13 +19,18 @@ import {
   useDailyWeatherForecast,
 } from '@/entities/weather-forecast';
 import { DigitalClock } from '@/shared/ui';
+import { useBrandingConfigStore } from '@/entities/branding';
 
 interface ScheduleWidgetProps {
   rotate: number;
 }
 
 export function ScheduleWidget({ rotate }: ScheduleWidgetProps) {
-  const { headerTitle, locationTitle, locationLon, locationLat } = useEnv();
+  const headerTitle = useBrandingConfigStore(
+    (s) => s.config?.scheduleHeaderTitle,
+  );
+  const companyLogoUrl = useBrandingConfigStore((s) => s.logoUrl);
+  const { locationTitle, locationLon, locationLat } = useEnv();
   const {
     data: dailyForecast,
     isLoading: isLoadingDaily,
@@ -64,7 +69,11 @@ export function ScheduleWidget({ rotate }: ScheduleWidgetProps) {
 
   return (
     <div className="flex h-full w-full flex-col">
-      <ScheduleHeader isEffectiveXl={isEffectiveXl} title={headerTitle} />
+      <ScheduleHeader
+        isEffectiveXl={isEffectiveXl}
+        title={headerTitle}
+        logoUrl={companyLogoUrl}
+      />
 
       <div
         className="mx-auto flex w-full flex-1 border-t-4"

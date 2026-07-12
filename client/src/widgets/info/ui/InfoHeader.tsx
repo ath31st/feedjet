@@ -2,17 +2,18 @@ import eagleUrl from '@/shared/assets/digital_eagle.svg';
 
 interface InfoHeaderProps {
   isEffectiveXl: boolean;
+  logoUrl: string;
   title?: string;
 }
 
-export function InfoHeader({ isEffectiveXl, title }: InfoHeaderProps) {
+export function InfoHeader({ isEffectiveXl, title, logoUrl }: InfoHeaderProps) {
   return (
     <>
       {isEffectiveXl ? (
         <div className="flex h-1/4 items-center justify-center px-12 py-4">
           <img
-            src={eagleUrl}
-            alt="Eagle"
+            src={logoUrl}
+            alt="Logo"
             className="h-full w-2/5 object-contain"
             style={{ filter: 'drop-shadow(0 0 6px var(--border))' }}
           />

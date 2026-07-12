@@ -1,17 +1,20 @@
-import eagleUrl from '@/shared/assets/digital_eagle.svg';
-
 interface ScheduleHeaderProps {
   isEffectiveXl: boolean;
+  logoUrl: string;
   title?: string;
 }
 
-export function ScheduleHeader({ isEffectiveXl, title }: ScheduleHeaderProps) {
+export function ScheduleHeader({
+  isEffectiveXl,
+  title,
+  logoUrl,
+}: ScheduleHeaderProps) {
   return (
     <div
       className={`flex ${isEffectiveXl ? 'h-1/5' : 'h-1/7'} items-center justify-center px-18 py-4`}
     >
       <img
-        src={eagleUrl}
+        src={logoUrl}
         alt="Eagle"
         className="h-full w-1/2 object-contain"
         style={{ filter: 'drop-shadow(0 0 6px var(--border))' }}
