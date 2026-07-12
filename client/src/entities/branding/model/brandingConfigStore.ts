@@ -6,8 +6,9 @@ import type { Logo } from '..';
 
 interface BrandingState {
   config: BrandingConfig | null;
-  logoUrl: string | null;
+  logoUrl: string;
   loading: boolean;
+  loadingLogo: boolean;
   error: string | null;
 
   fetchConfig(): Promise<void>;
@@ -20,22 +21,23 @@ interface BrandingState {
 
 export const useBrandingConfigStore = create<BrandingState>()((set, _get) => ({
   config: null,
-  logoUrl: null,
+  logoUrl: defaultLogo,
   loading: false,
+  loadingLogo: false,
   error: null,
 
   fetchLogo: async () => {
-    set({ loading: true, error: null });
+    set({ loadingLogo: true, error: null });
     try {
       const logo = await trpcClient.logo.getLogo.query();
       set({
         logoUrl: logo ? buildLogoUrl(logo.fileName) : defaultLogo,
-        loading: false,
+        loadingLogo: false,
       });
     } catch (err) {
       set({
         error: err instanceof Error ? err.message : 'Failed to fetch logo',
-        loading: false,
+        loadingLogo: false,
       });
     }
   },
