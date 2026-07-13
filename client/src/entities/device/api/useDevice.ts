@@ -19,6 +19,10 @@ export const useDeleteDevice = () => {
   );
 };
 
-export const useGetAllDevices = () => {
-  return useQuery(trpcWithProxy.device.getAllDevices.queryOptions());
+export const useGetAllDevices = (refetchInterval?: number) => {
+  return useQuery(
+    trpcWithProxy.device.getAllDevices.queryOptions(undefined, {
+      refetchInterval,
+    }),
+  );
 };

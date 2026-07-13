@@ -14,7 +14,7 @@ export class DeviceService {
   private readonly db: DbType;
   private readonly devicesCache = new LRUCache<string, Device[]>({
     max: 1,
-    ttl: 15000,
+    ttl: 30_000,
   });
   private readonly logger = createServiceLogger('deviceService');
 
