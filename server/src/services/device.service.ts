@@ -8,9 +8,14 @@ import type {
 } from '@shared/types/device.js';
 import { createServiceLogger } from '../utils/pino.logger.js';
 import { DeviceError } from '../errors/device.error.js';
+import { LRUCache } from 'lru-cache';
 
 export class DeviceService {
   private readonly db: DbType;
+  private readonly devicesCache = new LRUCache<string, Device[]>({
+    max: 1,
+    ttl: 15000,
+  });
   private readonly logger = createServiceLogger('deviceService');
 
   constructor(db: DbType) {
@@ -97,11 +102,20 @@ export class DeviceService {
 
   getAll(): Device[] {
     try {
-      return this.db
+      const cached = this.devicesCache.get('all');
+      if (cached) {
+        return cached;
+      }
+
+      const devices = this.db
         .select()
         .from(devicesTable)
         .orderBy(desc(devicesTable.lastSeenAt))
         .all();
+
+      this.devicesCache.set('all', devices);
+
+      return devices;
     } catch (err) {
       this.logger.error({ err, fn: 'getAll' }, 'Failed to get devices');
       throw new DeviceError(500, 'Failed to get devices');
@@ -131,6 +145,8 @@ export class DeviceService {
         .delete(devicesTable)
         .where(eq(devicesTable.deviceId, deviceId))
         .run();
+
+      this.devicesCache.clear();
 
       this.logger.info({ deviceId, fn: 'delete' }, 'Device deleted');
     } catch (err) {
@@ -167,6 +183,8 @@ export class DeviceService {
         .delete(devicesTable)
         .where(sql`${devicesTable.lastSeenAt} < ${cutoffTimestampInSeconds}`)
         .run();
+
+      this.devicesCache.clear();
 
       this.logger.info(
         {

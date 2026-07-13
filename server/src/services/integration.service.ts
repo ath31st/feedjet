@@ -14,10 +14,15 @@ import { IntegrationError } from '../errors/integration.error.js';
 import { PhilipsPairError } from '../errors/philips.pair.error.js';
 import type { PhilipsJointSpaceClient } from '../integration/philips.jointspace.client.js';
 import { PORT } from '../config/philips.jointspace.client.config.js';
+import { LRUCache } from 'lru-cache';
 
 export class IntegrationService {
   private readonly db: DbType;
   private readonly philipsClient: PhilipsJointSpaceClient;
+  private readonly integrationIpsCache = new LRUCache<string, Set<string>>({
+    max: 1,
+    ttl: 60_000,
+  });
   private readonly logger = createServiceLogger('integrationService');
 
   constructor(db: DbType, philipsClient: PhilipsJointSpaceClient) {
@@ -66,13 +71,22 @@ export class IntegrationService {
   }
 
   getIntegrationIps(): Set<string> {
-    return new Set(
+    const cached = this.integrationIpsCache.get('ips');
+    if (cached) {
+      return cached;
+    }
+
+    const ips = new Set(
       this.db
         .select({ ip: integrationsTable.ip })
         .from(integrationsTable)
         .all()
         .map((row) => row.ip),
     );
+
+    this.integrationIpsCache.set('ips', ips);
+
+    return ips;
   }
 
   create(data: NewIntegration): Integration {
@@ -105,6 +119,8 @@ export class IntegrationService {
         { id: integration.id, fn: 'create' },
         'Created integration',
       );
+
+      this.integrationIpsCache.clear();
 
       return integration;
     } catch (error) {
@@ -193,6 +209,8 @@ export class IntegrationService {
 
     this.logger.info({ data, fn: 'update' }, 'Updated integration');
 
+    this.integrationIpsCache.clear();
+
     return result;
   }
 
@@ -206,6 +224,9 @@ export class IntegrationService {
         .run().changes > 0;
 
     this.logger.info({ integrationId, fn: 'delete' }, 'Deleted integration');
+
+    this.integrationIpsCache.clear();
+
     return result;
   }
 
@@ -332,6 +353,8 @@ export class IntegrationService {
             .get();
 
       this.logger.info({ fn: 'pairPhilipsComplete' }, 'Philips pairing stored');
+
+      this.integrationIpsCache.clear();
 
       return integration;
     } catch (error) {
