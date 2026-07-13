@@ -1,4 +1,4 @@
-import { t, logoStorageService } from '../../container.js';
+import { t, logoStorageService, eventBus } from '../../container.js';
 import { protectedProcedure, publicProcedure } from '../../middleware/auth.js';
 import {
   fileDeleteParamsSchema,
@@ -16,18 +16,20 @@ export const logoStorageRouter = t.router({
       const file = input.get('file') as File;
       const filename = input.get('filename') as string;
 
-      const { path, savedFileName } = await logoStorageService.replace(
-        file,
-        filename,
-      );
+      const logo = await logoStorageService.replace(file, filename);
 
-      return { ok: true, path, filename: savedFileName };
+      eventBus.emit('branding-logo', logo);
+
+      return { ok: true, logo };
     }),
 
   deleteLogo: protectedProcedure
     .input(fileDeleteParamsSchema)
     .mutation(async ({ input }) => {
       await logoStorageService.delete(input.filename);
+
+      eventBus.emit('branding-logo', null);
+
       return { ok: true };
     }),
 });

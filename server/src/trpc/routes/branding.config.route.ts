@@ -1,4 +1,4 @@
-import { t, brandingConfigService } from '../../container.js';
+import { t, brandingConfigService, eventBus } from '../../container.js';
 import { protectedProcedure, publicProcedure } from '../../middleware/auth.js';
 import {
   brandingConfigGetInputSchema,
@@ -29,6 +29,8 @@ export const brandingConfigRouter = t.router({
           input.brandingConfigId,
           input.data,
         );
+
+        eventBus.emit('branding-config', updated);
         // TODO когда появятся организации надо будет здесь сделать рассылку по организации
         //eventBus.emit(`branding-config:${updated.organizationId}`, updated);
         return updated;

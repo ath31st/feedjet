@@ -6,6 +6,8 @@ import {
 export const unifiedSseHandler = createUnifiedSseHandler((kioskId) => {
   const subs: SseSubscription[] = [
     { eventName: 'feed', messageType: 'feed' },
+    { eventName: 'branding-config', messageType: 'branding-config' },
+    { eventName: 'branding-logo', messageType: 'branding-logo' },
     { eventName: 'control', messageType: 'control' },
     {
       eventName: 'keepalive',

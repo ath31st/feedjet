@@ -36,7 +36,7 @@ export class LogoStorageService extends BaseImageStorageService {
     }
   }
 
-  async replace(file: File, fileName: string) {
+  async replace(file: File, fileName: string): Promise<Logo | null> {
     try {
       const currentLogo = this.findCurrentLogo();
 
@@ -51,14 +51,11 @@ export class LogoStorageService extends BaseImageStorageService {
       const savedFileName = this.saveLogoMetadata(meta);
 
       this.logger.info(
-        { savedPath, fn: 'replace' },
+        { savedPath, savedFileName, fn: 'replace' },
         'Logo replaced successfully',
       );
 
-      return {
-        path: savedPath,
-        savedFileName,
-      };
+      return this.findCurrentLogo();
     } catch (err) {
       this.logger.error({ err, fn: 'replace' }, 'Failed to replace logo');
       throw new LogoStorageError(500, 'Failed to replace logo');

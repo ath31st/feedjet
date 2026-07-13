@@ -10,12 +10,19 @@ import type { TickerConfig } from '@/entities/ticker-config';
 import { useTickerConfigStore } from '@/entities/ticker-config';
 import { useScenarioStore, type Scenario } from '@/entities/scenario';
 import { useDeviceStore } from '@/entities/device';
+import {
+  useBrandingConfigStore,
+  type BrandingConfig,
+  type Logo,
+} from '@/entities/branding';
 
 export function useSseStream(kioskId: number) {
   console.log('SSE: currentKioskId', kioskId);
 
   const setFeeds = useRssFeedStore((s) => s.setFeeds);
   const setUiConfig = useUiConfigStore((s) => s.setConfig);
+  const setBrandingConfig = useBrandingConfigStore((s) => s.setConfig);
+  const setBrandingLogo = useBrandingConfigStore((s) => s.setLogo);
   const setTickerConfig = useTickerConfigStore((s) => s.setConfig);
   const setFeedConfig = useFeedConfigStore((s) => s.setConfig);
   const setScenario = useScenarioStore((s) => s.setScenario);
@@ -49,6 +56,16 @@ export function useSseStream(kioskId: number) {
             setUiConfig(payload as UiConfig);
             break;
 
+          case 'branding-config':
+            console.log('SSE: Received BRANDING CONFIG');
+            setBrandingConfig(payload as BrandingConfig);
+            break;
+
+          case 'branding-logo':
+            console.log('SSE: Received BRANDING LOGO');
+            setBrandingLogo(payload as Logo);
+            break;
+
           case 'feed-config':
             console.log('SSE: Received FEED CONFIG');
             setFeedConfig(payload as FeedConfig);
@@ -80,6 +97,8 @@ export function useSseStream(kioskId: number) {
     [
       setFeeds,
       setUiConfig,
+      setBrandingConfig,
+      setBrandingLogo,
       setFeedConfig,
       setTickerConfig,
       setScenario,
