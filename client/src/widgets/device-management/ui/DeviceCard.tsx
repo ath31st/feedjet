@@ -9,6 +9,7 @@ import type { Device } from '@/entities/device';
 import copy from 'copy-to-clipboard';
 import { toast } from 'sonner';
 import { CardField, CardTitle, EntityCard } from '@/shared/ui';
+import { fmtRelative, getRelativeColor } from '@/shared/lib';
 
 interface DeviceCardProps {
   device: Device;
@@ -75,7 +76,11 @@ export function DeviceCard({ device, onDelete }: DeviceCardProps) {
       </CardField>
 
       <CardField label="С момента">
-        {new Date(device.firstSeenAt).toLocaleString()}
+        {new Date(device.firstSeenAt).toLocaleString()} (
+        <span className={getRelativeColor(device.lastSeenAt)}>
+          {fmtRelative(device.lastSeenAt)}
+        </span>
+        )
       </CardField>
     </EntityCard>
   );
