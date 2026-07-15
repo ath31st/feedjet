@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { buildLogoUrl, type BrandingConfig } from '..';
 import { trpcClient } from '@/shared/api';
-import defaultLogo from '@/shared/assets/default_logo.svg';
+import defaultLogo from '@/shared/assets/default_logo.png';
 import type { Logo } from '..';
 
 interface BrandingState {

@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { useLogo } from '../model/useLogo';
-import defaultLogo from '@/shared/assets/default_logo.svg';
+import defaultLogo from '@/shared/assets/default_logo.png';
 import { Trash, Upload } from 'lucide-react';
 import { CommonButton } from '@/shared/ui/common';
 
