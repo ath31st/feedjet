@@ -50,11 +50,10 @@ export const ITEM_CONFIG: Record<string, TypeConfig> = {
     hasDuration: false,
     canPreview: true,
     renderPreview: (item) =>
-      item.videoFileName ? (
-        <video
-          src={buildVideoUrl(item.videoFileName)}
-          muted
-          preload="metadata"
+      item.videoThumbnail ? (
+        <img
+          src={buildVideoUrl(item.videoThumbnail)}
+          alt=""
           className="h-full w-full object-cover"
         />
       ) : null,

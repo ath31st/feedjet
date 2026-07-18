@@ -93,13 +93,23 @@ export function MediaGrid({
                     );
                   }
 
-                  return (
-                    <video
-                      src={buildVideoUrl(file.fileName)}
-                      muted
-                      preload="metadata"
+                  return !thumbFailed && file.thumbnail ? (
+                    <img
+                      src={buildVideoUrl(file.thumbnail)}
+                      alt={file.name}
                       className="h-full w-full object-cover"
+                      onError={() =>
+                        setFailedThumbs((prev) => {
+                          const next = new Set(prev);
+                          next.add(key);
+                          return next;
+                        })
+                      }
                     />
+                  ) : (
+                    <div className="flex h-full items-center justify-center">
+                      <Video size={32} />
+                    </div>
                   );
                 })()}
 
