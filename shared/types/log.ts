@@ -1,5 +1,5 @@
 export interface LogFilter {
-  level?: LogLevel;
+  levels?: LogLevel[];
   source?: string;
   search?: string;
 }
@@ -30,3 +30,5 @@ export const LogLevel = {
 } as const;
 
 export type LogLevel = (typeof LogLevel)[keyof typeof LogLevel];
+
+export const LOG_LEVEL_VALUES = Object.values(LogLevel);
