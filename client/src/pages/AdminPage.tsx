@@ -2,26 +2,59 @@ import * as Tabs from '@radix-ui/react-tabs';
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 
-import { RssManagementWidget } from '@/widgets/rss-management';
-import { AppearanceSettingsWidget } from '@/widgets/appearance-settings';
-import { ScheduleManagementWidget } from '@/widgets/schedule-management';
-import { KioskManagement } from '@/widgets/kiosk-management';
+import {
+  RssManagementWidget,
+  HelpItems as rssHelp,
+} from '@/widgets/rss-management';
+import {
+  AppearanceSettingsWidget,
+  HelpItems as appearanceHelp,
+} from '@/widgets/appearance-settings';
+import {
+  ScheduleManagementWidget,
+  HelpItems as scheduleHelp,
+} from '@/widgets/schedule-management';
+import {
+  KioskManagement,
+  HelpItems as kiosksHelp,
+} from '@/widgets/kiosk-management';
 import { KioskSelectorWidget } from '@/widgets/kiosk-selector';
 import { Logout } from '@/features/auth';
-import { BirthdaysManagement } from '@/widgets/birthdays-management';
+import {
+  BirthdaysManagement,
+  HelpItems as birthdaysHelp,
+} from '@/widgets/birthdays-management';
 import { useKioskStore } from '@/entities/kiosk';
-import { KioskWorkScheduleManagement } from '@/widgets/kiosk-work-schedule-management';
-import { LogWidget } from '@/widgets/log';
+import {
+  KioskWorkScheduleManagement,
+  HelpItems as operatingHoursHelp,
+} from '@/widgets/kiosk-work-schedule-management';
+import { LogWidget, HelpItems as logsHelp } from '@/widgets/log';
 import { AdminHelpPanel } from '@/widgets/admin-help-panel';
-import { TickerManagementWidget } from '@/widgets/ticker-management';
-import { ScenariosManagementWidget } from '@/widgets/scenarios-management';
-import { MediaManagementWidget } from '@/widgets/media-management';
-
-import { HelpItems as birthdaysHelp } from '@/widgets/birthdays-management';
-import { HelpItems as kiosksHelp } from '@/widgets/kiosk-management';
-import { HelpItems as appearanceHelp } from '@/widgets/appearance-settings';
-import { HelpItems as operatingHoursHelp } from '@/widgets/kiosk-work-schedule-management';
-import { HelpItems as rssHelp } from '@/widgets/rss-management';
+import {
+  TickerManagementWidget,
+  HelpItems as tickerHelp,
+} from '@/widgets/ticker-management';
+import {
+  ScenariosManagementWidget,
+  HelpItems as scenariosHelp,
+} from '@/widgets/scenarios-management';
+import {
+  MediaManagementWidget,
+  HelpItems as mediaHelp,
+} from '@/widgets/media-management';
+import {
+  IntegrationManagement,
+  HelpItems as integrationsHelp,
+} from '@/widgets/integration-management';
+import {
+  DeviceManagement,
+  HelpItems as devicesHelp,
+} from '@/widgets/device-management';
+import {
+  BrandingConfigManagementWidget,
+  HelpItems as organizationHelp,
+} from '@/widgets/branding-config-management';
 
 import { useAdminHelp } from '@/features/admin-help-toggle';
 import { AdminTabTrigger, SlideSlot } from '@/shared/ui';
@@ -42,9 +75,6 @@ import {
   Building2,
 } from 'lucide-react';
 import type { HelpItem } from '@/entities/help';
-import { IntegrationManagement } from '@/widgets/integration-management';
-import { DeviceManagement } from '@/widgets/device-management';
-import { BrandingConfigManagementWidget } from '@/widgets/branding-config-management';
 
 export function AdminPage() {
   const kiosk = useKioskStore((s) => s.currentKiosk);
@@ -61,11 +91,19 @@ export function AdminPage() {
   const kioskSlug = kiosk.slug;
 
   const helpMap: Record<string, HelpItem[]> = {
+    scenarios: scenariosHelp,
+    'media-folder': mediaHelp,
     settings: appearanceHelp,
+    organization: organizationHelp,
+    schedule: scheduleHelp,
+    ticker: tickerHelp,
     rss: rssHelp,
     birthdays: birthdaysHelp,
     kiosks: kiosksHelp,
+    devices: devicesHelp,
+    integrations: integrationsHelp,
     'operating-hours': operatingHoursHelp,
+    logs: logsHelp,
   };
 
   const helpItems = isHelpEnabled ? (helpMap[tab] ?? []) : [];
