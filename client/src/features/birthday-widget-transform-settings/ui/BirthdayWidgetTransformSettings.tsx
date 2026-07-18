@@ -2,7 +2,7 @@ import { MonthTabs } from './MonthTabs';
 import { TransformPreview } from './TransformPreview';
 import { CommonSwitch, IconButton } from '@/shared/ui/common';
 import { ResetIcon, UpdateIcon } from '@radix-ui/react-icons';
-import { SaveIcon } from 'lucide-react';
+import { Copy, SaveIcon } from 'lucide-react';
 import { TooltipWrapper, SliderControl, ColorControl } from '@/shared/ui';
 import { useBirthdayWidgetTransformSettings } from '../model/useBirthdayWidgetTransformSettings';
 
@@ -13,12 +13,14 @@ export function BirthdayWidgetTransformSettings() {
     localTransform,
     backgroundUrl,
     month,
-    setMonth,
+    isCopyMode,
     setLocalTransform,
     getPreviewBirthdays,
     handleRollbackChanges,
     handleReset,
     handleSave,
+    handleToggleCopyMode,
+    handleMonthChange,
     isHalfSetBirthdays,
     setHalfSetBirthdays,
     isUpdating,
@@ -30,7 +32,11 @@ export function BirthdayWidgetTransformSettings() {
 
   return (
     <div className="flex flex-col gap-4">
-      <MonthTabs value={month} onChange={setMonth} />
+      <MonthTabs
+        value={month}
+        onChange={handleMonthChange}
+        copyMode={isCopyMode}
+      />
 
       <div className="flex flex-col items-center gap-6 2xl:flex-row">
         <div className="flex-1">
@@ -219,6 +225,18 @@ export function BirthdayWidgetTransformSettings() {
                 ></CommonSwitch>
               </div>
             </TooltipWrapper>
+
+            <IconButton
+              onClick={handleToggleCopyMode}
+              tooltip={
+                isCopyMode
+                  ? 'Выберите месяц-источник (повторный клик — отмена)'
+                  : 'Скопировать конфиг с другого месяца'
+              }
+              ariaLabel="Скопировать конфиг с другого месяца"
+              className={isCopyMode ? 'bg-(--button-hover-bg)' : ''}
+              icon={<Copy className="h-5 w-5 cursor-pointer" />}
+            />
 
             <IconButton
               onClick={handleRollbackChanges}
