@@ -1,140 +1,216 @@
 import { LogCard } from './LogCard';
-import { LogLevel, type LogItem } from '@/entities/log';
+import { LevelMultiSelect } from './LevelMultiSelect';
+import { ConfirmActionDialog } from '@/shared/ui';
 import { IconButton, SimpleDropdownMenu } from '@/shared/ui/common';
 import {
   ThickArrowLeftIcon,
   ThickArrowRightIcon,
   TrashIcon,
 } from '@radix-ui/react-icons';
+import { Download, Pause, Play } from 'lucide-react';
 import { useLogViewer } from '../model/useLogViewer';
 
 export function LogViewer() {
   const {
     file,
-    setFile,
     files,
-    setFilter,
-    setLevel,
-    setPage,
+    sources,
+    levels,
+    source,
+    searchInput,
+    page,
     pageSize,
-    level,
-    isLoading,
-    search,
-    setSearch,
-    applyFilters,
-    setPageSize,
-    logPage,
-    deleteLogFiles,
     daysToKeep,
+    isFollowing,
+    isFollowingDesired,
+    logPage,
+    isFilesLoading,
+    isPageLoading,
+    isFetching,
+    isDeleting,
+    isDownloading,
+    handleFileChange,
+    handleLevelsChange,
+    handleSourceChange,
+    setSearchInput,
+    handlePageSizeChange,
     setDaysToKeep,
+    handleToggleFollow,
+    handleNewer,
+    handleOlder,
+    handleDownload,
+    handleDelete,
   } = useLogViewer();
 
-  if (isLoading) {
-    return <div className="p-4">Загрузка...</div>;
+  if (isFilesLoading) {
+    return (
+      <div className="space-y-2 p-4">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div
+            // biome-ignore lint/suspicious/noArrayIndexKey: skeleton
+            key={i}
+            className="h-8 animate-pulse rounded bg-(--border)"
+          />
+        ))}
+      </div>
+    );
   }
 
-  if (!file) {
-    return <div className="p-4">Нет логов</div>;
+  if (!file || files.length === 0) {
+    return <div className="p-4 text-(--meta-text)">Нет логов</div>;
   }
+
+  const logs = logPage?.logs ?? [];
+  const showInitialSkeleton = isPageLoading && !logPage;
 
   return (
-    <div className="flex h-full flex-col">
-      <div className="flex w-full flex-row gap-4 p-3">
-        <SimpleDropdownMenu
-          value={file ?? ''}
-          options={(files ?? []).map((f) => ({ label: f, value: f }))}
-          placeholder="Выберите файл"
-          onSelect={(v) => {
-            setFile(v);
-            setPage(0);
-          }}
-        />
+    <div className="flex h-full flex-col gap-3">
+      <div className="flex flex-wrap items-center gap-2">
+        <div className="min-w-40 flex-1">
+          <SimpleDropdownMenu
+            value={file}
+            options={files.map((f) => ({ label: f, value: f }))}
+            placeholder="Файл"
+            onSelect={handleFileChange}
+          />
+        </div>
 
-        <SimpleDropdownMenu
-          value={level ?? ''}
-          options={[
-            { label: 'Все уровни', value: '' },
-            ...Object.entries(LogLevel).map(([key, value]) => ({
-              label: key,
-              value,
-            })),
-          ]}
-          onSelect={(l) => {
-            const newLevel = l === '' ? undefined : (l as LogLevel);
-            setLevel(newLevel);
-            setFilter({
-              level: newLevel,
-              search: search || undefined,
-            });
-            setPage(0);
-          }}
-        />
+        <div className="min-w-36 flex-1">
+          <LevelMultiSelect value={levels} onChange={handleLevelsChange} />
+        </div>
+
+        <div className="min-w-36 flex-1">
+          <SimpleDropdownMenu
+            value={source}
+            options={[
+              { label: 'Все источники', value: '' },
+              ...sources.map((s) => ({ label: s, value: s })),
+            ]}
+            placeholder="Источник"
+            onSelect={handleSourceChange}
+          />
+        </div>
 
         <input
           type="search"
-          placeholder="Поиск"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && applyFilters()}
-          className="h-full rounded-lg border border-(--border) bg-transparent px-3 py-2 focus:outline-none focus:ring-(--border) focus:ring-1"
-          required
+          placeholder="Поиск…"
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+          className="min-w-40 flex-1 rounded-lg border border-(--border) bg-transparent px-3 py-1.5 text-sm focus:outline-none focus:ring-(--border) focus:ring-1"
         />
 
-        <SimpleDropdownMenu
-          value={pageSize}
-          options={[
-            { label: '20', value: 20 },
-            { label: '50', value: 50 },
-            { label: '100', value: 100 },
-          ]}
-          onSelect={(v) => {
-            setPageSize(v);
-            setPage(0);
-          }}
-        />
-
-        <div className="ml-auto flex gap-2">
-          <IconButton
-            onClick={() => setPage((p) => p - 1)}
-            tooltip="Предыдущая страница"
-            disabled={!logPage?.hasPrev}
-            icon={<ThickArrowLeftIcon className="h-5 w-5 cursor-pointer" />}
+        <div className="w-24">
+          <SimpleDropdownMenu
+            value={pageSize}
+            options={[
+              { label: '20', value: 20 },
+              { label: '50', value: 50 },
+              { label: '100', value: 100 },
+            ]}
+            onSelect={handlePageSizeChange}
           />
+        </div>
+
+        <IconButton
+          onClick={handleToggleFollow}
+          tooltip={
+            isFollowingDesired
+              ? 'Пауза автообновления'
+              : 'Следить за новыми записями'
+          }
+          ariaLabel="Автообновление"
+          className={isFollowing ? 'bg-(--button-hover-bg)' : ''}
+          icon={
+            isFollowingDesired ? (
+              <Pause className="h-5 w-5" />
+            ) : (
+              <Play className="h-5 w-5" />
+            )
+          }
+        />
+
+        <IconButton
+          onClick={handleDownload}
+          disabled={isDownloading}
+          tooltip="Скачать файл"
+          ariaLabel="Скачать файл"
+          icon={<Download className="h-5 w-5" />}
+        />
+
+        <div className="flex items-center gap-1">
           <IconButton
-            onClick={() => setPage((p) => p + 1)}
-            tooltip="Следующая страница"
+            onClick={handleNewer}
+            tooltip="Новее"
+            disabled={!logPage?.hasPrev}
+            icon={<ThickArrowLeftIcon className="h-5 w-5" />}
+          />
+          <span className="min-w-16 text-center text-(--meta-text) text-xs">
+            стр. {page + 1}
+            {isFetching && !showInitialSkeleton ? ' · …' : ''}
+          </span>
+          <IconButton
+            onClick={handleOlder}
+            tooltip="Старее"
             disabled={!logPage?.hasNext}
-            icon={<ThickArrowRightIcon className="h-5 w-5 cursor-pointer" />}
+            icon={<ThickArrowRightIcon className="h-5 w-5" />}
           />
         </div>
       </div>
 
-      <div className="flex w-1/4 gap-2 p-3">
-        <IconButton
-          onClick={() => deleteLogFiles({ daysToKeep })}
-          tooltip="Очистить логи"
-          disabled={daysToKeep === 0}
-          icon={<TrashIcon className="h-5 w-5 cursor-pointer" />}
-        />
+      <div className="flex flex-wrap items-center gap-2">
+        <div className="w-48">
+          <SimpleDropdownMenu
+            placeholder="Оставить логи за:"
+            value={daysToKeep}
+            options={[
+              { label: 'Последние 3 дня', value: 3 },
+              { label: 'Последние 7 дней', value: 7 },
+              { label: 'Последние 30 дней', value: 30 },
+            ]}
+            onSelect={setDaysToKeep}
+          />
+        </div>
 
-        <SimpleDropdownMenu
-          placeholder="Оставить логи за:"
-          value={daysToKeep}
-          options={[
-            { label: 'Последние 3 дня', value: 3 },
-            { label: 'Последние 7 дней', value: 7 },
-            { label: 'Последние 30 дней', value: 30 },
-          ]}
-          onSelect={(v) => {
-            setDaysToKeep(v);
-          }}
+        <ConfirmActionDialog
+          title="Очистить старые логи?"
+          description={`Будут удалены файлы старше ${daysToKeep} дн. Текущий лог не затронут. Восстановить нельзя.`}
+          confirmText="Удалить"
+          trigger={
+            <IconButton
+              disabled={isDeleting}
+              tooltip="Очистить старые логи"
+              ariaLabel="Очистить старые логи"
+              icon={<TrashIcon className="h-5 w-5" />}
+            />
+          }
+          onConfirm={handleDelete}
         />
       </div>
 
-      <div className="flex-1 overflow-auto p-3 text-sm">
-        {logPage?.logs.map((log: LogItem, i: number) => (
-          <LogCard key={`${log.time}-${i}`} log={log} />
-        ))}
+      <div className="min-h-0 flex-1 overflow-auto rounded-lg border border-(--border) p-2">
+        {showInitialSkeleton ? (
+          <div className="space-y-2 p-2">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div
+                // biome-ignore lint/suspicious/noArrayIndexKey: skeleton
+                key={i}
+                className="h-6 animate-pulse rounded bg-(--border)"
+              />
+            ))}
+          </div>
+        ) : logs.length === 0 ? (
+          <div className="p-6 text-center text-(--meta-text) text-sm">
+            Нет записей по текущим фильтрам
+          </div>
+        ) : (
+          logs.map((log, i) => (
+            <LogCard
+              // biome-ignore lint/suspicious/noArrayIndexKey: its complicated index already
+              key={`${log.time}-${log.source}-${log.msg}-${i}`}
+              log={log}
+            />
+          ))
+        )}
       </div>
     </div>
   );
