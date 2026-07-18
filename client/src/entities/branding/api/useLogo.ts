@@ -10,7 +10,7 @@ export const useUploadLogo = () => {
   return useMutation(
     trpcWithProxy.logo.uploadLogo.mutationOptions({
       onSuccess: (data, _, ctx) => {
-        toast.success(`Логотип ${data.filename} успешно загружен`, {
+        toast.success(`Логотип ${data.logo?.fileName} успешно загружен`, {
           id: ctx?.toastId,
         });
         queryClient.invalidateQueries({
