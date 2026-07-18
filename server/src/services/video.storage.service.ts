@@ -48,27 +48,116 @@ export class VideoStorageService extends FileStorageService {
 
     const savedPath = await this.saveStream(nodeStream, filename);
 
-    let meta = this.findVideoMetadataByFileName(filename);
+    const meta = this.findVideoMetadataByFileName(filename);
     if (meta) {
+      await this.deleteThumbnailFile(meta.thumbnail);
       this.removeVideoMetadataByFileName(filename);
     }
-    meta = await this.getVideoMetadata(filename);
-    const savedFileName = this.saveVideoMetadata(meta, folderId);
+
+    const baseMeta = await this.getVideoMetadata(filename);
+    const thumbnail = await this.generateThumbnail(filename);
+    const savedFileName = this.saveVideoMetadata(
+      { ...baseMeta, thumbnail },
+      folderId,
+    );
 
     this.logger.info(
-      { savedPath, savedFileName, folderId, fn: 'upload' },
+      { savedPath, savedFileName, folderId, thumbnail, fn: 'upload' },
       'Video uploaded',
     );
     return { path: savedPath, savedFileName };
   }
 
   async delete(fileName: string) {
+    const meta = this.findVideoMetadataByFileName(fileName);
+    if (meta?.thumbnail) {
+      await this.deleteThumbnailFile(meta.thumbnail);
+    }
+
     this.removeVideoMetadataByFileName(fileName);
     await super.remove(fileName);
     this.logger.info({ fileName, fn: 'delete' }, 'Video deleted successfully');
   }
 
-  private async getVideoMetadata(fileName: string): Promise<VideoMetadata> {
+  private getThumbnailFileName(fileName: string) {
+    const name = path.basename(fileName, path.extname(fileName));
+    return `${name}_thumbnail.jpg`;
+  }
+
+  private async deleteThumbnailFile(thumbnail: string | null | undefined) {
+    if (!thumbnail) return;
+
+    if (await this.exists(this.getFilePath(thumbnail))) {
+      await this.remove(thumbnail);
+    }
+  }
+
+  private async generateThumbnail(fileName: string): Promise<string> {
+    const thumbnail = this.getThumbnailFileName(fileName);
+    const inputPath = this.getFilePath(fileName);
+    const outputPath = this.getFilePath(thumbnail);
+
+    const seekPoints = ['1', '0'];
+
+    for (const ss of seekPoints) {
+      try {
+        await execFileAsync('ffmpeg', [
+          '-y',
+          '-ss',
+          ss,
+          '-i',
+          inputPath,
+          '-frames:v',
+          '1',
+          '-vf',
+          'scale=-1:150',
+          '-q:v',
+          '5',
+          outputPath,
+        ]);
+
+        if (await this.exists(outputPath)) {
+          this.logger.info(
+            { fileName, thumbnail, ss, fn: 'generateThumbnail' },
+            'Video thumbnail generated',
+          );
+          return thumbnail;
+        }
+      } catch (error) {
+        this.logger.warn(
+          { error, fileName, ss, fn: 'generateThumbnail' },
+          'Failed to generate video thumbnail at seek point',
+        );
+      }
+    }
+
+    this.logger.error(
+      { fileName, fn: 'generateThumbnail' },
+      'Could not generate video thumbnail',
+    );
+    return '';
+  }
+
+  private async ensureThumbnail(meta: VideoMetadata): Promise<string> {
+    const expected = this.getThumbnailFileName(meta.fileName);
+
+    if (
+      meta.thumbnail &&
+      (await this.exists(this.getFilePath(meta.thumbnail)))
+    ) {
+      return meta.thumbnail;
+    }
+
+    if (await this.exists(this.getFilePath(expected))) {
+      return expected;
+    }
+
+    return this.generateThumbnail(meta.fileName);
+  }
+
+  private async getVideoMetadata(
+    fileName: string,
+  ): Promise<Omit<VideoMetadata, 'thumbnail'>> {
     const filePath = this.getFilePath(fileName);
 
     const { stdout } = await execFileAsync('ffprobe', [
@@ -142,6 +231,14 @@ export class VideoStorageService extends FileStorageService {
     }
   }
 
+  private updateVideoThumbnail(fileName: string, thumbnail: string) {
+    this.db
+      .update(videosTable)
+      .set({ thumbnail })
+      .where(eq(videosTable.fileName, fileName))
+      .run();
+  }
+
   removeVideoMetadataByFileName(fileName: string) {
     try {
       this.db
@@ -171,18 +268,31 @@ export class VideoStorageService extends FileStorageService {
 
   async syncWithDisk() {
     const files = await this.listFiles();
+    const withoutThumbnails = files.filter((f) => !f.includes('_thumbnail'));
     const existing = new Set(this.listVideoMetadata().map((v) => v.fileName));
 
-    for (const file of files) {
+    for (const file of withoutThumbnails) {
       if (!existing.has(file)) {
-        const meta = await this.getVideoMetadata(file);
-        this.saveVideoMetadata(meta);
+        const baseMeta = await this.getVideoMetadata(file);
+        const thumbnail = await this.generateThumbnail(file);
+        this.saveVideoMetadata({ ...baseMeta, thumbnail });
       }
     }
 
     for (const video of this.listVideoMetadata()) {
-      if (!files.includes(video.fileName)) {
+      if (!withoutThumbnails.includes(video.fileName)) {
+        await this.deleteThumbnailFile(video.thumbnail);
         this.removeVideoMetadataByFileName(video.fileName);
+        continue;
+      }
+
+      const thumbnail = await this.ensureThumbnail(video);
+      if (thumbnail !== video.thumbnail) {
+        this.updateVideoThumbnail(video.fileName, thumbnail);
+        this.logger.info(
+          { fileName: video.fileName, thumbnail, fn: 'syncWithDisk' },
+          'Video thumbnail backfilled',
+        );
       }
     }
   }

@@ -67,6 +67,7 @@ export class ScenarioService {
         imageHeight: imagesTable.height,
         videoName: videosTable.name,
         videoFileName: videosTable.fileName,
+        videoThumbnail: videosTable.thumbnail,
         videoDuration: videosTable.duration,
       })
       .from(scenarioItemsTable)
