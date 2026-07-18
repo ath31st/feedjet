@@ -6,6 +6,7 @@ export interface VideoMetadata {
   width: number;
   height: number;
   size: number;
+  thumbnail: string;
   mtime: number;
   createdAt: number;
 }

@@ -30,6 +30,7 @@ export interface MediaImage extends MediaFileBase {
 export interface MediaVideo extends MediaFileBase {
   kind: 'video';
   duration: number;
+  thumbnail: string;
 }
 
 export type MediaFile = MediaImage | MediaVideo;

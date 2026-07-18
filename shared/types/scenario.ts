@@ -25,6 +25,7 @@ export interface ScenarioItem {
   imageHeight?: number | null;
   videoName?: string | null;
   videoFileName?: string | null;
+  videoThumbnail?: string | null;
   videoDuration?: number | null;
 }
 

@@ -189,6 +189,7 @@ export const videosTable = sqliteTable('videos', {
   width: integer('width').notNull(),
   height: integer('height').notNull(),
   size: integer('size').notNull(),
+  thumbnail: text('thumbnail').notNull().default(''),
   mtime: integer('mtime').notNull(),
   folderId: integer('folder_id').references(() => mediaFoldersTable.id, {
     onDelete: 'set null',

@@ -78,6 +78,13 @@
       "when": 1783248272595,
       "tag": "0010_minor_medusa",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "6",
+      "when": 1784365237833,
+      "tag": "0011_fat_harrier",
+      "breakpoints": true
     }
   ]
 }
