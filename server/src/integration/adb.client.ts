@@ -125,7 +125,12 @@ export class AdbClient {
     return this.client.disconnect(target.ip, target.port);
   }
 
-  private async isScreenOn(target: AdbTarget): Promise<boolean> {
+  async isScreenOn(target: AdbTarget): Promise<boolean> {
+    this.logger.debug(
+      { targetIp: target.ip, port: target.port, fn: 'isScreenOn' },
+      'Get screen state (ADB)',
+    );
+
     const state = await this.cmd(
       target,
       'dumpsys power | grep "mHoldingDisplaySuspendBlocker"',

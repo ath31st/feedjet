@@ -29,4 +29,8 @@ export const controlRouter = t.router({
       await deviceControlService.screenOff(input.ip);
       return true;
     }),
+
+  getScreenStates: protectedProcedure.query(() => {
+    return deviceControlService.getScreenStates();
+  }),
 });

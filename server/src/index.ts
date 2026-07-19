@@ -16,6 +16,7 @@ import { unifiedSseHandler } from './sse/unified.sse.handlers.js';
 import { startSseKeepAliveCron } from './cron/sse.keep.alive.cron.js';
 import { startKioskWorkCron } from './cron/kiosk.work.cron.js';
 import { startDeviceCleanupCronJob } from './cron/device.cleanup.cron.js';
+import { startScreenStateCron } from './cron/screen.state.cron.js';
 
 const logger = createServiceLogger('main');
 
@@ -47,6 +48,7 @@ startImageCacheCleanupJob();
 startSseKeepAliveCron();
 startKioskWorkCron();
 startDeviceCleanupCronJob();
+startScreenStateCron();
 
 app.listen(port, () => {
   logger.info(

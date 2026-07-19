@@ -52,6 +52,22 @@ export class FullyKioskClient {
     return this.cmd(target, 'screenOff');
   }
 
+  async isScreenOn(target: FullyKioskTarget): Promise<boolean> {
+    this.logger.debug(
+      { targetIp: target.ip, port: target.port, fn: 'isScreenOn' },
+      'Get screen state (fully kiosk)',
+    );
+
+    const res = await this.cmd(target, 'deviceInfo');
+    const isScreenOn = res.data?.isScreenOn;
+
+    if (typeof isScreenOn !== 'boolean') {
+      throw new Error(`Unexpected deviceInfo screen state: ${res.data}`);
+    }
+
+    return isScreenOn;
+  }
+
   async getScreenshot(target: FullyKioskTarget): Promise<Buffer> {
     this.logger.debug(
       { targetIp: target.ip, fn: 'getScreenshot' },
