@@ -7,6 +7,7 @@ export function IntegrationList() {
   const {
     isLoadingIntegrations,
     integrations,
+    screenStates,
     handleDeleteIntegration,
     editIntegration,
     setEditIntegration,
@@ -22,6 +23,7 @@ export function IntegrationList() {
         <IntegrationCard
           key={integration.id}
           integration={integration}
+          screenState={screenStates?.[integration.ip]}
           onDelete={handleDeleteIntegration}
           onEdit={setEditIntegration}
         />

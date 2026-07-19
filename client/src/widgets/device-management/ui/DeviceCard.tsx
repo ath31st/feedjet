@@ -6,6 +6,8 @@ import { CommonButton } from '@/shared/ui/common';
 import { Trash2, Copy } from 'lucide-react';
 import { ReloadDevicePageButton } from '@/features/reload-device';
 import type { Device } from '@/entities/device';
+import type { ScreenState } from '@/entities/device-control';
+import { ScreenStateValue } from '@/entities/device-control';
 import copy from 'copy-to-clipboard';
 import { toast } from 'sonner';
 import { CardField, CardTitle, EntityCard } from '@/shared/ui';
@@ -13,6 +15,7 @@ import { RelativeTime } from './RelativeTime';
 
 interface DeviceCardProps {
   device: Device;
+  screenState?: ScreenState;
   onDelete: (id: string) => void;
 }
 
@@ -26,7 +29,7 @@ const handleCopyIp = async (ip: string) => {
   }
 };
 
-export function DeviceCard({ device, onDelete }: DeviceCardProps) {
+export function DeviceCard({ device, screenState, onDelete }: DeviceCardProps) {
   return (
     <EntityCard
       controls={
@@ -70,6 +73,12 @@ export function DeviceCard({ device, onDelete }: DeviceCardProps) {
       )}
 
       <CardField label="User Agent">{device.userAgent}</CardField>
+
+      {device.hasIntegration && (
+        <CardField label="Экран устройства">
+          <ScreenStateValue state={screenState} />
+        </CardField>
+      )}
 
       <CardField label="Последняя активность">
         {new Date(device.lastSeenAt).toLocaleString()} (

@@ -5,18 +5,22 @@ import {
   DeviceScreenOffAction,
   DeviceScreenOnAction,
 } from '@/features/device-screen-control';
+import type { ScreenState } from '@/entities/device-control';
+import { ScreenStateValue } from '@/entities/device-control';
 import { CommonButton } from '@/shared/ui/common';
 import { Pencil, Trash2 } from 'lucide-react';
 import { CardField, CardTitle, EntityCard } from '@/shared/ui';
 
 interface IntegrationCardProps {
   integration: Integration;
+  screenState?: ScreenState;
   onDelete: (id: number) => void;
   onEdit: (integration: Integration) => void;
 }
 
 export function IntegrationCard({
   integration,
+  screenState,
   onDelete,
   onEdit,
 }: IntegrationCardProps) {
@@ -68,6 +72,10 @@ export function IntegrationCard({
 
       <CardField label="Статус">
         {integration.isActive ? 'Активен' : 'Неактивен'}
+      </CardField>
+
+      <CardField label="Экран устройства">
+        <ScreenStateValue state={screenState} />
       </CardField>
     </EntityCard>
   );

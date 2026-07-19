@@ -7,6 +7,7 @@ import {
   type NewIntegration,
   type UpdateIntegration,
 } from '@/entities/integration';
+import { useGetScreenStates } from '@/entities/device-control';
 import { useState } from 'react';
 
 export function useIntegrationWidget() {
@@ -17,6 +18,7 @@ export function useIntegrationWidget() {
 
   const { data: integrations = [], isLoading: isLoadingIntegrations } =
     useGetAllIntegrations();
+  const { data: screenStates } = useGetScreenStates(30_000);
   const { mutate: createIntegration } = useCreateIntegration();
   const { mutate: updateIntegration } = useUpdateIntegration();
   const { mutate: deleteIntegration } = useDeleteIntegration();
@@ -37,6 +39,7 @@ export function useIntegrationWidget() {
     openCreateDialog,
     setOpenCreateDialog,
     integrations,
+    screenStates,
     isLoadingIntegrations,
     editIntegration,
     setEditIntegration,
