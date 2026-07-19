@@ -19,13 +19,15 @@ export function CommonSwitch({
       checked={checked}
       onCheckedChange={onCheckedChange}
       disabled={disabled}
-      className="relative h-5 w-10 shrink-0 cursor-pointer rounded-full border border-(--border) transition-colors disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-(--button-bg)"
+      className="relative flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border border-(--border) bg-(--background-secondary) p-0.5 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-(--button-bg) focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:border-(--button-bg) data-[state=checked]:bg-(--button-bg)"
     >
-      <SwitchPrimitive.Thumb className="block h-4 w-4 translate-x-px rounded-full bg-(--text) transition-transform data-[state=checked]:translate-x-5.25" />
+      <SwitchPrimitive.Thumb className="block size-4 rounded-full bg-(--text) shadow-sm transition-transform duration-200 ease-out data-[state=checked]:translate-x-5" />
     </SwitchPrimitive.Root>
   );
 
-  if (!tooltip) return switchEl;
-
-  return <TooltipWrapper tooltip={tooltip}>{switchEl}</TooltipWrapper>;
+  return tooltip ? (
+    <TooltipWrapper tooltip={tooltip}>{switchEl}</TooltipWrapper>
+  ) : (
+    switchEl
+  );
 }

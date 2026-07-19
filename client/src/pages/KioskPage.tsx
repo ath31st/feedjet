@@ -49,7 +49,7 @@ export function KioskPage() {
       <div className="relative h-screen w-screen">
         <Rotator rotate={rotate}>
           <StaticBackground />
-          <div className="flex h-screen w-screen items-center justify-center text-(--text-muted)">
+          <div className="flex h-screen items-center justify-center text-(--text-muted)">
             <p className="text-6xl">Сценарий пуст</p>
           </div>
         </Rotator>
