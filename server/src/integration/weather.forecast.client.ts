@@ -66,16 +66,16 @@ export class WeatherForecastClient {
       const mapped = weatherForecastMapper.toWeatherForecast(data);
       this.currentCache.set(key, mapped);
 
-      this.logger.info(
-        { mapped, lat, lon, fn: 'getCurrent' },
+      this.logger.debug(
+        { lat, lon, fn: 'getCurrent' },
         'Fetched current weather',
       );
       return mapped;
-    } catch (e: unknown) {
-      const isTimeout = isErrorWithMessage(e) && e.message === 'TIMEOUT';
+    } catch (err: unknown) {
+      const isTimeout = isErrorWithMessage(err) && err.message === 'TIMEOUT';
 
       this.logger.error(
-        { e, lat, lon, fn: 'getCurrent', isTimeout },
+        { err, lat, lon, fn: 'getCurrent', isTimeout },
         isTimeout
           ? `Weather request timed out (${this.requestTimeoutMs / 1000}s)`
           : 'Failed fetch current weather',
@@ -103,16 +103,16 @@ export class WeatherForecastClient {
 
       this.dailyCache.set(key, mappedData);
 
-      this.logger.info(
-        { mappedData, lat, lon, fn: 'getDailyForecast' },
+      this.logger.debug(
+        { lat, lon, count: mappedData.length, fn: 'getDailyForecast' },
         'Fetched forecast',
       );
       return mappedData;
-    } catch (e: unknown) {
-      const isTimeout = isErrorWithMessage(e) && e.message === 'TIMEOUT';
+    } catch (err: unknown) {
+      const isTimeout = isErrorWithMessage(err) && err.message === 'TIMEOUT';
 
       this.logger.error(
-        { e, lat, lon, fn: 'getDailyForecast', isTimeout },
+        { err, lat, lon, fn: 'getDailyForecast', isTimeout },
         isTimeout ? 'Forecast request timed out (5s)' : 'Failed fetch forecast',
       );
       return [];

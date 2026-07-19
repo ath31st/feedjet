@@ -64,10 +64,11 @@ export type AppRouter = typeof appRouter;
 export const trpcMiddleware = createExpressMiddleware({
   router: appRouter,
   createContext,
-  onError: ({ error, path, type }) => {
+  onError: ({ error, path, type, ctx }) => {
     if (error.cause instanceof ZodError) {
       logger.warn(
         {
+          requestId: ctx?.requestId,
           path,
           type,
           issues: error.cause.issues,
@@ -79,6 +80,7 @@ export const trpcMiddleware = createExpressMiddleware({
 
     logger.error(
       {
+        requestId: ctx?.requestId,
         path,
         type,
         code: error.code,

@@ -5,9 +5,11 @@ import type {
   MediaFolder,
   MediaFolderTree,
 } from '@shared/types/media.folder.js';
+import { createServiceLogger } from '../utils/pino.logger.js';
 
 export class MediaFolderService {
   private readonly db: DbType;
+  private readonly logger = createServiceLogger('mediaFolderService');
 
   constructor(db: DbType) {
     this.db = db;
@@ -40,6 +42,11 @@ export class MediaFolderService {
       .values({ name, parentId })
       .returning()
       .get();
+
+    this.logger.info(
+      { id: result.id, name, parentId, fn: 'create' },
+      'Created media folder',
+    );
     return result;
   }
 
@@ -50,7 +57,13 @@ export class MediaFolderService {
       .where(eq(mediaFoldersTable.id, id))
       .returning()
       .get();
-    if (!result) throw new Error('Folder not found');
+
+    if (!result) {
+      this.logger.warn({ id, name, fn: 'rename' }, 'Folder not found');
+      throw new Error('Folder not found');
+    }
+
+    this.logger.info({ id, name, fn: 'rename' }, 'Renamed media folder');
     return result;
   }
 
@@ -66,6 +79,8 @@ export class MediaFolderService {
       .where(eq(videosTable.folderId, id))
       .run();
     this.db.delete(mediaFoldersTable).where(eq(mediaFoldersTable.id, id)).run();
+
+    this.logger.info({ id, fn: 'delete' }, 'Deleted media folder');
   }
 
   assignImageToFolder(imageId: number, folderId: number | null): void {
@@ -74,6 +89,11 @@ export class MediaFolderService {
       .set({ folderId })
       .where(eq(imagesTable.id, imageId))
       .run();
+
+    this.logger.info(
+      { imageId, folderId, fn: 'assignImageToFolder' },
+      'Assigned image to folder',
+    );
   }
 
   assignVideoToFolder(videoId: number, folderId: number | null): void {
@@ -82,6 +102,11 @@ export class MediaFolderService {
       .set({ folderId })
       .where(eq(videosTable.id, videoId))
       .run();
+
+    this.logger.info(
+      { videoId, folderId, fn: 'assignVideoToFolder' },
+      'Assigned video to folder',
+    );
   }
 
   moveMediaBatch(
@@ -103,6 +128,16 @@ export class MediaFolderService {
           .run();
       }
     });
+
+    this.logger.info(
+      {
+        folderId,
+        imageCount: imageIds.length,
+        videoCount: videoIds.length,
+        fn: 'moveMediaBatch',
+      },
+      'Moved media batch',
+    );
   }
 
   getFileNamesByIds(

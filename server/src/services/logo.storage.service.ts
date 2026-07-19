@@ -104,9 +104,9 @@ export class LogoStorageService extends BaseImageStorageService {
       );
 
       return fileName;
-    } catch (error) {
+    } catch (err) {
       this.logger.error(
-        { error, fn: 'saveLogoMetadata' },
+        { err, fn: 'saveLogoMetadata' },
         'Error saving logo metadata',
       );
 
@@ -122,9 +122,9 @@ export class LogoStorageService extends BaseImageStorageService {
         { fileName, fn: 'removeLogoMetadataByFileName' },
         'Logo metadata removed successfully',
       );
-    } catch (error) {
+    } catch (err) {
       this.logger.error(
-        { error, fn: 'removeLogoMetadataByFileName' },
+        { err, fn: 'removeLogoMetadataByFileName' },
         'Error removing logo metadata',
       );
 

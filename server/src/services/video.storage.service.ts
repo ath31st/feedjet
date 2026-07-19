@@ -123,9 +123,9 @@ export class VideoStorageService extends FileStorageService {
           );
           return thumbnail;
         }
-      } catch (error) {
+      } catch (err) {
         this.logger.warn(
-          { error, fileName, ss, fn: 'generateThumbnail' },
+          { err, fileName, ss, fn: 'generateThumbnail' },
           'Failed to generate video thumbnail at seek point',
         );
       }
@@ -222,9 +222,9 @@ export class VideoStorageService extends FileStorageService {
         'Video metadata saved successfully',
       );
       return fileName;
-    } catch (error) {
+    } catch (err) {
       this.logger.error(
-        { error, fn: 'saveVideoMetadata' },
+        { err, fn: 'saveVideoMetadata' },
         'Error saving video metadata',
       );
       throw new VideoStorageServiceError(500, 'Error saving video metadata');
@@ -249,9 +249,9 @@ export class VideoStorageService extends FileStorageService {
         { fileName, fn: 'removeVideoMetadataByFileName' },
         'Video metadata removed successfully',
       );
-    } catch (error) {
+    } catch (err) {
       this.logger.error(
-        { error, fn: 'removeVideoMetadataByFileName' },
+        { err, fn: 'removeVideoMetadataByFileName' },
         'Error removing video metadata',
       );
       throw new VideoStorageServiceError(500, 'Error removing video metadata');

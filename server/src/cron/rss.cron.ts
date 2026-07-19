@@ -21,7 +21,7 @@ export const startRssCronJob = () => {
   }
 
   cron.schedule(cronSchedule, async () => {
-    logger.info(
+    logger.debug(
       { fn: 'startRssCronJob' },
       'Running scheduled task to fetch rss feeds.',
     );
@@ -29,7 +29,7 @@ export const startRssCronJob = () => {
     const rssFeeds = rssService.getActive();
 
     if (rssFeeds.length === 0) {
-      logger.info(
+      logger.debug(
         { rssFeedsCount: rssFeeds.length, fn: 'startRssCronJob' },
         'No active RSS feeds found',
       );
@@ -48,7 +48,7 @@ export const startRssCronJob = () => {
     const latestItems = await rssParser.parseLatestFeedIitems(rssFeeds, limit);
 
     if (latestItems.length === 0) {
-      logger.info({ fn: 'startRssCronJob' }, 'No feed items fetched.');
+      logger.debug({ fn: 'startRssCronJob' }, 'No feed items fetched.');
       return;
     }
 

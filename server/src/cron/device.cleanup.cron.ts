@@ -22,9 +22,9 @@ export const startDeviceCleanupCronJob = () => {
         { deleted, fn: 'startDeviceCleanupCronJob' },
         'Device cleanup completed',
       );
-    } catch (error) {
+    } catch (err) {
       logger.error(
-        { error, fn: 'startDeviceCleanupCronJob' },
+        { err, fn: 'startDeviceCleanupCronJob' },
         'Device cleanup failed',
       );
     }

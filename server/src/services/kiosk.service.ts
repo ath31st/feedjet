@@ -47,12 +47,12 @@ export class KioskService {
           'Kiosk created with default configs',
         );
         return kiosk;
-      } catch (error: unknown) {
-        if (error instanceof KioskError) {
-          throw error;
+      } catch (err: unknown) {
+        if (err instanceof KioskError) {
+          throw err;
         }
         this.logger.error(
-          { error, data, fn: 'create' },
+          { err, data, fn: 'create' },
           'Failed to create kiosk with configs',
         );
         throw new KioskError(500, `Failed to create kiosk with configs`);
@@ -170,9 +170,9 @@ export class KioskService {
       this.logger.info({ kioskId, data, fn: 'update' }, 'Kiosk updated');
 
       return updated;
-    } catch (error: unknown) {
+    } catch (err: unknown) {
       this.logger.error(
-        { error, kioskId, data, fn: 'update' },
+        { err, kioskId, data, fn: 'update' },
         'Failed to update kiosk',
       );
       throw new KioskError(500, 'Failed to update kiosk');

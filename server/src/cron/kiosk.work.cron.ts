@@ -42,13 +42,13 @@ export function startKioskWorkCron(): void {
 
     cronRunning = true;
 
-    logger.info({ fn: 'startKioskWorkCron' }, 'Kiosk work cron job started');
+    logger.debug({ fn: 'startKioskWorkCron' }, 'Kiosk work cron job started');
 
     try {
       const activeKiosks = kioskService.getActive();
 
       if (activeKiosks.length === 0) {
-        logger.info({ fn: 'startKioskWorkCron' }, 'Skip: No active kiosks');
+        logger.debug({ fn: 'startKioskWorkCron' }, 'Skip: No active kiosks');
         return;
       }
 
@@ -58,7 +58,7 @@ export function startKioskWorkCron(): void {
             kioskWorkScheduleService.scheduleStatuses(kiosk.id);
 
           if (scheduleNotActive) {
-            logger.info(
+            logger.debug(
               { slug: kiosk.slug, fn: 'startKioskWorkCron' },
               'Skip: Schedule not active for active kiosk',
             );
@@ -68,7 +68,7 @@ export function startKioskWorkCron(): void {
           const ips = integrationService.getIpsByKioskId(kiosk.id);
 
           if (ips.length === 0) {
-            logger.info(
+            logger.debug(
               { slug: kiosk.slug, kioskId: kiosk.id, fn: 'startKioskWorkCron' },
               'Skip: No integration IPs found for active kiosk',
             );
@@ -86,7 +86,7 @@ export function startKioskWorkCron(): void {
                       'screenOn',
                     );
                     logger.info(
-                      { kioskId: kiosk.id, ip },
+                      { kioskId: kiosk.id, ip, fn: 'startKioskWorkCron' },
                       'Screen ON command sent successfully',
                     );
                   } else if (isEndTime) {
@@ -96,14 +96,14 @@ export function startKioskWorkCron(): void {
                       'screenOff',
                     );
                     logger.info(
-                      { kioskId: kiosk.id, ip },
+                      { kioskId: kiosk.id, ip, fn: 'startKioskWorkCron' },
                       'Screen OFF command sent successfully',
                     );
                   }
-                } catch (ipError) {
+                } catch (err) {
                   logger.error(
                     {
-                      error: ipError,
+                      err,
                       kioskId: kiosk.id,
                       ip,
                       fn: 'startKioskWorkCron',
@@ -114,22 +114,22 @@ export function startKioskWorkCron(): void {
               })();
             }
           }
-        } catch (kioskError) {
+        } catch (err) {
           logger.error(
-            { error: kioskError, kioskId: kiosk.id, fn: 'startKioskWorkCron' },
+            { err, kioskId: kiosk.id, fn: 'startKioskWorkCron' },
             'Failed to process kiosk work schedule',
           );
         }
       }
-    } catch (globalError) {
+    } catch (err) {
       logger.error(
-        { error: globalError, fn: 'startKioskWorkCron' },
+        { err, fn: 'startKioskWorkCron' },
         'Critical error in kiosk work cron',
       );
     } finally {
       cronRunning = false;
 
-      logger.info({ fn: 'startKioskWorkCron' }, 'Kiosk work cron finished');
+      logger.debug({ fn: 'startKioskWorkCron' }, 'Kiosk work cron finished');
     }
   });
 }

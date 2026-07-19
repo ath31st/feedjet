@@ -80,7 +80,7 @@ export class ImageCacheService {
         .toBuffer();
 
       await fs.writeFile(cachePath, webpBuffer);
-      this.logger.info(
+      this.logger.debug(
         { url, width, cachePath, fn: 'processInternal' },
         'Image processed and cached',
       );

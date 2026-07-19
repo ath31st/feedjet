@@ -44,6 +44,11 @@ export class ScenarioService {
       .returning()
       .get();
 
+    this.logger.info(
+      { scenarioId: created.id, kioskId, fn: 'ensureForKiosk' },
+      'Created scenario for kiosk',
+    );
+
     const items = this.getItems(created.id);
     return { ...created, items };
   }
@@ -80,36 +85,49 @@ export class ScenarioService {
 
   addItem(scenarioId: number, input: UpsertScenarioItemInput): ScenarioItem {
     this.logger.debug(
-      { scenarioId, input, fn: 'addItem' },
+      { scenarioId, type: input.type, fn: 'addItem' },
       'Adding scenario item',
     );
 
-    const maxOrder =
-      this.db
-        .select({
-          max: sql<number>`COALESCE(MAX(${scenarioItemsTable.order}), -1)`,
+    try {
+      const maxOrder =
+        this.db
+          .select({
+            max: sql<number>`COALESCE(MAX(${scenarioItemsTable.order}), -1)`,
+          })
+          .from(scenarioItemsTable)
+          .where(eq(scenarioItemsTable.scenarioId, scenarioId))
+          .get()?.max ?? -1;
+
+      const item = this.db
+        .insert(scenarioItemsTable)
+        .values({
+          scenarioId,
+          type: input.type,
+          widgetType: input.widgetType ?? null,
+          imageId: input.imageId ?? null,
+          videoId: input.videoId ?? null,
+          order: maxOrder + 1,
+          isActive: input.isActive,
+          durationSeconds: input.durationSeconds ?? 10,
         })
-        .from(scenarioItemsTable)
-        .where(eq(scenarioItemsTable.scenarioId, scenarioId))
-        .get()?.max ?? -1;
+        .returning()
+        .get();
 
-    const item = this.db
-      .insert(scenarioItemsTable)
-      .values({
-        scenarioId,
-        type: input.type,
-        widgetType: input.widgetType ?? null,
-        imageId: input.imageId ?? null,
-        videoId: input.videoId ?? null,
-        order: maxOrder + 1,
-        isActive: input.isActive,
-        durationSeconds: input.durationSeconds ?? 10,
-      })
-      .returning()
-      .get();
+      this.touchScenario(scenarioId);
 
-    this.touchScenario(scenarioId);
-    return item as ScenarioItem;
+      this.logger.info(
+        { scenarioId, itemId: item.id, type: input.type, fn: 'addItem' },
+        'Added scenario item',
+      );
+      return item as ScenarioItem;
+    } catch (err) {
+      this.logger.error(
+        { err, scenarioId, fn: 'addItem' },
+        'Failed to add scenario item',
+      );
+      throw err;
+    }
   }
 
   addItems(
@@ -117,38 +135,51 @@ export class ScenarioService {
     input: UpsertScenarioItemInput[],
   ): ScenarioItem[] {
     this.logger.debug(
-      { scenarioId, input, fn: 'addItems' },
+      { scenarioId, count: input.length, fn: 'addItems' },
       'Adding scenario items',
     );
 
-    const maxOrder =
-      this.db
-        .select({
-          max: sql<number>`COALESCE(MAX(${scenarioItemsTable.order}), -1)`,
-        })
-        .from(scenarioItemsTable)
-        .where(eq(scenarioItemsTable.scenarioId, scenarioId))
-        .get()?.max ?? -1;
+    try {
+      const maxOrder =
+        this.db
+          .select({
+            max: sql<number>`COALESCE(MAX(${scenarioItemsTable.order}), -1)`,
+          })
+          .from(scenarioItemsTable)
+          .where(eq(scenarioItemsTable.scenarioId, scenarioId))
+          .get()?.max ?? -1;
 
-    const values = input.map((item, index) => ({
-      scenarioId,
-      type: item.type,
-      widgetType: item.widgetType ?? null,
-      imageId: item.imageId ?? null,
-      videoId: item.videoId ?? null,
-      order: maxOrder + index + 1,
-      isActive: item.isActive,
-      durationSeconds: item.durationSeconds ?? 10,
-    }));
+      const values = input.map((item, index) => ({
+        scenarioId,
+        type: item.type,
+        widgetType: item.widgetType ?? null,
+        imageId: item.imageId ?? null,
+        videoId: item.videoId ?? null,
+        order: maxOrder + index + 1,
+        isActive: item.isActive,
+        durationSeconds: item.durationSeconds ?? 10,
+      }));
 
-    const items = this.db
-      .insert(scenarioItemsTable)
-      .values(values)
-      .returning()
-      .all();
+      const items = this.db
+        .insert(scenarioItemsTable)
+        .values(values)
+        .returning()
+        .all();
 
-    this.touchScenario(scenarioId);
-    return items as ScenarioItem[];
+      this.touchScenario(scenarioId);
+
+      this.logger.info(
+        { scenarioId, count: items.length, fn: 'addItems' },
+        'Added scenario items',
+      );
+      return items as ScenarioItem[];
+    } catch (err) {
+      this.logger.error(
+        { err, scenarioId, count: input.length, fn: 'addItems' },
+        'Failed to add scenario items',
+      );
+      throw err;
+    }
   }
 
   updateItem(
@@ -158,49 +189,85 @@ export class ScenarioService {
     >,
   ): void {
     this.logger.debug(
-      { itemId, patch, fn: 'updateItem' },
+      { itemId, fields: Object.keys(patch), fn: 'updateItem' },
       'Updating scenario item',
     );
 
-    this.db
-      .update(scenarioItemsTable)
-      .set(patch)
-      .where(eq(scenarioItemsTable.id, itemId))
-      .run();
+    try {
+      this.db
+        .update(scenarioItemsTable)
+        .set(patch)
+        .where(eq(scenarioItemsTable.id, itemId))
+        .run();
+
+      this.logger.info({ itemId, fn: 'updateItem' }, 'Updated scenario item');
+    } catch (err) {
+      this.logger.error(
+        { err, itemId, fn: 'updateItem' },
+        'Failed to update scenario item',
+      );
+      throw err;
+    }
   }
 
   reorderItems(scenarioId: number, orderedIds: number[]): void {
     this.logger.debug(
-      { scenarioId, orderedIds, fn: 'reorderItems' },
+      { scenarioId, count: orderedIds.length, fn: 'reorderItems' },
       'Reordering scenario items',
     );
 
-    this.db.transaction((tx) => {
-      orderedIds.forEach((id, index) => {
-        tx.update(scenarioItemsTable)
-          .set({ order: index })
-          .where(eq(scenarioItemsTable.id, id))
-          .run();
+    try {
+      this.db.transaction((tx) => {
+        orderedIds.forEach((id, index) => {
+          tx.update(scenarioItemsTable)
+            .set({ order: index })
+            .where(eq(scenarioItemsTable.id, id))
+            .run();
+        });
       });
-    });
-    this.touchScenario(scenarioId);
+      this.touchScenario(scenarioId);
+
+      this.logger.info(
+        { scenarioId, count: orderedIds.length, fn: 'reorderItems' },
+        'Reordered scenario items',
+      );
+    } catch (err) {
+      this.logger.error(
+        { err, scenarioId, fn: 'reorderItems' },
+        'Failed to reorder scenario items',
+      );
+      throw err;
+    }
   }
 
   deleteItem(itemId: number): void {
     this.logger.debug({ itemId, fn: 'deleteItem' }, 'Deleting scenario item');
 
-    const item = this.db
-      .select({ scenarioId: scenarioItemsTable.scenarioId })
-      .from(scenarioItemsTable)
-      .where(eq(scenarioItemsTable.id, itemId))
-      .get();
+    try {
+      const item = this.db
+        .select({ scenarioId: scenarioItemsTable.scenarioId })
+        .from(scenarioItemsTable)
+        .where(eq(scenarioItemsTable.id, itemId))
+        .get();
 
-    this.db
-      .delete(scenarioItemsTable)
-      .where(eq(scenarioItemsTable.id, itemId))
-      .run();
+      this.db
+        .delete(scenarioItemsTable)
+        .where(eq(scenarioItemsTable.id, itemId))
+        .run();
 
-    if (item) this.touchScenario(item.scenarioId);
+      if (item) this.touchScenario(item.scenarioId);
+
+      this.logger.info(
+        { itemId, scenarioId: item?.scenarioId, fn: 'deleteItem' },
+        'Deleted scenario item',
+      );
+    } catch (err) {
+      this.logger.error(
+        { err, itemId, fn: 'deleteItem' },
+        'Failed to delete scenario item',
+      );
+      throw err;
+    }
   }
 
   private touchScenario(scenarioId: number): void {

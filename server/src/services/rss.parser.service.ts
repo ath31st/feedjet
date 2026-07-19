@@ -40,9 +40,9 @@ export class RssParser {
     const promises = rssFeeds.map(async (rssFeed) => {
       try {
         return await this.parse(rssFeed.url);
-      } catch (error) {
+      } catch (err) {
         this.logger.error(
-          { error, rssFeedId: rssFeed.id, url: rssFeed.url, fn: 'parse' },
+          { err, rssFeedId: rssFeed.id, url: rssFeed.url, fn: 'parse' },
           'Failed to parse RSS feed',
         );
         return [];

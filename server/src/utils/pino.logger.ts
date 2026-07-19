@@ -1,7 +1,14 @@
+import { AsyncLocalStorage } from 'node:async_hooks';
 import { join } from 'node:path';
 import pino from 'pino';
 
 const logLevel = process.env.LOG_LEVEL || 'info';
+
+export type RequestLogStore = {
+  requestId: string;
+};
+
+export const requestLogContext = new AsyncLocalStorage<RequestLogStore>();
 
 const transport = pino.transport({
   targets: [
@@ -37,6 +44,10 @@ const logger = pino(
     level: logLevel,
     base: undefined,
     timestamp: pino.stdTimeFunctions.isoTime,
+    mixin() {
+      const store = requestLogContext.getStore();
+      return store?.requestId ? { requestId: store.requestId } : {};
+    },
   },
   transport,
 );

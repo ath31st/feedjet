@@ -53,9 +53,9 @@ export class KioskWorkScheduleService {
       this.logger.info({ kioskId, fn: 'upsertDay' }, 'Work schedule upserted');
 
       return result;
-    } catch (error) {
+    } catch (err) {
       this.logger.error(
-        { error, kioskId, data, fn: 'upsertDay' },
+        { err, kioskId, data, fn: 'upsertDay' },
         'Failed to upsert work schedule',
       );
       throw new KioskWorkScheduleError(500, 'Failed to upsert work schedule');

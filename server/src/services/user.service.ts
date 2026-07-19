@@ -42,7 +42,7 @@ export class UserService {
   }
 
   create(data: NewUser): User {
-    this.logger.debug({ data, fn: 'create' }, 'Creating user');
+    this.logger.debug({ login: data.login, fn: 'create' }, 'Creating user');
 
     data.password = this.hashPassword(data.password);
 
@@ -58,19 +58,30 @@ export class UserService {
     } catch (err: unknown) {
       if ((err as Error).message.includes('UNIQUE')) {
         this.logger.warn(
-          { err, data, fn: 'create' },
+          { err, login: data.login, fn: 'create' },
           'User with same login already exists',
         );
         throw new UserServiceError(409, 'User with same login already exists');
       }
 
-      this.logger.error({ err, data, fn: 'create' }, 'Failed to create user');
+      this.logger.error(
+        { err, login: data.login, fn: 'create' },
+        'Failed to create user',
+      );
       throw new UserServiceError(500, 'Failed to create user');
     }
   }
 
   update(id: number, data: Partial<UserUpdate>): User {
-    this.logger.debug({ id, data, fn: 'update' }, 'Updating user');
+    this.logger.debug(
+      {
+        id,
+        login: data.login,
+        fields: Object.keys(data),
+        fn: 'update',
+      },
+      'Updating user',
+    );
 
     if (data.password) {
       data.password = this.hashPassword(data.password);
@@ -85,10 +96,7 @@ export class UserService {
         .get();
 
       if (!updatedUser) {
-        this.logger.warn(
-          { id, data, fn: 'update' },
-          'User not found for update',
-        );
+        this.logger.warn({ id, fn: 'update' }, 'User not found for update');
         throw new UserServiceError(404, 'User not found');
       }
 
@@ -98,16 +106,21 @@ export class UserService {
       );
       return userMapper.toDTO(updatedUser);
     } catch (err: unknown) {
+      if (err instanceof UserServiceError) throw err;
+
       if ((err as Error).message.includes('UNIQUE')) {
         this.logger.warn(
-          { err, data, fn: 'update' },
+          { err, id, login: data.login, fn: 'update' },
           'User with same login already exists',
         );
         throw new UserServiceError(409, 'User with same login already exists');
       }
 
-      this.logger.error({ err, data, fn: 'update' }, 'Failed to update user');
-      throw new UserServiceError(500, 'Failed to create user');
+      this.logger.error(
+        { err, id, login: data.login, fn: 'update' },
+        'Failed to update user',
+      );
+      throw new UserServiceError(500, 'Failed to update user');
     }
   }
 
@@ -129,6 +142,8 @@ export class UserService {
       this.logger.info({ id, fn: 'delete' }, 'Deleted user');
       return count;
     } catch (err) {
+      if (err instanceof UserServiceError) throw err;
+
       this.logger.error({ err, id, fn: 'delete' }, 'Failed to delete user');
       throw new UserServiceError(500, 'Failed to delete user');
     }

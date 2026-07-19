@@ -89,9 +89,9 @@ export class ImageStorageService extends BaseImageStorageService {
         'Image metadata saved successfully',
       );
       return fileName;
-    } catch (error) {
+    } catch (err) {
       this.logger.error(
-        { error, fn: 'saveImageMetadata' },
+        { err, fn: 'saveImageMetadata' },
         'Error saving image metadata',
       );
       throw new ImageStorageServiceError(500, 'Error saving image metadata');
@@ -108,9 +108,9 @@ export class ImageStorageService extends BaseImageStorageService {
         { fileName, fn: 'removeImageMetadataByFileName' },
         'Image metadata removed successfully',
       );
-    } catch (error) {
+    } catch (err) {
       this.logger.error(
-        { error, fn: 'removeImageMetadataByFileName' },
+        { err, fn: 'removeImageMetadataByFileName' },
         'Error removing image metadata',
       );
       throw new ImageStorageServiceError(500, 'Error removing image metadata');

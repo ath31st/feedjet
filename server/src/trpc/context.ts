@@ -1,8 +1,10 @@
 import type { CreateExpressContextOptions } from '@trpc/server/adapters/express';
+import { randomUUID } from 'node:crypto';
 import { userService, authService } from '../container.js';
 import { userMapper } from '../mappers/user.mapper.js';
 
 export async function createContext({ req, res }: CreateExpressContextOptions) {
+  const requestId = randomUUID();
   let user = null;
 
   const authHeader = req.headers.authorization;
@@ -26,7 +28,7 @@ export async function createContext({ req, res }: CreateExpressContextOptions) {
   // };
 
   // return { req, res, user, getOrganization };
-  return { req, res, user };
+  return { req, res, user, requestId };
 }
 
 export type Context = Awaited<ReturnType<typeof createContext>>;
