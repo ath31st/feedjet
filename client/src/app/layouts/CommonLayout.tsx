@@ -5,7 +5,7 @@ import { StaticBackground, ToasterConfig } from '@/shared/ui';
 export function CommonLayout() {
   return (
     <CommonThemeProvider>
-      <div className="mx-auto w-full max-w-450">
+      <div className="mx-auto w-full max-w-500">
         <StaticBackground />
         <ToasterConfig />
         <Outlet />

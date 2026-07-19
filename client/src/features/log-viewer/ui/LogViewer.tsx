@@ -26,7 +26,6 @@ export function LogViewer() {
     logPage,
     isFilesLoading,
     isPageLoading,
-    isFetching,
     isDeleting,
     isDownloading,
     handleFileChange,
@@ -146,7 +145,7 @@ export function LogViewer() {
           />
           <span className="min-w-16 text-center text-(--meta-text) text-xs">
             стр. {page + 1}
-            {isFetching && !showInitialSkeleton ? ' · …' : ''}
+            {/* {isFetching && !showInitialSkeleton ? ' · …' : ''} */}
           </span>
           <IconButton
             onClick={handleOlder}
