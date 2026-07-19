@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useEffectEvent, useRef, useState } from 'react';
 
 interface ScaledIframeProps {
   src: string;
@@ -6,6 +6,8 @@ interface ScaledIframeProps {
   iframeRef: React.RefObject<HTMLIFrameElement | null>;
   className?: string;
 }
+
+const PREVIEW_NAVIGATE = 'kiosk-preview:navigate';
 
 export function ScaledIframe({
   src,
@@ -15,6 +17,12 @@ export function ScaledIframe({
 }: ScaledIframeProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
+  /** Hard boot URL — only changes on first mount / manual reload (iframeKey). */
+  const [bootSrc, setBootSrc] = useState(src);
+  const loadedRef = useRef(false);
+  const pendingSrcRef = useRef<string | null>(null);
+  const displayedSrcRef = useRef(src);
+  const prevKeyRef = useRef(iframeKey);
 
   useEffect(() => {
     const el = containerRef.current;
@@ -29,6 +37,47 @@ export function ScaledIframe({
     return () => ro.disconnect();
   }, []);
 
+  const postSoftNavigate = useEffectEvent((path: string) => {
+    iframeRef.current?.contentWindow?.postMessage(
+      { type: PREVIEW_NAVIGATE, path },
+      window.location.origin,
+    );
+  });
+
+  useEffect(() => {
+    if (iframeKey !== prevKeyRef.current) {
+      prevKeyRef.current = iframeKey;
+      loadedRef.current = false;
+      pendingSrcRef.current = null;
+      displayedSrcRef.current = src;
+      setBootSrc(src);
+      return;
+    }
+
+    if (src === displayedSrcRef.current) return;
+
+    if (!loadedRef.current) {
+      pendingSrcRef.current = src;
+      return;
+    }
+
+    displayedSrcRef.current = src;
+    postSoftNavigate(src);
+  }, [src, iframeKey]);
+
+  const handleLoad = () => {
+    loadedRef.current = true;
+    const pending = pendingSrcRef.current;
+    pendingSrcRef.current = null;
+
+    if (pending && pending !== displayedSrcRef.current) {
+      displayedSrcRef.current = pending;
+      postSoftNavigate(pending);
+    } else {
+      displayedSrcRef.current = bootSrc;
+    }
+  };
+
   return (
     <div
       ref={containerRef}
@@ -37,8 +86,9 @@ export function ScaledIframe({
       <iframe
         ref={iframeRef}
         key={iframeKey}
-        src={src}
+        src={bootSrc}
         title="Превью киоска"
+        onLoad={handleLoad}
         style={{
           width: 1920,
           height: 1080,
