@@ -1,6 +1,12 @@
 import type { Request, Response } from 'express';
-import { eventBus } from '../container.js';
+import { eventBus, rssFeedCacheService } from '../container.js';
+import {
+  refreshFeedCache,
+  startRssJobs,
+  stopRssJobs,
+} from '../cron/rss.cron.js';
 import { createServiceLogger } from '../utils/pino.logger.js';
+import { sseConnectionRegistry } from './sse.connection.registry.js';
 
 const logger = createServiceLogger('sseUnifiedHandler');
 
@@ -21,6 +27,15 @@ export function createUnifiedSseHandler(
     res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('Connection', 'keep-alive');
     res.flushHeaders();
+
+    const activeConnections = sseConnectionRegistry.onConnect();
+    if (activeConnections === 1) {
+      startRssJobs();
+    }
+
+    if (!rssFeedCacheService.hasCache()) {
+      void refreshFeedCache();
+    }
 
     logger.info({ kioskId, fn: 'unifiedSseHandler' }, 'SSE client connected');
 
@@ -54,6 +69,11 @@ export function createUnifiedSseHandler(
       listeners.forEach((listener, eventName) => {
         eventBus.off(eventName, listener);
       });
+
+      const remaining = sseConnectionRegistry.onDisconnect();
+      if (remaining === 0) {
+        stopRssJobs();
+      }
 
       logger.info(
         { kioskId, fn: 'unifiedSseHandler' },

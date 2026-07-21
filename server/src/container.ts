@@ -16,6 +16,7 @@ import { ScheduleEventService } from './services/schedule.event.service.js';
 import { ImageCacheService } from './services/image.cache.service.js';
 import { OpenWeatherAPI } from 'openweather-api-node';
 import { WeatherForecastClient } from './integration/weather.forecast.client.js';
+import { RssFeedCacheService } from './services/rss.feed.cache.service.js';
 import { VideoStorageService } from './services/video.storage.service.js';
 import {
   cacheDir,
@@ -72,6 +73,11 @@ export const userService = new UserService(db);
 export const authService = new AuthService(userService);
 export const rssService = new RssService(db);
 export const feedConfigService = new FeedConfigService(db);
+export const rssFeedCacheService = new RssFeedCacheService(
+  rssParser,
+  rssService,
+  feedConfigService,
+);
 export const uiConfigService = new UiConfigService(db);
 export const brandingConfigService = new BrandingConfigService(db);
 export const tickerConfigService = new TickerConfigService(db);

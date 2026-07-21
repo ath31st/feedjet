@@ -2,7 +2,6 @@ import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import { trpcMiddleware } from './trpc/index.js';
-import { startRssCronJob } from './cron/rss.cron.js';
 import {
   birthdayBackgroundService,
   imageCacheService,
@@ -43,7 +42,6 @@ app.use('/trpc', trpcMiddleware);
 app.use(express.json());
 app.get('/sse/stream/:kioskId', unifiedSseHandler);
 
-startRssCronJob();
 startImageCacheCleanupJob();
 startSseKeepAliveCron();
 startKioskWorkCron();

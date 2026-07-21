@@ -1,65 +1,116 @@
-import cron from 'node-cron';
-import {
-  eventBus,
-  rssParser,
-  rssService,
-  feedConfigService,
-} from '../container.js';
+import cron, { type ScheduledTask } from 'node-cron';
+import { eventBus, rssFeedCacheService } from '../container.js';
+import { sseConnectionRegistry } from '../sse/sse.connection.registry.js';
 import { createServiceLogger } from '../utils/pino.logger.js';
+
+const RSS_CRON_SCHEDULE = process.env.RSS_CRON_SCHEDULE ?? '*/10 * * * *';
+const RSS_SSE_PUSH_INTERVAL_MS = Number(
+  process.env.RSS_SSE_PUSH_INTERVAL_MS ?? 30_000,
+);
 
 const logger = createServiceLogger('rssCron');
 
-export const startRssCronJob = () => {
-  const cronSchedule = process.env.CRON_SCHEDULE;
+let fetchTask: ScheduledTask | null = null;
+let pushTimer: ReturnType<typeof setInterval> | null = null;
 
-  if (!cronSchedule) {
-    logger.info(
-      { fn: 'startRssCronJob' },
-      'CRON_SCHEDULE is not set. Scheduled task will not run.',
+export async function refreshFeedCache(): Promise<void> {
+  const items = await rssFeedCacheService.refresh();
+
+  if (items.length === 0) {
+    return;
+  }
+
+  eventBus.emit('feed', items);
+  logger.debug(
+    { feedItemsCount: items.length, fn: 'refreshFeedCache' },
+    'Refreshed feed sent to event bus',
+  );
+}
+
+export function pushCachedFeeds(): void {
+  const items = rssFeedCacheService.getCached();
+
+  if (!items || items.length === 0) {
+    logger.debug({ fn: 'pushCachedFeeds' }, 'Feed cache empty, skip push');
+    return;
+  }
+
+  eventBus.emit('feed', items);
+  logger.debug(
+    { feedItemsCount: items.length, fn: 'pushCachedFeeds' },
+    'Pushed cached feed items to event bus',
+  );
+}
+
+export function refetchIfClientsOnline(): void {
+  rssFeedCacheService.invalidate();
+
+  if (sseConnectionRegistry.getCount() === 0) {
+    logger.debug(
+      { fn: 'refetchIfClientsOnline' },
+      'Cache invalidated, no SSE clients online',
     );
     return;
   }
 
-  cron.schedule(cronSchedule, async () => {
-    logger.debug(
-      { fn: 'startRssCronJob' },
-      'Running scheduled task to fetch rss feeds.',
-    );
+  logger.info(
+    { fn: 'refetchIfClientsOnline' },
+    'Cache invalidated, refetching for online clients',
+  );
+  void refreshFeedCache();
+}
 
-    const rssFeeds = rssService.getActive();
+function runFetchIfNeeded(): void {
+  if (sseConnectionRegistry.getCount() === 0) {
+    return;
+  }
 
-    if (rssFeeds.length === 0) {
-      logger.debug(
-        { rssFeedsCount: rssFeeds.length, fn: 'startRssCronJob' },
-        'No active RSS feeds found',
-      );
-      return;
-    }
+  if (rssFeedCacheService.hasCache()) {
+    logger.debug({ fn: 'runFetchIfNeeded' }, 'Feed cache hit, skip fetch');
+    return;
+  }
 
-    const limit = feedConfigService.findMaxCarouselSize();
-    if (!limit) {
-      logger.warn(
-        { fn: 'startRssCronJob' },
-        'Feed config (carouselSize) not found, skipping RSS fetch.',
-      );
-      return;
-    }
+  void refreshFeedCache();
+}
 
-    const latestItems = await rssParser.parseLatestFeedIitems(rssFeeds, limit);
-
-    if (latestItems.length === 0) {
-      logger.debug({ fn: 'startRssCronJob' }, 'No feed items fetched.');
-      return;
-    }
-
+export function startRssJobs(): void {
+  if (!fetchTask) {
+    fetchTask = cron.schedule(RSS_CRON_SCHEDULE, () => {
+      logger.debug({ fn: 'startRssJobs' }, 'Running scheduled RSS fetch');
+      runFetchIfNeeded();
+    });
     logger.info(
-      {
-        rssFeedsCount: rssFeeds.length,
-        feedItemsCount: latestItems.length,
-        fn: 'startRssCronJob',
-      },
-      'Sended feed items to event bus',
+      { cronSchedule: RSS_CRON_SCHEDULE, fn: 'startRssJobs' },
+      'RSS fetch cron started',
     );
-    eventBus.emit('feed', latestItems);
-  });
-};
+  } else {
+    fetchTask.start();
+    logger.info({ fn: 'startRssJobs' }, 'RSS fetch cron resumed');
+  }
+
+  if (!pushTimer) {
+    pushTimer = setInterval(() => {
+      if (sseConnectionRegistry.getCount() === 0) {
+        return;
+      }
+      pushCachedFeeds();
+    }, RSS_SSE_PUSH_INTERVAL_MS);
+    logger.info(
+      { pushIntervalMs: RSS_SSE_PUSH_INTERVAL_MS, fn: 'startRssJobs' },
+      'RSS SSE push interval started',
+    );
+  }
+}
+
+export function stopRssJobs(): void {
+  if (fetchTask) {
+    fetchTask.stop();
+    logger.info({ fn: 'stopRssJobs' }, 'RSS fetch cron stopped');
+  }
+
+  if (pushTimer) {
+    clearInterval(pushTimer);
+    pushTimer = null;
+    logger.info({ fn: 'stopRssJobs' }, 'RSS SSE push interval stopped');
+  }
+}

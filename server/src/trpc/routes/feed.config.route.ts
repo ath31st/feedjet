@@ -4,6 +4,7 @@ import {
   feedConfigUpdateInputSchema,
 } from '../../validations/schemas/feed.config.schemas.js';
 import { t, feedConfigService, eventBus } from '../../container.js';
+import { refetchIfClientsOnline } from '../../cron/rss.cron.js';
 import { publicProcedure, protectedProcedure } from '../../middleware/auth.js';
 import { handleServiceCall } from '../error.handler.js';
 
@@ -24,6 +25,7 @@ export const feedConfigRouter = t.router({
       handleServiceCall(() => {
         const updated = feedConfigService.update(input.kioskId, input.data);
         eventBus.emit(`feed-config:${updated.kioskId}`, updated);
+        refetchIfClientsOnline();
         return updated;
       }),
     ),

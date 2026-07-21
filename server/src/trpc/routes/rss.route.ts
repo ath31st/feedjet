@@ -5,6 +5,7 @@ import {
   rssUpdateSchema,
 } from '../../validations/schemas/rss.schemas.js';
 import { t, rssService } from '../../container.js';
+import { refetchIfClientsOnline } from '../../cron/rss.cron.js';
 import { protectedProcedure } from '../../middleware/auth.js';
 import { handleServiceCall } from '../error.handler.js';
 
@@ -25,7 +26,13 @@ export const rssRouter = t.router({
 
   create: protectedProcedure
     .input(rssCreateSchema)
-    .mutation(({ input }) => handleServiceCall(() => rssService.create(input))),
+    .mutation(({ input }) =>
+      handleServiceCall(() => {
+        const created = rssService.create(input);
+        refetchIfClientsOnline();
+        return created;
+      }),
+    ),
 
   update: protectedProcedure
     .input(
@@ -35,10 +42,18 @@ export const rssRouter = t.router({
       }),
     )
     .mutation(({ input }) =>
-      handleServiceCall(() => rssService.update(input.id, input.data)),
+      handleServiceCall(() => {
+        const updated = rssService.update(input.id, input.data);
+        refetchIfClientsOnline();
+        return updated;
+      }),
     ),
 
-  delete: protectedProcedure.input(rssParamsSchema).mutation(({ input }) => {
-    return rssService.delete(input.id);
-  }),
+  delete: protectedProcedure.input(rssParamsSchema).mutation(({ input }) =>
+    handleServiceCall(() => {
+      const deleted = rssService.delete(input.id);
+      refetchIfClientsOnline();
+      return deleted;
+    }),
+  ),
 });
