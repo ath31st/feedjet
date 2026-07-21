@@ -3,12 +3,12 @@ import { eventBus, rssFeedCacheService } from '../container.js';
 import { sseConnectionRegistry } from '../sse/sse.connection.registry.js';
 import { createServiceLogger } from '../utils/pino.logger.js';
 
-const RSS_CRON_SCHEDULE = process.env.RSS_CRON_SCHEDULE ?? '*/10 * * * *';
+const logger = createServiceLogger('rssCron');
+
+const cronSchedule = process.env.RSS_CRON_SCHEDULE ?? '*/10 * * * *';
 const RSS_SSE_PUSH_INTERVAL_MS = Number(
   process.env.RSS_SSE_PUSH_INTERVAL_MS ?? 30_000,
 );
-
-const logger = createServiceLogger('rssCron');
 
 let fetchTask: ScheduledTask | null = null;
 let pushTimer: ReturnType<typeof setInterval> | null = null;
@@ -75,12 +75,12 @@ function runFetchIfNeeded(): void {
 
 export function startRssJobs(): void {
   if (!fetchTask) {
-    fetchTask = cron.schedule(RSS_CRON_SCHEDULE, () => {
+    fetchTask = cron.schedule(cronSchedule, () => {
       logger.debug({ fn: 'startRssJobs' }, 'Running scheduled RSS fetch');
       runFetchIfNeeded();
     });
     logger.info(
-      { cronSchedule: RSS_CRON_SCHEDULE, fn: 'startRssJobs' },
+      { cronSchedule: cronSchedule, fn: 'startRssJobs' },
       'RSS fetch cron started',
     );
   } else {

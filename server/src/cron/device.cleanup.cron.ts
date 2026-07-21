@@ -6,10 +6,10 @@ const logger = createServiceLogger('deviceCleanupCron');
 
 export const startDeviceCleanupCronJob = () => {
   // Run every day at 19:00
-  const cronSchedule = process.env.DEVICE_CLEANUP_CRON_SCHEDULE || '0 19 * * *';
+  const cronSchedule = process.env.DEVICE_CLEANUP_CRON_SCHEDULE ?? '0 19 * * *';
   // Delete devices older than 10 days
   const daysThreshold = parseInt(
-    process.env.DEVICE_CLEANUP_DAYS_THRESHOLD || '10',
+    process.env.DEVICE_CLEANUP_DAYS_THRESHOLD ?? '10',
     10,
   );
 

@@ -4,7 +4,7 @@ import { createServiceLogger } from '../utils/pino.logger.js';
 
 const logger = createServiceLogger('screenStateCron');
 
-const CRON_SCREEN_STATE = process.env.CRON_SCREEN_STATE ?? '0 * * * * *';
+const cronSchedule = process.env.CRON_SCREEN_STATE ?? '0 * * * * *';
 
 let cronRunning = false;
 
@@ -21,7 +21,9 @@ async function refreshAllScreenStates(): Promise<void> {
 
   try {
     const ips = [
-      ...new Set(integrationService.getAll().map((integration) => integration.ip)),
+      ...new Set(
+        integrationService.getAll().map((integration) => integration.ip),
+      ),
     ];
 
     if (ips.length === 0) {
@@ -49,7 +51,7 @@ async function refreshAllScreenStates(): Promise<void> {
 export function startScreenStateCron(): void {
   void refreshAllScreenStates();
 
-  cron.schedule(CRON_SCREEN_STATE, () => {
+  cron.schedule(cronSchedule, () => {
     void refreshAllScreenStates();
   });
 }

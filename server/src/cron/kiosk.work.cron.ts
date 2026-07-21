@@ -7,10 +7,10 @@ import {
   integrationService,
 } from '../container.js';
 
-const CRON_KIOSK_WORK = '* * * * *';
-const CONTROL_TIMEOUT_MS = 15_000;
-
 const logger = createServiceLogger('kioskWorkCron');
+
+const cronSchedule = '* * * * *'; // Run every minute
+const CONTROL_TIMEOUT_MS = 15_000;
 
 let cronRunning = false;
 
@@ -31,7 +31,7 @@ function withTimeout<T>(
 }
 
 export function startKioskWorkCron(): void {
-  cron.schedule(CRON_KIOSK_WORK, async () => {
+  cron.schedule(cronSchedule, async () => {
     if (cronRunning) {
       logger.warn(
         { fn: 'startKioskWorkCron' },

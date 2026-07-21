@@ -4,10 +4,10 @@ import { createServiceLogger } from '../utils/pino.logger.js';
 
 const logger = createServiceLogger('sseKeepAliveCron');
 
-export function startSseKeepAliveCron(): void {
-  const expr = process.env.CRON_SSE_KEEPALIVE ?? '*/30 * * * * *';
+const cronSchedule = process.env.CRON_SSE_KEEPALIVE ?? '*/30 * * * * *';
 
-  if (!expr) {
+export function startSseKeepAliveCron(): void {
+  if (!cronSchedule) {
     logger.info(
       { fn: 'startSseKeepAliveCron' },
       'CRON_SSE_KEEPALIVE not set. KeepAlive disabled.',
@@ -15,7 +15,7 @@ export function startSseKeepAliveCron(): void {
     return;
   }
 
-  cron.schedule(expr, () => {
+  cron.schedule(cronSchedule, () => {
     const payload = JSON.stringify({ timestamp: Date.now() });
 
     eventBus.emit('keepalive', payload);
