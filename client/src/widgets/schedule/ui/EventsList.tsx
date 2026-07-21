@@ -22,7 +22,6 @@ export function EventsList({
       {events.map((event) => {
         const label = `${event.startTime} | ${event.title}`;
 
-        const shouldScroll = label.length > (isEffectiveXl ? 50 : 30);
         return (
           <div
             key={event.id}
@@ -33,11 +32,7 @@ export function EventsList({
               border: '1px solid var(--border)',
             }}
           >
-            {shouldScroll ? (
-              <TextMarquee speed={effectiveSpeed} text={label} />
-            ) : (
-              <span>{label}</span>
-            )}
+            <TextMarquee overflowOnly speed={effectiveSpeed} text={label} />
           </div>
         );
       })}
