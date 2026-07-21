@@ -33,7 +33,7 @@ export class RssParser {
     return items;
   }
 
-  async parseLatestFeedIitems(
+  async parseLatestFeedItems(
     rssFeeds: RssFeed[],
     limit?: number,
   ): Promise<FeedItem[]> {

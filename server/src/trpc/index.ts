@@ -5,7 +5,6 @@ import { rssRouter } from './routes/rss.route.js';
 import { feedConfigRouter } from './routes/feed.config.route.js';
 import { createContext } from './context.js';
 import { authRouter } from './routes/auth.route.js';
-import { rssParserRouter } from './routes/rss.parser.route.js';
 import { controlRouter } from './routes/control.route.js';
 import { uiConfigRouter } from './routes/ui.config.route.js';
 import { scheduleEventRouter } from './routes/schedule.event.route.js';
@@ -34,7 +33,6 @@ const logger = createServiceLogger('trpc');
 const appRouter = t.router({
   user: userRouter,
   rss: rssRouter,
-  rssParser: rssParserRouter,
   feedConfig: feedConfigRouter,
   auth: authRouter,
   control: controlRouter,
