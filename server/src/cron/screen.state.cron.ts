@@ -4,7 +4,7 @@ import { createServiceLogger } from '../utils/pino.logger.js';
 
 const logger = createServiceLogger('screenStateCron');
 
-const CRON_SCREEN_STATE = process.env.CRON_SCREEN_STATE ?? '*/60 * * * * *';
+const CRON_SCREEN_STATE = process.env.CRON_SCREEN_STATE ?? '0 * * * * *';
 
 let cronRunning = false;
 

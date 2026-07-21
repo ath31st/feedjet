@@ -36,6 +36,65 @@ export class FullyKioskClient {
     });
   }
 
+  private normalizeBoolean(value: unknown): boolean | null {
+    if (typeof value === 'boolean') {
+      return value;
+    }
+
+    if (typeof value === 'string') {
+      const normalized = value.trim().toLowerCase();
+      if (normalized === 'true' || normalized === 'on' || normalized === '1') {
+        return true;
+      }
+      if (
+        normalized === 'false' ||
+        normalized === 'off' ||
+        normalized === '0'
+      ) {
+        return false;
+      }
+    }
+
+    if (typeof value === 'number') {
+      if (value === 1) return true;
+      if (value === 0) return false;
+    }
+
+    return null;
+  }
+
+  private extractScreenOnState(payload: unknown): boolean | null {
+    if (!payload || typeof payload !== 'object') {
+      return null;
+    }
+
+    const candidates = [
+      (payload as Record<string, unknown>).isScreenOn,
+      (payload as Record<string, unknown>).screenOn,
+      (payload as Record<string, unknown>).screenStatus,
+    ];
+
+    for (const candidate of candidates) {
+      const parsed = this.normalizeBoolean(candidate);
+      if (parsed !== null) {
+        return parsed;
+      }
+    }
+
+    const nestedObjects = Object.values(payload as Record<string, unknown>).filter(
+      (value) => value && typeof value === 'object',
+    );
+
+    for (const nested of nestedObjects) {
+      const parsed = this.extractScreenOnState(nested);
+      if (parsed !== null) {
+        return parsed;
+      }
+    }
+
+    return null;
+  }
+
   async screenOn(target: FullyKioskTarget) {
     this.logger.debug(
       { targetIp: target.ip, port: target.port, fn: 'screenOn' },
@@ -59,10 +118,24 @@ export class FullyKioskClient {
     );
 
     const res = await this.cmd(target, 'deviceInfo');
-    const isScreenOn = res.data?.isScreenOn;
+    const isScreenOn = this.extractScreenOnState(res.data);
 
-    if (typeof isScreenOn !== 'boolean') {
-      throw new Error(`Unexpected deviceInfo screen state: ${res.data}`);
+    if (isScreenOn === null) {
+      this.logger.debug(
+        {
+          targetIp: target.ip,
+          port: target.port,
+          payload: res.data,
+          fn: 'isScreenOn',
+        },
+        'Fully deviceInfo payload (unparsed)',
+      );
+
+      const keys =
+        res.data && typeof res.data === 'object'
+          ? Object.keys(res.data as Record<string, unknown>).join(',')
+          : 'non-object payload';
+      throw new Error(`Unexpected deviceInfo screen state payload keys: ${keys}`);
     }
 
     return isScreenOn;
