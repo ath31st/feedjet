@@ -1,14 +1,8 @@
-import { useState, useEffect, useEffectEvent } from 'react';
+import { useState, useEffect } from 'react';
 import { useFindScheduleEventsByDate } from '@/entities/schedule';
 import { getOnlyDateStr } from '@/shared/lib/getOnlyDateStr';
 
-export function useScheduleWithTimer({
-  refetchCurrent,
-  refetchDaily,
-}: {
-  refetchCurrent: () => void;
-  refetchDaily: () => void;
-}) {
+export function useScheduleWithTimer() {
   const todayDate = new Date();
   const [now, setNow] = useState(todayDate);
   const {
@@ -17,17 +11,21 @@ export function useScheduleWithTimer({
     refetch,
   } = useFindScheduleEventsByDate(getOnlyDateStr(todayDate));
 
-  const onTick = useEffectEvent(() => {
-    setNow(new Date());
-    refetch();
-    refetchCurrent();
-    refetchDaily();
-  });
-
   useEffect(() => {
-    const intervalId = setInterval(onTick, 60_000);
+    const intervalId = setInterval(() => {
+      setNow(new Date());
+    }, 1000);
+
     return () => clearInterval(intervalId);
   }, []);
 
-  return { now, events, isLoading };
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      refetch();
+    }, 60_000);
+
+    return () => clearInterval(intervalId);
+  }, [refetch]);
+
+  return { now, events: events ?? [], isLoading };
 }

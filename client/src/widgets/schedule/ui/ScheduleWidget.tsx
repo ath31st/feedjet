@@ -5,7 +5,6 @@ import {
   getPositionPercentByDateTime,
   useIsXl,
   isRotate90,
-  useEnv,
 } from '@/shared/lib';
 import { LoadingThreeDotsJumping } from '@/shared/ui/LoadingThreeDotsJumping';
 import { ScheduleHeader } from './ScheduleHeader';
@@ -13,13 +12,13 @@ import { DaysColumn } from './DaysColumn';
 import { TimeGrid } from './TimeGrid';
 import { EventsList } from './EventsList';
 import { useScheduleWithTimer } from '../model/useScheduleWithTimer';
-import { WeatherForecast } from './WeatherForecast';
-import {
-  useCurrentWeatherForecast,
-  useDailyWeatherForecast,
-} from '@/entities/weather-forecast';
 import { DigitalClock } from '@/shared/ui';
 import { useBrandingConfigStore } from '@/entities/branding';
+import { NextEventPanel } from './NextEventPanel';
+import {
+  getNextUpcomingEvent,
+  getSecondsUntilEventStart,
+} from '../lib/getNextUpcomingEvent';
 
 interface ScheduleWidgetProps {
   rotate: number;
@@ -30,24 +29,10 @@ export function ScheduleWidget({ rotate }: ScheduleWidgetProps) {
     (s) => s.config?.scheduleHeaderTitle,
   );
   const organizationLogoUrl = useBrandingConfigStore((s) => s.logoUrl);
-  const { locationTitle, locationLon, locationLat } = useEnv();
-  const {
-    data: dailyForecast,
-    isLoading: isLoadingDaily,
-    refetch: refetchDaily,
-  } = useDailyWeatherForecast(locationLat, locationLon);
-  const {
-    data: currentWeather,
-    isLoading: isLoadingCurrent,
-    refetch: refetchCurrent,
-  } = useCurrentWeatherForecast(locationLat, locationLon);
-  const { now, events, isLoading } = useScheduleWithTimer({
-    refetchCurrent,
-    refetchDaily,
-  });
+  const { now, events, isLoading } = useScheduleWithTimer();
   const daysOfWeek = getDaysOfWeekByDate(now);
   const startHour = parseInt(hours[0], 10);
-  const formatedDaysOfWeek = daysOfWeek.map(formatDateToMap);
+  const formattedDaysOfWeek = daysOfWeek.map(formatDateToMap);
   const todayIndex = daysOfWeek.findIndex((d) => d.getDate() === now.getDate());
   const positionPercent = getPositionPercentByDateTime(
     now,
@@ -58,6 +43,11 @@ export function ScheduleWidget({ rotate }: ScheduleWidgetProps) {
   const isEffectiveXl = isRotate90(rotate) ? !isXl : isXl;
   const effectiveSpeed = isRotate90(rotate) ? 1 : 50;
   const fontXlSize = 8;
+
+  const nextEvent = getNextUpcomingEvent(events, now);
+  const countdownSeconds = nextEvent
+    ? getSecondsUntilEventStart(nextEvent, now)
+    : 0;
 
   if (isLoading) {
     return (
@@ -80,7 +70,7 @@ export function ScheduleWidget({ rotate }: ScheduleWidgetProps) {
         style={{ borderColor: 'var(--border)' }}
       >
         <DaysColumn
-          days={formatedDaysOfWeek}
+          days={formattedDaysOfWeek}
           todayIndex={todayIndex}
           isEffectiveXl={isEffectiveXl}
         />
@@ -89,7 +79,7 @@ export function ScheduleWidget({ rotate }: ScheduleWidgetProps) {
           <div className="relative h-full">
             <TimeGrid hours={hours} positionPercent={positionPercent} />
             <EventsList
-              events={events ?? []}
+              events={events}
               isEffectiveXl={isEffectiveXl}
               hoursStart={startHour}
               hoursCount={hours.length}
@@ -100,14 +90,13 @@ export function ScheduleWidget({ rotate }: ScheduleWidgetProps) {
         {isEffectiveXl && (
           <>
             <div className="h-full border-(--border) border-2" />
-            <div className="flex h-full w-1/2 flex-col gap-4 px-4 py-10">
+            <div className="flex h-full w-1/2 min-w-0 flex-col gap-4 px-4 py-4">
               <DigitalClock fontXlSize={fontXlSize} />
-              <WeatherForecast
-                locationTitle={locationTitle}
-                dailyForecast={dailyForecast ?? []}
-                currentWeather={currentWeather ?? null}
-                isLoadingDaily={isLoadingDaily}
-                isLoadingCurrent={isLoadingCurrent}
+              <NextEventPanel
+                events={events}
+                nextEvent={nextEvent}
+                countdownSeconds={countdownSeconds}
+                isEffectiveXl={isEffectiveXl}
               />
             </div>
           </>
@@ -115,14 +104,13 @@ export function ScheduleWidget({ rotate }: ScheduleWidgetProps) {
       </div>
 
       {!isEffectiveXl && (
-        <div className="flex h-1/7 flex-row gap-4 border-(--border) border-t-4 px-4">
+        <div className="flex h-1/7 min-h-0 flex-row items-stretch gap-4 border-(--border) border-t-4 px-4 py-2">
           <DigitalClock fontXlSize={fontXlSize} />
-          <WeatherForecast
-            locationTitle={locationTitle}
-            dailyForecast={dailyForecast ?? []}
-            currentWeather={currentWeather ?? null}
-            isLoadingDaily={isLoadingDaily}
-            isLoadingCurrent={isLoadingCurrent}
+          <NextEventPanel
+            events={events}
+            nextEvent={nextEvent}
+            countdownSeconds={countdownSeconds}
+            isEffectiveXl={isEffectiveXl}
           />
         </div>
       )}
