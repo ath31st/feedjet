@@ -1,6 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import { ProtectedRoute } from './ProtectedRoute';
-import { AdminPage } from '@/pages/AdminPage';
+import { AdminPage } from '@/pages/admin';
 import { KioskPage } from '@/pages/KioskPage';
 import { LoginPage } from '@/pages/LoginPage';
 import { NotFoundPage } from '@/pages/NotFoundPage';
