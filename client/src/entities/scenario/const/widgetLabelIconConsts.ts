@@ -1,5 +1,12 @@
 import type { ScenarioWidgetType } from '@/entities/scenario';
-import { Cake, CalendarDays, CloudSun, Rss, type LucideIcon } from 'lucide-react';
+import {
+  Cake,
+  CalendarDays,
+  Clock,
+  CloudSun,
+  Rss,
+  type LucideIcon,
+} from 'lucide-react';
 
 export const WIDGET_LABELS: Record<ScenarioWidgetType, string> = {
   birthday: 'Дни рождения',
@@ -28,3 +35,31 @@ export const WIDGET_HUES: Record<ScenarioWidgetType, number> = {
   schedule: 140,
   info: 200,
 };
+
+export type WidgetPresentation = {
+  label: string;
+  description: string;
+  hue: number;
+  Icon: LucideIcon;
+};
+
+export function getWidgetPresentation(
+  type: ScenarioWidgetType,
+  offlineMode = false,
+): WidgetPresentation {
+  if (offlineMode && type === 'info') {
+    return {
+      label: 'Дата и время',
+      description: 'Часы, дата и календарь на месяц',
+      hue: WIDGET_HUES.info,
+      Icon: Clock,
+    };
+  }
+
+  return {
+    label: WIDGET_LABELS[type],
+    description: WIDGET_DESCRIPTIONS[type],
+    hue: WIDGET_HUES[type],
+    Icon: WIDGET_ICONS[type],
+  };
+}

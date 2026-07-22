@@ -3,24 +3,17 @@ import { useAppFeaturesStore } from '@/entities/app-features';
 import {
   useAddScenarioItem,
   useAddScenarioItems,
-  WIDGET_DESCRIPTIONS,
-  WIDGET_HUES,
-  WIDGET_ICONS,
+  getWidgetPresentation,
   WIDGET_LABELS,
   type ScenarioWidgetType,
 } from '@/entities/scenario';
-import { Clock, type LucideIcon } from 'lucide-react';
 import { useMemo, useState } from 'react';
 
 export type Tab = 'widget' | 'media';
 
 export type WidgetOption = {
   type: ScenarioWidgetType;
-  label: string;
-  description: string;
-  hue: number;
-  Icon: LucideIcon;
-};
+} & ReturnType<typeof getWidgetPresentation>;
 
 export const useScenarioAddItem = (kioskId: number, onClose: () => void) => {
   const [tab, setTab] = useState<Tab>('widget');
@@ -38,25 +31,10 @@ export const useScenarioAddItem = (kioskId: number, onClose: () => void) => {
     () =>
       (Object.keys(WIDGET_LABELS) as ScenarioWidgetType[])
         .filter((type) => !(offlineMode && type === 'rss'))
-        .map((type) => {
-          if (offlineMode && type === 'info') {
-            return {
-              type,
-              label: 'Дата и время',
-              description: 'Часы, дата и календарь на месяц',
-              hue: WIDGET_HUES[type],
-              Icon: Clock,
-            };
-          }
-
-          return {
-            type,
-            label: WIDGET_LABELS[type],
-            description: WIDGET_DESCRIPTIONS[type],
-            hue: WIDGET_HUES[type],
-            Icon: WIDGET_ICONS[type],
-          };
-        }),
+        .map((type) => ({
+          type,
+          ...getWidgetPresentation(type, offlineMode),
+        })),
     [offlineMode],
   );
 
