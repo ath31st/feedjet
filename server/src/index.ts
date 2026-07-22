@@ -9,13 +9,9 @@ import {
   logoStorageService,
   videoStorageService,
 } from './container.js';
-import { startImageCacheCleanupJob } from './cron/image.cache.cron.js';
+import { startCronJobs } from './cron/start.cron.jobs.js';
 import { createServiceLogger } from './utils/pino.logger.js';
 import { unifiedSseHandler } from './sse/unified.sse.handlers.js';
-import { startSseKeepAliveCron } from './cron/sse.keep.alive.cron.js';
-import { startKioskWorkCron } from './cron/kiosk.work.cron.js';
-import { startDeviceCleanupCronJob } from './cron/device.cleanup.cron.js';
-import { startScreenStateCron } from './cron/screen.state.cron.js';
 
 const logger = createServiceLogger('main');
 
@@ -42,11 +38,7 @@ app.use('/trpc', trpcMiddleware);
 app.use(express.json());
 app.get('/sse/stream/:kioskId', unifiedSseHandler);
 
-startImageCacheCleanupJob();
-startSseKeepAliveCron();
-startKioskWorkCron();
-startDeviceCleanupCronJob();
-startScreenStateCron();
+startCronJobs();
 
 app.listen(port, () => {
   logger.info(

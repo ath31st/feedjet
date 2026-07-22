@@ -1,6 +1,9 @@
 import cron, { type ScheduledTask } from 'node-cron';
 import { eventBus, rssFeedCacheService } from '../container.js';
-import { sseConnectionRegistry } from '../sse/sse.connection.registry.js';
+import {
+  registerSseLifecycleCallbacks,
+  sseConnectionRegistry,
+} from '../sse/sse.connection.registry.js';
 import { createServiceLogger } from '../utils/pino.logger.js';
 
 const logger = createServiceLogger('rssCron');
@@ -100,6 +103,19 @@ export function startRssJobs(): void {
       'RSS SSE push interval started',
     );
   }
+}
+
+export function bindRssJobsToSseConnections(): void {
+  registerSseLifecycleCallbacks({
+    onFirstConnect: () => {
+      startRssJobs();
+
+      if (!rssFeedCacheService.hasCache()) {
+        void refreshFeedCache();
+      }
+    },
+    onLastDisconnect: stopRssJobs,
+  });
 }
 
 export function stopRssJobs(): void {
