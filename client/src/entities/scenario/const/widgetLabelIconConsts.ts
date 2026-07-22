@@ -1,5 +1,5 @@
 import type { ScenarioWidgetType } from '@/entities/scenario';
-import { Cake, CalendarDays, CloudSun, Rss } from 'lucide-react';
+import { Cake, CalendarDays, CloudSun, Rss, type LucideIcon } from 'lucide-react';
 
 export const WIDGET_LABELS: Record<ScenarioWidgetType, string> = {
   birthday: 'Дни рождения',
@@ -8,10 +8,7 @@ export const WIDGET_LABELS: Record<ScenarioWidgetType, string> = {
   info: 'Погода и время',
 };
 
-export const WIDGET_ICONS: Record<
-  ScenarioWidgetType,
-  React.FC<{ size?: number; className?: string }>
-> = {
+export const WIDGET_ICONS: Record<ScenarioWidgetType, LucideIcon> = {
   birthday: Cake,
   rss: Rss,
   schedule: CalendarDays,

@@ -2,15 +2,25 @@ import { useEffect, useEffectEvent, useMemo, useState } from 'react';
 import type { ScenarioItem } from '@shared/types/scenario';
 import { useScenarioStore } from '@/entities/scenario';
 import { useUiConfigStore } from '@/entities/ui-config';
+import { useAppFeaturesStore } from '@/entities/app-features';
 import { useMatch } from 'react-router-dom';
 
 export function useScenarioRotation() {
   const rotate = useUiConfigStore((s) => s.uiConfig.screenRotation);
   const animation = useUiConfigStore((s) => s.uiConfig.animationMode);
   const seasonOverlay = useUiConfigStore((s) => s.uiConfig.seasonOverlay);
+  const offlineMode = useAppFeaturesStore((s) => s.offlineMode);
+  const featuresInitialized = useAppFeaturesStore((s) => s.initialized);
   const { scenario, loading: scenarioLoading } = useScenarioStore();
-  const items: ScenarioItem[] = (scenario?.items ?? []).filter(
-    (i) => i.isActive,
+  const items: ScenarioItem[] = useMemo(
+    () =>
+      (scenario?.items ?? [])
+        .filter((i) => i.isActive)
+        .filter(
+          (i) =>
+            !(offlineMode && i.type === 'widget' && i.widgetType === 'rss'),
+        ),
+    [scenario?.items, offlineMode],
   );
   const [currentItemId, setCurrentItemId] = useState<number | null>(null);
   const [isRotationLocked, setIsRotationLocked] = useState(false);
@@ -120,7 +130,7 @@ export function useScenarioRotation() {
   });
 
   return {
-    scenarioLoading,
+    scenarioLoading: scenarioLoading || !featuresInitialized,
     currentItem,
     index: safeIndex,
     setIndex,

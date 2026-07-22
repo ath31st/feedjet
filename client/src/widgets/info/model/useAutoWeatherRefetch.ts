@@ -4,12 +4,14 @@ interface UseAutoWeatherRefetchProps {
   refetchDaily: () => void;
   refetchCurrent: () => void;
   intervalMs?: number;
+  enabled?: boolean;
 }
 
 export function useAutoWeatherRefetch({
   refetchDaily,
   refetchCurrent,
   intervalMs = 60000,
+  enabled = true,
 }: UseAutoWeatherRefetchProps) {
   const refetchAll = useEffectEvent(() => {
     refetchDaily();
@@ -17,10 +19,14 @@ export function useAutoWeatherRefetch({
   });
 
   useEffect(() => {
+    if (!enabled) {
+      return;
+    }
+
     const id = setInterval(() => {
       refetchAll();
     }, intervalMs);
 
     return () => clearInterval(id);
-  }, [intervalMs]);
+  }, [intervalMs, enabled]);
 }

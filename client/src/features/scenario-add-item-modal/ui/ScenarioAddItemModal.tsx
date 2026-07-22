@@ -1,10 +1,3 @@
-import {
-  WIDGET_DESCRIPTIONS,
-  WIDGET_HUES,
-  WIDGET_ICONS,
-  WIDGET_LABELS,
-} from '@/entities/scenario';
-import type { ScenarioWidgetType } from '@shared/types/scenario';
 import { Plus } from 'lucide-react';
 import { ScenarioModal } from './ScenarioModal';
 import { ContentTabs } from './ContentTabs';
@@ -33,6 +26,7 @@ export function ScenarioAddItemModal({
     folderTree,
     media,
     isLoading,
+    widgetOptions,
     handleAddWidget,
     handleAddSelected,
   } = useScenarioAddItem(kioskId, onClose);
@@ -59,40 +53,33 @@ export function ScenarioAddItemModal({
 
       {tab === 'widget' && (
         <div className="grid grid-cols-2 gap-3">
-          {Object.entries(WIDGET_LABELS).map(([type, label]) => {
-            const Icon = WIDGET_ICONS[type as ScenarioWidgetType];
-            const hue = WIDGET_HUES[type as ScenarioWidgetType];
-
-            return (
-              <button
-                key={type}
-                type="button"
-                onClick={() => handleAddWidget(type as ScenarioWidgetType)}
-                className="group flex items-center gap-4 rounded-xl border border-(--border) p-4 text-left transition-all hover:border-(--border) hover:bg-(--button-hover-bg)"
+          {widgetOptions.map(({ type, label, description, hue, Icon }) => (
+            <button
+              key={type}
+              type="button"
+              onClick={() => handleAddWidget(type)}
+              className="group flex items-center gap-4 rounded-xl border border-(--border) p-4 text-left transition-all hover:border-(--border) hover:bg-(--button-hover-bg)"
+            >
+              <div
+                className="flex h-20 w-20 shrink-0 items-center justify-center rounded-lg text-white"
+                style={{
+                  background: `linear-gradient(135deg, hsl(${hue},65%,55%), hsl(${(hue + 40) % 360},70%,40%))`,
+                }}
               >
-                <div
-                  className="flex h-20 w-20 shrink-0 items-center justify-center rounded-lg text-white"
-                  style={{
-                    background: `linear-gradient(135deg, hsl(${hue},65%,55%), hsl(${(hue + 40) % 360},70%,40%))`,
-                  }}
-                >
-                  <Icon size={44} />
-                </div>
+                <Icon size={44} />
+              </div>
 
-                <div className="min-w-0 flex-1">
-                  <div className="font-semibold text-sm">{label}</div>
-                  <div className="mt-1 text-xs leading-snug">
-                    {WIDGET_DESCRIPTIONS[type as ScenarioWidgetType]}
-                  </div>
-                </div>
+              <div className="min-w-0 flex-1">
+                <div className="font-semibold text-sm">{label}</div>
+                <div className="mt-1 text-xs leading-snug">{description}</div>
+              </div>
 
-                <Plus
-                  size={34}
-                  className="shrink-0 opacity-0 transition-opacity group-hover:opacity-100"
-                />
-              </button>
-            );
-          })}
+              <Plus
+                size={34}
+                className="shrink-0 opacity-0 transition-opacity group-hover:opacity-100"
+              />
+            </button>
+          ))}
         </div>
       )}
 
