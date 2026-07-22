@@ -25,6 +25,7 @@ import {
   HelpItems as birthdaysHelp,
 } from '@/widgets/birthdays-management';
 import { useKioskStore } from '@/entities/kiosk';
+import { useAppFeaturesStore } from '@/entities/app-features';
 import {
   KioskWorkScheduleManagement,
   HelpItems as operatingHoursHelp,
@@ -79,11 +80,13 @@ import type { HelpItem } from '@/entities/help';
 export function AdminPage() {
   const kiosk = useKioskStore((s) => s.currentKiosk);
   const isKioskLoading = useKioskStore((s) => s.loading);
+  const offlineMode = useAppFeaturesStore((s) => s.offlineMode);
+  const featuresInitialized = useAppFeaturesStore((s) => s.initialized);
 
   const [tab, setTab] = useState('scenarios');
   const isHelpEnabled = useAdminHelp((s) => s.enabled);
 
-  if (isKioskLoading || !kiosk) {
+  if (isKioskLoading || !kiosk || !featuresInitialized) {
     return null;
   }
 
@@ -145,12 +148,16 @@ export function AdminPage() {
       icon: Radio,
       kioskSelector: true,
     },
-    {
-      value: 'rss',
-      label: 'RSS ленты новостей',
-      icon: Rss,
-      kioskSelector: true,
-    },
+    ...(offlineMode
+      ? []
+      : [
+          {
+            value: 'rss',
+            label: 'RSS ленты новостей',
+            icon: Rss,
+            kioskSelector: true,
+          },
+        ]),
     {
       value: 'birthdays',
       label: 'Дни рождения',
