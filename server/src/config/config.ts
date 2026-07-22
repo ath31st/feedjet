@@ -34,8 +34,14 @@ if (!fs.existsSync(fileStorageDir)) {
   logger.info({ fileStorageDir }, 'File storage directory already exists');
 }
 
+export const offlineMode = process.env.OFFLINE_MODE === 'true';
+
+if (offlineMode) {
+  logger.info('Offline mode enabled');
+}
+
 export const openWeatherApiKey = process.env.OPEN_WEATHER_API_KEY;
-if (!openWeatherApiKey) {
+if (!offlineMode && !openWeatherApiKey) {
   logger.error('Error: OPEN_WEATHER_API_KEY environment variable is not set');
   process.exit(1);
 }
