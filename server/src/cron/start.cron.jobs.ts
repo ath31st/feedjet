@@ -1,3 +1,4 @@
+import { offlineMode } from '../config/config.js';
 import { startDeviceCleanupCronJob } from './device.cleanup.cron.js';
 import { startImageCacheCleanupJob } from './image.cache.cron.js';
 import { startKioskWorkCron } from './kiosk.work.cron.js';
@@ -11,5 +12,8 @@ export function startCronJobs(): void {
   startKioskWorkCron();
   startDeviceCleanupCronJob();
   startScreenStateCron();
-  bindRssJobsToSseConnections();
+
+  if (!offlineMode) {
+    bindRssJobsToSseConnections();
+  }
 }

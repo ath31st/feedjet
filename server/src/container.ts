@@ -22,6 +22,7 @@ import {
   cacheDir,
   dbPath,
   fileStorageDir,
+  offlineMode,
   openWeatherApiKey,
 } from './config/config.js';
 import { KioskService } from './services/kiosk.service.js';
@@ -63,10 +64,12 @@ export const videoStorageService = new VideoStorageService(db, fileStorageDir);
 export const imageStorageService = new ImageStorageService(db, fileStorageDir);
 export const logoStorageService = new LogoStorageService(db, fileStorageDir);
 
-const openWeatherClient = new OpenWeatherAPI({ key: openWeatherApiKey });
-export const weatherForecastClient = new WeatherForecastClient(
-  openWeatherClient,
-);
+export const weatherForecastClient: WeatherForecastClient | null =
+  !offlineMode && openWeatherApiKey
+    ? new WeatherForecastClient(
+        new OpenWeatherAPI({ key: openWeatherApiKey }),
+      )
+    : null;
 
 export const rssParser = new RssParser(new Parser());
 export const userService = new UserService(db);

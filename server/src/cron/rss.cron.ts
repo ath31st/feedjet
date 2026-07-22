@@ -4,6 +4,7 @@ import {
   registerSseLifecycleCallbacks,
   sseConnectionRegistry,
 } from '../sse/sse.connection.registry.js';
+import { offlineMode } from '../config/config.js';
 import { createServiceLogger } from '../utils/pino.logger.js';
 
 const logger = createServiceLogger('rssCron');
@@ -17,6 +18,9 @@ let fetchTask: ScheduledTask | null = null;
 let pushTimer: ReturnType<typeof setInterval> | null = null;
 
 export async function refreshFeedCache(): Promise<void> {
+  if (offlineMode) {
+    return;
+  }
   const items = await rssFeedCacheService.refresh();
 
   if (items.length === 0) {
@@ -46,6 +50,10 @@ export function pushCachedFeeds(): void {
 }
 
 export function refetchIfClientsOnline(): void {
+  if (offlineMode) {
+    return;
+  }
+
   rssFeedCacheService.invalidate();
 
   if (sseConnectionRegistry.getCount() === 0) {
