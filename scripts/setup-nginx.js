@@ -73,6 +73,7 @@ const absVideosDir = path.join(absFileStorageDir, 'videos');
 const absImagesDir = path.join(absFileStorageDir, 'images');
 const absLogosDir = path.join(absFileStorageDir, 'logos');
 const absBackgroundsDir = path.join(absFileStorageDir, 'backgrounds');
+const absClientDist = path.join(projectRoot, 'client', 'dist');
 
 // certs
 if (!fs.existsSync(certsDir)) fs.mkdirSync(certsDir, { recursive: true });
@@ -93,12 +94,26 @@ if (!fs.existsSync(crtPath) || !fs.existsSync(keyPath)) {
   }
 }
 
-try {
-  if (!fs.existsSync(absCacheDir)) fs.mkdirSync(absCacheDir, { recursive: true });
-} catch (err) {
-  console.error(`❌ Не удалось создать cacheDir: ${absCacheDir}`);
-  console.error(err.message || err);
-  process.exit(1);
+const dirsToEnsure = [
+  absCacheDir,
+  absVideosDir,
+  absImagesDir,
+  absLogosDir,
+  absBackgroundsDir,
+];
+
+for (const dir of dirsToEnsure) {
+  try {
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+  } catch (err) {
+    console.error(`❌ Не удалось создать каталог: ${dir}`);
+    console.error(err.message || err);
+    process.exit(1);
+  }
+}
+
+if (!fs.existsSync(absClientDist)) {
+  console.warn(`Предупреждение: каталог ${absClientDist} отсутствует. Выполните сборку клиента: cd client && yarn build`);
 }
 
 if (!fs.existsSync(nginxConfTemplate)) {
@@ -109,6 +124,7 @@ if (!fs.existsSync(nginxConfTemplate)) {
 const template = fs.readFileSync(nginxConfTemplate, 'utf-8');
 
 const nginxConf = template
+  .replace(/{{\s*CLIENT_DIST\s*}}/g, absClientDist)
   .replace(/{{\s*CACHE_DIR\s*}}/g, absCacheDir)
   .replace(/{{\s*VIDEO_DIR\s*}}/g, absVideosDir)
   .replace(/{{\s*IMAGE_DIR\s*}}/g, absImagesDir)
@@ -120,10 +136,14 @@ const nginxConf = template
 fs.writeFileSync(nginxConfOutput, nginxConf, 'utf-8');
 
 console.log(`✅ nginx.conf обновлён: ${path.relative(projectRoot, nginxConfOutput)}`);
+console.log(`📁 clientDist: ${absClientDist}`);
 console.log(`📁 cacheDir: ${absCacheDir}`);
 console.log(`📁 videosDir: ${absVideosDir}`);
 console.log(`📁 imagesDir: ${absImagesDir}`);
 console.log(`📁 logosDir: ${absLogosDir}`);
 console.log(`📁 backgroundsDir: ${absBackgroundsDir}`);
 console.log(`📄 certs: ${crtPath}, ${keyPath}`);
-console.log(`🚀 Запусти: sudo nginx -c "${nginxConfOutput}"`);
+console.log(`Подключение к системному Nginx (выполняется один раз):`);
+console.log(`   sudo mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.dist`);
+console.log(`   sudo ln -s "${nginxConfOutput}" /etc/nginx/nginx.conf`);
+console.log(`   sudo nginx -t && sudo systemctl reload nginx`);
