@@ -8,6 +8,10 @@ import { createServiceLogger } from '../utils/pino.logger.js';
 const CACHE_KEY = 'feeds';
 
 export class RssFeedCacheService {
+  private readonly rssParser: RssParser;
+  private readonly rssService: RssService;
+  private readonly feedConfigService: FeedConfigService;
+
   private readonly cacheTtl = Number(process.env.RSS_CACHE_TTL_MS) || 600_000;
   private readonly cache = new LRUCache<string, FeedItem[]>({
     max: 1,
@@ -17,10 +21,14 @@ export class RssFeedCacheService {
   private readonly logger = createServiceLogger('rssFeedCacheService');
 
   constructor(
-    private readonly rssParser: RssParser,
-    private readonly rssService: RssService,
-    private readonly feedConfigService: FeedConfigService,
-  ) {}
+    rssParser: RssParser,
+    rssService: RssService,
+    feedConfigService: FeedConfigService,
+  ) {
+    this.rssParser = rssParser;
+    this.rssService = rssService;
+    this.feedConfigService = feedConfigService;
+  }
 
   getCached(): FeedItem[] | undefined {
     return this.cache.get(CACHE_KEY);
