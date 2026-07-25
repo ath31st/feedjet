@@ -8,7 +8,7 @@ const LABELS: Record<ScreenState, string> = {
 
 const COLORS: Record<ScreenState, string> = {
   on: 'text-green-500',
-  off: 'text-(--meta-text)',
+  off: 'text-red-500',
   unreachable: 'text-orange-500',
 };
 
