@@ -3,28 +3,18 @@ import type { IZipEntry } from 'adm-zip';
 import { XMLParser } from 'fast-xml-parser';
 import { FileStorageError } from '../errors/file.storage.error.js';
 
-type TextNode = { '#text': string } | string;
-type TextNodes = TextNode | TextNode[];
+/** Ordered node from fast-xml-parser with preserveOrder: true */
+type OrderedNode = Record<string, unknown>;
 
-interface TableCell {
-  p?: TextNodes;
-}
+const ATTR_KEY = ':@';
+const TEXT_KEY = '#text';
+const SPACE_TAG = 's';
+const TABLE_TAG = 'table';
+const ROW_TAG = 'table-row';
+const CELL_TAG = 'table-cell';
+const COVERED_CELL_TAG = 'covered-table-cell';
 
-interface TableRow {
-  'table-cell'?: TableCell | TableCell[];
-}
-
-interface Table {
-  'table-row'?: TableRow | TableRow[];
-}
-
-interface ParsedXml {
-  'document-content'?: {
-    body?: { text?: { table?: Table | Table[] } };
-  };
-}
-
-export async function parseOdtTable(buffer: Buffer): Promise<string[]> {
+export async function parseOdtTable(buffer: Buffer): Promise<string[][]> {
   const zip = new AdmZip(buffer);
   const entry: IZipEntry | null = zip.getEntry('content.xml');
 
@@ -35,54 +25,89 @@ export async function parseOdtTable(buffer: Buffer): Promise<string[]> {
 
   const parser = new XMLParser({
     ignoreAttributes: false,
-    attributeNamePrefix: '',
+    attributeNamePrefix: '@_',
     removeNSPrefix: true,
     trimValues: false,
+    preserveOrder: true,
   });
 
-  const parsed = parser.parse(xml) as ParsedXml;
-  const tables = parsed['document-content']?.body?.text?.table;
+  const parsed = parser.parse(xml) as OrderedNode[];
+  const tables = findNodesByTag(parsed, TABLE_TAG);
 
-  if (!tables) throw new FileStorageError(400, 'No tables found in ODT');
+  if (tables.length === 0)
+    throw new FileStorageError(400, 'No tables found in ODT');
 
-  const firstTable: Table = Array.isArray(tables) ? tables[0] : tables;
-  const rows = firstTable['table-row'];
+  const firstTable = tables[0];
+  const rows = firstTable.filter((node) => ROW_TAG in node);
 
-  if (!rows) throw new FileStorageError(400, 'No rows in table');
+  if (rows.length === 0) throw new FileStorageError(400, 'No rows in table');
 
-  const result: string[] = [];
-  const rowArray: TableRow[] = Array.isArray(rows) ? rows : [rows];
+  const result: string[][] = [];
 
-  for (const row of rowArray) {
-    const cells = row['table-cell'];
+  for (const rowWrap of rows) {
+    const rowChildren = rowWrap[ROW_TAG] as OrderedNode[];
+    const cells: string[] = [];
 
-    if (!cells) continue;
-
-    const cellArray: TableCell[] = Array.isArray(cells) ? cells : [cells];
-    const values: string[] = [];
-
-    for (const cell of cellArray) {
-      const cellText = extractCellText(cell.p);
-      values.push(cellText);
+    for (const child of rowChildren) {
+      if (CELL_TAG in child) {
+        cells.push(normalizeCellText(extractOrderedText(child[CELL_TAG])));
+      } else if (COVERED_CELL_TAG in child) {
+        cells.push('');
+      }
     }
 
-    const line: string = values.filter(Boolean).join(' ').trim();
-
-    if (line) result.push(line);
+    if (cells.some((c) => c.length > 0)) result.push(cells);
   }
+
   return result;
 }
 
-// biome-ignore lint/suspicious/noExplicitAny: parsing unknown xml structure
-function extractCellText(node: any): string {
-  if (!node) return '';
-  if (typeof node === 'string') return node;
-  if (Array.isArray(node)) return node.map(extractCellText).join('');
+function findNodesByTag(nodes: OrderedNode[], tag: string): OrderedNode[][] {
+  const found: OrderedNode[][] = [];
 
-  let text = '';
-  if ('#text' in node) text += node['#text'];
-  if ('s' in node) text += ' ';
-  if ('span' in node) text += extractCellText(node.span);
+  for (const node of nodes) {
+    if (tag in node) {
+      found.push(node[tag] as OrderedNode[]);
+    }
 
-  return text;
+    for (const [key, value] of Object.entries(node)) {
+      if (key === ATTR_KEY || key === TEXT_KEY) continue;
+      if (Array.isArray(value)) {
+        found.push(...findNodesByTag(value as OrderedNode[], tag));
+      }
+    }
+  }
+
+  return found;
+}
+
+function extractOrderedText(nodes: unknown): string {
+  if (!nodes) return '';
+  if (typeof nodes === 'string') return nodes;
+  if (!Array.isArray(nodes)) return '';
+
+  let out = '';
+
+  for (const node of nodes as OrderedNode[]) {
+    if (TEXT_KEY in node) {
+      out += String(node[TEXT_KEY]);
+      continue;
+    }
+
+    if (SPACE_TAG in node) {
+      const attrs = (node[ATTR_KEY] as Record<string, string> | undefined) ?? {};
+      const count = Number(attrs['@_c'] ?? 1);
+      out += ' '.repeat(Number.isFinite(count) && count > 0 ? count : 1);
+      continue;
+    }
+
+    const tag = Object.keys(node).find((k) => k !== ATTR_KEY);
+    if (tag) out += extractOrderedText(node[tag]);
+  }
+
+  return out;
+}
+
+function normalizeCellText(text: string): string {
+  return text.replace(/\s+/g, ' ').trim();
 }

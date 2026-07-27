@@ -40,32 +40,46 @@ export class BirthdayFileService extends FileStorageService {
     buffer: Buffer,
     dateFormat: string = this.defaultDateFormat,
   ): Promise<NewBirthday[]> {
-    const text = await parseOdtTable(buffer);
-    const lines: string[] = text
-      .map((l: string) => l.trim())
-      .filter(Boolean)
-      .filter((l) => {
-        const cells = l.split(/\s+/);
-        return cells.some((cell) =>
-          isValid(parse(cell, dateFormat, new Date())),
-        );
-      });
+    const rows = await parseOdtTable(buffer);
+    const birthdays: NewBirthday[] = [];
 
-    return lines.map((line) => {
-      const [dateStr, ...rest] = line.split(/\s+/);
-      const birthDate = this.parseDate(dateStr, dateFormat);
-      const [lastName, firstName, middleName, ...deptParts] = rest;
-      const department = deptParts.join(' ').trim() || undefined;
-      const fullName = [lastName, firstName, middleName].join(' ');
+    for (const cells of rows) {
+      const mapped = this.mapRowToBirthday(cells, dateFormat);
+      if (mapped) birthdays.push(mapped);
+    }
 
-      const newBirthday: NewBirthday = {
-        fullName,
-        department,
-        birthDate,
-      };
+    if (birthdays.length === 0) {
+      throw new BirthdayError(
+        400,
+        'No birthday rows found in the uploaded file',
+      );
+    }
 
-      return newBirthday;
-    });
+    return birthdays;
+  }
+
+  private mapRowToBirthday(
+    cells: string[],
+    dateFormat: string,
+  ): NewBirthday | null {
+    const dateColIndex = cells.findIndex((cell) =>
+      isValid(parse(cell, dateFormat, new Date())),
+    );
+
+    if (dateColIndex === -1) return null;
+
+    const birthDate = this.parseDate(cells[dateColIndex], dateFormat);
+    const others = cells
+      .filter((_, i) => i !== dateColIndex)
+      .map((c) => c.trim())
+      .filter(Boolean);
+
+    const fullName = others[0];
+    if (!fullName) return null;
+
+    const department = others[1] || undefined;
+
+    return { fullName, department, birthDate };
   }
 
   parseDate(
