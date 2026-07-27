@@ -11,7 +11,6 @@ export const HelpItems: HelpItem[] = [
           <li>.docx</li>
           <li>.doc</li>
           <li>.odt</li>
-          <li>.txt</li>
         </ul>
         <p className="mb-2">
           Файл должен содержать таблицу с тремя колонками: дата рождения, ФИО и
