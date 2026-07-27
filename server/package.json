@@ -34,6 +34,7 @@
     "pino-roll": "^4.0.0",
     "rss-parser": "^3.13.0",
     "sharp": "^0.34.3",
+    "word-extractor": "^1.0.4",
     "zod": "^4.3.2"
   },
   "devDependencies": {
