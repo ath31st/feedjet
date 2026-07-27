@@ -4,7 +4,10 @@ import type { Birthday, NewBirthday } from '@shared/types/birthdays.js';
 import { webReadableToNode } from '../utils/stream.js';
 import { BirthdayError } from '../errors/birthday.error.js';
 import { parseOdtTable } from '../utils/odt.table.parser.js';
+import { parseDocxTable } from '../utils/docx.table.parser.js';
+import { parseDocTable } from '../utils/doc.table.parser.js';
 import { parse, isValid } from 'date-fns';
+import { extname } from 'node:path';
 
 export class BirthdayFileService extends FileStorageService {
   private readonly birthdayService: BirthdayService;
@@ -31,16 +34,17 @@ export class BirthdayFileService extends FileStorageService {
     dateFormat?: string,
   ): Promise<NewBirthday[]> {
     const buffer = await this.readFile(filename);
-    const parsed = await this.parseBirthdayFile(buffer, dateFormat);
+    const parsed = await this.parseBirthdayFile(buffer, filename, dateFormat);
 
     return parsed;
   }
 
   private async parseBirthdayFile(
     buffer: Buffer,
+    filename: string,
     dateFormat: string = this.defaultDateFormat,
   ): Promise<NewBirthday[]> {
-    const rows = await parseOdtTable(buffer);
+    const rows = await this.parseTableRows(buffer, filename);
     const birthdays: NewBirthday[] = [];
 
     for (const cells of rows) {
@@ -56,6 +60,27 @@ export class BirthdayFileService extends FileStorageService {
     }
 
     return birthdays;
+  }
+
+  private async parseTableRows(
+    buffer: Buffer,
+    filename: string,
+  ): Promise<string[][]> {
+    const ext = extname(filename).toLowerCase();
+
+    switch (ext) {
+      case '.odt':
+        return parseOdtTable(buffer);
+      case '.docx':
+        return parseDocxTable(buffer);
+      case '.doc':
+        return parseDocTable(buffer);
+      default:
+        throw new BirthdayError(
+          400,
+          `Unsupported file type: ${ext || '(none)'}. Use .odt, .docx or .doc`,
+        );
+    }
   }
 
   private mapRowToBirthday(
