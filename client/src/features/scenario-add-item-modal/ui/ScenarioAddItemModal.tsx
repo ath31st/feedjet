@@ -25,6 +25,7 @@ export function ScenarioAddItemModal({
     setSelectedFiles,
     folderTree,
     media,
+    childFolders,
     isLoading,
     widgetOptions,
     handleAddWidget,
@@ -113,6 +114,8 @@ export function ScenarioAddItemModal({
             <MediaGrid
               media={media}
               isLoading={isLoading}
+              folders={childFolders}
+              onOpenFolder={setSelectedFolderId}
               selectedFiles={selectedFiles}
               onToggleSelect={(key) => {
                 setSelectedFiles((prev) => {

@@ -6,11 +6,17 @@ import { fmtBytes, fmtDuration } from '@/shared/lib';
 import { Folder, Image, Video } from 'lucide-react';
 import { useState } from 'react';
 
+export interface MediaGridFolder {
+  id: number;
+  name: string;
+}
+
 interface MediaGridProps {
   selectedFiles: Set<string>;
   media: MediaFile[];
   isLoading: boolean;
-
+  folders?: MediaGridFolder[];
+  onOpenFolder?: (id: number) => void;
   onToggleSelect: (key: string) => void;
   renderActions?: (file: MediaFile) => React.ReactNode;
 }
@@ -19,6 +25,8 @@ export function MediaGrid({
   selectedFiles,
   media,
   isLoading,
+  folders = [],
+  onOpenFolder,
   onToggleSelect,
   renderActions,
 }: MediaGridProps) {
@@ -42,7 +50,7 @@ export function MediaGrid({
     );
   }
 
-  if (media.length === 0) {
+  if (media.length === 0 && folders.length === 0) {
     return (
       <div className="flex flex-1 flex-col items-center justify-center gap-3 p-2">
         <Folder size={48} strokeWidth={1} />
@@ -54,6 +62,25 @@ export function MediaGrid({
   return (
     <div className="flex-1 overflow-y-auto p-2">
       <div className="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-3">
+        {folders.map((folder) => (
+          <div
+            key={`folder-${folder.id}`}
+            className="cursor-pointer overflow-hidden rounded-lg border border-(--border) transition-all hover:border-(--button-hover-bg)/50"
+            onClick={() => onOpenFolder?.(folder.id)}
+          >
+            <div className="relative flex h-28 items-center justify-center overflow-hidden bg-(--background)">
+              <Folder size={40} strokeWidth={1.25} />
+            </div>
+
+            <div className="p-2">
+              <p className="truncate font-medium text-xs" title={folder.name}>
+                {folder.name}
+              </p>
+              <p className="text-xs">Папка</p>
+            </div>
+          </div>
+        ))}
+
         {media.map((file) => {
           const key = `${file.kind}-${file.id}`;
           const isSelected = selectedFiles.has(key);
@@ -126,10 +153,7 @@ export function MediaGrid({
                 )}
 
                 {renderActions && (
-                  <div
-                    className="absolute inset-0 flex items-center justify-center gap-2 bg-black/50 opacity-0 transition-opacity group-hover:opacity-100"
-                    onClick={(e) => e.stopPropagation()}
-                  >
+                  <div className="absolute inset-0 flex items-center justify-center gap-2 bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
                     {renderActions(file)}
                   </div>
                 )}

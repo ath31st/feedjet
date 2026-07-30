@@ -1,6 +1,8 @@
 import { useDeleteImageGlobal } from '@/entities/image';
 import {
+  getChildFolders,
   useDeleteMediaBatch,
+  useMediaFolderTree,
   useMediaInFolder,
   useMoveMediaBatch,
   type MediaFile,
@@ -50,7 +52,13 @@ export function useMediaManagementWidget() {
     () => splitSelectionKeys(selectedFiles),
     [selectedFiles],
   );
+  const { data: folderTree = [] } = useMediaFolderTree();
   const { data: media = [], isLoading } = useMediaInFolder(selectedFolderId);
+
+  const childFolders = useMemo(
+    () => getChildFolders(folderTree, selectedFolderId),
+    [folderTree, selectedFolderId],
+  );
 
   const selectionTotal =
     selectionCounts.imageIds.length + selectionCounts.videoIds.length;
@@ -135,6 +143,7 @@ export function useMediaManagementWidget() {
   return {
     media,
     isLoading,
+    childFolders,
 
     preview,
     setPreview,

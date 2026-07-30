@@ -19,6 +19,7 @@ export function MediaManagementWidget() {
   const {
     media,
     isLoading,
+    childFolders,
 
     preview,
     setPreview,
@@ -84,6 +85,8 @@ export function MediaManagementWidget() {
         <MediaGrid
           media={media}
           isLoading={isLoading}
+          folders={childFolders}
+          onOpenFolder={setSelectedFolderId}
           selectedFiles={selectedFiles}
           onToggleSelect={(key) => {
             setSelectedFiles((prev) => {

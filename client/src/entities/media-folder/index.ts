@@ -1,4 +1,5 @@
 export * from './api/useMediaFolder';
+export { getChildFolders } from './lib/getChildFolders';
 export type {
   MediaFolder,
   MediaFolderTree,

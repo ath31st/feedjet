@@ -1,4 +1,8 @@
-import { useMediaFolderTree, useMediaInFolder } from '@/entities/media-folder';
+import {
+  getChildFolders,
+  useMediaFolderTree,
+  useMediaInFolder,
+} from '@/entities/media-folder';
 import { useAppFeaturesStore } from '@/entities/app-features';
 import {
   useAddScenarioItem,
@@ -26,6 +30,11 @@ export const useScenarioAddItem = (kioskId: number, onClose: () => void) => {
 
   const { data: folderTree = [] } = useMediaFolderTree();
   const { data: media = [], isLoading } = useMediaInFolder(selectedFolderId);
+
+  const childFolders = useMemo(
+    () => getChildFolders(folderTree, selectedFolderId),
+    [folderTree, selectedFolderId],
+  );
 
   const widgetOptions = useMemo<WidgetOption[]>(
     () =>
@@ -96,6 +105,7 @@ export const useScenarioAddItem = (kioskId: number, onClose: () => void) => {
     setSelectedFiles,
     folderTree,
     media,
+    childFolders,
     isLoading,
     widgetOptions,
     handleAddWidget,
