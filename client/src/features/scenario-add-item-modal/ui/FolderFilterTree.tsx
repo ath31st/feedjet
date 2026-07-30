@@ -1,7 +1,7 @@
 import type { MediaFolderTree } from '@/entities/media-folder';
+import { useExpandedFolderIds } from '@/entities/media-folder';
 import { FolderFilterNode } from './FolderFilterNode';
 import { FolderTreeItem, FolderTreeContainer } from '@/shared/ui';
-import { useFolderFilterTree } from '../model/useFolderFilterTree';
 
 interface Props {
   tree: MediaFolderTree[];
@@ -10,7 +10,7 @@ interface Props {
 }
 
 export function FolderFilterTree({ tree, selectedId, onSelect }: Props) {
-  const { expandedIds, toggleExpand } = useFolderFilterTree(tree, selectedId);
+  const { expandedIds, toggleExpand } = useExpandedFolderIds(tree, selectedId);
 
   return (
     <FolderTreeContainer

@@ -1,5 +1,6 @@
 import {
   getChildFolders,
+  toggleMediaSelectionKey,
   useMediaFolderTree,
   useMediaInFolder,
 } from '@/entities/media-folder';
@@ -46,6 +47,23 @@ export const useScenarioAddItem = (kioskId: number, onClose: () => void) => {
         })),
     [offlineMode],
   );
+
+  const handleTabChange = (nextTab: Tab) => {
+    setTab(nextTab);
+    setSelectedFiles(new Set());
+  };
+
+  const handleSelectFolder = (id: number | null) => {
+    setSelectedFolderId(id);
+  };
+
+  const handleToggleSelect = (key: string) => {
+    setSelectedFiles((prev) => toggleMediaSelectionKey(prev, key));
+  };
+
+  const handleClearSelection = () => {
+    setSelectedFiles(new Set());
+  };
 
   const handleAddWidget = (widgetType: ScenarioWidgetType) => {
     addItem.mutate(
@@ -98,11 +116,12 @@ export const useScenarioAddItem = (kioskId: number, onClose: () => void) => {
 
   return {
     tab,
-    setTab,
+    handleTabChange,
     selectedFolderId,
-    setSelectedFolderId,
+    handleSelectFolder,
     selectedFiles,
-    setSelectedFiles,
+    handleToggleSelect,
+    handleClearSelection,
     folderTree,
     media,
     childFolders,

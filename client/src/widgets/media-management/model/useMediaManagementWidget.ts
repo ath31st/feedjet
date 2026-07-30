@@ -1,6 +1,9 @@
 import { useDeleteImageGlobal } from '@/entities/image';
 import {
   getChildFolders,
+  mediaFileKey,
+  splitSelectionKeys,
+  toggleMediaSelectionKey,
   useDeleteMediaBatch,
   useMediaFolderTree,
   useMediaInFolder,
@@ -9,33 +12,6 @@ import {
 } from '@/entities/media-folder';
 import { useDeleteVideoGlobal } from '@/entities/video';
 import { useEffect, useMemo, useState } from 'react';
-
-function mediaKey(file: MediaFile): string {
-  return `${file.kind}-${file.id}`;
-}
-
-function splitSelectionKeys(keys: Set<string>): {
-  imageIds: number[];
-  videoIds: number[];
-} {
-  const imageIds: number[] = [];
-  const videoIds: number[] = [];
-
-  for (const key of keys) {
-    const [kind, idStr] = key.split('-');
-    const id = Number(idStr);
-
-    if (!Number.isFinite(id)) continue;
-
-    if (kind === 'image') {
-      imageIds.push(id);
-    } else if (kind === 'video') {
-      videoIds.push(id);
-    }
-  }
-
-  return { imageIds, videoIds };
-}
 
 export function useMediaManagementWidget() {
   const { mutate: deleteImageMut } = useDeleteImageGlobal();
@@ -67,12 +43,32 @@ export function useMediaManagementWidget() {
     setSelectedFiles((prev) => {
       if (prev.size === 0) return prev;
 
-      const valid = new Set(media.map(mediaKey));
+      const valid = new Set(media.map(mediaFileKey));
       const next = new Set([...prev].filter((key) => valid.has(key)));
 
       return next.size === prev.size ? prev : next;
     });
   }, [media]);
+
+  const handleSelectFolder = (id: number | null) => {
+    setSelectedFolderId(id);
+  };
+
+  const handleToggleSelect = (key: string) => {
+    setSelectedFiles((prev) => toggleMediaSelectionKey(prev, key));
+  };
+
+  const handleClearSelection = () => {
+    setSelectedFiles(new Set());
+  };
+
+  const handleOpenPreview = (file: MediaFile) => {
+    setPreview(file);
+  };
+
+  const handleClosePreview = () => {
+    setPreview(null);
+  };
 
   const handleBulkDelete = () => {
     if (selectionTotal === 0) return;
@@ -95,7 +91,7 @@ export function useMediaManagementWidget() {
   };
 
   const deleteFile = (file: MediaFile) => {
-    const key = mediaKey(file);
+    const key = mediaFileKey(file);
     const onSuccess = () => {
       setSelectedFiles((prev) => {
         if (!prev.has(key)) return prev;
@@ -146,13 +142,15 @@ export function useMediaManagementWidget() {
     childFolders,
 
     preview,
-    setPreview,
+    handleOpenPreview,
+    handleClosePreview,
 
     selectedFolderId,
-    setSelectedFolderId,
+    handleSelectFolder,
 
     selectedFiles,
-    setSelectedFiles,
+    handleToggleSelect,
+    handleClearSelection,
 
     selectionTotal,
 

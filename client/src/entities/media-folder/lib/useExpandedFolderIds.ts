@@ -1,7 +1,8 @@
-import { findFolderPath, type MediaFolderTree } from '@/entities/media-folder';
+import type { MediaFolderTree } from '@shared/types/media.folder';
 import { useEffect, useState } from 'react';
+import { findFolderPath } from './findFolderPath';
 
-export function useFolderFilterTree(
+export function useExpandedFolderIds(
   tree: MediaFolderTree[],
   selectedId: number | null,
 ) {

@@ -22,13 +22,15 @@ export function MediaManagementWidget() {
     childFolders,
 
     preview,
-    setPreview,
+    handleOpenPreview,
+    handleClosePreview,
 
     selectedFolderId,
-    setSelectedFolderId,
+    handleSelectFolder,
 
     selectedFiles,
-    setSelectedFiles,
+    handleToggleSelect,
+    handleClearSelection,
 
     selectionTotal,
 
@@ -48,7 +50,7 @@ export function MediaManagementWidget() {
         <div className="flex flex-col gap-6">
           <FolderTreePanel
             selectedFolderId={selectedFolderId}
-            onSelectFolder={setSelectedFolderId}
+            onSelectFolder={handleSelectFolder}
             moveMode={moveMode}
             moveCount={selectionTotal}
             onPickTargetFolder={handlePickTargetFolder}
@@ -77,7 +79,7 @@ export function MediaManagementWidget() {
               moveMode={moveMode}
               onStartMove={handleStartMove}
               onBulkDelete={handleBulkDelete}
-              onClearSelection={() => setSelectedFiles(new Set())}
+              onClearSelection={handleClearSelection}
             />
           </div>
         </div>
@@ -86,28 +88,16 @@ export function MediaManagementWidget() {
           media={media}
           isLoading={isLoading}
           folders={childFolders}
-          onOpenFolder={setSelectedFolderId}
+          onOpenFolder={handleSelectFolder}
           selectedFiles={selectedFiles}
-          onToggleSelect={(key) => {
-            setSelectedFiles((prev) => {
-              const next = new Set(prev);
-
-              if (next.has(key)) {
-                next.delete(key);
-              } else {
-                next.add(key);
-              }
-
-              return next;
-            });
-          }}
+          onToggleSelect={handleToggleSelect}
           renderActions={(file) => (
             <>
               <IconButton
                 icon={<Eye size={22} />}
                 onClick={(e) => {
                   e.stopPropagation();
-                  setPreview(file);
+                  handleOpenPreview(file);
                 }}
               />
 
@@ -130,13 +120,13 @@ export function MediaManagementWidget() {
             open={!!preview}
             kind={preview.kind}
             src={
-              preview?.kind === 'image'
+              preview.kind === 'image'
                 ? buildImageUrl(preview.fileName)
                 : buildVideoUrl(preview.fileName)
             }
             alt={preview.name}
             videoMuted
-            onClose={() => setPreview(null)}
+            onClose={handleClosePreview}
             description={buildMediaDescription(preview)}
           />
         )}

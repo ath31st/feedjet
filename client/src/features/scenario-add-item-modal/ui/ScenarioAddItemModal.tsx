@@ -18,11 +18,12 @@ export function ScenarioAddItemModal({
 }: ScenarioAddItemModalProps) {
   const {
     tab,
-    setTab,
+    handleTabChange,
     selectedFolderId,
-    setSelectedFolderId,
+    handleSelectFolder,
     selectedFiles,
-    setSelectedFiles,
+    handleToggleSelect,
+    handleClearSelection,
     folderTree,
     media,
     childFolders,
@@ -45,10 +46,7 @@ export function ScenarioAddItemModal({
           { value: 'media', label: 'Медиа' },
         ]}
         value={tab}
-        onChange={(v) => {
-          setTab(v as Tab);
-          setSelectedFiles(new Set());
-        }}
+        onChange={(v) => handleTabChange(v as Tab)}
         className="mb-5"
       />
 
@@ -90,7 +88,7 @@ export function ScenarioAddItemModal({
             <FolderFilterTree
               tree={folderTree}
               selectedId={selectedFolderId}
-              onSelect={setSelectedFolderId}
+              onSelect={handleSelectFolder}
             />
           </div>
 
@@ -105,7 +103,7 @@ export function ScenarioAddItemModal({
               <MediaSelectionToolbar
                 mode="select"
                 selectedCount={selectedFiles.size}
-                onClearSelection={() => setSelectedFiles(new Set())}
+                onClearSelection={handleClearSelection}
                 onAddToScenario={handleAddSelected}
                 moveMode={false}
               />
@@ -115,15 +113,9 @@ export function ScenarioAddItemModal({
               media={media}
               isLoading={isLoading}
               folders={childFolders}
-              onOpenFolder={setSelectedFolderId}
+              onOpenFolder={handleSelectFolder}
               selectedFiles={selectedFiles}
-              onToggleSelect={(key) => {
-                setSelectedFiles((prev) => {
-                  const next = new Set(prev);
-                  next.has(key) ? next.delete(key) : next.add(key);
-                  return next;
-                });
-              }}
+              onToggleSelect={handleToggleSelect}
             />
           </div>
         </div>
