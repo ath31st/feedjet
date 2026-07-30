@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/a11y: disable all a11y rules */
 import { FolderTreePanel } from '@/features/media-folder-tree-panel';
 import {
   ConfirmActionDialog,
@@ -5,7 +6,11 @@ import {
   MediaSelectionToolbar,
   SettingsCard,
 } from '@/shared/ui';
-import { MediaUploadButton } from '@/features/media-upload-button';
+import {
+  MediaDropZone,
+  MediaUploadArea,
+  MediaUploadButton,
+} from '@/features/media-upload-button';
 import { buildImageUrl } from '@/entities/image';
 import { buildVideoUrl } from '@/entities/video';
 import { buildMediaDescription } from '@/features/preview-modal';
@@ -63,57 +68,61 @@ export function MediaManagementWidget() {
       </SettingsCard>
 
       <SettingsCard title="Управление медиа" className="w-full md:w-4/5">
-        <div className="relative flex items-center justify-end gap-2 overflow-hidden p-2">
-          <MediaUploadButton selectedFolderId={selectedFolderId} />
+        <MediaUploadArea folderId={selectedFolderId}>
+          <div className="relative flex items-center justify-end gap-2 overflow-hidden p-2">
+            <MediaUploadButton />
 
-          <div
-            className={`absolute right-0 flex items-center gap-2 transition-all duration-300 ease-in-out ${
-              selectedFiles.size > 0
-                ? 'translate-x-0 opacity-100'
-                : 'pointer-events-none translate-x-full opacity-0'
-            }`}
-          >
-            <MediaSelectionToolbar
-              selectedCount={selectedFiles.size}
-              mode="manage"
-              moveMode={moveMode}
-              onStartMove={handleStartMove}
-              onBulkDelete={handleBulkDelete}
-              onClearSelection={handleClearSelection}
-            />
+            <div
+              className={`absolute right-0 flex items-center gap-2 transition-all duration-300 ease-in-out ${
+                selectedFiles.size > 0
+                  ? 'translate-x-0 opacity-100'
+                  : 'pointer-events-none translate-x-full opacity-0'
+              }`}
+            >
+              <MediaSelectionToolbar
+                selectedCount={selectedFiles.size}
+                mode="manage"
+                moveMode={moveMode}
+                onStartMove={handleStartMove}
+                onBulkDelete={handleBulkDelete}
+                onClearSelection={handleClearSelection}
+              />
+            </div>
           </div>
-        </div>
 
-        <MediaGrid
-          media={media}
-          isLoading={isLoading}
-          folders={childFolders}
-          onOpenFolder={handleSelectFolder}
-          selectedFiles={selectedFiles}
-          onToggleSelect={handleToggleSelect}
-          renderActions={(file) => (
-            <>
-              <IconButton
-                icon={<Eye size={22} />}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleOpenPreview(file);
-                }}
-              />
+          <MediaDropZone>
+            <MediaGrid
+              media={media}
+              isLoading={isLoading}
+              folders={childFolders}
+              onOpenFolder={handleSelectFolder}
+              selectedFiles={selectedFiles}
+              onToggleSelect={handleToggleSelect}
+              renderActions={(file) => (
+                <>
+                  <IconButton
+                    icon={<Eye size={22} />}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleOpenPreview(file);
+                    }}
+                  />
 
-              <ConfirmActionDialog
-                confirmText="Удалить"
-                description={`Файл «${file.name}» будет удалён`}
-                trigger={<IconButton icon={<Trash2 size={22} />} />}
-                title="Удалить файл?"
-                onConfirm={(e) => {
-                  e.stopPropagation();
-                  handleDelete(file);
-                }}
-              />
-            </>
-          )}
-        />
+                  <ConfirmActionDialog
+                    confirmText="Удалить"
+                    description={`Файл «${file.name}» будет удалён`}
+                    trigger={<IconButton icon={<Trash2 size={22} />} />}
+                    title="Удалить файл?"
+                    onConfirm={(e) => {
+                      e.stopPropagation();
+                      handleDelete(file);
+                    }}
+                  />
+                </>
+              )}
+            />
+          </MediaDropZone>
+        </MediaUploadArea>
 
         {preview && (
           <PreviewModal

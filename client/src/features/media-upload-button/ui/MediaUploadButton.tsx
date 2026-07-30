@@ -1,18 +1,10 @@
 import { useRef } from 'react';
 import { Upload } from 'lucide-react';
 import { CommonButton } from '@/shared/ui/common';
-import { useMediaUpload } from '../model/useMediaUpload';
+import { useMediaUploadContext } from '../model/MediaUploadContext';
 
-interface MediaUploadButtonProps {
-  selectedFolderId: number | null;
-}
-
-export function MediaUploadButton({
-  selectedFolderId,
-}: MediaUploadButtonProps) {
-  const { uploading, handleUploadFiles } = useMediaUpload({
-    folderId: selectedFolderId,
-  });
+export function MediaUploadButton() {
+  const { uploading, handleUploadFiles } = useMediaUploadContext();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   return (
