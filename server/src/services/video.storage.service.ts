@@ -9,6 +9,7 @@ import { eq } from 'drizzle-orm';
 import { VideoStorageServiceError } from '../errors/video.error.js';
 import { webReadableToNode } from '../utils/stream.js';
 import { promises as fs } from 'node:fs';
+import { sanitizeFileName } from '../utils/sanitize.filename.js';
 
 const execFileAsync = promisify(execFile);
 
@@ -44,25 +45,33 @@ export class VideoStorageService extends FileStorageService {
     filename: string,
     folderId: number | null = null,
   ): Promise<{ path: string; savedFileName: string }> {
+    const safeFileName = sanitizeFileName(filename);
     const nodeStream = webReadableToNode(file.stream());
 
-    const savedPath = await this.saveStream(nodeStream, filename);
+    const savedPath = await this.saveStream(nodeStream, safeFileName);
 
-    const meta = this.findVideoMetadataByFileName(filename);
+    const meta = this.findVideoMetadataByFileName(safeFileName);
     if (meta) {
       await this.deleteThumbnailFile(meta.thumbnail);
-      this.removeVideoMetadataByFileName(filename);
+      this.removeVideoMetadataByFileName(safeFileName);
     }
 
-    const baseMeta = await this.getVideoMetadata(filename);
-    const thumbnail = await this.generateThumbnail(filename);
+    const baseMeta = await this.getVideoMetadata(safeFileName);
+    const thumbnail = await this.generateThumbnail(safeFileName);
     const savedFileName = this.saveVideoMetadata(
       { ...baseMeta, thumbnail },
       folderId,
     );
 
     this.logger.info(
-      { savedPath, savedFileName, folderId, thumbnail, fn: 'upload' },
+      {
+        savedPath,
+        savedFileName,
+        folderId,
+        thumbnail,
+        originalFileName: filename,
+        fn: 'upload',
+      },
       'Video uploaded',
     );
     return { path: savedPath, savedFileName };

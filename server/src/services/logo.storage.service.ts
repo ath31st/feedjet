@@ -6,6 +6,7 @@ import { ImageStorageServiceError } from '../errors/image.error.js';
 import type { BaseImageMetadata } from '@shared/types/image.js';
 import type { Logo } from '@shared/types/logo.js';
 import { LogoStorageError } from '../errors/logo.storage.error.js';
+import { sanitizeFileName } from '../utils/sanitize.filename.js';
 
 export class LogoStorageService extends BaseImageStorageService {
   private readonly db: DbType;
@@ -38,6 +39,7 @@ export class LogoStorageService extends BaseImageStorageService {
 
   async replace(file: File, fileName: string): Promise<Logo | null> {
     try {
+      const safeFileName = sanitizeFileName(fileName);
       const currentLogo = this.findCurrentLogo();
 
       if (currentLogo) {
@@ -45,13 +47,18 @@ export class LogoStorageService extends BaseImageStorageService {
       }
 
       const nodeStream = this.getNodeStream(file);
-      const savedPath = await this.saveImageStream(nodeStream, fileName);
+      const savedPath = await this.saveImageStream(nodeStream, safeFileName);
 
-      const meta = await this.getImageMetadata(fileName);
+      const meta = await this.getImageMetadata(safeFileName);
       const savedFileName = this.saveLogoMetadata(meta);
 
       this.logger.info(
-        { savedPath, savedFileName, fn: 'replace' },
+        {
+          savedPath,
+          savedFileName,
+          originalFileName: fileName,
+          fn: 'replace',
+        },
         'Logo replaced successfully',
       );
 

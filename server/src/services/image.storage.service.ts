@@ -4,6 +4,7 @@ import type { DbType } from '../container.js';
 import { imagesTable } from '../db/schema.js';
 import { eq } from 'drizzle-orm';
 import { BaseImageStorageService } from './base.image.storage.service.js';
+import { sanitizeFileName } from '../utils/sanitize.filename.js';
 
 export class ImageStorageService extends BaseImageStorageService {
   private readonly db: DbType;
@@ -18,32 +19,33 @@ export class ImageStorageService extends BaseImageStorageService {
   }
 
   async upload(file: File, fileName: string, folderId: number | null = null) {
+    const safeFileName = sanitizeFileName(fileName);
     const nodeStream = this.getNodeStream(file);
-    const savedPath = await this.saveImageStream(nodeStream, fileName);
+    const savedPath = await this.saveImageStream(nodeStream, safeFileName);
 
-    const resizedBuffer = await this.resizeImage(fileName, null, 150);
+    const resizedBuffer = await this.resizeImage(safeFileName, null, 150);
     if (resizedBuffer) {
       await this.saveImageBuffer(
         resizedBuffer,
-        this.getThumbnailFileName(fileName),
+        this.getThumbnailFileName(safeFileName),
       );
     }
 
-    let meta = this.findImageMetadataByFileName(fileName);
+    let meta = this.findImageMetadataByFileName(safeFileName);
     if (meta) {
-      this.removeImageMetadataByFileName(fileName);
+      this.removeImageMetadataByFileName(safeFileName);
     }
-    const baseMeta = await this.getImageMetadata(fileName);
+    const baseMeta = await this.getImageMetadata(safeFileName);
 
     meta = {
       ...baseMeta,
-      thumbnail: this.getThumbnailFileName(fileName),
+      thumbnail: this.getThumbnailFileName(safeFileName),
     };
 
     const savedFileName = this.saveImageMetadata(meta, folderId);
 
     this.logger.info(
-      { savedPath, folderId, fn: 'upload' },
+      { savedPath, folderId, originalFileName: fileName, fn: 'upload' },
       'Image uploaded successfully',
     );
 
