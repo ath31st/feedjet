@@ -126,7 +126,10 @@ export function MediaGrid({
                 )}
 
                 {renderActions && (
-                  <div className="absolute inset-0 flex items-center justify-center gap-2 bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
+                  <div
+                    className="absolute inset-0 flex items-center justify-center gap-2 bg-black/50 opacity-0 transition-opacity group-hover:opacity-100"
+                    onClick={(e) => e.stopPropagation()}
+                  >
                     {renderActions(file)}
                   </div>
                 )}

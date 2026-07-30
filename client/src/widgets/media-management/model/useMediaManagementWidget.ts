@@ -6,7 +6,11 @@ import {
   type MediaFile,
 } from '@/entities/media-folder';
 import { useDeleteVideoGlobal } from '@/entities/video';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+
+function mediaKey(file: MediaFile): string {
+  return `${file.kind}-${file.id}`;
+}
 
 function splitSelectionKeys(keys: Set<string>): {
   imageIds: number[];
@@ -51,6 +55,17 @@ export function useMediaManagementWidget() {
   const selectionTotal =
     selectionCounts.imageIds.length + selectionCounts.videoIds.length;
 
+  useEffect(() => {
+    setSelectedFiles((prev) => {
+      if (prev.size === 0) return prev;
+
+      const valid = new Set(media.map(mediaKey));
+      const next = new Set([...prev].filter((key) => valid.has(key)));
+
+      return next.size === prev.size ? prev : next;
+    });
+  }, [media]);
+
   const handleBulkDelete = () => {
     if (selectionTotal === 0) return;
 
@@ -72,11 +87,21 @@ export function useMediaManagementWidget() {
   };
 
   const deleteFile = (file: MediaFile) => {
+    const key = mediaKey(file);
+    const onSuccess = () => {
+      setSelectedFiles((prev) => {
+        if (!prev.has(key)) return prev;
+        const next = new Set(prev);
+        next.delete(key);
+        return next;
+      });
+    };
+
     if (file.kind === 'image') {
-      deleteImageMut({ filename: file.fileName });
+      deleteImageMut({ filename: file.fileName }, { onSuccess });
       return;
     }
-    deleteVideoMut({ filename: file.fileName });
+    deleteVideoMut({ filename: file.fileName }, { onSuccess });
   };
 
   const handleStartMove = () => {
