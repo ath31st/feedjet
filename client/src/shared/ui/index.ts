@@ -13,6 +13,7 @@ export * from './TooltipWrapper';
 export * from './StaticBackground';
 export * from './DigitalClock';
 export * from './FileUpload';
+export * from './FileDropZone';
 export * from './help/HelpDialog';
 export * from './help/HelpSectionButton';
 export * from './PreviewDialogBase';

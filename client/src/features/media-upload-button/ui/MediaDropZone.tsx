@@ -1,5 +1,5 @@
-/** biome-ignore-all lint/a11y: disable all a11y rules */
 import type { ReactNode } from 'react';
+import { FileDropZone } from '@/shared/ui';
 import { useMediaUploadContext } from '../model/MediaUploadContext';
 
 interface MediaDropZoneProps {
@@ -7,21 +7,14 @@ interface MediaDropZoneProps {
 }
 
 export function MediaDropZone({ children }: MediaDropZoneProps) {
-  const { isDragOver, handleDragOver, handleDragLeave, handleDrop } =
-    useMediaUploadContext();
+  const { handleUploadFiles } = useMediaUploadContext();
 
   return (
-    <div
-      className={`flex min-h-0 flex-1 flex-col rounded-lg border-2 transition-colors ${
-        isDragOver
-          ? 'border-(--button-hover-bg) border-dashed bg-(--button-hover-bg)/20'
-          : 'border-transparent'
-      }`}
-      onDragOver={handleDragOver}
-      onDragLeave={handleDragLeave}
-      onDrop={handleDrop}
+    <FileDropZone
+      onDrop={handleUploadFiles}
+      className="flex min-h-0 flex-1 flex-col rounded-lg"
     >
       {children}
-    </div>
+    </FileDropZone>
   );
 }

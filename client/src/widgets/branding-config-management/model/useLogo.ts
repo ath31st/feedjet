@@ -4,6 +4,9 @@ import {
   useGetLogo,
   useUploadLogo,
 } from '@/entities/branding';
+import { toast } from 'sonner';
+
+const ALLOWED_LOGO_TYPES = ['image/png', 'image/svg+xml'];
 
 export const useLogo = () => {
   const { data: logo, isLoading } = useGetLogo();
@@ -24,19 +27,29 @@ export const useLogo = () => {
     deleteLogo({ filename: logo.fileName });
   };
 
+  const uploadIfAllowed = (file: File) => {
+    if (!ALLOWED_LOGO_TYPES.includes(file.type)) {
+      toast.error(`Неподдерживаемый формат: ${file.name}`);
+      return;
+    }
+
+    handleUploadLogo(file);
+  };
+
   const handleSelectFile = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
 
     if (!file) return;
 
-    const allowedTypes = ['image/png', 'image/svg+xml'];
-    if (!allowedTypes.includes(file.type)) {
-      return;
-    }
-
-    handleUploadLogo(file);
+    uploadIfAllowed(file);
 
     event.target.value = '';
+  };
+
+  const handleDropFiles = (files: File[]) => {
+    const file = files[0];
+    if (!file) return;
+    uploadIfAllowed(file);
   };
 
   return {
@@ -46,6 +59,7 @@ export const useLogo = () => {
     isDeleting: isDeletePending,
     hasLogo: !!logo,
     handleSelectFile,
+    handleDropFiles,
     handleDeleteLogo,
   };
 };

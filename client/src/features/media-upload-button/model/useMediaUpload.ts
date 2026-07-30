@@ -1,4 +1,4 @@
-import { useCallback, useState, type DragEvent } from 'react';
+import { useCallback, useState } from 'react';
 import { toast } from 'sonner';
 import { useUploadImage } from '@/entities/image';
 import { useUploadVideo } from '@/entities/video';
@@ -16,13 +16,8 @@ interface UseMediaUploadParams {
   folderId: number | null;
 }
 
-function hasFilePayload(e: DragEvent): boolean {
-  return Array.from(e.dataTransfer.types).includes('Files');
-}
-
 export function useMediaUpload({ folderId }: UseMediaUploadParams) {
   const [uploading, setUploading] = useState<UploadingFile[]>([]);
-  const [isDragOver, setIsDragOver] = useState(false);
   const uploadImage = useUploadImage();
   const uploadVideo = useUploadVideo();
 
@@ -104,44 +99,8 @@ export function useMediaUpload({ folderId }: UseMediaUploadParams) {
     [folderId, uploadImage, uploadVideo],
   );
 
-  const handleDragOver = useCallback((e: DragEvent) => {
-    if (!hasFilePayload(e)) return;
-    e.preventDefault();
-    e.stopPropagation();
-    setIsDragOver(true);
-  }, []);
-
-  const handleDragLeave = useCallback((e: DragEvent) => {
-    if (!hasFilePayload(e)) return;
-    e.preventDefault();
-    e.stopPropagation();
-
-    const next = e.relatedTarget;
-    if (next instanceof Node && e.currentTarget.contains(next)) return;
-
-    setIsDragOver(false);
-  }, []);
-
-  const handleDrop = useCallback(
-    (e: DragEvent) => {
-      if (!hasFilePayload(e)) return;
-      e.preventDefault();
-      e.stopPropagation();
-      setIsDragOver(false);
-
-      if (e.dataTransfer.files.length > 0) {
-        void handleUploadFiles(e.dataTransfer.files);
-      }
-    },
-    [handleUploadFiles],
-  );
-
   return {
     uploading,
-    isDragOver,
     handleUploadFiles,
-    handleDragOver,
-    handleDragLeave,
-    handleDrop,
   };
 }

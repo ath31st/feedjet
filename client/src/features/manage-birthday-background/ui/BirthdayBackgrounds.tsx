@@ -11,6 +11,7 @@ export function ManageBirthdayBackground() {
     fileInputRef,
     handleSlotClick,
     handleUpload,
+    handleDropFile,
     handleReplace,
     handleDelete,
     closePreview,
@@ -26,6 +27,7 @@ export function ManageBirthdayBackground() {
         <BackgroundGrid
           backgrounds={backgrounds}
           onSlotClick={handleSlotClick}
+          onDropFile={handleDropFile}
         />
       )}
 

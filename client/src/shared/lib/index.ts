@@ -22,3 +22,4 @@ export * from './hexToRgba';
 export * from './formatters';
 export * from './generateUUID';
 export * from './getRelativeColor';
+export * from './useFileDropZone';

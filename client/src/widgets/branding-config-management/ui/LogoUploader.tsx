@@ -3,6 +3,7 @@ import { useLogo } from '../model/useLogo';
 import defaultLogo from '@/shared/assets/default_logo.png';
 import { Trash, Upload } from 'lucide-react';
 import { CommonButton } from '@/shared/ui/common';
+import { FileDropZone } from '@/shared/ui';
 
 export function LogoUploader() {
   const {
@@ -10,6 +11,7 @@ export function LogoUploader() {
     isLoading,
     isUploading,
     handleSelectFile,
+    handleDropFiles,
     handleDeleteLogo,
     isDeleting,
   } = useLogo();
@@ -18,7 +20,11 @@ export function LogoUploader() {
   const imageSrc = logoUrl ?? defaultLogo;
 
   return (
-    <div className="relative h-150 overflow-hidden rounded-lg">
+    <FileDropZone
+      onDrop={handleDropFiles}
+      className="relative h-150 overflow-hidden rounded-lg"
+      inactiveClassName="border-transparent"
+    >
       <img
         src={isLoading ? defaultLogo : imageSrc}
         alt="Логотип организации"
@@ -52,6 +58,6 @@ export function LogoUploader() {
           <Upload size={15} />
         </CommonButton>
       </div>
-    </div>
+    </FileDropZone>
   );
 }
