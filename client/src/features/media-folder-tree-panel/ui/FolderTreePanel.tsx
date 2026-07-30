@@ -37,6 +37,8 @@ export function FolderTreePanel({
     handleStartRename,
     setRenameValue,
     handleSelect,
+    expandedIds,
+    handleToggleExpand,
   } = useFolderTreePanel(
     selectedFolderId,
     onSelectFolder,
@@ -101,6 +103,8 @@ export function FolderTreePanel({
           onCancelRename={handleCancelRename}
           onDelete={handleDelete}
           onSelect={(id) => handleSelect(id)}
+          expandedIds={expandedIds}
+          onToggleExpand={handleToggleExpand}
           moveMode={moveMode}
           isMovePending={isMovePending}
         />

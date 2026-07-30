@@ -7,7 +7,6 @@ import {
   CheckIcon,
   ResetIcon,
 } from '@radix-ui/react-icons';
-import { useState } from 'react';
 import { ConfirmActionDialog, FolderTreeItem } from '@/shared/ui';
 
 interface FolderNodeProps {
@@ -16,6 +15,8 @@ interface FolderNodeProps {
   renamingId: number | null;
   renameValue: string;
   depth?: number;
+  expandedIds: Set<number>;
+  onToggleExpand: (id: number) => void;
   onSelect: (id: number) => void;
   onStartRename: (node: MediaFolderTree) => void;
   onRenameValueChange: (value: string) => void;
@@ -32,6 +33,8 @@ export function FolderNode({
   renamingId,
   renameValue,
   depth = 0,
+  expandedIds,
+  onToggleExpand,
   onSelect,
   onStartRename,
   onRenameValueChange,
@@ -41,8 +44,7 @@ export function FolderNode({
   moveMode = false,
   isMovePending = false,
 }: FolderNodeProps) {
-  const [expanded, setExpanded] = useState(false);
-
+  const expanded = expandedIds.has(node.id);
   const isSelected = selectedId === node.id;
   const isRenaming = renamingId === node.id;
 
@@ -55,7 +57,7 @@ export function FolderNode({
       hasChildren={node.children.length > 0}
       moveMode={moveMode}
       isMovePending={isMovePending}
-      onToggleExpand={() => setExpanded((v) => !v)}
+      onToggleExpand={() => onToggleExpand(node.id)}
       onClick={() => onSelect(node.id)}
       renderTitle={() =>
         isRenaming && !moveMode ? (
@@ -133,6 +135,8 @@ export function FolderNode({
             onDelete={onDelete}
             onSelect={onSelect}
             depth={depth + 1}
+            expandedIds={expandedIds}
+            onToggleExpand={onToggleExpand}
             moveMode={moveMode}
             isMovePending={isMovePending}
           />

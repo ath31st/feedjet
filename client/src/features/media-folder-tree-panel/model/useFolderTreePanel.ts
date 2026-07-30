@@ -1,4 +1,5 @@
 import {
+  findFolderPath,
   useCreateFolder,
   useDeleteFolder,
   useMediaFolderTree,
@@ -6,7 +7,7 @@ import {
   useRenameFolder,
   type MediaFolderTree,
 } from '@/entities/media-folder';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export function useFolderTreePanel(
   selectedFolderId: number | null,
@@ -17,6 +18,7 @@ export function useFolderTreePanel(
 ) {
   const [renamingId, setRenamingId] = useState<number | null>(null);
   const [renameValue, setRenameValue] = useState('');
+  const [expandedIds, setExpandedIds] = useState<Set<number>>(() => new Set());
 
   const { data: tree = [] } = useMediaFolderTree();
   const { data: stats } = useMediaStats();
@@ -24,6 +26,22 @@ export function useFolderTreePanel(
   const { mutate: createFolder } = useCreateFolder();
   const { mutate: renameFolder } = useRenameFolder();
   const { mutate: deleteFolder } = useDeleteFolder();
+
+  useEffect(() => {
+    if (selectedFolderId === null) return;
+    const path = findFolderPath(tree, selectedFolderId);
+    if (!path) return;
+    setExpandedIds(new Set(path));
+  }, [selectedFolderId, tree]);
+
+  const handleToggleExpand = (id: number) => {
+    setExpandedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
 
   const handleRename = () => {
     if (!renamingId || !renameValue.trim()) {
@@ -79,6 +97,8 @@ export function useFolderTreePanel(
     renamingId,
     renameValue,
     setRenameValue,
+    expandedIds,
+    handleToggleExpand,
     handleRename,
     handleDelete,
     handleCancelRename,
