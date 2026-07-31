@@ -4,6 +4,12 @@ import { toast } from 'sonner';
 
 const folderQueryKey = () => trpcWithProxy.mediaFolder.getTree.queryKey();
 const mediaQueryKey = () => trpcWithProxy.mediaFolder.listMedia.queryKey();
+const statsQueryKey = () => trpcWithProxy.mediaFolder.stats.queryKey();
+
+const invalidateMediaLists = () => {
+  queryClient.invalidateQueries({ queryKey: mediaQueryKey() });
+  queryClient.invalidateQueries({ queryKey: statsQueryKey() });
+};
 
 export const useMediaFolderTree = () =>
   useQuery(trpcWithProxy.mediaFolder.getTree.queryOptions());
@@ -49,7 +55,7 @@ export const useMoveMediaBatch = () =>
     trpcWithProxy.mediaFolder.moveMediaBatch.mutationOptions({
       onSuccess(data) {
         toast.success(`Перемещено файлов: ${data.movedCount}`);
-        queryClient.invalidateQueries({ queryKey: mediaQueryKey() });
+        invalidateMediaLists();
       },
       onError(err: unknown) {
         if (err instanceof Error) {
@@ -66,7 +72,7 @@ export const useDeleteMediaBatch = () =>
     trpcWithProxy.mediaFolder.deleteMediaBatch.mutationOptions({
       onSuccess(data) {
         toast.success(`Удалено файлов: ${data.deletedCount}`);
-        queryClient.invalidateQueries({ queryKey: mediaQueryKey() });
+        invalidateMediaLists();
       },
       onError(err: unknown) {
         if (err instanceof Error) {

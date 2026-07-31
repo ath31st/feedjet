@@ -85,7 +85,8 @@ export function FolderTreePanel({
         stats &&
         !moveMode && (
           <p className="text-(--text-muted) text-xs">
-            {stats.imageCount} изображений · {stats.videoCount} видео
+            {stats.imageCount} изображений · {stats.videoCount} видео ·{' '}
+            {stats.pdfCount} PDF
           </p>
         )
       }

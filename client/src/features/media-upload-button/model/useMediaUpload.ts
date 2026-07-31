@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
 import { toast } from 'sonner';
 import { useUploadImage } from '@/entities/image';
+import { useUploadPdf } from '@/entities/pdf';
 import { useUploadVideo } from '@/entities/video';
 
 interface UploadingFile {
@@ -12,6 +13,8 @@ const IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.webp', '.bmp'];
 
 const VIDEO_EXTENSIONS = ['.mp4', '.webm', '.mkv', '.avi', '.mov'];
 
+const PDF_EXTENSIONS = ['.pdf'];
+
 interface UseMediaUploadParams {
   folderId: number | null;
 }
@@ -20,6 +23,7 @@ export function useMediaUpload({ folderId }: UseMediaUploadParams) {
   const [uploading, setUploading] = useState<UploadingFile[]>([]);
   const uploadImage = useUploadImage();
   const uploadVideo = useUploadVideo();
+  const uploadPdf = useUploadPdf();
 
   const handleUploadFiles = useCallback(
     async (files: FileList | File[]) => {
@@ -30,8 +34,9 @@ export function useMediaUpload({ folderId }: UseMediaUploadParams) {
 
         const isImage = IMAGE_EXTENSIONS.includes(ext);
         const isVideo = VIDEO_EXTENSIONS.includes(ext);
+        const isPdf = PDF_EXTENSIONS.includes(ext);
 
-        if (!isImage && !isVideo) {
+        if (!isImage && !isVideo && !isPdf) {
           toast.error(`Неподдерживаемый формат: ${file.name}`);
           continue;
         }
@@ -69,8 +74,10 @@ export function useMediaUpload({ folderId }: UseMediaUploadParams) {
         try {
           if (isImage) {
             await uploadImage.mutateAsync(fd as unknown as FormData);
-          } else {
+          } else if (isVideo) {
             await uploadVideo.mutateAsync(fd as unknown as FormData);
+          } else {
+            await uploadPdf.mutateAsync(fd as unknown as FormData);
           }
 
           clearInterval(interval);
@@ -96,7 +103,7 @@ export function useMediaUpload({ folderId }: UseMediaUploadParams) {
         }
       }
     },
-    [folderId, uploadImage, uploadVideo],
+    [folderId, uploadImage, uploadVideo, uploadPdf],
   );
 
   return {

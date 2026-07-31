@@ -13,7 +13,7 @@ export function MediaUploadButton() {
         ref={fileInputRef}
         type="file"
         multiple
-        accept="image/*,video/*"
+        accept="image/*,video/*,.pdf,application/pdf"
         className="hidden"
         onChange={(e) => e.target.files && handleUploadFiles(e.target.files)}
       />
