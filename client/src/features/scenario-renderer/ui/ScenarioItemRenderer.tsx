@@ -2,6 +2,7 @@ import { lazy } from 'react';
 import type { ScenarioItem, ScenarioWidgetType } from '@/entities/scenario';
 import type { AnimationType } from '@/shared/lib';
 import { ImageItemView } from './ImageItemView';
+import { PdfItemView } from './PdfItemView';
 import { VideoItemView } from './VideoItemView';
 
 const FeedWidget = lazy(() => import('@/widgets/feed'));
@@ -35,6 +36,8 @@ interface ScenarioItemRendererProps {
   rotate: number;
   animation: AnimationType;
   onVideoEnd: () => void;
+  onPdfEnd: () => void;
+  isPaused?: boolean;
   isPreview?: boolean;
 }
 
@@ -43,6 +46,8 @@ export const ScenarioItemRenderer = ({
   rotate,
   animation,
   onVideoEnd,
+  onPdfEnd,
+  isPaused,
   isPreview,
 }: ScenarioItemRendererProps) => {
   if (item.type === 'widget' && item.widgetType) {
@@ -65,6 +70,17 @@ export const ScenarioItemRenderer = ({
         fileName={item.videoFileName}
         onEnd={onVideoEnd}
         isPreview={isPreview}
+      />
+    );
+  }
+
+  if (item.type === 'pdf' && item.pdfFileName) {
+    return (
+      <PdfItemView
+        fileName={item.pdfFileName}
+        durationSeconds={item.durationSeconds}
+        onEnd={onPdfEnd}
+        isPaused={isPaused}
       />
     );
   }

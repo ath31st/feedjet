@@ -100,7 +100,7 @@ export function useScenarioRotation() {
       return;
     }
 
-    if (currentItem.type === 'video') {
+    if (currentItem.type === 'video' || currentItem.type === 'pdf') {
       return;
     }
 

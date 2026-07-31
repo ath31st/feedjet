@@ -91,7 +91,9 @@ export function KioskPage() {
                 rotate={rotate}
                 animation={animation}
                 isPreview={isPreview}
+                isPaused={userPaused}
                 onVideoEnd={unlockRotation}
+                onPdfEnd={unlockRotation}
               />
             </Suspense>
           </Rotator>
