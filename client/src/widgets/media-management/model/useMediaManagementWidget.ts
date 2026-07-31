@@ -10,12 +10,14 @@ import {
   useMoveMediaBatch,
   type MediaFile,
 } from '@/entities/media-folder';
+import { useDeletePdfGlobal } from '@/entities/pdf';
 import { useDeleteVideoGlobal } from '@/entities/video';
 import { useEffect, useMemo, useState } from 'react';
 
 export function useMediaManagementWidget() {
   const { mutate: deleteImageMut } = useDeleteImageGlobal();
   const { mutate: deleteVideoMut } = useDeleteVideoGlobal();
+  const { mutate: deletePdfMut } = useDeletePdfGlobal();
   const [selectedFolderId, setSelectedFolderId] = useState<number | null>(null);
   const [selectedFiles, setSelectedFiles] = useState<Set<string>>(
     () => new Set(),
@@ -37,7 +39,9 @@ export function useMediaManagementWidget() {
   );
 
   const selectionTotal =
-    selectionCounts.imageIds.length + selectionCounts.videoIds.length;
+    selectionCounts.imageIds.length +
+    selectionCounts.videoIds.length +
+    selectionCounts.pdfIds.length;
 
   useEffect(() => {
     setSelectedFiles((prev) => {
@@ -77,6 +81,7 @@ export function useMediaManagementWidget() {
       {
         imageIds: selectionCounts.imageIds,
         videoIds: selectionCounts.videoIds,
+        pdfIds: selectionCounts.pdfIds,
       },
       {
         onSuccess: () => {
@@ -105,7 +110,11 @@ export function useMediaManagementWidget() {
       deleteImageMut({ filename: file.fileName }, { onSuccess });
       return;
     }
-    deleteVideoMut({ filename: file.fileName }, { onSuccess });
+    if (file.kind === 'video') {
+      deleteVideoMut({ filename: file.fileName }, { onSuccess });
+      return;
+    }
+    deletePdfMut({ filename: file.fileName }, { onSuccess });
   };
 
   const handleStartMove = () => {
@@ -126,6 +135,7 @@ export function useMediaManagementWidget() {
         folderId,
         imageIds: selectionCounts.imageIds,
         videoIds: selectionCounts.videoIds,
+        pdfIds: selectionCounts.pdfIds,
       },
       {
         onSuccess: () => {

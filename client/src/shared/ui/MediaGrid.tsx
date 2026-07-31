@@ -1,9 +1,10 @@
 /** biome-ignore-all lint/a11y: disable all a11y rules */
 import { buildImageUrl } from '@/entities/image';
+import { buildPdfUrl } from '@/entities/pdf';
 import { buildVideoUrl } from '@/entities/video';
 import type { MediaFile } from '@/entities/media-folder';
 import { fmtBytes, fmtDuration } from '@/shared/lib';
-import { Folder, Image, Video } from 'lucide-react';
+import { FileText, Folder, Image, Video } from 'lucide-react';
 import { useState } from 'react';
 
 export interface MediaGridFolder {
@@ -84,6 +85,25 @@ export function MediaGrid({
         {media.map((file) => {
           const key = `${file.kind}-${file.id}`;
           const isSelected = selectedFiles.has(key);
+          const thumbFailed = failedThumbs.has(key);
+          const thumbSrc =
+            file.kind === 'image'
+              ? file.thumbnail
+                ? buildImageUrl(file.thumbnail)
+                : null
+              : file.kind === 'video'
+                ? file.thumbnail
+                  ? buildVideoUrl(file.thumbnail)
+                  : null
+                : file.thumbnail
+                  ? buildPdfUrl(file.thumbnail)
+                  : null;
+          const FallbackIcon =
+            file.kind === 'image'
+              ? Image
+              : file.kind === 'video'
+                ? Video
+                : FileText;
 
           return (
             <div
@@ -96,55 +116,29 @@ export function MediaGrid({
               onClick={() => onToggleSelect(key)}
             >
               <div className="relative h-28 overflow-hidden bg-(--background)">
-                {(() => {
-                  const thumbFailed = failedThumbs.has(key);
-
-                  if (file.kind === 'image') {
-                    return !thumbFailed && file.thumbnail ? (
-                      <img
-                        src={buildImageUrl(file.thumbnail)}
-                        alt={file.name}
-                        className="h-full w-full object-cover"
-                        onError={() =>
-                          setFailedThumbs((prev) => {
-                            const next = new Set(prev);
-                            next.add(key);
-                            return next;
-                          })
-                        }
-                      />
-                    ) : (
-                      <div className="flex h-full items-center justify-center">
-                        <Image size={32} />
-                      </div>
-                    );
-                  }
-
-                  return !thumbFailed && file.thumbnail ? (
-                    <img
-                      src={buildVideoUrl(file.thumbnail)}
-                      alt={file.name}
-                      className="h-full w-full object-cover"
-                      onError={() =>
-                        setFailedThumbs((prev) => {
-                          const next = new Set(prev);
-                          next.add(key);
-                          return next;
-                        })
-                      }
-                    />
-                  ) : (
-                    <div className="flex h-full items-center justify-center">
-                      <Video size={32} />
-                    </div>
-                  );
-                })()}
-
-                {file.kind === 'image' ? (
-                  <Image size={12} className="absolute bottom-1 left-1" />
+                {!thumbFailed && thumbSrc ? (
+                  <img
+                    src={thumbSrc}
+                    alt={file.name}
+                    className="h-full w-full object-cover"
+                    onError={() =>
+                      setFailedThumbs((prev) => {
+                        const next = new Set(prev);
+                        next.add(key);
+                        return next;
+                      })
+                    }
+                  />
                 ) : (
-                  <Video size={12} className="absolute bottom-1 left-1" />
+                  <div className="flex h-full items-center justify-center">
+                    <FallbackIcon size={32} />
+                  </div>
                 )}
+
+                <FallbackIcon
+                  size={12}
+                  className="absolute bottom-1 left-1"
+                />
 
                 {isSelected && (
                   <div className="absolute top-2 right-2 z-10 rounded bg-(--button-hover-bg) px-2 py-0.5 text-xs">
@@ -168,6 +162,9 @@ export function MediaGrid({
 
                 {file.kind === 'video' && (
                   <p className="text-xs">{fmtDuration(file.duration)}</p>
+                )}
+                {file.kind === 'pdf' && (
+                  <p className="text-xs">{file.pageCount} стр.</p>
                 )}
               </div>
             </div>

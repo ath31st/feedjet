@@ -13,4 +13,5 @@ export type {
   MediaFile,
   MediaImage,
   MediaVideo,
+  MediaPdf,
 } from '@shared/types/media.folder';

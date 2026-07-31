@@ -17,9 +17,11 @@ export function toggleMediaSelectionKey(
 export function splitSelectionKeys(keys: Set<string>): {
   imageIds: number[];
   videoIds: number[];
+  pdfIds: number[];
 } {
   const imageIds: number[] = [];
   const videoIds: number[] = [];
+  const pdfIds: number[] = [];
 
   for (const key of keys) {
     const [kind, idStr] = key.split('-');
@@ -31,8 +33,10 @@ export function splitSelectionKeys(keys: Set<string>): {
       imageIds.push(id);
     } else if (kind === 'video') {
       videoIds.push(id);
+    } else if (kind === 'pdf') {
+      pdfIds.push(id);
     }
   }
 
-  return { imageIds, videoIds };
+  return { imageIds, videoIds, pdfIds };
 }

@@ -5,7 +5,10 @@ export function buildMediaDescription(file: MediaFile) {
   return {
     name: file.name,
     format: file.format.toUpperCase(),
-    resolution: `${file.width}×${file.height}`,
+    resolution:
+      file.kind === 'pdf'
+        ? `${file.pageCount} стр.`
+        : `${file.width}×${file.height}`,
     size: fmtBytes(file.size),
     duration: file.kind === 'video' ? fmtDuration(file.duration) : null,
   };

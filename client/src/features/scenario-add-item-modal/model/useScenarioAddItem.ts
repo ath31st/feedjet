@@ -31,7 +31,11 @@ export const useScenarioAddItem = (
   const offlineMode = useAppFeaturesStore((s) => s.offlineMode);
 
   const { data: folderTree = [] } = useMediaFolderTree();
-  const { data: media = [], isLoading } = useMediaInFolder(selectedFolderId);
+  const { data: allMedia = [], isLoading } = useMediaInFolder(selectedFolderId);
+  const media = useMemo(
+    () => allMedia.filter((file) => file.kind !== 'pdf'),
+    [allMedia],
+  );
 
   const childFolders = useMemo(
     () => getChildFolders(folderTree, selectedFolderId),
@@ -111,7 +115,7 @@ export const useScenarioAddItem = (
           imageWidth: file.width,
           imageHeight: file.height,
         });
-      } else {
+      } else if (file.kind === 'video') {
         items.push({
           id: nextTempScenarioItemId(),
           scenarioId: 0,

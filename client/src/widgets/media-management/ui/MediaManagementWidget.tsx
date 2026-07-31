@@ -12,6 +12,7 @@ import {
   MediaUploadButton,
 } from '@/features/media-upload-button';
 import { buildImageUrl } from '@/entities/image';
+import { buildPdfUrl } from '@/entities/pdf';
 import { buildVideoUrl } from '@/entities/video';
 import { buildMediaDescription } from '@/features/preview-modal';
 import { PreviewModal } from '@/features/preview-modal';
@@ -127,11 +128,13 @@ export function MediaManagementWidget() {
         {preview && (
           <PreviewModal
             open={!!preview}
-            kind={preview.kind}
+            kind={preview.kind === 'video' ? 'video' : 'image'}
             src={
               preview.kind === 'image'
                 ? buildImageUrl(preview.fileName)
-                : buildVideoUrl(preview.fileName)
+                : preview.kind === 'video'
+                  ? buildVideoUrl(preview.fileName)
+                  : buildPdfUrl(preview.thumbnail || preview.fileName)
             }
             alt={preview.name}
             videoMuted
