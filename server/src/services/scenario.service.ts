@@ -14,6 +14,33 @@ import type {
 } from '@shared/types/scenario.js';
 import { createServiceLogger } from '../utils/pino.logger.js';
 
+function toDbItemFields(item: ReplaceScenarioItemInput) {
+  if (item.type === 'widget') {
+    return {
+      type: item.type,
+      widgetType: item.widgetType,
+      imageId: null,
+      videoId: null,
+    };
+  }
+
+  if (item.type === 'image') {
+    return {
+      type: item.type,
+      widgetType: null,
+      imageId: item.imageId,
+      videoId: null,
+    };
+  }
+
+  return {
+    type: item.type,
+    widgetType: null,
+    imageId: null,
+    videoId: item.videoId,
+  };
+}
+
 export class ScenarioService {
   private readonly db: DbType;
   private readonly logger = createServiceLogger('scenarioService');
@@ -319,10 +346,7 @@ export class ScenarioService {
         for (const { id, item, order } of updates) {
           tx.update(scenarioItemsTable)
             .set({
-              type: item.type,
-              widgetType: item.widgetType ?? null,
-              imageId: item.imageId ?? null,
-              videoId: item.videoId ?? null,
+              ...toDbItemFields(item),
               order,
               isActive: item.isActive,
               durationSeconds: item.durationSeconds ?? 10,
@@ -335,10 +359,7 @@ export class ScenarioService {
           tx.insert(scenarioItemsTable)
             .values({
               scenarioId,
-              type: item.type,
-              widgetType: item.widgetType ?? null,
-              imageId: item.imageId ?? null,
-              videoId: item.videoId ?? null,
+              ...toDbItemFields(item),
               order,
               isActive: item.isActive,
               durationSeconds: item.durationSeconds ?? 10,

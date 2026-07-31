@@ -4,12 +4,14 @@ interface KioskSelectorProps {
   kiosks: Kiosk[];
   activeKiosk: Kiosk | null;
   onChange: (kiosk: Kiosk) => void;
+  copyMode?: boolean;
 }
 
 export function KioskSelector({
   kiosks,
   activeKiosk,
   onChange,
+  copyMode = false,
 }: KioskSelectorProps) {
   return (
     <div className="scrollbar-hide relative flex flex-row flex-wrap gap-2 overflow-x-auto">
@@ -24,6 +26,10 @@ export function KioskSelector({
               isActive
                 ? 'text-(--text) hover:text-(--text)'
                 : 'text-muted-foreground'
+            } ${
+              copyMode
+                ? 'outline outline-2 outline-dashed outline-(--button-hover-bg)'
+                : ''
             }`}
           >
             {isActive && (

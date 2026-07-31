@@ -1,4 +1,4 @@
-import { PlusIcon, SaveIcon, Trash2 } from 'lucide-react';
+import { Copy, PlusIcon, SaveIcon, Trash2 } from 'lucide-react';
 import { CommonButton } from '@/shared/ui/common';
 import { ConfirmActionDialog } from '@/shared/ui';
 import { ResetIcon } from '@radix-ui/react-icons';
@@ -6,19 +6,23 @@ import { ResetIcon } from '@radix-ui/react-icons';
 interface HeaderProps {
   isDirty: boolean;
   hasItems: boolean;
+  isCopyMode: boolean;
   onAdd: () => void;
   onSave: () => void;
   onReset: () => void;
   onDeleteAll: () => void;
+  onToggleCopyMode: () => void;
 }
 
 export function Header({
   isDirty,
   hasItems,
+  isCopyMode,
   onAdd,
   onSave,
   onReset,
   onDeleteAll,
+  onToggleCopyMode,
 }: HeaderProps) {
   return (
     <div className="mb-2 flex items-center gap-3">
@@ -51,6 +55,19 @@ export function Header({
 
         <CommonButton onClick={onAdd} type="button" tooltip="Добавить элемент">
           <PlusIcon size={15} />
+        </CommonButton>
+
+        <CommonButton
+          onClick={onToggleCopyMode}
+          type="button"
+          tooltip={
+            isCopyMode
+              ? 'Выберите киоск-источник (повторный клик — отмена)'
+              : 'Скопировать сценарий из другого киоска'
+          }
+          className={isCopyMode ? 'bg-(--button-hover-bg)' : ''}
+        >
+          <Copy size={15} />
         </CommonButton>
 
         <div className="ml-2 flex items-center gap-2">

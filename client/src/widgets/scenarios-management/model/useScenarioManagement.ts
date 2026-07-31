@@ -1,51 +1,57 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   useScenario,
   useReplaceScenarioItems,
+  useScenarioCopyStore,
+  nextTempScenarioItemId,
   type ScenarioItem,
   type ReplaceScenarioItemInput,
 } from '@/entities/scenario';
+import { queryClient, trpcWithProxy } from '@/shared/api';
+import { toast } from 'sonner';
 
 function toReplacePayload(items: ScenarioItem[]): ReplaceScenarioItemInput[] {
-  return items.flatMap((item) => {
+  const result: ReplaceScenarioItemInput[] = [];
+
+  for (const item of items) {
     const id = item.id > 0 ? item.id : undefined;
-    const base = {
-      id,
-      isActive: item.isActive,
-      durationSeconds: item.durationSeconds ?? undefined,
-    };
+    const durationSeconds = item.durationSeconds ?? undefined;
 
     if (item.type === 'widget') {
-      if (item.widgetType == null) return [];
-      return [
-        {
-          ...base,
-          type: 'widget' as const,
-          widgetType: item.widgetType,
-        },
-      ];
+      if (item.widgetType == null) continue;
+      result.push({
+        id,
+        type: 'widget',
+        widgetType: item.widgetType,
+        isActive: item.isActive,
+        durationSeconds,
+      });
+      continue;
     }
 
     if (item.type === 'image') {
-      if (item.imageId == null) return [];
-      return [
-        {
-          ...base,
-          type: 'image' as const,
-          imageId: item.imageId,
-        },
-      ];
+      if (item.imageId == null) continue;
+      result.push({
+        id,
+        type: 'image',
+        imageId: item.imageId,
+        isActive: item.isActive,
+        durationSeconds,
+      });
+      continue;
     }
 
-    if (item.videoId == null) return [];
-    return [
-      {
-        ...base,
-        type: 'video' as const,
-        videoId: item.videoId,
-      },
-    ];
-  });
+    if (item.videoId == null) continue;
+    result.push({
+      id,
+      type: 'video',
+      videoId: item.videoId,
+      isActive: item.isActive,
+      durationSeconds,
+    });
+  }
+
+  return result;
 }
 
 export function useScenarioManagement(effectiveKioskId: number) {
@@ -54,17 +60,67 @@ export function useScenarioManagement(effectiveKioskId: number) {
   const [isDirty, setIsDirty] = useState(false);
 
   const replaceItems = useReplaceScenarioItems(effectiveKioskId);
+  const isCopyMode = useScenarioCopyStore((s) => s.isCopyMode);
+  const setIsCopyMode = useScenarioCopyStore((s) => s.setIsCopyMode);
+  const toggleCopyMode = useScenarioCopyStore((s) => s.toggleCopyMode);
+  const registerCopyHandler = useScenarioCopyStore(
+    (s) => s.registerCopyHandler,
+  );
+  const resetCopyStore = useScenarioCopyStore((s) => s.reset);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: effectiveKioskId needed here
   useEffect(() => {
     setIsDirty(false);
-  }, [effectiveKioskId]);
+    setIsCopyMode(false);
+  }, [effectiveKioskId, setIsCopyMode]);
 
   useEffect(() => {
     if (!scenario || isDirty) return;
     setLocalItems(scenario.items);
   }, [scenario, isDirty]);
 
+  const handleCopyFromKiosk = useCallback(
+    async (sourceKioskId: number) => {
+      if (sourceKioskId === effectiveKioskId) {
+        setIsCopyMode(false);
+        return;
+      }
+
+      try {
+        const source = await queryClient.fetchQuery(
+          trpcWithProxy.scenario.getByKiosk.queryOptions({
+            kioskId: sourceKioskId,
+          }),
+        );
+
+        setLocalItems(
+          source.items.map((item, index) => ({
+            ...item,
+            id: nextTempScenarioItemId(),
+            scenarioId: scenario?.id ?? 0,
+            order: index,
+          })),
+        );
+        setIsDirty(true);
+        setIsCopyMode(false);
+        toast.success('Сценарий скопирован — сохраните изменения');
+      } catch {
+        toast.error('Не удалось скопировать сценарий');
+        setIsCopyMode(false);
+      }
+    },
+    [effectiveKioskId, scenario?.id, setIsCopyMode],
+  );
+
+  useEffect(() => {
+    registerCopyHandler(handleCopyFromKiosk);
+    return () => {
+      resetCopyStore();
+    };
+  }, [handleCopyFromKiosk, registerCopyHandler, resetCopyStore]);
+
   const handleSave = () => {
+    setIsCopyMode(false);
     replaceItems.mutate(
       {
         kioskId: effectiveKioskId,
@@ -80,6 +136,7 @@ export function useScenarioManagement(effectiveKioskId: number) {
   };
 
   const handleReset = () => {
+    setIsCopyMode(false);
     setLocalItems(scenario?.items ?? []);
     setIsDirty(false);
   };
@@ -119,6 +176,8 @@ export function useScenarioManagement(effectiveKioskId: number) {
     isLoading,
     isDirty,
     setIsDirty,
+    isCopyMode,
+    toggleCopyMode,
     activeItemsCount,
     totalDuration,
     handleSave,

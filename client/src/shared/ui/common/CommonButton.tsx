@@ -7,6 +7,7 @@ interface CommonButtonProps {
   onClick?: MouseEventHandler<HTMLButtonElement>;
   disabled?: boolean;
   tooltip?: string;
+  className?: string;
 }
 
 export function CommonButton({
@@ -15,10 +16,11 @@ export function CommonButton({
   onClick,
   disabled = false,
   tooltip,
+  className = '',
 }: CommonButtonProps) {
   const button = (
     <button
-      className={`rounded-lg border border-(--border) bg-(--button-bg) p-2 text-(--button-text) hover:bg-(--button-hover-bg) ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}`}
+      className={`rounded-lg border border-(--border) bg-(--button-bg) p-2 text-(--button-text) hover:bg-(--button-hover-bg) ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'} ${className}`}
       type={type}
       onClick={onClick}
       disabled={disabled}

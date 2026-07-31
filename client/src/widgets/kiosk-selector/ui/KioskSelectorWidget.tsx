@@ -1,17 +1,16 @@
-import { useGetActiveKiosks, useKioskStore } from '@/entities/kiosk';
 import { KioskSelector } from '@/features/kiosk-selector';
+import { useKioskSelectorWidget } from '../model/useKioskSelectorWidget';
 
 export function KioskSelectorWidget() {
-  const setCurrentKiosk = useKioskStore((s) => s.setCurrentKiosk);
-  const currentKiosk = useKioskStore((s) => s.currentKiosk);
-
-  const { data: kiosks = [] } = useGetActiveKiosks();
+  const { kiosks, currentKiosk, isCopyMode, handleChange } =
+    useKioskSelectorWidget();
 
   return (
     <KioskSelector
       kiosks={kiosks}
       activeKiosk={currentKiosk}
-      onChange={setCurrentKiosk}
+      onChange={handleChange}
+      copyMode={isCopyMode}
     />
   );
 }

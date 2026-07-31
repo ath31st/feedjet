@@ -18,6 +18,8 @@ export function ScenariosManagementWidget({ kioskId, kioskSlug }: Props) {
     isLoading,
     isDirty,
     setIsDirty,
+    isCopyMode,
+    toggleCopyMode,
     activeItemsCount,
     totalDuration,
     handleSave,
@@ -47,12 +49,14 @@ export function ScenariosManagementWidget({ kioskId, kioskSlug }: Props) {
           items={localItems}
           isDirty={isDirty}
           isLoading={isLoading}
+          isCopyMode={isCopyMode}
           currentPlayingItemId={currentPlayingItemId}
           onItemsChange={setLocalItems}
           onDirtyChange={setIsDirty}
           onSave={handleSave}
           onReset={handleReset}
           onDeleteAll={handleDeleteAll}
+          onToggleCopyMode={toggleCopyMode}
           onOpenAddModal={openAddModal}
           onPreview={openPreview}
         />

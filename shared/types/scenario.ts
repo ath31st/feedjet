@@ -48,12 +48,23 @@ export interface UpsertScenarioItemInput {
   durationSeconds?: number;
 }
 
-export interface ReplaceScenarioItemInput {
+type ReplaceScenarioItemBase = {
   id?: number;
-  type: ScenarioItemType;
-  widgetType?: ScenarioWidgetType;
-  imageId?: number;
-  videoId?: number;
   isActive: boolean;
   durationSeconds?: number;
-}
+};
+
+export type ReplaceScenarioItemInput =
+  | (ReplaceScenarioItemBase & {
+      type: 'widget';
+      widgetType: ScenarioWidgetType;
+    })
+  | (ReplaceScenarioItemBase & {
+      type: 'image';
+      imageId: number;
+    })
+  | (ReplaceScenarioItemBase & {
+      type: 'video';
+      videoId: number;
+    });
+
