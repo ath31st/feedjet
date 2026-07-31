@@ -197,6 +197,21 @@ export const videosTable = sqliteTable('videos', {
   createdAt: integer('created_at').notNull().default(sql`(unixepoch())`),
 });
 
+export const pdfsTable = sqliteTable('pdfs', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  name: text('name').notNull(),
+  fileName: text('file_name').unique().notNull(),
+  format: text('format').notNull(),
+  pageCount: integer('page_count').notNull(),
+  size: integer('size').notNull(),
+  thumbnail: text('thumbnail').notNull().default(''),
+  mtime: integer('mtime').notNull(),
+  folderId: integer('folder_id').references(() => mediaFoldersTable.id, {
+    onDelete: 'set null',
+  }),
+  createdAt: integer('created_at').notNull().default(sql`(unixepoch())`),
+});
+
 export const birthdaysTable = sqliteTable('birthdays', {
   id: integer('id').primaryKey({ autoIncrement: true }),
   fullNameEnc: text('full_name').notNull(),
@@ -323,13 +338,18 @@ export const scenarioItemsTable = sqliteTable(
     scenarioId: integer('scenario_id')
       .notNull()
       .references(() => scenariosTable.id, { onDelete: 'cascade' }),
-    type: text('type', { enum: ['widget', 'image', 'video'] }).notNull(),
+    type: text('type', {
+      enum: ['widget', 'image', 'video', 'pdf'],
+    }).notNull(),
     widgetType:
       text('widget_type').$type<(typeof scenarioWidgetTypes)[number]>(),
     imageId: integer('image_id').references(() => imagesTable.id, {
       onDelete: 'cascade',
     }),
     videoId: integer('video_id').references(() => videosTable.id, {
+      onDelete: 'cascade',
+    }),
+    pdfId: integer('pdf_id').references(() => pdfsTable.id, {
       onDelete: 'cascade',
     }),
     order: integer('order').notNull().default(0),
@@ -346,6 +366,7 @@ export const scenarioItemsTable = sqliteTable(
           AND ${table.widgetType} IS NOT NULL
           AND ${table.imageId} IS NULL
           AND ${table.videoId} IS NULL
+          AND ${table.pdfId} IS NULL
         )
 
         OR
@@ -355,6 +376,7 @@ export const scenarioItemsTable = sqliteTable(
           AND ${table.imageId} IS NOT NULL
           AND ${table.widgetType} IS NULL
           AND ${table.videoId} IS NULL
+          AND ${table.pdfId} IS NULL
         )
 
         OR
@@ -364,6 +386,17 @@ export const scenarioItemsTable = sqliteTable(
           AND ${table.videoId} IS NOT NULL
           AND ${table.widgetType} IS NULL
           AND ${table.imageId} IS NULL
+          AND ${table.pdfId} IS NULL
+        )
+
+        OR
+
+        (
+          ${table.type} = 'pdf'
+          AND ${table.pdfId} IS NOT NULL
+          AND ${table.widgetType} IS NULL
+          AND ${table.imageId} IS NULL
+          AND ${table.videoId} IS NULL
         )
       `,
     ),
