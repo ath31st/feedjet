@@ -131,6 +131,7 @@ export function useScenarioRotation() {
 
   return {
     scenarioLoading: scenarioLoading || !featuresInitialized,
+    items,
     currentItem,
     index: safeIndex,
     setIndex,

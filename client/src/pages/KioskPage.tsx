@@ -6,7 +6,10 @@ import {
   Rotator,
   LoadingThreeDotsJumping,
 } from '@/shared/ui';
-import { useScenarioRotation } from '@/features/kiosk-rotation';
+import {
+  useScenarioRotation,
+  useScenarioImagePreload,
+} from '@/features/kiosk-rotation';
 import { ScenarioItemRenderer } from '@/features/scenario-renderer';
 import { TickerRuntime } from '@/widgets/ticker-runtime';
 import { useIframeBridge } from '@/features/kiosk-iframe-bridge';
@@ -14,6 +17,7 @@ import { useIframeBridge } from '@/features/kiosk-iframe-bridge';
 export function KioskPage() {
   const {
     scenarioLoading,
+    items,
     currentItem,
     index,
     unlockRotation,
@@ -26,6 +30,8 @@ export function KioskPage() {
     seasonOverlay,
     isPreview,
   } = useScenarioRotation();
+
+  useScenarioImagePreload(items, index);
 
   useIframeBridge({
     onNext: next,
