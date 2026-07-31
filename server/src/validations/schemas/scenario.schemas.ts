@@ -14,6 +14,7 @@ export const widgetScenarioItemSchema = baseScenarioItemSchema.extend({
   widgetType: z.enum(scenarioWidgetTypes),
   imageId: z.undefined().optional(),
   videoId: z.undefined().optional(),
+  pdfId: z.undefined().optional(),
 });
 
 export const imageScenarioItemSchema = baseScenarioItemSchema.extend({
@@ -21,6 +22,7 @@ export const imageScenarioItemSchema = baseScenarioItemSchema.extend({
   imageId: z.number(),
   widgetType: z.undefined().optional(),
   videoId: z.undefined().optional(),
+  pdfId: z.undefined().optional(),
 });
 
 export const videoScenarioItemSchema = baseScenarioItemSchema.extend({
@@ -28,12 +30,22 @@ export const videoScenarioItemSchema = baseScenarioItemSchema.extend({
   videoId: z.number(),
   widgetType: z.undefined().optional(),
   imageId: z.undefined().optional(),
+  pdfId: z.undefined().optional(),
+});
+
+export const pdfScenarioItemSchema = baseScenarioItemSchema.extend({
+  type: z.literal('pdf'),
+  pdfId: z.number(),
+  widgetType: z.undefined().optional(),
+  imageId: z.undefined().optional(),
+  videoId: z.undefined().optional(),
 });
 
 export const scenarioItemSchema = z.discriminatedUnion('type', [
   widgetScenarioItemSchema,
   imageScenarioItemSchema,
   videoScenarioItemSchema,
+  pdfScenarioItemSchema,
 ]);
 
 export const getScenarioByKioskSchema = z.object({
@@ -80,6 +92,9 @@ const replaceScenarioItemSchema = z.discriminatedUnion('type', [
     id: z.number().int().positive().optional(),
   }),
   videoScenarioItemSchema.extend({
+    id: z.number().int().positive().optional(),
+  }),
+  pdfScenarioItemSchema.extend({
     id: z.number().int().positive().optional(),
   }),
 ]);

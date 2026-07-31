@@ -1,4 +1,4 @@
-export const scenarioItemTypes = ['widget', 'image', 'video'] as const;
+export const scenarioItemTypes = ['widget', 'image', 'video', 'pdf'] as const;
 export type ScenarioItemType = (typeof scenarioItemTypes)[number];
 export const scenarioWidgetTypes = [
   'schedule',
@@ -15,6 +15,7 @@ export interface ScenarioItem {
   widgetType: ScenarioWidgetType | null;
   imageId: number | null;
   videoId: number | null;
+  pdfId: number | null;
   order: number;
   isActive: boolean;
   durationSeconds: number | null;
@@ -27,6 +28,10 @@ export interface ScenarioItem {
   videoFileName?: string | null;
   videoThumbnail?: string | null;
   videoDuration?: number | null;
+  pdfName?: string | null;
+  pdfFileName?: string | null;
+  pdfThumbnail?: string | null;
+  pdfPageCount?: number | null;
 }
 
 export interface Scenario {
@@ -43,6 +48,7 @@ export interface UpsertScenarioItemInput {
   widgetType?: ScenarioWidgetType;
   imageId?: number;
   videoId?: number;
+  pdfId?: number;
   order: number;
   isActive: boolean;
   durationSeconds?: number;
@@ -66,5 +72,8 @@ export type ReplaceScenarioItemInput =
   | (ReplaceScenarioItemBase & {
       type: 'video';
       videoId: number;
+    })
+  | (ReplaceScenarioItemBase & {
+      type: 'pdf';
+      pdfId: number;
     });
-

@@ -41,11 +41,23 @@ function toReplacePayload(items: ScenarioItem[]): ReplaceScenarioItemInput[] {
       continue;
     }
 
-    if (item.videoId == null) continue;
+    if (item.type === 'video') {
+      if (item.videoId == null) continue;
+      result.push({
+        id,
+        type: 'video',
+        videoId: item.videoId,
+        isActive: item.isActive,
+        durationSeconds,
+      });
+      continue;
+    }
+
+    if (item.pdfId == null) continue;
     result.push({
       id,
-      type: 'video',
-      videoId: item.videoId,
+      type: 'pdf',
+      pdfId: item.pdfId,
       isActive: item.isActive,
       durationSeconds,
     });
@@ -164,6 +176,11 @@ export function useScenarioManagement(effectiveKioskId: number) {
     .reduce((sum, i) => {
       if (i.type === 'video') {
         return sum + (i.videoDuration ?? i.durationSeconds ?? 0);
+      }
+
+      if (i.type === 'pdf') {
+        const pages = Math.max(1, i.pdfPageCount ?? 1);
+        return sum + (i.durationSeconds ?? 10) * pages;
       }
 
       return sum + (i.durationSeconds ?? 10);

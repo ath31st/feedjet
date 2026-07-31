@@ -31,11 +31,7 @@ export const useScenarioAddItem = (
   const offlineMode = useAppFeaturesStore((s) => s.offlineMode);
 
   const { data: folderTree = [] } = useMediaFolderTree();
-  const { data: allMedia = [], isLoading } = useMediaInFolder(selectedFolderId);
-  const media = useMemo(
-    () => allMedia.filter((file) => file.kind !== 'pdf'),
-    [allMedia],
-  );
+  const { data: media = [], isLoading } = useMediaInFolder(selectedFolderId);
 
   const childFolders = useMemo(
     () => getChildFolders(folderTree, selectedFolderId),
@@ -79,6 +75,7 @@ export const useScenarioAddItem = (
         widgetType,
         imageId: null,
         videoId: null,
+        pdfId: null,
         order: 0,
         isActive: true,
         durationSeconds: 15,
@@ -106,6 +103,7 @@ export const useScenarioAddItem = (
           widgetType: null,
           imageId: file.id,
           videoId: null,
+          pdfId: null,
           order: 0,
           isActive: true,
           durationSeconds: 10,
@@ -123,6 +121,7 @@ export const useScenarioAddItem = (
           widgetType: null,
           imageId: null,
           videoId: file.id,
+          pdfId: null,
           order: 0,
           isActive: true,
           durationSeconds: null,
@@ -130,6 +129,23 @@ export const useScenarioAddItem = (
           videoFileName: file.fileName,
           videoThumbnail: file.thumbnail,
           videoDuration: file.duration,
+        });
+      } else if (file.kind === 'pdf') {
+        items.push({
+          id: nextTempScenarioItemId(),
+          scenarioId: 0,
+          type: 'pdf',
+          widgetType: null,
+          imageId: null,
+          videoId: null,
+          pdfId: file.id,
+          order: 0,
+          isActive: true,
+          durationSeconds: 10,
+          pdfName: file.name,
+          pdfFileName: file.fileName,
+          pdfThumbnail: file.thumbnail,
+          pdfPageCount: file.pageCount,
         });
       }
     }

@@ -4,6 +4,7 @@ import {
   scenarioItemsTable,
   imagesTable,
   videosTable,
+  pdfsTable,
 } from '../db/schema.js';
 import { eq, asc, inArray, sql } from 'drizzle-orm';
 import type {
@@ -21,6 +22,7 @@ function toDbItemFields(item: ReplaceScenarioItemInput) {
       widgetType: item.widgetType,
       imageId: null,
       videoId: null,
+      pdfId: null,
     };
   }
 
@@ -30,6 +32,17 @@ function toDbItemFields(item: ReplaceScenarioItemInput) {
       widgetType: null,
       imageId: item.imageId,
       videoId: null,
+      pdfId: null,
+    };
+  }
+
+  if (item.type === 'video') {
+    return {
+      type: item.type,
+      widgetType: null,
+      imageId: null,
+      videoId: item.videoId,
+      pdfId: null,
     };
   }
 
@@ -37,7 +50,8 @@ function toDbItemFields(item: ReplaceScenarioItemInput) {
     type: item.type,
     widgetType: null,
     imageId: null,
-    videoId: item.videoId,
+    videoId: null,
+    pdfId: item.pdfId,
   };
 }
 
@@ -90,6 +104,7 @@ export class ScenarioService {
         widgetType: scenarioItemsTable.widgetType,
         imageId: scenarioItemsTable.imageId,
         videoId: scenarioItemsTable.videoId,
+        pdfId: scenarioItemsTable.pdfId,
         order: scenarioItemsTable.order,
         isActive: scenarioItemsTable.isActive,
         durationSeconds: scenarioItemsTable.durationSeconds,
@@ -102,10 +117,15 @@ export class ScenarioService {
         videoFileName: videosTable.fileName,
         videoThumbnail: videosTable.thumbnail,
         videoDuration: videosTable.duration,
+        pdfName: pdfsTable.name,
+        pdfFileName: pdfsTable.fileName,
+        pdfThumbnail: pdfsTable.thumbnail,
+        pdfPageCount: pdfsTable.pageCount,
       })
       .from(scenarioItemsTable)
       .leftJoin(imagesTable, eq(scenarioItemsTable.imageId, imagesTable.id))
       .leftJoin(videosTable, eq(scenarioItemsTable.videoId, videosTable.id))
+      .leftJoin(pdfsTable, eq(scenarioItemsTable.pdfId, pdfsTable.id))
       .where(eq(scenarioItemsTable.scenarioId, scenarioId))
       .orderBy(asc(scenarioItemsTable.order))
       .all() as ScenarioItem[];
@@ -135,6 +155,7 @@ export class ScenarioService {
           widgetType: input.widgetType ?? null,
           imageId: input.imageId ?? null,
           videoId: input.videoId ?? null,
+          pdfId: input.pdfId ?? null,
           order: maxOrder + 1,
           isActive: input.isActive,
           durationSeconds: input.durationSeconds ?? 10,
@@ -183,6 +204,7 @@ export class ScenarioService {
         widgetType: item.widgetType ?? null,
         imageId: item.imageId ?? null,
         videoId: item.videoId ?? null,
+        pdfId: item.pdfId ?? null,
         order: maxOrder + index + 1,
         isActive: item.isActive,
         durationSeconds: item.durationSeconds ?? 10,

@@ -1,10 +1,12 @@
 import type { ScenarioItem } from '@/entities/scenario';
 import { WIDGET_LABELS } from '@/entities/scenario';
 import { buildImageUrl } from '@/entities/image';
+import { buildPdfUrl } from '@/entities/pdf';
 import { buildVideoUrl } from '@/entities/video';
 import {
   Video,
   AlertCircle,
+  FileText,
   Image as ImageIcon,
   type LucideIcon,
 } from 'lucide-react';
@@ -53,6 +55,25 @@ export const ITEM_CONFIG: Record<string, TypeConfig> = {
       item.videoThumbnail ? (
         <img
           src={buildVideoUrl(item.videoThumbnail)}
+          alt=""
+          className="h-full w-full object-cover"
+        />
+      ) : null,
+  },
+  pdf: {
+    getLabel: (item) => {
+      const name = item.pdfName ?? 'PDF';
+      const pages = item.pdfPageCount;
+      return pages != null ? `${name} (${pages} стр.)` : name;
+    },
+    getTypeName: 'PDF',
+    Icon: FileText,
+    hasDuration: true,
+    canPreview: true,
+    renderPreview: (item) =>
+      item.pdfThumbnail ? (
+        <img
+          src={buildPdfUrl(item.pdfThumbnail)}
           alt=""
           className="h-full w-full object-cover"
         />
