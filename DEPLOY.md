@@ -13,7 +13,7 @@ sudo apt update
 sudo apt install -y \
   curl ca-certificates git openssl \
   build-essential python3 \
-  ffmpeg nginx \
+  ffmpeg ghostscript nginx \
   android-tools-adb
 ```
 
