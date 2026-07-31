@@ -3,6 +3,7 @@ import {
   mediaFolderService,
   imageStorageService,
   videoStorageService,
+  pdfStorageService,
 } from '../../container.js';
 import { protectedProcedure } from '../../middleware/auth.js';
 import {
@@ -12,6 +13,7 @@ import {
   listMediaSchema,
   assignImageFolderSchema,
   assignVideoFolderSchema,
+  assignPdfFolderSchema,
   moveMediaBatchSchema,
   deleteMediaBatchSchema,
 } from '../../validations/schemas/media.folder.schemas.js';
@@ -58,6 +60,13 @@ export const mediaFolderRouter = t.router({
       return { success: true };
     }),
 
+  assignPdfFolder: protectedProcedure
+    .input(assignPdfFolderSchema)
+    .mutation(({ input }) => {
+      mediaFolderService.assignPdfToFolder(input.pdfId, input.folderId);
+      return { success: true };
+    }),
+
   moveMediaBatch: protectedProcedure
     .input(moveMediaBatchSchema)
     .mutation(({ input }) => {
@@ -65,18 +74,24 @@ export const mediaFolderRouter = t.router({
         input.folderId,
         input.imageIds,
         input.videoIds,
+        input.pdfIds,
       );
       return {
         success: true,
-        movedCount: input.imageIds.length + input.videoIds.length,
+        movedCount:
+          input.imageIds.length + input.videoIds.length + input.pdfIds.length,
       };
     }),
 
   deleteMediaBatch: protectedProcedure
     .input(deleteMediaBatchSchema)
     .mutation(async ({ input }) => {
-      const { imageFileNames, videoFileNames } =
-        mediaFolderService.getFileNamesByIds(input.imageIds, input.videoIds);
+      const { imageFileNames, videoFileNames, pdfFileNames } =
+        mediaFolderService.getFileNamesByIds(
+          input.imageIds,
+          input.videoIds,
+          input.pdfIds,
+        );
 
       for (const fileName of imageFileNames) {
         await imageStorageService.delete(fileName);
@@ -84,10 +99,14 @@ export const mediaFolderRouter = t.router({
       for (const fileName of videoFileNames) {
         await videoStorageService.delete(fileName);
       }
+      for (const fileName of pdfFileNames) {
+        await pdfStorageService.delete(fileName);
+      }
 
       return {
         success: true,
-        deletedCount: imageFileNames.length + videoFileNames.length,
+        deletedCount:
+          imageFileNames.length + videoFileNames.length + pdfFileNames.length,
       };
     }),
 
@@ -95,6 +114,7 @@ export const mediaFolderRouter = t.router({
     return {
       imageCount: mediaFolderService.countAllImages(),
       videoCount: mediaFolderService.countAllVideos(),
+      pdfCount: mediaFolderService.countAllPdfs(),
     };
   }),
 });

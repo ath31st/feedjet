@@ -11,6 +11,7 @@ import { scheduleEventRouter } from './routes/schedule.event.route.js';
 import { imageCacheRouter } from './routes/image.cache.route.js';
 import { weatherForecastRouter } from './routes/weather.forecast.route.js';
 import { videoStorageRouter } from './routes/video.storage.route.js';
+import { pdfStorageRouter } from './routes/pdf.storage.route.js';
 import { kioskRouter } from './routes/kiosk.route.js';
 import { birthdayRouter } from './routes/birthday.route.js';
 import { createServiceLogger } from '../utils/pino.logger.js';
@@ -48,6 +49,7 @@ const appRouter = t.router({
   logo: logoStorageRouter,
   weather: weatherForecastRouter,
   videoFile: videoStorageRouter,
+  pdfFile: pdfStorageRouter,
   kiosk: kioskRouter,
   birthday: birthdayRouter,
   birthdayWidgetTransform: birthdayWidgetTransformRouter,

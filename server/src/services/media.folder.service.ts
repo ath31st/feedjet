@@ -1,5 +1,10 @@
 import type { DbType } from '../container.js';
-import { mediaFoldersTable, imagesTable, videosTable } from '../db/schema.js';
+import {
+  mediaFoldersTable,
+  imagesTable,
+  videosTable,
+  pdfsTable,
+} from '../db/schema.js';
 import { eq, inArray, sql } from 'drizzle-orm';
 import type {
   MediaFolder,
@@ -78,6 +83,11 @@ export class MediaFolderService {
       .set({ folderId: null })
       .where(eq(videosTable.folderId, id))
       .run();
+    this.db
+      .update(pdfsTable)
+      .set({ folderId: null })
+      .where(eq(pdfsTable.folderId, id))
+      .run();
     this.db.delete(mediaFoldersTable).where(eq(mediaFoldersTable.id, id)).run();
 
     this.logger.info({ id, fn: 'delete' }, 'Deleted media folder');
@@ -109,10 +119,24 @@ export class MediaFolderService {
     );
   }
 
+  assignPdfToFolder(pdfId: number, folderId: number | null): void {
+    this.db
+      .update(pdfsTable)
+      .set({ folderId })
+      .where(eq(pdfsTable.id, pdfId))
+      .run();
+
+    this.logger.info(
+      { pdfId, folderId, fn: 'assignPdfToFolder' },
+      'Assigned PDF to folder',
+    );
+  }
+
   moveMediaBatch(
     folderId: number | null,
     imageIds: number[],
     videoIds: number[],
+    pdfIds: number[],
   ): void {
     this.db.transaction((tx) => {
       if (imageIds.length > 0) {
@@ -127,6 +151,12 @@ export class MediaFolderService {
           .where(inArray(videosTable.id, videoIds))
           .run();
       }
+      if (pdfIds.length > 0) {
+        tx.update(pdfsTable)
+          .set({ folderId })
+          .where(inArray(pdfsTable.id, pdfIds))
+          .run();
+      }
     });
 
     this.logger.info(
@@ -134,6 +164,7 @@ export class MediaFolderService {
         folderId,
         imageCount: imageIds.length,
         videoCount: videoIds.length,
+        pdfCount: pdfIds.length,
         fn: 'moveMediaBatch',
       },
       'Moved media batch',
@@ -143,7 +174,12 @@ export class MediaFolderService {
   getFileNamesByIds(
     imageIds: number[],
     videoIds: number[],
-  ): { imageFileNames: string[]; videoFileNames: string[] } {
+    pdfIds: number[],
+  ): {
+    imageFileNames: string[];
+    videoFileNames: string[];
+    pdfFileNames: string[];
+  } {
     const imageFileNames =
       imageIds.length === 0
         ? []
@@ -164,7 +200,17 @@ export class MediaFolderService {
             .all()
             .map((r) => r.fileName);
 
-    return { imageFileNames, videoFileNames };
+    const pdfFileNames =
+      pdfIds.length === 0
+        ? []
+        : this.db
+            .select({ fileName: pdfsTable.fileName })
+            .from(pdfsTable)
+            .where(inArray(pdfsTable.id, pdfIds))
+            .all()
+            .map((r) => r.fileName);
+
+    return { imageFileNames, videoFileNames, pdfFileNames };
   }
 
   listAllImages(folderId: number | null) {
@@ -185,10 +231,20 @@ export class MediaFolderService {
     return rows.map((v) => ({ ...v, kind: 'video' as const }));
   }
 
+  listAllPdfs(folderId: number | null) {
+    const query = this.db.select().from(pdfsTable);
+    const rows =
+      folderId === null
+        ? query.all()
+        : query.where(eq(pdfsTable.folderId, folderId)).all();
+    return rows.map((p) => ({ ...p, kind: 'pdf' as const }));
+  }
+
   listAllMedia(folderId: number | null) {
     const images = this.listAllImages(folderId);
     const videos = this.listAllVideos(folderId);
-    return [...images, ...videos];
+    const pdfs = this.listAllPdfs(folderId);
+    return [...images, ...videos, ...pdfs];
   }
 
   countAllImages(): number {
@@ -203,6 +259,14 @@ export class MediaFolderService {
     const result = this.db
       .select({ count: sql<number>`count(*)` })
       .from(videosTable)
+      .get();
+    return result?.count ?? 0;
+  }
+
+  countAllPdfs(): number {
+    const result = this.db
+      .select({ count: sql<number>`count(*)` })
+      .from(pdfsTable)
       .get();
     return result?.count ?? 0;
   }

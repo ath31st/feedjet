@@ -7,6 +7,7 @@ import {
   imageCacheService,
   imageStorageService,
   logoStorageService,
+  pdfStorageService,
   videoStorageService,
 } from './container.js';
 import { startCronJobs } from './cron/start.cron.jobs.js';
@@ -27,6 +28,8 @@ app.use(
 );
 const videoStorageBaseDir = videoStorageService.getBaseDir();
 app.use('/videos', express.static(videoStorageBaseDir));
+const pdfStorageBaseDir = pdfStorageService.getBaseDir();
+app.use('/pdfs', express.static(pdfStorageBaseDir));
 const imageStorageBaseDir = imageStorageService.getBaseDir();
 app.use('/images', express.static(imageStorageBaseDir));
 const logoStorageBaseDir = logoStorageService.getBaseDir();

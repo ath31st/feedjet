@@ -33,4 +33,18 @@ export interface MediaVideo extends MediaFileBase {
   thumbnail: string;
 }
 
-export type MediaFile = MediaImage | MediaVideo;
+export interface MediaPdf {
+  kind: 'pdf';
+  id: number;
+  name: string;
+  fileName: string;
+  format: string;
+  pageCount: number;
+  size: number;
+  thumbnail: string;
+  folderId: number | null;
+  createdAt: number;
+  mtime: number;
+}
+
+export type MediaFile = MediaImage | MediaVideo | MediaPdf;

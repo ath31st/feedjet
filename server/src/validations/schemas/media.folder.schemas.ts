@@ -28,15 +28,22 @@ export const assignVideoFolderSchema = z.object({
   folderId: z.number().nullable(),
 });
 
+export const assignPdfFolderSchema = z.object({
+  pdfId: z.number(),
+  folderId: z.number().nullable(),
+});
+
 export const moveMediaBatchSchema = z.object({
   folderId: z.number().nullable(),
   imageIds: z.array(z.number()).default([]),
   videoIds: z.array(z.number()).default([]),
+  pdfIds: z.array(z.number()).default([]),
 });
 
 export const deleteMediaBatchSchema = z.object({
   imageIds: z.array(z.number()).default([]),
   videoIds: z.array(z.number()).default([]),
+  pdfIds: z.array(z.number()).default([]),
 });
 
 export type CreateMediaFolderInput = z.infer<typeof createMediaFolderSchema>;
@@ -45,5 +52,6 @@ export type DeleteMediaFolderInput = z.infer<typeof deleteMediaFolderSchema>;
 export type ListMediaInput = z.infer<typeof listMediaSchema>;
 export type AssignImageFolderInput = z.infer<typeof assignImageFolderSchema>;
 export type AssignVideoFolderInput = z.infer<typeof assignVideoFolderSchema>;
+export type AssignPdfFolderInput = z.infer<typeof assignPdfFolderSchema>;
 export type MoveMediaBatchInput = z.infer<typeof moveMediaBatchSchema>;
 export type DeleteMediaBatchInput = z.infer<typeof deleteMediaBatchSchema>;

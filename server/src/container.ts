@@ -18,6 +18,7 @@ import { OpenWeatherAPI } from 'openweather-api-node';
 import { WeatherForecastClient } from './integration/weather.forecast.client.js';
 import { RssFeedCacheService } from './services/rss.feed.cache.service.js';
 import { VideoStorageService } from './services/video.storage.service.js';
+import { PdfStorageService } from './services/pdf.storage.service.js';
 import {
   cacheDir,
   dbPath,
@@ -61,6 +62,7 @@ export const philipsJointSpaceClient = new PhilipsJointSpaceClient();
 
 export const imageCacheService = new ImageCacheService(cacheDir);
 export const videoStorageService = new VideoStorageService(db, fileStorageDir);
+export const pdfStorageService = new PdfStorageService(db, fileStorageDir);
 export const imageStorageService = new ImageStorageService(db, fileStorageDir);
 export const logoStorageService = new LogoStorageService(db, fileStorageDir);
 
@@ -103,6 +105,7 @@ export const kioskService = new KioskService(
 );
 kioskService.ensureDefaultKiosk();
 videoStorageService.syncWithDisk();
+pdfStorageService.syncWithDisk();
 imageStorageService.syncWithDisk();
 export const kioskWorkScheduleService = new KioskWorkScheduleService(db);
 export const integrationService = new IntegrationService(
