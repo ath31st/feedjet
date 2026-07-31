@@ -1,29 +1,78 @@
 import { useState, useEffect } from 'react';
-import { useScenario, useReorderScenarioItems } from '@/entities/scenario';
-import type { ScenarioItem } from '@/entities/scenario';
+import {
+  useScenario,
+  useReplaceScenarioItems,
+  type ScenarioItem,
+  type ReplaceScenarioItemInput,
+} from '@/entities/scenario';
+
+function toReplacePayload(items: ScenarioItem[]): ReplaceScenarioItemInput[] {
+  return items.flatMap((item) => {
+    const id = item.id > 0 ? item.id : undefined;
+    const base = {
+      id,
+      isActive: item.isActive,
+      durationSeconds: item.durationSeconds ?? undefined,
+    };
+
+    if (item.type === 'widget') {
+      if (item.widgetType == null) return [];
+      return [
+        {
+          ...base,
+          type: 'widget' as const,
+          widgetType: item.widgetType,
+        },
+      ];
+    }
+
+    if (item.type === 'image') {
+      if (item.imageId == null) return [];
+      return [
+        {
+          ...base,
+          type: 'image' as const,
+          imageId: item.imageId,
+        },
+      ];
+    }
+
+    if (item.videoId == null) return [];
+    return [
+      {
+        ...base,
+        type: 'video' as const,
+        videoId: item.videoId,
+      },
+    ];
+  });
+}
 
 export function useScenarioManagement(effectiveKioskId: number) {
   const { data: scenario, isLoading } = useScenario(effectiveKioskId);
   const [localItems, setLocalItems] = useState<ScenarioItem[]>([]);
   const [isDirty, setIsDirty] = useState(false);
 
-  const reorder = useReorderScenarioItems(effectiveKioskId);
+  const replaceItems = useReplaceScenarioItems(effectiveKioskId);
 
   useEffect(() => {
-    if (scenario) {
-      setLocalItems(scenario.items);
-      setIsDirty(false);
-    }
-  }, [scenario]);
+    setIsDirty(false);
+  }, [effectiveKioskId]);
+
+  useEffect(() => {
+    if (!scenario || isDirty) return;
+    setLocalItems(scenario.items);
+  }, [scenario, isDirty]);
 
   const handleSave = () => {
-    reorder.mutate(
+    replaceItems.mutate(
       {
         kioskId: effectiveKioskId,
-        orderedIds: localItems.map((i) => i.id),
+        items: toReplacePayload(localItems),
       },
       {
-        onSuccess: () => {
+        onSuccess: (items) => {
+          setLocalItems(items);
           setIsDirty(false);
         },
       },
@@ -33,6 +82,23 @@ export function useScenarioManagement(effectiveKioskId: number) {
   const handleReset = () => {
     setLocalItems(scenario?.items ?? []);
     setIsDirty(false);
+  };
+
+  const handleDeleteAll = () => {
+    setLocalItems([]);
+    setIsDirty(true);
+  };
+
+  const handleAddItems = (items: ScenarioItem[]) => {
+    setLocalItems((prev) => [
+      ...prev,
+      ...items.map((item, index) => ({
+        ...item,
+        scenarioId: scenario?.id ?? item.scenarioId,
+        order: prev.length + index,
+      })),
+    ]);
+    setIsDirty(true);
   };
 
   const activeItemsCount = localItems.filter((i) => i.isActive).length;
@@ -57,5 +123,8 @@ export function useScenarioManagement(effectiveKioskId: number) {
     totalDuration,
     handleSave,
     handleReset,
+    handleDeleteAll,
+    handleAddItems,
+    isSaving: replaceItems.isPending,
   };
 }

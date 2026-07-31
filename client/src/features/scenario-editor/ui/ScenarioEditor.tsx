@@ -1,13 +1,8 @@
-import {
-  useDeleteScenarioItem,
-  useReorderScenarioItems,
-  useUpdateScenarioItem,
-} from '@/entities/scenario';
 import type { ScenarioItem } from '@/entities/scenario';
-import { Header } from './Header';
 import { LoadingState } from './LoadingState';
 import { ItemsSortableList } from './ItemsSortableList';
 import { EmptyState } from './EmptyState';
+import { Header } from './Header';
 
 interface LightboxState {
   src: string;
@@ -16,7 +11,6 @@ interface LightboxState {
 }
 
 interface ScenarioEditorProps {
-  kioskId: number;
   items: ScenarioItem[];
   isDirty: boolean;
   isLoading: boolean;
@@ -25,12 +19,12 @@ interface ScenarioEditorProps {
   onDirtyChange: React.Dispatch<React.SetStateAction<boolean>>;
   onSave: () => void;
   onReset: () => void;
+  onDeleteAll: () => void;
   onOpenAddModal: () => void;
   onPreview: (payload: LightboxState) => void;
 }
 
 export function ScenarioEditor({
-  kioskId,
   items,
   isDirty,
   isLoading,
@@ -39,20 +33,19 @@ export function ScenarioEditor({
   onDirtyChange,
   onSave,
   onReset,
+  onDeleteAll,
   onOpenAddModal,
   onPreview,
 }: ScenarioEditorProps) {
-  const updateItem = useUpdateScenarioItem(kioskId);
-  const deleteItem = useDeleteScenarioItem(kioskId);
-  const reorder = useReorderScenarioItems(kioskId);
-
   return (
     <div className="flex flex-col">
       <Header
         isDirty={isDirty}
+        hasItems={items.length > 0}
         onAdd={onOpenAddModal}
         onSave={onSave}
         onReset={onReset}
+        onDeleteAll={onDeleteAll}
       />
 
       <div className="flex-1 overflow-y-auto">
@@ -62,12 +55,8 @@ export function ScenarioEditor({
           <EmptyState />
         ) : (
           <ItemsSortableList
-            kioskId={kioskId}
             items={items}
             currentPlayingItemId={currentPlayingItemId}
-            reorder={reorder}
-            updateItem={updateItem}
-            deleteItem={deleteItem}
             onItemsChange={onItemsChange}
             onDirtyChange={onDirtyChange}
             onPreview={onPreview}

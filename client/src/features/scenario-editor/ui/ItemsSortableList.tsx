@@ -1,33 +1,21 @@
 import { DragDropContext, Droppable, type DropResult } from '@hello-pangea/dnd';
-import type {
-  ScenarioItem,
-  useDeleteScenarioItem,
-  useReorderScenarioItems,
-  useUpdateScenarioItem,
-} from '@/entities/scenario';
+import type { ScenarioItem } from '@/entities/scenario';
 import { ItemRow } from './ItemRow';
 import { buildImageUrl } from '@/entities/image';
 import { buildVideoUrl } from '@/entities/video';
 import type { PreviewMediaState } from '..';
 
 interface ItemsSortableListProps {
-  kioskId: number;
   items: ScenarioItem[];
   currentPlayingItemId: number | null;
-  reorder: ReturnType<typeof useReorderScenarioItems>;
-  updateItem: ReturnType<typeof useUpdateScenarioItem>;
-  deleteItem: ReturnType<typeof useDeleteScenarioItem>;
   onItemsChange: React.Dispatch<React.SetStateAction<ScenarioItem[]>>;
   onDirtyChange: React.Dispatch<React.SetStateAction<boolean>>;
   onPreview: (payload: PreviewMediaState) => void;
 }
 
 export function ItemsSortableList({
-  kioskId,
   items,
   currentPlayingItemId,
-  updateItem,
-  deleteItem,
   onItemsChange,
   onDirtyChange,
   onPreview,
@@ -47,33 +35,29 @@ export function ItemsSortableList({
   };
 
   const handleToggle = (item: ScenarioItem) => {
-    updateItem.mutate({
-      kioskId,
-      itemId: item.id,
-      patch: {
-        isActive: !item.isActive,
-      },
-    });
+    onItemsChange((prev) =>
+      prev.map((row) =>
+        row.id === item.id ? { ...row, isActive: !row.isActive } : row,
+      ),
+    );
+    onDirtyChange(true);
   };
 
   const handleDelete = (item: ScenarioItem) => {
-    deleteItem.mutate({
-      kioskId,
-      itemId: item.id,
-    });
+    onItemsChange((prev) => prev.filter((row) => row.id !== item.id));
+    onDirtyChange(true);
   };
 
   const handleDurationChange = (
     item: ScenarioItem,
     durationSeconds: number,
   ) => {
-    updateItem.mutate({
-      kioskId,
-      itemId: item.id,
-      patch: {
-        durationSeconds,
-      },
-    });
+    onItemsChange((prev) =>
+      prev.map((row) =>
+        row.id === item.id ? { ...row, durationSeconds } : row,
+      ),
+    );
+    onDirtyChange(true);
   };
 
   const openPreview = (item: ScenarioItem) => {

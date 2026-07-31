@@ -4,17 +4,18 @@ import { ContentTabs } from './ContentTabs';
 import { FolderFilterTree } from './FolderFilterTree';
 import { MediaGrid, MediaSelectionToolbar } from '@/shared/ui';
 import { useScenarioAddItem, type Tab } from '../model/useScenarioAddItem';
+import type { ScenarioItem } from '@/entities/scenario';
 
 interface ScenarioAddItemModalProps {
   open: boolean;
   onClose: () => void;
-  kioskId: number;
+  onAddItems: (items: ScenarioItem[]) => void;
 }
 
 export function ScenarioAddItemModal({
   open,
   onClose,
-  kioskId,
+  onAddItems,
 }: ScenarioAddItemModalProps) {
   const {
     tab,
@@ -31,7 +32,7 @@ export function ScenarioAddItemModal({
     widgetOptions,
     handleAddWidget,
     handleAddSelected,
-  } = useScenarioAddItem(kioskId, onClose);
+  } = useScenarioAddItem(onAddItems, onClose);
 
   return (
     <ScenarioModal

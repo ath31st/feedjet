@@ -22,6 +22,8 @@ export function ScenariosManagementWidget({ kioskId, kioskSlug }: Props) {
     totalDuration,
     handleSave,
     handleReset,
+    handleDeleteAll,
+    handleAddItems,
   } = useScenarioManagement(kioskId);
 
   const { iframeKey, paused, setPaused, currentPlayingItemId, reloadIframe } =
@@ -42,7 +44,6 @@ export function ScenariosManagementWidget({ kioskId, kioskSlug }: Props) {
     <div className="flex w-full flex-row items-start gap-6">
       <SettingsCard title="Редактор сценариев" className="w-full md:w-1/2">
         <ScenarioEditor
-          kioskId={kioskId}
           items={localItems}
           isDirty={isDirty}
           isLoading={isLoading}
@@ -51,6 +52,7 @@ export function ScenariosManagementWidget({ kioskId, kioskSlug }: Props) {
           onDirtyChange={setIsDirty}
           onSave={handleSave}
           onReset={handleReset}
+          onDeleteAll={handleDeleteAll}
           onOpenAddModal={openAddModal}
           onPreview={openPreview}
         />
@@ -72,7 +74,7 @@ export function ScenariosManagementWidget({ kioskId, kioskSlug }: Props) {
       <ScenarioAddItemModal
         open={addModalOpen}
         onClose={closeAddModal}
-        kioskId={kioskId}
+        onAddItems={handleAddItems}
       />
 
       {previewContent && (

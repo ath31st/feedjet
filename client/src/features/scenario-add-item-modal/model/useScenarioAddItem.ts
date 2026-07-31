@@ -6,13 +6,14 @@ import {
 } from '@/entities/media-folder';
 import { useAppFeaturesStore } from '@/entities/app-features';
 import {
-  useAddScenarioItem,
-  useAddScenarioItems,
   getWidgetPresentation,
+  nextTempScenarioItemId,
   WIDGET_LABELS,
+  type ScenarioItem,
   type ScenarioWidgetType,
 } from '@/entities/scenario';
 import { useMemo, useState } from 'react';
+import { toast } from 'sonner';
 
 export type Tab = 'widget' | 'media';
 
@@ -20,14 +21,14 @@ export type WidgetOption = {
   type: ScenarioWidgetType;
 } & ReturnType<typeof getWidgetPresentation>;
 
-export const useScenarioAddItem = (kioskId: number, onClose: () => void) => {
+export const useScenarioAddItem = (
+  onAddItems: (items: ScenarioItem[]) => void,
+  onClose: () => void,
+) => {
   const [tab, setTab] = useState<Tab>('widget');
   const [selectedFolderId, setSelectedFolderId] = useState<number | null>(null);
   const [selectedFiles, setSelectedFiles] = useState<Set<string>>(new Set());
   const offlineMode = useAppFeaturesStore((s) => s.offlineMode);
-
-  const addItem = useAddScenarioItem(kioskId);
-  const addItems = useAddScenarioItems(kioskId);
 
   const { data: folderTree = [] } = useMediaFolderTree();
   const { data: media = [], isLoading } = useMediaInFolder(selectedFolderId);
@@ -66,52 +67,79 @@ export const useScenarioAddItem = (kioskId: number, onClose: () => void) => {
   };
 
   const handleAddWidget = (widgetType: ScenarioWidgetType) => {
-    addItem.mutate(
+    onAddItems([
       {
-        kioskId,
-        item: {
-          type: 'widget',
-          widgetType,
-          order: 0,
-          isActive: true,
-          durationSeconds: 15,
-        },
+        id: nextTempScenarioItemId(),
+        scenarioId: 0,
+        type: 'widget',
+        widgetType,
+        imageId: null,
+        videoId: null,
+        order: 0,
+        isActive: true,
+        durationSeconds: 15,
       },
-      { onSuccess: onClose },
-    );
+    ]);
+    toast.success('Элемент добавлен в черновик');
+    onClose();
   };
 
   const handleAddSelected = () => {
-    const items = Array.from(selectedFiles).map((key) => {
-      const [kind, id] = key.split('-');
+    const items: ScenarioItem[] = [];
 
-      if (kind === 'image') {
-        return {
-          type: 'image' as const,
-          imageId: Number(id),
+    for (const key of selectedFiles) {
+      const [kind, idStr] = key.split('-');
+      const mediaId = Number(idStr);
+      const file = media.find((m) => m.kind === kind && m.id === mediaId);
+
+      if (!file) continue;
+
+      if (file.kind === 'image') {
+        items.push({
+          id: nextTempScenarioItemId(),
+          scenarioId: 0,
+          type: 'image',
+          widgetType: null,
+          imageId: file.id,
+          videoId: null,
           order: 0,
           isActive: true,
           durationSeconds: 10,
-        };
+          imageName: file.name,
+          imageFileName: file.fileName,
+          imageThumbnail: file.thumbnail,
+          imageWidth: file.width,
+          imageHeight: file.height,
+        });
+      } else {
+        items.push({
+          id: nextTempScenarioItemId(),
+          scenarioId: 0,
+          type: 'video',
+          widgetType: null,
+          imageId: null,
+          videoId: file.id,
+          order: 0,
+          isActive: true,
+          durationSeconds: null,
+          videoName: file.name,
+          videoFileName: file.fileName,
+          videoThumbnail: file.thumbnail,
+          videoDuration: file.duration,
+        });
       }
+    }
 
-      return {
-        type: 'video' as const,
-        videoId: Number(id),
-        order: 0,
-        isActive: true,
-      };
-    });
+    if (items.length === 0) return;
 
-    addItems.mutate(
-      { kioskId, items },
-      {
-        onSuccess: () => {
-          setSelectedFiles(new Set());
-          onClose();
-        },
-      },
+    onAddItems(items);
+    setSelectedFiles(new Set());
+    toast.success(
+      items.length === 1
+        ? 'Элемент добавлен в черновик'
+        : 'Элементы добавлены в черновик',
     );
+    onClose();
   };
 
   return {
