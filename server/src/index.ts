@@ -19,6 +19,8 @@ const logger = createServiceLogger('main');
 const app = express();
 const port = process.env.PORT || 3000;
 
+app.use(cors());
+
 const cacheDir = imageCacheService.getCacheDir();
 app.use(
   '/cache',
@@ -36,7 +38,6 @@ const logoStorageBaseDir = logoStorageService.getBaseDir();
 app.use('/logos', express.static(logoStorageBaseDir));
 const backgroundStorageDir = birthdayBackgroundService.getBaseDir();
 app.use('/backgrounds', express.static(backgroundStorageDir));
-app.use(cors());
 app.use('/trpc', trpcMiddleware);
 app.use(express.json());
 app.get('/sse/stream/:kioskId', unifiedSseHandler);
