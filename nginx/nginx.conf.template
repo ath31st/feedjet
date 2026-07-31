@@ -68,6 +68,11 @@ http {
             add_header Cache-Control "public";
         }
 
+        location /pdfs/ {
+            alias {{PDF_DIR}}/;
+            add_header Cache-Control "public";
+        }
+
         location /images/ {
             alias {{IMAGE_DIR}}/;
             add_header Cache-Control "public";

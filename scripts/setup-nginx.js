@@ -70,6 +70,7 @@ const absFileStorageDir = path.isAbsolute(fileStorageDirValue)
   : path.resolve(serverRoot, fileStorageDirValue);
 
 const absVideosDir = path.join(absFileStorageDir, 'videos');
+const absPdfsDir = path.join(absFileStorageDir, 'pdfs');
 const absImagesDir = path.join(absFileStorageDir, 'images');
 const absLogosDir = path.join(absFileStorageDir, 'logos');
 const absBackgroundsDir = path.join(absFileStorageDir, 'backgrounds');
@@ -97,6 +98,7 @@ if (!fs.existsSync(crtPath) || !fs.existsSync(keyPath)) {
 const dirsToEnsure = [
   absCacheDir,
   absVideosDir,
+  absPdfsDir,
   absImagesDir,
   absLogosDir,
   absBackgroundsDir,
@@ -127,6 +129,7 @@ const nginxConf = template
   .replace(/{{\s*CLIENT_DIST\s*}}/g, absClientDist)
   .replace(/{{\s*CACHE_DIR\s*}}/g, absCacheDir)
   .replace(/{{\s*VIDEO_DIR\s*}}/g, absVideosDir)
+  .replace(/{{\s*PDF_DIR\s*}}/g, absPdfsDir)
   .replace(/{{\s*IMAGE_DIR\s*}}/g, absImagesDir)
   .replace(/{{\s*LOGO_DIR\s*}}/g, absLogosDir)
   .replace(/{{\s*BACKGROUND_DIR\s*}}/g, absBackgroundsDir)
@@ -139,6 +142,7 @@ console.log(`✅ nginx.conf обновлён: ${path.relative(projectRoot, nginx
 console.log(`📁 clientDist: ${absClientDist}`);
 console.log(`📁 cacheDir: ${absCacheDir}`);
 console.log(`📁 videosDir: ${absVideosDir}`);
+console.log(`📁 pdfsDir: ${absPdfsDir}`);
 console.log(`📁 imagesDir: ${absImagesDir}`);
 console.log(`📁 logosDir: ${absLogosDir}`);
 console.log(`📁 backgroundsDir: ${absBackgroundsDir}`);
