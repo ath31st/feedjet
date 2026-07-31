@@ -6,6 +6,7 @@ import {
   deleteScenarioItemSchema,
   getScenarioByKioskSchema,
   reorderScenarioItemsSchema,
+  replaceScenarioItemsSchema,
   updateScenarioItemSchema,
 } from '../../validations/schemas/scenario.schemas.js';
 
@@ -75,5 +76,17 @@ export const scenarioRouter = t.router({
       emitScenario(input.kioskId);
 
       return { success: true };
+    }),
+
+  replaceItems: protectedProcedure
+    .input(replaceScenarioItemsSchema)
+    .mutation(({ input }) => {
+      const scenario = scenarioService.ensureForKiosk(input.kioskId);
+
+      const items = scenarioService.replaceItems(scenario.id, input.items);
+
+      emitScenario(input.kioskId);
+
+      return items;
     }),
 });

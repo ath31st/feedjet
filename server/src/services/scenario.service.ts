@@ -5,11 +5,12 @@ import {
   imagesTable,
   videosTable,
 } from '../db/schema.js';
-import { eq, asc, sql } from 'drizzle-orm';
+import { eq, asc, inArray, sql } from 'drizzle-orm';
 import type {
   Scenario,
   ScenarioItem,
   UpsertScenarioItemInput,
+  ReplaceScenarioItemInput,
 } from '@shared/types/scenario.js';
 import { createServiceLogger } from '../utils/pino.logger.js';
 
@@ -265,6 +266,99 @@ export class ScenarioService {
       this.logger.error(
         { err, itemId, fn: 'deleteItem' },
         'Failed to delete scenario item',
+      );
+      throw err;
+    }
+  }
+
+  replaceItems(
+    scenarioId: number,
+    items: ReplaceScenarioItemInput[],
+  ): ScenarioItem[] {
+    this.logger.debug(
+      { scenarioId, count: items.length, fn: 'replaceItems' },
+      'Replacing scenario items',
+    );
+
+    try {
+      this.db.transaction((tx) => {
+        const existing = tx
+          .select({ id: scenarioItemsTable.id })
+          .from(scenarioItemsTable)
+          .where(eq(scenarioItemsTable.scenarioId, scenarioId))
+          .all();
+        const existingIds = new Set(existing.map((row) => row.id));
+
+        const updates: {
+          id: number;
+          item: ReplaceScenarioItemInput;
+          order: number;
+        }[] = [];
+        const inserts: { item: ReplaceScenarioItemInput; order: number }[] =
+          [];
+
+        items.forEach((item, order) => {
+          if (item.id != null && existingIds.has(item.id)) {
+            updates.push({ id: item.id, item, order });
+          } else {
+            inserts.push({ item, order });
+          }
+        });
+
+        const keepIds = new Set(updates.map(({ id }) => id));
+        const toDelete = existing
+          .map((row) => row.id)
+          .filter((id) => !keepIds.has(id));
+
+        if (toDelete.length > 0) {
+          tx.delete(scenarioItemsTable)
+            .where(inArray(scenarioItemsTable.id, toDelete))
+            .run();
+        }
+
+        for (const { id, item, order } of updates) {
+          tx.update(scenarioItemsTable)
+            .set({
+              type: item.type,
+              widgetType: item.widgetType ?? null,
+              imageId: item.imageId ?? null,
+              videoId: item.videoId ?? null,
+              order,
+              isActive: item.isActive,
+              durationSeconds: item.durationSeconds ?? 10,
+            })
+            .where(eq(scenarioItemsTable.id, id))
+            .run();
+        }
+
+        for (const { item, order } of inserts) {
+          tx.insert(scenarioItemsTable)
+            .values({
+              scenarioId,
+              type: item.type,
+              widgetType: item.widgetType ?? null,
+              imageId: item.imageId ?? null,
+              videoId: item.videoId ?? null,
+              order,
+              isActive: item.isActive,
+              durationSeconds: item.durationSeconds ?? 10,
+            })
+            .run();
+        }
+      });
+
+      this.touchScenario(scenarioId);
+
+      this.logger.info(
+        { scenarioId, count: items.length, fn: 'replaceItems' },
+        'Replaced scenario items',
+      );
+
+      return this.getItems(scenarioId);
+    } catch (err) {
+      this.logger.error(
+        { err, scenarioId, fn: 'replaceItems' },
+        'Failed to replace scenario items',
       );
       throw err;
     }

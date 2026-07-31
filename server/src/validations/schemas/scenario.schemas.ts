@@ -72,4 +72,24 @@ export const deleteScenarioItemSchema = z.object({
   itemId: z.number(),
 });
 
+const replaceScenarioItemSchema = z.discriminatedUnion('type', [
+  widgetScenarioItemSchema.extend({
+    id: z.number().int().positive().optional(),
+  }),
+  imageScenarioItemSchema.extend({
+    id: z.number().int().positive().optional(),
+  }),
+  videoScenarioItemSchema.extend({
+    id: z.number().int().positive().optional(),
+  }),
+]);
+
+export const replaceScenarioItemsSchema = z.object({
+  kioskId: kioskIdSchema,
+  items: z.array(replaceScenarioItemSchema),
+});
+
 export type ScenarioItemInput = z.infer<typeof scenarioItemSchema>;
+export type ReplaceScenarioItemInput = z.infer<
+  typeof replaceScenarioItemSchema
+>;

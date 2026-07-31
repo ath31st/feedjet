@@ -47,3 +47,13 @@ export interface UpsertScenarioItemInput {
   isActive: boolean;
   durationSeconds?: number;
 }
+
+export interface ReplaceScenarioItemInput {
+  id?: number;
+  type: ScenarioItemType;
+  widgetType?: ScenarioWidgetType;
+  imageId?: number;
+  videoId?: number;
+  isActive: boolean;
+  durationSeconds?: number;
+}
