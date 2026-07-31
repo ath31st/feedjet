@@ -5,9 +5,13 @@ import sharp from 'sharp';
 import { FileStorageError } from '../errors/file.storage.error.js';
 import type { BaseImageMetadata } from '@shared/types/image.js';
 import { webReadableToNode } from '../utils/stream.js';
+import type { OptimizedImage } from '../types/image.js';
 
 export abstract class BaseImageStorageService extends FileStorageService {
   protected readonly imageDir: string;
+  private readonly maxEdge = 1920;
+  private readonly webpQuality = 80;
+  private readonly minSizeSavingRatio = 0.15;
 
   protected readonly allowedExtensions = [
     '.jpg',
@@ -46,7 +50,7 @@ export abstract class BaseImageStorageService extends FileStorageService {
     return fs.readdir(this.getBaseDir());
   }
 
-  protected isImageFile(fileName: string): boolean {
+  protected isImageFile(fileName: string) {
     return this.allowedExtensions.includes(
       path.extname(fileName).toLowerCase(),
     );
@@ -146,5 +150,58 @@ export abstract class BaseImageStorageService extends FileStorageService {
     const name = path.basename(fileName, ext);
 
     return `${name}_thumbnail${ext}`;
+  }
+
+  protected isSvgFileName(fileName: string) {
+    return path.extname(fileName).toLowerCase() === '.svg';
+  }
+
+  /**
+   * Fits image to maxEdge and converts to WebP when it helps.
+   * Large images always become WebP; small ones only if saving ratio is met.
+   * SVG is left untouched. Original bytes are not kept when WebP wins.
+   */
+  protected async optimizeImageBuffer(
+    buffer: Buffer,
+    originalFileName: string,
+  ): Promise<OptimizedImage> {
+    if (this.isSvgFileName(originalFileName)) {
+      return { buffer, fileName: originalFileName, changed: false };
+    }
+
+    const metadata = await sharp(buffer, { failOn: 'none' }).metadata();
+    const width = metadata.width ?? 0;
+    const height = metadata.height ?? 0;
+    const needsResize = width > this.maxEdge || height > this.maxEdge;
+
+    const webpBuffer = await sharp(buffer, { failOn: 'none' })
+      .resize({
+        width: this.maxEdge,
+        height: this.maxEdge,
+        fit: 'inside',
+        withoutEnlargement: true,
+      })
+      .webp({ quality: this.webpQuality })
+      .toBuffer();
+
+    const savingRatio = 1 - webpBuffer.length / Math.max(buffer.length, 1);
+    const useWebp =
+      needsResize || savingRatio >= this.minSizeSavingRatio;
+
+    if (!useWebp) {
+      return { buffer, fileName: originalFileName, changed: false };
+    }
+
+    const name = path.basename(
+      originalFileName,
+      path.extname(originalFileName),
+    );
+    const fileName = `${name}.webp`;
+
+    return {
+      buffer: webpBuffer,
+      fileName,
+      changed: true,
+    };
   }
 }

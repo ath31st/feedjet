@@ -20,32 +20,55 @@ export class ImageStorageService extends BaseImageStorageService {
 
   async upload(file: File, fileName: string, folderId: number | null = null) {
     const safeFileName = sanitizeFileName(fileName);
-    const nodeStream = this.getNodeStream(file);
-    const savedPath = await this.saveImageStream(nodeStream, safeFileName);
+    const sourceBuffer = Buffer.from(await file.arrayBuffer());
+    const optimized = await this.optimizeImageBuffer(
+      sourceBuffer,
+      safeFileName,
+    );
 
-    const resizedBuffer = await this.resizeImage(safeFileName, null, 150);
-    if (resizedBuffer) {
-      await this.saveImageBuffer(
-        resizedBuffer,
-        this.getThumbnailFileName(safeFileName),
-      );
+    const namesToReplace = new Set([safeFileName, optimized.fileName]);
+    for (const name of namesToReplace) {
+      const existing = this.findImageMetadataByFileName(name);
+      if (existing) {
+        await this.delete(existing.fileName);
+      }
     }
 
-    let meta = this.findImageMetadataByFileName(safeFileName);
-    if (meta) {
-      this.removeImageMetadataByFileName(safeFileName);
+    if (
+      optimized.fileName !== safeFileName &&
+      (await this.exists(this.getFilePath(safeFileName)))
+    ) {
+      await this.remove(safeFileName);
+      const oldThumb = this.getThumbnailFileName(safeFileName);
+      if (await this.exists(this.getFilePath(oldThumb))) {
+        await this.remove(oldThumb);
+      }
     }
-    const baseMeta = await this.getImageMetadata(safeFileName);
 
-    meta = {
-      ...baseMeta,
-      thumbnail: this.getThumbnailFileName(safeFileName),
-    };
+    const savedPath = await this.saveImageBuffer(
+      optimized.buffer,
+      optimized.fileName,
+    );
+    await this.writeThumbnail(optimized.fileName);
 
-    const savedFileName = this.saveImageMetadata(meta, folderId);
+    const baseMeta = await this.getImageMetadata(optimized.fileName);
+    const savedFileName = this.saveImageMetadata(
+      {
+        ...baseMeta,
+        thumbnail: this.getThumbnailFileName(optimized.fileName),
+      },
+      folderId,
+    );
 
     this.logger.info(
-      { savedPath, folderId, originalFileName: fileName, fn: 'upload' },
+      {
+        savedPath,
+        folderId,
+        originalFileName: fileName,
+        savedFileName,
+        optimized: optimized.changed,
+        fn: 'upload',
+      },
       'Image uploaded successfully',
     );
 
@@ -64,6 +87,62 @@ export class ImageStorageService extends BaseImageStorageService {
         this.logger.info({ file, fn: 'delete' }, 'Image deleted successfully');
       }
     }
+  }
+
+  private async writeThumbnail(fileName: string) {
+    const resizedBuffer = await this.resizeImage(fileName, null, 150);
+    if (resizedBuffer) {
+      await this.saveImageBuffer(
+        resizedBuffer,
+        this.getThumbnailFileName(fileName),
+      );
+    }
+  }
+
+  /**
+   * Re-encodes a file on disk when optimization applies.
+   * Returns the final file name (may change extension to .webp).
+   */
+  private async ensureOptimizedFile(fileName: string): Promise<string> {
+    if (this.isSvgFileName(fileName)) {
+      return fileName;
+    }
+
+    if (!(await this.exists(this.getFilePath(fileName)))) {
+      return fileName;
+    }
+
+    const sourceBuffer = await this.readFile(fileName);
+    const optimized = await this.optimizeImageBuffer(sourceBuffer, fileName);
+
+    if (!optimized.changed) {
+      return fileName;
+    }
+
+    await this.saveImageBuffer(optimized.buffer, optimized.fileName);
+
+    if (optimized.fileName !== fileName) {
+      await this.remove(fileName);
+      const oldThumb = this.getThumbnailFileName(fileName);
+      if (await this.exists(this.getFilePath(oldThumb))) {
+        await this.remove(oldThumb);
+      }
+    }
+
+    await this.writeThumbnail(optimized.fileName);
+
+    this.logger.info(
+      {
+        from: fileName,
+        to: optimized.fileName,
+        beforeSize: sourceBuffer.length,
+        afterSize: optimized.buffer.length,
+        fn: 'ensureOptimizedFile',
+      },
+      'Image optimized on disk',
+    );
+
+    return optimized.fileName;
   }
 
   private listImageMetadata(): ImageMetadata[] {
@@ -97,6 +176,36 @@ export class ImageStorageService extends BaseImageStorageService {
         'Error saving image metadata',
       );
       throw new ImageStorageServiceError(500, 'Error saving image metadata');
+    }
+  }
+
+  private updateImageMetadata(oldFileName: string, meta: ImageMetadata) {
+    try {
+      this.db
+        .update(imagesTable)
+        .set({
+          name: meta.name,
+          fileName: meta.fileName,
+          format: meta.format,
+          width: meta.width,
+          height: meta.height,
+          size: meta.size,
+          thumbnail: meta.thumbnail,
+          mtime: meta.mtime,
+        })
+        .where(eq(imagesTable.fileName, oldFileName))
+        .run();
+
+      this.logger.info(
+        { oldFileName, fileName: meta.fileName, fn: 'updateImageMetadata' },
+        'Image metadata updated successfully',
+      );
+    } catch (err) {
+      this.logger.error(
+        { err, oldFileName, fn: 'updateImageMetadata' },
+        'Error updating image metadata',
+      );
+      throw new ImageStorageServiceError(500, 'Error updating image metadata');
     }
   }
 
@@ -136,7 +245,8 @@ export class ImageStorageService extends BaseImageStorageService {
 
     for (const file of withoutThumbnails) {
       if (!existing.has(file)) {
-        const baseMeta = await this.getImageMetadata(file);
+        const finalName = await this.ensureOptimizedFile(file);
+        const baseMeta = await this.getImageMetadata(finalName);
 
         this.saveImageMetadata({
           ...baseMeta,
@@ -146,9 +256,21 @@ export class ImageStorageService extends BaseImageStorageService {
     }
 
     for (const image of this.listImageMetadata()) {
-      if (!files.includes(image.fileName)) {
+      if (!(await this.exists(this.getFilePath(image.fileName)))) {
         this.removeImageMetadataByFileName(image.fileName);
+        continue;
       }
+
+      const finalName = await this.ensureOptimizedFile(image.fileName);
+      if (finalName === image.fileName) {
+        continue;
+      }
+
+      const baseMeta = await this.getImageMetadata(finalName);
+      this.updateImageMetadata(image.fileName, {
+        ...baseMeta,
+        thumbnail: this.getThumbnailFileName(finalName),
+      });
     }
   }
 }
