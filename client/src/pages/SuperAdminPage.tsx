@@ -2,7 +2,6 @@ import * as Tabs from '@radix-ui/react-tabs';
 import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 
-import { Logout } from '@/features/auth';
 import { LogWidget } from '@/widgets/log';
 import { AdminHelpPanel } from '@/widgets/admin-help-panel';
 
@@ -58,10 +57,6 @@ export function SuperAdminPage() {
 
   return (
     <div className="p-6">
-      <div className="absolute top-6 right-12">
-        <Logout />
-      </div>
-
       <h1 className="mb-4 text-center font-bold text-3xl">
         Панель супер администратора
       </h1>

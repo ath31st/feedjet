@@ -1,14 +1,14 @@
 import { Outlet } from 'react-router-dom';
-import { ThemeSwitcher } from '@/features/admin-theme-selector';
 import { AdminInitializer } from '../init/AdminInitializer';
-import { AdminHelpToggle } from '@/features/admin-help-toggle';
+import { AdminToolsPanel } from '@/widgets/admin-tools-panel';
+import { LogoutSidePanel } from '@/features/auth';
 
 export function AdminLayout() {
   return (
     <>
       <AdminInitializer />
-      <AdminHelpToggle />
-      <ThemeSwitcher />
+      <LogoutSidePanel />
+      <AdminToolsPanel />
       <Outlet />
     </>
   );

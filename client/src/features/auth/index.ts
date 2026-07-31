@@ -1,3 +1,3 @@
 export { LoginForm } from './ui/LoginForm';
-export { LogoutButton as Logout } from './ui/LogoutButton';
+export { LogoutSidePanel } from './ui/LogoutSidePanel';
 export { useMe } from './model/useAuth';

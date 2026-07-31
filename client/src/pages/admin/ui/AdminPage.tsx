@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 
 import { KioskSelectorWidget } from '@/widgets/kiosk-selector';
-import { Logout } from '@/features/auth';
 import { AdminHelpPanel } from '@/widgets/admin-help-panel';
 import { useAdminHelp } from '@/features/admin-help-toggle';
 import { AdminTabTrigger, SlideSlot } from '@/shared/ui';
@@ -34,10 +33,6 @@ export function AdminPage() {
 
   return (
     <div className="p-6">
-      <div className="absolute top-6 right-12">
-        <Logout />
-      </div>
-
       <h1 className="mb-4 text-center font-bold text-3xl">
         Панель администратора
       </h1>
