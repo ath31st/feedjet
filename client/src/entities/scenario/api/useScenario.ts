@@ -60,3 +60,15 @@ export const useDeleteScenarioItem = (kioskId: number) =>
       },
     }),
   );
+
+export const useReplaceScenarioItems = (kioskId: number) =>
+  useMutation(
+    trpcWithProxy.scenario.replaceItems.mutationOptions({
+      onSuccess(items) {
+        queryClient.setQueryData(scenarioKey(kioskId), (old) =>
+          old ? { ...old, items } : old,
+        );
+        toast.success('Сценарий сохранён');
+      },
+    }),
+  );

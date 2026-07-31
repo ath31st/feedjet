@@ -5,6 +5,8 @@ export type {
   ScenarioItemType,
   ScenarioWidgetType,
   UpsertScenarioItemInput,
+  ReplaceScenarioItemInput,
 } from '@shared/types/scenario';
 export * from './model/scenarioStore';
 export * from './const/widgetLabelIconConsts';
+export * from './lib/tempId';
