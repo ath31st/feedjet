@@ -177,7 +177,7 @@ export function TickerConfigSettings({
           ></CommonSwitch>
         </div>
 
-        <div className="flex flex-row items-center justify-center gap-6">
+        <div className="col-span-2 flex items-center justify-center gap-6">
           <IconButton
             onClick={handleRollbackChanges}
             tooltip="Отменить изменения"

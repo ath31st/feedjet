@@ -17,9 +17,9 @@ export function DiskUsageView({ used, total, isLoading }: DiskUsageViewProps) {
   return (
     <div className="flex w-full flex-col">
       <div className="flex flex-col gap-2 text-xs">
-        <div className="flex justify-between">
+        <div className="flex flex-wrap items-baseline justify-between gap-x-2 gap-y-0.5">
           <span className="text-(--meta-text)">Использовано:</span>
-          <span>
+          <span className="whitespace-nowrap">
             {formatBytes(used)} / {formatBytes(total)}
           </span>
         </div>

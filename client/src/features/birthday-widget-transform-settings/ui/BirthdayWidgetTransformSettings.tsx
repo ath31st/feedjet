@@ -113,7 +113,7 @@ export function BirthdayWidgetTransformSettings() {
             }
           />
 
-          <SliderControl
+          {/* <SliderControl
             label="Вертикальный сдвиг строк (px)"
             value={localTransform.lineOffsetY ?? 0}
             min={-20}
@@ -124,7 +124,7 @@ export function BirthdayWidgetTransformSettings() {
                 prev ? { ...prev, lineOffsetY: val } : prev,
               )
             }
-          />
+          /> */}
 
           <SliderControl
             label="Поворот вокруг X (в град)"
@@ -214,7 +214,7 @@ export function BirthdayWidgetTransformSettings() {
             }
           />
 
-          <div className="flex flex-row items-center justify-center gap-6">
+          <div className="col-span-2 flex items-center justify-center gap-6">
             <TooltipWrapper
               tooltip={`Показывать ${isHalfSetBirthdays ? 'весь список' : 'половину списка'}`}
             >
