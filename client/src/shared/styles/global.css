@@ -70,21 +70,21 @@ html body[data-scroll-locked] {
   --border-disabled: hsl(var(--hue), 20%, 20%);
 }
 
-[data-theme="sepia"] {
-  --hue: 30;
+[data-theme="olive"] {
+  --hue: 80;
 
-  --background: hsl(var(--hue), 30%, 10%);
-  --text: hsl(var(--hue), 35%, 90%);
-  --card-bg: hsl(var(--hue), 30%, 15%);
-  --card-text: hsl(var(--hue), 35%, 90%);
-  --category-text: hsl(var(--hue), 60%, 60%);
-  --description-text: hsl(var(--hue), 45%, 75%);
-  --meta-text: hsl(var(--hue), 40%, 55%);
-  --button-bg: hsl(var(--hue), 55%, 25%);
-  --button-text: hsl(var(--hue), 35%, 90%);
-  --button-hover-bg: hsl(var(--hue), 55%, 35%);
-  --border: hsl(var(--hue), 45%, 50%);
-  --border-disabled: hsl(var(--hue), 45%, 30%);
+  --background: hsl(var(--hue), 22%, 10%);
+  --text: hsl(var(--hue), 30%, 88%);
+  --card-bg: hsl(var(--hue), 18%, 15%);
+  --card-text: hsl(var(--hue), 30%, 88%);
+  --category-text: hsl(var(--hue), 45%, 58%);
+  --description-text: hsl(var(--hue), 25%, 72%);
+  --meta-text: hsl(var(--hue), 18%, 48%);
+  --button-bg: hsl(var(--hue), 35%, 24%);
+  --button-text: hsl(var(--hue), 30%, 92%);
+  --button-hover-bg: hsl(var(--hue), 35%, 32%);
+  --border: hsl(var(--hue), 30%, 42%);
+  --border-disabled: hsl(var(--hue), 25%, 22%);
 }
 
 [data-theme="sepia-light"] {
@@ -496,6 +496,69 @@ html body[data-scroll-locked] {
   --button-hover-bg: hsl(var(--accent-hue), 70%, 30%);
   --border: hsl(var(--accent-hue), 60%, 40%);
   --border-disabled: hsl(var(--accent-hue), 60%, 20%);
+}
+
+[data-theme="aurora"] {
+  --primary-hue: 230;
+  --accent-hue: 170;
+  --secondary-hue: 320;
+
+  --background: hsl(var(--primary-hue), 45%, 8%);
+  --text: hsl(var(--accent-hue), 40%, 88%);
+  --card-bg: hsl(var(--primary-hue), 40%, 14%);
+  --card-text: hsl(var(--accent-hue), 40%, 88%);
+
+  --category-text: hsl(var(--secondary-hue), 70%, 70%);
+  --description-text: hsl(var(--accent-hue), 25%, 70%);
+  --meta-text: hsl(var(--primary-hue), 20%, 50%);
+
+  --button-bg: hsl(var(--accent-hue), 55%, 22%);
+  --button-text: hsl(var(--primary-hue), 30%, 95%);
+  --button-hover-bg: hsl(var(--accent-hue), 55%, 32%);
+  --border: hsl(var(--secondary-hue), 50%, 45%);
+  --border-disabled: hsl(var(--secondary-hue), 40%, 22%);
+}
+
+[data-theme="harbor"] {
+  --primary-hue: 215;
+  --accent-hue: 18;
+  --secondary-hue: 42;
+
+  --background: hsl(var(--primary-hue), 40%, 9%);
+  --text: hsl(var(--secondary-hue), 45%, 88%);
+  --card-bg: hsl(var(--primary-hue), 35%, 15%);
+  --card-text: hsl(var(--secondary-hue), 45%, 88%);
+
+  --category-text: hsl(var(--accent-hue), 75%, 65%);
+  --description-text: hsl(var(--primary-hue), 25%, 68%);
+  --meta-text: hsl(var(--primary-hue), 18%, 48%);
+
+  --button-bg: hsl(var(--accent-hue), 70%, 28%);
+  --button-text: hsl(var(--primary-hue), 20%, 96%);
+  --button-hover-bg: hsl(var(--accent-hue), 70%, 38%);
+  --border: hsl(var(--secondary-hue), 65%, 48%);
+  --border-disabled: hsl(var(--secondary-hue), 50%, 25%);
+}
+
+[data-theme="tropic"] {
+  --primary-hue: 168;
+  --accent-hue: 8;
+  --secondary-hue: 48;
+
+  --background: hsl(var(--primary-hue), 40%, 10%);
+  --text: hsl(var(--secondary-hue), 50%, 90%);
+  --card-bg: hsl(var(--primary-hue), 35%, 16%);
+  --card-text: hsl(var(--secondary-hue), 50%, 90%);
+
+  --category-text: hsl(var(--accent-hue), 75%, 65%);
+  --description-text: hsl(var(--primary-hue), 30%, 68%);
+  --meta-text: hsl(var(--primary-hue), 20%, 45%);
+
+  --button-bg: hsl(var(--accent-hue), 65%, 30%);
+  --button-text: hsl(var(--primary-hue), 25%, 96%);
+  --button-hover-bg: hsl(var(--accent-hue), 65%, 40%);
+  --border: hsl(var(--secondary-hue), 70%, 48%);
+  --border-disabled: hsl(var(--secondary-hue), 50%, 25%);
 }
 
 @keyframes scroll-diagonal-switch {
