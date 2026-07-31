@@ -1,5 +1,6 @@
 import { useAdminTheme } from '@/app/providers/CommonThemeProvider';
 import { themesFull, type Theme } from '@/entities/ui-config';
+import { getThemeSwatchStyle } from '@/shared/lib';
 
 export function ThemeSwitcher() {
   const { setTheme } = useAdminTheme();
@@ -12,9 +13,9 @@ export function ThemeSwitcher() {
             key={t.name}
             type="button"
             onClick={() => setTheme(t.name as Theme)}
-            style={{ backgroundColor: t.color }}
+            style={getThemeSwatchStyle(t.colors)}
             title={t.label}
-            className="rounded-lg opacity-75 transition-opacity duration-300 hover:opacity-100"
+            className="overflow-hidden rounded-lg opacity-75 transition-opacity duration-300 hover:opacity-100"
           >
             <span className="sr-only">{t.label}</span>
           </button>

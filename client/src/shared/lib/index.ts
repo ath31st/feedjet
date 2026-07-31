@@ -17,6 +17,7 @@ export * from './useEnv';
 export * from './geRemFromTailwindXl';
 export * from './formatSecondsToTime';
 export * from './getColorFromHex';
+export * from './getThemeSwatchStyle';
 export * from './useHorizontalWheelScroll';
 export * from './hexToRgba';
 export * from './formatters';
