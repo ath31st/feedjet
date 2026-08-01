@@ -46,6 +46,7 @@
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.0.15",
+    "@types/word-extractor": "^1.0.6",
     "drizzle-kit": "^0.31.10",
     "tsc-alias": "^1.8.17",
     "tsx": "^4.21.0",
