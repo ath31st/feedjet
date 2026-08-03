@@ -18,7 +18,7 @@ export function WeekSelector({
             key={w.key}
             type="button"
             onClick={() => onChange(w.date)}
-            className={`relative w-38 px-6 py-2 font-medium text-md outline-none transition-colors hover:text-(--border) ${
+            className={`relative w-38 cursor-pointer px-6 py-2 font-medium text-md outline-none transition-colors hover:text-(--border) ${
               isActive
                 ? 'text-(--text) hover:text-(--text)'
                 : 'text-muted-foreground'

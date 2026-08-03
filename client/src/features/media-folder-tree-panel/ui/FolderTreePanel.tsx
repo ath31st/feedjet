@@ -84,10 +84,15 @@ export function FolderTreePanel({
       asideFooter={
         stats &&
         !moveMode && (
-          <p className="text-(--text-muted) text-xs">
-            {stats.imageCount} изображений · {stats.videoCount} видео ·{' '}
-            {stats.pdfCount} PDF
-          </p>
+          <div className="flex flex-wrap gap-x-1 text-xs">
+            <span className="whitespace-nowrap">
+              {stats.imageCount} изображений
+            </span>
+            <span>·</span>
+            <span className="whitespace-nowrap">{stats.videoCount} видео</span>
+            <span>·</span>
+            <span className="whitespace-nowrap">{stats.pdfCount} PDF</span>
+          </div>
         )
       }
     >
