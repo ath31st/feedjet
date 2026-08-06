@@ -84,8 +84,16 @@ export function ItemRow({
             </p>
           </div>
 
+          <div onClick={(e) => e.stopPropagation()}>
+            <ShowPeriodBadge
+              activeFrom={item.activeFrom}
+              activeTo={item.activeTo}
+              onClick={onShowPeriodClick}
+            />
+          </div>
+
           {config.hasDuration && (
-            <div onClick={(e) => e.stopPropagation()}>
+            <div className="shrink-0" onClick={(e) => e.stopPropagation()}>
               <DurationInput
                 value={item.durationSeconds ?? 10}
                 onChange={onDurationChange}
@@ -94,14 +102,6 @@ export function ItemRow({
               />
             </div>
           )}
-
-          <div onClick={(e) => e.stopPropagation()}>
-            <ShowPeriodBadge
-              activeFrom={item.activeFrom}
-              activeTo={item.activeTo}
-              onClick={onShowPeriodClick}
-            />
-          </div>
 
           <div onClick={(e) => e.stopPropagation()}>
             <CommonSwitch checked={item.isActive} onCheckedChange={onToggle} />

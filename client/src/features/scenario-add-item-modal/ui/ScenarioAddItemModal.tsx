@@ -58,7 +58,7 @@ export function ScenarioAddItemModal({
               key={type}
               type="button"
               onClick={() => handleAddWidget(type)}
-              className="group flex items-center gap-4 rounded-xl border border-(--border) p-4 text-left transition-all hover:border-(--border) hover:bg-(--button-hover-bg)"
+              className="group flex cursor-pointer items-center gap-4 rounded-xl border border-(--border) p-4 text-left transition-all hover:border-(--border) hover:bg-(--button-hover-bg)"
             >
               <div
                 className="flex h-20 w-20 shrink-0 items-center justify-center rounded-lg text-white"
