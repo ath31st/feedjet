@@ -355,6 +355,8 @@ export const scenarioItemsTable = sqliteTable(
     order: integer('order').notNull().default(0),
     isActive: integer('is_active', { mode: 'boolean' }).notNull().default(true),
     durationSeconds: integer('duration_seconds').default(10),
+    activeFrom: text('active_from'),
+    activeTo: text('active_to'),
   },
   (table) => [
     check(
