@@ -108,6 +108,8 @@ export class ScenarioService {
         order: scenarioItemsTable.order,
         isActive: scenarioItemsTable.isActive,
         durationSeconds: scenarioItemsTable.durationSeconds,
+        activeFrom: scenarioItemsTable.activeFrom,
+        activeTo: scenarioItemsTable.activeTo,
         imageName: imagesTable.name,
         imageFileName: imagesTable.fileName,
         imageThumbnail: imagesTable.thumbnail,
@@ -159,6 +161,8 @@ export class ScenarioService {
           order: maxOrder + 1,
           isActive: input.isActive,
           durationSeconds: input.durationSeconds ?? 10,
+          activeFrom: input.activeFrom ?? null,
+          activeTo: input.activeTo ?? null,
         })
         .returning()
         .get();
@@ -208,6 +212,8 @@ export class ScenarioService {
         order: maxOrder + index + 1,
         isActive: item.isActive,
         durationSeconds: item.durationSeconds ?? 10,
+        activeFrom: item.activeFrom ?? null,
+        activeTo: item.activeTo ?? null,
       }));
 
       const items = this.db
@@ -235,7 +241,10 @@ export class ScenarioService {
   updateItem(
     itemId: number,
     patch: Partial<
-      Pick<ScenarioItem, 'isActive' | 'durationSeconds' | 'order'>
+      Pick<
+        ScenarioItem,
+        'isActive' | 'durationSeconds' | 'order' | 'activeFrom' | 'activeTo'
+      >
     >,
   ): void {
     this.logger.debug(
@@ -372,6 +381,8 @@ export class ScenarioService {
               order,
               isActive: item.isActive,
               durationSeconds: item.durationSeconds ?? 10,
+              activeFrom: item.activeFrom ?? null,
+              activeTo: item.activeTo ?? null,
             })
             .where(eq(scenarioItemsTable.id, id))
             .run();
@@ -385,6 +396,8 @@ export class ScenarioService {
               order,
               isActive: item.isActive,
               durationSeconds: item.durationSeconds ?? 10,
+              activeFrom: item.activeFrom ?? null,
+              activeTo: item.activeTo ?? null,
             })
             .run();
         }

@@ -19,6 +19,8 @@ export interface ScenarioItem {
   order: number;
   isActive: boolean;
   durationSeconds: number | null;
+  activeFrom: string | null;
+  activeTo: string | null;
   imageName?: string | null;
   imageFileName?: string | null;
   imageThumbnail?: string | null;
@@ -52,12 +54,16 @@ export interface UpsertScenarioItemInput {
   order: number;
   isActive: boolean;
   durationSeconds?: number;
+  activeFrom?: string | null;
+  activeTo?: string | null;
 }
 
 type ReplaceScenarioItemBase = {
   id?: number;
   isActive: boolean;
   durationSeconds?: number;
+  activeFrom?: string | null;
+  activeTo?: string | null;
 };
 
 export type ReplaceScenarioItemInput =
