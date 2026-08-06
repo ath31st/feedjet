@@ -1,3 +1,4 @@
+export * from './CommonDialog';
 export * from './CommonButton';
 export * from './IconButton';
 export * from './SimpleDropdownMenu';

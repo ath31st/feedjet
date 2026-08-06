@@ -91,8 +91,7 @@ export function ShowPeriodCalendar({
             'flex h-9 cursor-pointer items-center justify-center rounded-md text-sm transition-colors ';
 
           if (isAnchor) {
-            cellClass +=
-              'bg-(--button-bg) font-semibold text-(--button-text)';
+            cellClass += 'bg-(--button-bg) font-semibold text-(--button-text)';
           } else if (inRange) {
             cellClass += 'bg-(--button-bg)/25 text-(--text)';
           } else {

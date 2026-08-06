@@ -25,7 +25,11 @@ const log = (stage: string, details?: Record<string, unknown>) => {
   });
 };
 
-const logError = (stage: string, error: unknown, details?: Record<string, unknown>) => {
+const logError = (
+  stage: string,
+  error: unknown,
+  details?: Record<string, unknown>,
+) => {
   console.error(`[feedjet:pdf] ${stage}`, {
     t: Date.now(),
     error,
@@ -173,10 +177,14 @@ export const PdfItemView = ({
         });
 
         if (!context) {
-          logError('canvas 2d context null', new Error('getContext(2d) returned null'), {
-            fileName,
-            pageNumber,
-          });
+          logError(
+            'canvas 2d context null',
+            new Error('getContext(2d) returned null'),
+            {
+              fileName,
+              pageNumber,
+            },
+          );
           handleEnd('canvas-context-null');
           return;
         }
@@ -303,7 +311,11 @@ export const PdfItemView = ({
             transition={pageMotion.transition}
             style={{ willChange: 'opacity, transform' }}
             onLoad={() => {
-              log('img onLoad', { fileName, pageNumber, pageSrcPrefix: pageSrc.slice(0, 64) });
+              log('img onLoad', {
+                fileName,
+                pageNumber,
+                pageSrcPrefix: pageSrc.slice(0, 64),
+              });
             }}
             onError={(event) => {
               logError('img onError', new Error('page image failed to load'), {

@@ -25,20 +25,24 @@ export function ConfirmActionDialog({
       <AlertDialog.Trigger asChild>{trigger}</AlertDialog.Trigger>
 
       <AlertDialog.Portal>
-        <AlertDialog.Overlay className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm" />
+        <AlertDialog.Overlay className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs" />
 
-        <AlertDialog.Content className="fixed top-1/2 left-1/2 z-50 w-87.5 -translate-x-1/2 -translate-y-1/2 rounded-lg border border-(--border) bg-(--card-bg) p-4 shadow-xl">
-          <AlertDialog.Title className="mb-2 font-semibold text-lg">
+        <AlertDialog.Content className="fixed top-1/2 left-1/2 z-50 w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-lg border border-(--border)/40 bg-(--card-bg) p-5 shadow-xl">
+          <AlertDialog.Title className="font-semibold text-base">
             {title}
           </AlertDialog.Title>
 
-          {description && (
-            <AlertDialog.Description className="mb-4 text-(--meta-text) text-sm">
+          {description ? (
+            <AlertDialog.Description className="mt-0.5 text-(--meta-text) text-sm">
               {description}
+            </AlertDialog.Description>
+          ) : (
+            <AlertDialog.Description className="sr-only">
+              {title}
             </AlertDialog.Description>
           )}
 
-          <div className="flex justify-end gap-2">
+          <div className="mt-5 flex justify-end gap-2">
             <AlertDialog.Cancel asChild>
               <CommonButton type="button" tooltip={cancelText}>
                 <ResetIcon />

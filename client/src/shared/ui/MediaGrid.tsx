@@ -135,10 +135,7 @@ export function MediaGrid({
                   </div>
                 )}
 
-                <FallbackIcon
-                  size={12}
-                  className="absolute bottom-1 left-1"
-                />
+                <FallbackIcon size={12} className="absolute bottom-1 left-1" />
 
                 {isSelected && (
                   <div className="absolute top-2 right-2 z-10 rounded bg-(--button-hover-bg) px-2 py-0.5 text-xs">

@@ -28,7 +28,7 @@ export function KioskSelector({
                 : 'text-muted-foreground'
             } ${
               copyMode
-                ? 'outline outline-2 outline-dashed outline-(--button-hover-bg)'
+                ? 'outline outline-dashed outline-(--button-hover-bg) outline-2'
                 : ''
             }`}
           >

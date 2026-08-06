@@ -23,6 +23,7 @@ export * from './AppearanceButton';
 export { DiskUsageView } from './disk-usage-view/DiskUsageView';
 export { DndSortableList } from './DndSortableList';
 export { ConfirmActionDialog } from './common/ConfirmActionDialog';
+export { CommonDialog } from './common/CommonDialog';
 export { FormField, sharedInputStyles } from './common/FormField';
 export * from './IntegrationForm';
 export { SeasonOverlay } from './season-overlay/SeasonOverlay';

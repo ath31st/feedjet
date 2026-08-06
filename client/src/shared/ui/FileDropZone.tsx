@@ -17,8 +17,12 @@ export function FileDropZone({
   activeClassName = 'border-dashed border-(--button-hover-bg) bg-(--button-hover-bg)/20',
   inactiveClassName = 'border-transparent',
 }: FileDropZoneProps) {
-  const { isDragOver, onDragOver, onDragLeave, onDrop: handleDrop } =
-    useFileDropZone(onDrop);
+  const {
+    isDragOver,
+    onDragOver,
+    onDragLeave,
+    onDrop: handleDrop,
+  } = useFileDropZone(onDrop);
 
   return (
     <div

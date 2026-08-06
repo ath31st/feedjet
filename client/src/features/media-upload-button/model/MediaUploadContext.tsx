@@ -22,7 +22,9 @@ export function MediaUploadContextProvider({
 export function useMediaUploadContext() {
   const ctx = useContext(MediaUploadContext);
   if (!ctx) {
-    throw new Error('useMediaUploadContext must be used within MediaUploadArea');
+    throw new Error(
+      'useMediaUploadContext must be used within MediaUploadArea',
+    );
   }
   return ctx;
 }

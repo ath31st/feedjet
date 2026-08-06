@@ -1,8 +1,5 @@
 import { useAppFeaturesStore } from '@/entities/app-features';
-import {
-  getWidgetPresentation,
-  type ScenarioItem,
-} from '@/entities/scenario';
+import { getWidgetPresentation, type ScenarioItem } from '@/entities/scenario';
 import { ITEM_CONFIG } from '../ui/ItemTypeConfig';
 
 export function useItemRow(item: ScenarioItem) {

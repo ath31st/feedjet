@@ -1,6 +1,6 @@
-import * as Dialog from '@radix-ui/react-dialog';
 import { useKioskForm } from '../model/useKioskForm';
 import type { Kiosk, NewKiosk, UpdateKiosk } from '@/entities/kiosk';
+import { CommonDialog } from '@/shared/ui/common';
 import { KioskForm } from './KioskForm';
 
 type Props =
@@ -25,20 +25,18 @@ export function KioskDialog(props: Props) {
   const { form, submit, cancel, mode } = useKioskForm(props);
 
   return (
-    <Dialog.Root open={props.open} onOpenChange={props.onClose}>
-      <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 bg-black/50" />
+    <CommonDialog open={props.open} onClose={props.onClose} size="md">
+      <CommonDialog.Header
+        title={
+          props.mode === 'create' ? 'Создать киоск' : 'Редактировать киоск'
+        }
+      />
 
-        <Dialog.Content className="fixed top-1/2 left-1/2 w-125 -translate-x-1/2 -translate-y-1/2 rounded-lg bg-(--card-bg) p-5 shadow-xl">
-          <Dialog.Title className="mb-4 font-semibold text-lg">
-            {props.mode === 'create' ? 'Создать киоск' : 'Редактировать киоск'}
-          </Dialog.Title>
-
-          <form onSubmit={submit}>
-            <KioskForm mode={mode} form={form} onCancel={cancel} />
-          </form>
-        </Dialog.Content>
-      </Dialog.Portal>
-    </Dialog.Root>
+      <CommonDialog.Body>
+        <form onSubmit={submit}>
+          <KioskForm mode={mode} form={form} onCancel={cancel} />
+        </form>
+      </CommonDialog.Body>
+    </CommonDialog>
   );
 }

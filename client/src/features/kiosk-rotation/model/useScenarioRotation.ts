@@ -1,9 +1,6 @@
 import { useEffect, useEffectEvent, useMemo, useState } from 'react';
 import type { ScenarioItem } from '@shared/types/scenario';
-import {
-  isItemWithinShowPeriod,
-  useScenarioStore,
-} from '@/entities/scenario';
+import { isItemWithinShowPeriod, useScenarioStore } from '@/entities/scenario';
 import { useLocalToday } from '@/shared/lib';
 import { useUiConfigStore } from '@/entities/ui-config';
 import { useAppFeaturesStore } from '@/entities/app-features';

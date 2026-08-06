@@ -1,8 +1,7 @@
-import * as Dialog from '@radix-ui/react-dialog';
 import type { ScheduleEvent, NewScheduleEvent } from '@/entities/schedule';
 import { ScheduleSlotEventForm } from './ScheduleSlotEventForm';
 import { ScheduleSlotEventList } from './ScheduleSlotEventList';
-import { CommonButton } from '@/shared/ui/common';
+import { CommonButton, CommonDialog } from '@/shared/ui/common';
 import { format, parseISO } from 'date-fns';
 import { ru } from 'date-fns/locale';
 import { useScheduleSlotManagementDialog } from '../model/useScheduleSlotManagementDialog';
@@ -39,47 +38,41 @@ export function ScheduleSlotManagementDialog({
   } = useScheduleSlotManagementDialog({ onCreate, onUpdate });
 
   return (
-    <Dialog.Root open={open} onOpenChange={onClose}>
-      <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 bg-black/50" />
-        <Dialog.Content className="fixed top-1/2 left-1/2 w-125 max-w-[90vw] -translate-x-1/2 -translate-y-1/2 rounded-lg bg-(--card-bg) p-5 shadow-xl">
-          <Dialog.Title className="mb-4 font-semibold text-lg">
-            {format(parseISO(date), 'd MMMM yyyy', { locale: ru })} {startTime}
-          </Dialog.Title>
-          <Dialog.Description className="sr-only">
-            Управление событиями для выбранного слота расписания
-          </Dialog.Description>
+    <CommonDialog open={open} onClose={onClose} size="md">
+      <CommonDialog.Header
+        title={`${format(parseISO(date), 'd MMMM yyyy', { locale: ru })} ${startTime}`}
+      />
 
-          {mode === 'view' && (
-            <>
-              <ScheduleSlotEventList
-                events={events}
-                onEdit={handleEdit}
-                onDelete={onDelete}
-              />
-              <div className="mt-4 flex justify-end">
-                <CommonButton
-                  type="button"
-                  onClick={setCreateMode}
-                  disabled={false}
-                >
-                  <PlusIcon />
-                </CommonButton>
-              </div>
-            </>
-          )}
-
-          {(mode === 'create' || mode === 'edit') && (
-            <ScheduleSlotEventForm
-              date={date}
-              time={startTime}
-              initialData={editing || { date, startTime }}
-              onSubmit={handleFormSubmit}
-              onCancel={handleCancel}
+      <CommonDialog.Body>
+        {mode === 'view' && (
+          <>
+            <ScheduleSlotEventList
+              events={events}
+              onEdit={handleEdit}
+              onDelete={onDelete}
             />
-          )}
-        </Dialog.Content>
-      </Dialog.Portal>
-    </Dialog.Root>
+            <div className="mt-4 flex justify-end">
+              <CommonButton
+                type="button"
+                onClick={setCreateMode}
+                disabled={false}
+              >
+                <PlusIcon />
+              </CommonButton>
+            </div>
+          </>
+        )}
+
+        {(mode === 'create' || mode === 'edit') && (
+          <ScheduleSlotEventForm
+            date={date}
+            time={startTime}
+            initialData={editing || { date, startTime }}
+            onSubmit={handleFormSubmit}
+            onCancel={handleCancel}
+          />
+        )}
+      </CommonDialog.Body>
+    </CommonDialog>
   );
 }

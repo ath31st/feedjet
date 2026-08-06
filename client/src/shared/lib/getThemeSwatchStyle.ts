@@ -1,9 +1,7 @@
 import type { CSSProperties } from 'react';
 
 /** Equal-width hard-stop gradient for 1–N theme preview colors. */
-export function getThemeSwatchStyle(
-  colors: readonly string[],
-): CSSProperties {
+export function getThemeSwatchStyle(colors: readonly string[]): CSSProperties {
   if (colors.length === 0) return {};
   if (colors.length === 1) return { backgroundColor: colors[0] };
 

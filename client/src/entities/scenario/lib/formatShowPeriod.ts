@@ -7,10 +7,7 @@ export function parseYmdLocal(ymd: string): Date {
 }
 
 function fmtShortYmd(ymd: string): string {
-  return format(parseYmdLocal(ymd), 'd MMM', { locale: ru }).replace(
-    /\.$/,
-    '',
-  );
+  return format(parseYmdLocal(ymd), 'd MMM', { locale: ru }).replace(/\.$/, '');
 }
 
 export function formatShowPeriodBadge(

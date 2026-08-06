@@ -29,15 +29,11 @@ export function formatCountdownRu(totalSeconds: number): string {
   const parts: string[] = [];
 
   if (hours > 0) {
-    parts.push(
-      `${hours} ${pluralize(hours, 'час', 'часа', 'часов')}`,
-    );
+    parts.push(`${hours} ${pluralize(hours, 'час', 'часа', 'часов')}`);
   }
 
   if (minutes > 0 || hours === 0) {
-    parts.push(
-      `${minutes} ${pluralize(minutes, 'минута', 'минуты', 'минут')}`,
-    );
+    parts.push(`${minutes} ${pluralize(minutes, 'минута', 'минуты', 'минут')}`);
   }
 
   return parts.join(' ');

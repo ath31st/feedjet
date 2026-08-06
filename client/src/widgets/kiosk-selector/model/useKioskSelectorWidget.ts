@@ -1,4 +1,8 @@
-import { useGetActiveKiosks, useKioskStore, type Kiosk } from '@/entities/kiosk';
+import {
+  useGetActiveKiosks,
+  useKioskStore,
+  type Kiosk,
+} from '@/entities/kiosk';
 import { useScenarioCopyStore } from '@/entities/scenario';
 
 export function useKioskSelectorWidget() {
