@@ -1,4 +1,5 @@
 import { formatBytes } from '@/shared/lib/formatBytes';
+import { Spinner } from '@/shared/ui';
 import { ProgressBar } from './ProgressBar';
 
 interface DiskUsageViewProps {
@@ -9,7 +10,7 @@ interface DiskUsageViewProps {
 
 export function DiskUsageView({ used, total, isLoading }: DiskUsageViewProps) {
   if (isLoading) {
-    return <span className="text-(--meta-text) text-xs">Загрузка…</span>;
+    return <Spinner size="sm" />;
   }
 
   const usedPercent = (used / total) * 100;

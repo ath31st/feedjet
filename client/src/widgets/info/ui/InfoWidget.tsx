@@ -1,4 +1,4 @@
-import { LoadingThreeDotsJumping } from '@/shared/ui/LoadingThreeDotsJumping';
+import { LoadingCenter } from '@/shared/ui';
 import { WeatherForecast } from './WeatherForecast';
 import { MonthCalendar } from './MonthCalendar';
 import { InfoHeader } from './InfoHeader';
@@ -26,11 +26,7 @@ export function InfoWidget({ rotate }: InfoWidgetProps) {
   } = useInfoWidget(rotate);
 
   if (isLoading) {
-    return (
-      <div className="flex h-screen w-screen items-center justify-center">
-        <LoadingThreeDotsJumping />
-      </div>
-    );
+    return <LoadingCenter fullScreen spinnerSize="lg" />;
   }
 
   const sidePanel = offlineMode ? (

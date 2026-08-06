@@ -6,7 +6,7 @@ import {
   useIsXl,
   isRotate90,
 } from '@/shared/lib';
-import { LoadingThreeDotsJumping } from '@/shared/ui/LoadingThreeDotsJumping';
+import { LoadingCenter } from '@/shared/ui';
 import { ScheduleHeader } from './ScheduleHeader';
 import { DaysColumn } from './DaysColumn';
 import { TimeGrid } from './TimeGrid';
@@ -50,11 +50,7 @@ export function ScheduleWidget({ rotate }: ScheduleWidgetProps) {
     : 0;
 
   if (isLoading) {
-    return (
-      <div className="flex h-screen w-screen items-center justify-center">
-        <LoadingThreeDotsJumping />
-      </div>
-    );
+    return <LoadingCenter fullScreen spinnerSize="lg" />;
   }
 
   return (

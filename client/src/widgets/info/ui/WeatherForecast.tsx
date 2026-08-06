@@ -1,5 +1,5 @@
 import type { WeatherForecast as Forecast } from '@/entities/weather-forecast';
-import { LoadingThreeDotsJumping } from '@/shared/ui/LoadingThreeDotsJumping';
+import { LoadingCenter } from '@/shared/ui';
 
 interface WeatherForecastProps {
   locationTitle?: string;
@@ -21,7 +21,7 @@ export function WeatherForecast({
   if (isLoading) {
     return (
       <div className="flex h-full flex-1 items-center justify-center">
-        <LoadingThreeDotsJumping />
+        <LoadingCenter spinnerSize="lg" className="min-h-0" />
       </div>
     );
   }

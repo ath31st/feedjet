@@ -3,7 +3,12 @@ import { TransformPreview } from './TransformPreview';
 import { CommonSwitch, IconButton } from '@/shared/ui/common';
 import { ResetIcon, UpdateIcon } from '@radix-ui/react-icons';
 import { Copy, SaveIcon } from 'lucide-react';
-import { TooltipWrapper, SliderControl, ColorControl } from '@/shared/ui';
+import {
+  FormSkeleton,
+  TooltipWrapper,
+  SliderControl,
+  ColorControl,
+} from '@/shared/ui';
 import { useBirthdayWidgetTransformSettings } from '../model/useBirthdayWidgetTransformSettings';
 
 export function BirthdayWidgetTransformSettings() {
@@ -27,7 +32,7 @@ export function BirthdayWidgetTransformSettings() {
   } = useBirthdayWidgetTransformSettings();
 
   if (isTransformLoading || isBackgroundLoading || !localTransform) {
-    return <div className="w-full text-(--meta-text) text-sm">Загрузка...</div>;
+    return <FormSkeleton fields={4} />;
   }
 
   return (

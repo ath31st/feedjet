@@ -1,4 +1,4 @@
-import { LoadingThreeDotsJumping } from '@/shared/ui';
+import { ListSkeleton } from '@/shared/ui';
 import { IntegrationCard } from './IntegrationCard';
 import { useIntegrationWidget } from '../model/useIntegrationWidget';
 import { IntegrationUpdateDialog } from '@/features/integration-update';
@@ -14,7 +14,7 @@ export function IntegrationList() {
     handleUpdateIntegration,
   } = useIntegrationWidget();
 
-  if (isLoadingIntegrations) return <LoadingThreeDotsJumping />;
+  if (isLoadingIntegrations) return <ListSkeleton />;
   if (!integrations?.length) return <p>Интеграции отсутствуют</p>;
 
   return (

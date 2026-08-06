@@ -1,5 +1,5 @@
 import { useBranding } from '../model/useBrandingConfig';
-import { FormField, sharedInputStyles } from '@/shared/ui';
+import { FormField, FormSkeleton, sharedInputStyles } from '@/shared/ui';
 import { CommonButton } from '@/shared/ui/common';
 import { CheckIcon, ResetIcon } from '@radix-ui/react-icons';
 
@@ -7,7 +7,7 @@ export function BrandingForm() {
   const { form, onSubmit, isLoading, onCancel } = useBranding();
 
   if (isLoading) {
-    return null;
+    return <FormSkeleton fields={2} />;
   }
 
   const {

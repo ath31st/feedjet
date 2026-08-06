@@ -2,6 +2,7 @@ import type { TickerConfig } from '@/entities/ticker-config';
 import {
   ColorControl,
   FormField,
+  FormSkeleton,
   sharedInputStyles,
   SliderControl,
 } from '@/shared/ui';
@@ -30,7 +31,7 @@ export function TickerConfigSettings({
   handleRollbackChanges,
 }: TickerConfigSettingsProps) {
   if (isConfigLoading || !localConfig) {
-    return <div className="w-full text-(--meta-text) text-sm">Загрузка...</div>;
+    return <FormSkeleton fields={5} />;
   }
 
   return (

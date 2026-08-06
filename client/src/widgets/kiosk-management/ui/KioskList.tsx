@@ -1,4 +1,4 @@
-import { LoadingThreeDotsJumping } from '@/shared/ui/LoadingThreeDotsJumping';
+import { ListSkeleton } from '@/shared/ui';
 import { KioskCard } from './KioskCard';
 import { useKioskList } from '../model/useKioskList';
 import { CommonButton } from '@/shared/ui/common';
@@ -16,7 +16,7 @@ export function KioskList() {
     editKiosk,
   } = useKioskList();
 
-  if (isLoading) return <LoadingThreeDotsJumping />;
+  if (isLoading) return <ListSkeleton />;
   if (!kiosks?.length) return <p>В базе данных нет киосков</p>;
 
   return (

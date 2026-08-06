@@ -1,4 +1,4 @@
-import { LoadingThreeDotsJumping } from '@/shared/ui';
+import { RowListSkeleton } from '@/shared/ui';
 import { BirthdayCard } from './BirthdayCard';
 import { useBirthdayList } from '../model/useBirthdayList';
 import { PopoverHint } from '@/shared/ui/common';
@@ -16,7 +16,7 @@ export function BirthdayList() {
     cancelEdit,
   } = useBirthdayList();
 
-  if (isLoading) return <LoadingThreeDotsJumping />;
+  if (isLoading) return <RowListSkeleton count={6} />;
   if (!birthdays?.length) return <p>В базе данных нет дней рождения</p>;
 
   return (

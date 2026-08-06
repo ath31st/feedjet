@@ -1,5 +1,5 @@
 import type { ScenarioItem } from '@/entities/scenario';
-import { LoadingState } from './LoadingState';
+import { ScenarioItemsSkeleton } from '@/shared/ui';
 import { ItemsSortableList } from './ItemsSortableList';
 import { EmptyState } from './EmptyState';
 import { Header } from './Header';
@@ -56,7 +56,7 @@ export function ScenarioEditor({
 
       <div className="flex-1 overflow-y-auto">
         {isLoading ? (
-          <LoadingState />
+          <ScenarioItemsSkeleton />
         ) : items.length === 0 ? (
           <EmptyState />
         ) : (

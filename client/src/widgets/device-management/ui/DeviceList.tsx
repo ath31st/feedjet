@@ -1,4 +1,4 @@
-import { LoadingThreeDotsJumping } from '@/shared/ui';
+import { ListSkeleton } from '@/shared/ui';
 import { DeviceCard } from './DeviceCard';
 import { useDeviceWidget } from '../model/useDeviceManagement';
 import type { Device } from '@/entities/device';
@@ -11,7 +11,7 @@ export function DeviceList() {
     handleDeleteDevice,
   } = useDeviceWidget();
 
-  if (isLoading) return <LoadingThreeDotsJumping />;
+  if (isLoading) return <ListSkeleton />;
   if (!devices?.length) return <p>Устройства отсутствуют</p>;
 
   return (

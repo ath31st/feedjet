@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMe } from '@/features/auth';
-import { LoadingThreeDotsJumping } from '@/shared/ui/LoadingThreeDotsJumping';
+import { LoadingCenter } from '@/shared/ui';
 
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate();
@@ -14,7 +14,7 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   }, [error, navigate]);
 
   if (isLoading) {
-    return <LoadingThreeDotsJumping />;
+    return <LoadingCenter fullScreen spinnerSize="4xl" />;
   }
 
   if (error?.data?.code === 'UNAUTHORIZED') {

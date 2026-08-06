@@ -1,4 +1,4 @@
-import { BirthdayTransformView, LoadingThreeDotsJumping } from '@/shared/ui';
+import { BirthdayTransformView, LoadingCenter } from '@/shared/ui';
 import { useBirthdayWidgetModel } from '../model/useBirthdayWidget';
 import { calcFontSize } from '../lib/selectors';
 
@@ -19,11 +19,7 @@ export function BirthdayWidget({ rotate }: BirthdayWidgetProps) {
   const fontSizeXl = calcFontSize(isEffectiveXl, birthdays.length);
 
   if (isLoading || isLoadingTransform) {
-    return (
-      <div className="flex h-screen w-screen items-center justify-center">
-        <LoadingThreeDotsJumping />
-      </div>
-    );
+    return <LoadingCenter fullScreen spinnerSize="lg" />;
   }
 
   if (!birthdays.length) {

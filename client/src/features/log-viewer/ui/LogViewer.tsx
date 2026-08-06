@@ -1,6 +1,7 @@
 import { LogCard } from './LogCard';
 import { LevelMultiSelect } from './LevelMultiSelect';
 import { ConfirmActionDialog } from '@/shared/ui';
+import { TextLinesSkeleton } from '@/shared/ui';
 import { IconButton, SimpleDropdownMenu } from '@/shared/ui/common';
 import {
   ThickArrowLeftIcon,
@@ -42,17 +43,7 @@ export function LogViewer() {
   } = useLogViewer();
 
   if (isFilesLoading) {
-    return (
-      <div className="space-y-2 p-4">
-        {Array.from({ length: 6 }).map((_, i) => (
-          <div
-            // biome-ignore lint/suspicious/noArrayIndexKey: skeleton
-            key={i}
-            className="h-8 animate-pulse rounded bg-(--border)"
-          />
-        ))}
-      </div>
-    );
+    return <TextLinesSkeleton count={6} lineClassName="h-8" className="p-4" />;
   }
 
   if (!file || files.length === 0) {
@@ -188,15 +179,7 @@ export function LogViewer() {
 
       <div className="min-h-0 flex-1 overflow-auto rounded-lg border border-(--border) p-2">
         {showInitialSkeleton ? (
-          <div className="space-y-2 p-2">
-            {Array.from({ length: 8 }).map((_, i) => (
-              <div
-                // biome-ignore lint/suspicious/noArrayIndexKey: skeleton
-                key={i}
-                className="h-6 animate-pulse rounded bg-(--border)"
-              />
-            ))}
-          </div>
+          <TextLinesSkeleton count={8} className="p-2" />
         ) : logs.length === 0 ? (
           <div className="p-6 text-center text-(--meta-text) text-sm">
             Нет записей по текущим фильтрам

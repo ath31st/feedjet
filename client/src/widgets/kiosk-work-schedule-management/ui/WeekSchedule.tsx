@@ -1,3 +1,4 @@
+import { FormSkeleton } from '@/shared/ui';
 import { DayScheduleCard } from './DayScheduleCard';
 import { useWeekSchedule } from '../model/useWeekSchedule';
 
@@ -9,7 +10,7 @@ export function WeekSchedule({ kioskId }: WeekScheduleProps) {
   const { isLoading, schedules, handleChange, isLoadingIntegration } =
     useWeekSchedule(kioskId);
 
-  if (isLoading || isLoadingIntegration) return <div>Загрузка...</div>;
+  if (isLoading || isLoadingIntegration) return <FormSkeleton fields={7} />;
 
   return (
     <div className="relative flex flex-col gap-2">

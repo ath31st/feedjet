@@ -1,4 +1,5 @@
 import { SettingsCard } from './SettingsCard';
+import { Spinner } from './loading';
 
 interface StatusMessageCardProps {
   title: string;
@@ -11,12 +12,12 @@ export function StatusMessageCard({
   message,
   className,
 }: StatusMessageCardProps) {
+  const isLoading = message.includes('Загрузка');
+
   return (
     <SettingsCard title={title} className={className}>
-      <div className="py-6 text-center">
-        <div className="mb-2 text-2xl">
-          {message.includes('Загрузка') ? '⏳' : '📺'}
-        </div>
+      <div className="flex flex-col items-center gap-3 py-6 text-center">
+        {isLoading ? <Spinner size="lg" /> : <div className="text-2xl">📺</div>}
         <div>{message}</div>
       </div>
     </SettingsCard>

@@ -4,7 +4,7 @@ import {
   SeasonOverlay,
   StaticBackground,
   Rotator,
-  LoadingThreeDotsJumping,
+  LoadingCenter,
 } from '@/shared/ui';
 import {
   useScenarioRotation,
@@ -43,11 +43,7 @@ export function KioskPage() {
   });
 
   if (scenarioLoading) {
-    return (
-      <div className="flex h-screen w-screen items-center justify-center">
-        <LoadingThreeDotsJumping />
-      </div>
-    );
+    return <LoadingCenter fullScreen spinnerSize="4xl" />;
   }
 
   if (!currentItem) {

@@ -1,4 +1,5 @@
 /** biome-ignore-all lint/a11y: disable all a11y rules */
+import { MediaGridSkeleton } from '@/shared/ui';
 import { buildImageUrl } from '@/entities/image';
 import { buildPdfUrl } from '@/entities/pdf';
 import { buildVideoUrl } from '@/entities/video';
@@ -36,19 +37,7 @@ export function MediaGrid({
   );
 
   if (isLoading) {
-    return (
-      <div className="flex-1 overflow-y-auto p-2">
-        <div className="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-3">
-          {Array.from({ length: 12 }).map((_, i) => (
-            <div
-              // biome-ignore lint/suspicious/noArrayIndexKey: skeleton
-              key={i}
-              className="h-42 animate-pulse rounded-lg bg-(--border)"
-            />
-          ))}
-        </div>
-      </div>
-    );
+    return <MediaGridSkeleton />;
   }
 
   if (media.length === 0 && folders.length === 0) {

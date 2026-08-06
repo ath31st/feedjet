@@ -1,3 +1,4 @@
+import { BackgroundGridSkeleton } from '@/shared/ui';
 import { useBackgroundManager } from '../model/useBackgroundManager';
 import { BackgroundGrid } from './BackgroundGrid';
 import { HiddenFileInput } from './HiddenFileInput';
@@ -18,7 +19,7 @@ export function ManageBirthdayBackground() {
   } = useBackgroundManager();
 
   if (isLoading) {
-    return <div className="text-sm opacity-50">Загрузка…</div>;
+    return <BackgroundGridSkeleton />;
   }
 
   return (

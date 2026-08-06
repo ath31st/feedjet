@@ -1,6 +1,6 @@
 import { Cross1Icon } from '@radix-ui/react-icons';
 import { useRssManagement } from '../model/useRssManagement';
-import { LoadingThreeDotsJumping } from '@/shared/ui/LoadingThreeDotsJumping';
+import { RowListSkeleton } from '@/shared/ui';
 import { CommonSwitch, IconButton } from '@/shared/ui/common';
 import { RssIcon } from 'lucide-react';
 
@@ -8,7 +8,7 @@ export function FeedList() {
   const { feeds, feedsLoading, handleDeleteFeed, handleUpdateFeed } =
     useRssManagement();
 
-  if (feedsLoading) return <LoadingThreeDotsJumping />;
+  if (feedsLoading) return <RowListSkeleton />;
   if (!feeds?.length) return <p>В базе данных нет RSS-лент</p>;
 
   return (
