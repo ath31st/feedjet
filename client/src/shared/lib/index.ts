@@ -11,6 +11,7 @@ export * from './getImageWidthByCells';
 export * from './getOnlyDateStr';
 export * from './getRandomFallbackImage';
 export * from './getTextSizeByCells';
+export * from './useLocalToday';
 export * from './useIsXl';
 export * from './isValidUrl';
 export * from './useEnv';

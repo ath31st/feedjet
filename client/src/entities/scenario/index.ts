@@ -11,3 +11,4 @@ export * from './model/scenarioStore';
 export * from './model/scenarioCopyStore';
 export * from './const/widgetLabelIconConsts';
 export * from './lib/tempId';
+export * from './lib/showPeriod';

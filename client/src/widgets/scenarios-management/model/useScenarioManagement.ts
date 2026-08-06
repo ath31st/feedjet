@@ -1,12 +1,14 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   useScenario,
   useReplaceScenarioItems,
   useScenarioCopyStore,
   nextTempScenarioItemId,
+  isItemPlayableToday,
   type ScenarioItem,
   type ReplaceScenarioItemInput,
 } from '@/entities/scenario';
+import { useLocalToday } from '@/shared/lib';
 import { queryClient, trpcWithProxy } from '@/shared/api';
 import { toast } from 'sonner';
 
@@ -70,6 +72,7 @@ export function useScenarioManagement(effectiveKioskId: number) {
   const { data: scenario, isLoading } = useScenario(effectiveKioskId);
   const [localItems, setLocalItems] = useState<ScenarioItem[]>([]);
   const [isDirty, setIsDirty] = useState(false);
+  const today = useLocalToday();
 
   const replaceItems = useReplaceScenarioItems(effectiveKioskId);
   const isCopyMode = useScenarioCopyStore((s) => s.isCopyMode);
@@ -170,21 +173,24 @@ export function useScenarioManagement(effectiveKioskId: number) {
     setIsDirty(true);
   };
 
-  const activeItemsCount = localItems.filter((i) => i.isActive).length;
-  const totalDuration = localItems
-    .filter((i) => i.isActive)
-    .reduce((sum, i) => {
-      if (i.type === 'video') {
-        return sum + (i.videoDuration ?? i.durationSeconds ?? 0);
-      }
+  const playableItems = useMemo(
+    () => localItems.filter((i) => isItemPlayableToday(i, today)),
+    [localItems, today],
+  );
 
-      if (i.type === 'pdf') {
-        const pages = Math.max(1, i.pdfPageCount ?? 1);
-        return sum + (i.durationSeconds ?? 10) * pages;
-      }
+  const activeItemsCount = playableItems.length;
+  const totalDuration = playableItems.reduce((sum, i) => {
+    if (i.type === 'video') {
+      return sum + (i.videoDuration ?? i.durationSeconds ?? 0);
+    }
 
-      return sum + (i.durationSeconds ?? 10);
-    }, 0);
+    if (i.type === 'pdf') {
+      const pages = Math.max(1, i.pdfPageCount ?? 1);
+      return sum + (i.durationSeconds ?? 10) * pages;
+    }
+
+    return sum + (i.durationSeconds ?? 10);
+  }, 0);
 
   return {
     scenario,

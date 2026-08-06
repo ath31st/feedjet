@@ -1,6 +1,10 @@
 import { useEffect, useEffectEvent, useMemo, useState } from 'react';
 import type { ScenarioItem } from '@shared/types/scenario';
-import { useScenarioStore } from '@/entities/scenario';
+import {
+  isItemWithinShowPeriod,
+  useScenarioStore,
+} from '@/entities/scenario';
+import { useLocalToday } from '@/shared/lib';
 import { useUiConfigStore } from '@/entities/ui-config';
 import { useAppFeaturesStore } from '@/entities/app-features';
 import { useMatch } from 'react-router-dom';
@@ -12,15 +16,17 @@ export function useScenarioRotation() {
   const offlineMode = useAppFeaturesStore((s) => s.offlineMode);
   const featuresInitialized = useAppFeaturesStore((s) => s.initialized);
   const { scenario, loading: scenarioLoading } = useScenarioStore();
+  const today = useLocalToday();
   const items: ScenarioItem[] = useMemo(
     () =>
       (scenario?.items ?? [])
         .filter((i) => i.isActive)
+        .filter((i) => isItemWithinShowPeriod(i, today))
         .filter(
           (i) =>
             !(offlineMode && i.type === 'widget' && i.widgetType === 'rss'),
         ),
-    [scenario?.items, offlineMode],
+    [scenario?.items, offlineMode, today],
   );
   const [currentItemId, setCurrentItemId] = useState<number | null>(null);
   const [isRotationLocked, setIsRotationLocked] = useState(false);
