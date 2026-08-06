@@ -18,25 +18,35 @@ export function ContentTabs({
 }: ContentTabsProps) {
   return (
     <div
-      className={`flex w-full justify-center border-(--border) border-b-2 ${className || ''}`.trim()}
+      className={`flex w-full items-center justify-center border-(--border) border-b-4 ${className || ''}`.trim()}
     >
-      {tabs.map((tab) => (
-        <button
-          type="button"
-          key={tab.value}
-          onClick={() => onChange(tab.value)}
-          className={`relative -mb-px h-10 w-35 cursor-pointer px-4 text-md transition-colors ${
-            value === tab.value
-              ? 'border-(--border) border-b-6'
-              : 'hover:bg-(--button-hover-bg)'
-          }
-          `
-            .trim()
-            .replace(/\s+/g, ' ')}
-        >
-          {tab.label}
-        </button>
-      ))}
+      {tabs.map((tab) => {
+        const isActive = value === tab.value;
+
+        return (
+          <button
+            key={tab.value}
+            type="button"
+            onClick={() => onChange(tab.value)}
+            className={`relative -mb-px h-10 w-38 cursor-pointer px-6 font-medium text-md outline-none transition-colors ${
+              isActive
+                ? 'text-(--text) hover:text-(--text)'
+                : 'text-muted-foreground hover:text-(--border)'
+            }`}
+          >
+            {isActive && (
+              <span
+                className="pointer-events-none absolute top-0 right-0 left-0 h-full"
+                style={{
+                  background:
+                    'linear-gradient(to top, color-mix(in srgb, var(--border) 30%, transparent) 40%, transparent 100%)',
+                }}
+              />
+            )}
+            <span className="relative z-10">{tab.label}</span>
+          </button>
+        );
+      })}
     </div>
   );
 }
