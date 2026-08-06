@@ -18,6 +18,8 @@ function toReplacePayload(items: ScenarioItem[]): ReplaceScenarioItemInput[] {
   for (const item of items) {
     const id = item.id > 0 ? item.id : undefined;
     const durationSeconds = item.durationSeconds ?? undefined;
+    const activeFrom = item.activeFrom ?? null;
+    const activeTo = item.activeTo ?? null;
 
     if (item.type === 'widget') {
       if (item.widgetType == null) continue;
@@ -27,6 +29,8 @@ function toReplacePayload(items: ScenarioItem[]): ReplaceScenarioItemInput[] {
         widgetType: item.widgetType,
         isActive: item.isActive,
         durationSeconds,
+        activeFrom,
+        activeTo,
       });
       continue;
     }
@@ -39,6 +43,8 @@ function toReplacePayload(items: ScenarioItem[]): ReplaceScenarioItemInput[] {
         imageId: item.imageId,
         isActive: item.isActive,
         durationSeconds,
+        activeFrom,
+        activeTo,
       });
       continue;
     }
@@ -51,6 +57,8 @@ function toReplacePayload(items: ScenarioItem[]): ReplaceScenarioItemInput[] {
         videoId: item.videoId,
         isActive: item.isActive,
         durationSeconds,
+        activeFrom,
+        activeTo,
       });
       continue;
     }
@@ -62,6 +70,8 @@ function toReplacePayload(items: ScenarioItem[]): ReplaceScenarioItemInput[] {
       pdfId: item.pdfId,
       isActive: item.isActive,
       durationSeconds,
+      activeFrom,
+      activeTo,
     });
   }
 

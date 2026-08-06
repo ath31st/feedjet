@@ -1,5 +1,6 @@
 /** biome-ignore-all lint/a11y: disable all a11y rules */
 import type { ScenarioItem } from '@/entities/scenario';
+import { ShowPeriodBadge } from './ShowPeriodBadge';
 import { CommonSwitch, IconButton } from '@/shared/ui/common';
 import { GripVertical, Trash2 } from 'lucide-react';
 import { DurationInput } from '@/shared/ui/DurationInput';
@@ -13,6 +14,7 @@ export function ItemRow({
   onToggle,
   onDelete,
   onDurationChange,
+  onShowPeriodClick,
   onClick,
   onPreview,
 }: {
@@ -22,6 +24,7 @@ export function ItemRow({
   onToggle: () => void;
   onDelete: () => void;
   onDurationChange: (v: number) => void;
+  onShowPeriodClick: () => void;
   onClick: () => void;
   onPreview?: () => void;
 }) {
@@ -91,6 +94,14 @@ export function ItemRow({
               />
             </div>
           )}
+
+          <div onClick={(e) => e.stopPropagation()}>
+            <ShowPeriodBadge
+              activeFrom={item.activeFrom}
+              activeTo={item.activeTo}
+              onClick={onShowPeriodClick}
+            />
+          </div>
 
           <div onClick={(e) => e.stopPropagation()}>
             <CommonSwitch checked={item.isActive} onCheckedChange={onToggle} />

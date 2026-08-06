@@ -12,3 +12,4 @@ export * from './model/scenarioCopyStore';
 export * from './const/widgetLabelIconConsts';
 export * from './lib/tempId';
 export * from './lib/showPeriod';
+export * from './lib/formatShowPeriod';
