@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { useGetCurrentConfig, useUpdateConfig } from '@/entities/branding';
+import { useSyncUnsavedSource } from '@/shared/model';
 
 export type BrandingFormValues = {
   id: number;
@@ -20,6 +21,9 @@ export const useBranding = () => {
       scheduleHeaderTitle: '',
     },
   });
+
+  const isDirty = form.formState.isDirty;
+  useSyncUnsavedSource('organization', isDirty);
 
   useEffect(() => {
     if (!brandingConfig) return;

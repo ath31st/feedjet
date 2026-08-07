@@ -10,6 +10,7 @@ import {
 } from '@/entities/scenario';
 import { useLocalToday } from '@/shared/lib';
 import { queryClient, trpcWithProxy } from '@/shared/api';
+import { useSyncUnsavedSource } from '@/shared/model';
 import { toast } from 'sonner';
 
 function toReplacePayload(items: ScenarioItem[]): ReplaceScenarioItemInput[] {
@@ -83,6 +84,7 @@ export function useScenarioManagement(effectiveKioskId: number) {
   const [localItems, setLocalItems] = useState<ScenarioItem[]>([]);
   const [isDirty, setIsDirty] = useState(false);
   const today = useLocalToday();
+  useSyncUnsavedSource('scenarios', isDirty);
 
   const replaceItems = useReplaceScenarioItems(effectiveKioskId);
   const isCopyMode = useScenarioCopyStore((s) => s.isCopyMode);

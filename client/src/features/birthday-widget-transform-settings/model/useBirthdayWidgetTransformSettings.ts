@@ -9,15 +9,24 @@ import {
   type BirthdayWidgetTransform,
 } from '@/entities/birthday-widget-transform';
 import { queryClient, trpcWithProxy } from '@/shared/api';
-import { useEffect, useState } from 'react';
+import { useSyncUnsavedSource, useUnsavedChangesStore } from '@/shared/model';
+import { useEffect, useMemo, useState } from 'react';
 import { toast } from 'sonner';
 import { MOCK_BIRTHDAYS } from '../lib/mockBirthdays';
+
+function isTransformEqual(
+  a: BirthdayWidgetTransform,
+  b: BirthdayWidgetTransform,
+) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
 
 export const useBirthdayWidgetTransformSettings = () => {
   const currentMonth = new Date().getMonth() + 1;
   const [month, setMonth] = useState(currentMonth);
   const [isHalfSetBirthdays, setHalfSetBirthdays] = useState(true);
   const [isCopyMode, setIsCopyMode] = useState(false);
+  const requestLeave = useUnsavedChangesStore((s) => s.requestLeave);
 
   const { data: transformData, isLoading: isTransformLoading } =
     useGetBirthdayWidgetTransformByMonth(month);
@@ -32,6 +41,14 @@ export const useBirthdayWidgetTransformSettings = () => {
 
   const [localTransform, setLocalTransform] =
     useState<BirthdayWidgetTransform | null>(null);
+
+  const isDirty = useMemo(() => {
+    if (!localTransform) return false;
+    if (!transformData) return true;
+    return !isTransformEqual(localTransform, transformData);
+  }, [localTransform, transformData]);
+
+  useSyncUnsavedSource('birthdays-transform', isDirty);
 
   const handleSave = () => {
     if (localTransform) {
@@ -64,7 +81,8 @@ export const useBirthdayWidgetTransformSettings = () => {
 
   const handleMonthChange = async (nextMonth: number) => {
     if (!isCopyMode) {
-      setMonth(nextMonth);
+      if (nextMonth === month) return;
+      requestLeave(() => setMonth(nextMonth));
       return;
     }
 

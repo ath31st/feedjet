@@ -4,7 +4,12 @@ import {
   useUpsertTickerConfig,
   type TickerConfig,
 } from '@/entities/ticker-config';
-import { useEffect, useState } from 'react';
+import { useSyncUnsavedSource } from '@/shared/model';
+import { useEffect, useMemo, useState } from 'react';
+
+function isTickerConfigEqual(a: TickerConfig, b: TickerConfig) {
+  return JSON.stringify(a) === JSON.stringify(b);
+}
 
 export const useTickerManagement = (kioskId: number) => {
   const { data: config, isLoading: isConfigLoading } =
@@ -14,6 +19,21 @@ export const useTickerManagement = (kioskId: number) => {
     useUpsertTickerConfig();
 
   const [localConfig, setLocalConfig] = useState<TickerConfig | null>(null);
+
+  const baselineConfig = useMemo(() => {
+    if (config) return config;
+    if (defaultConfig) {
+      return { ...defaultConfig, kioskId };
+    }
+    return null;
+  }, [config, defaultConfig, kioskId]);
+
+  const isDirty = useMemo(() => {
+    if (!localConfig || !baselineConfig) return false;
+    return !isTickerConfigEqual(localConfig, baselineConfig);
+  }, [localConfig, baselineConfig]);
+
+  useSyncUnsavedSource('ticker', isDirty);
 
   const handleSave = () => {
     if (localConfig) {

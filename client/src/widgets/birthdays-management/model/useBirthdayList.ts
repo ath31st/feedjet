@@ -3,7 +3,8 @@ import {
   useGetAllBirthdays,
   useUpdateBirthday,
 } from '@/entities/birthday';
-import { useState } from 'react';
+import { useSyncUnsavedSource } from '@/shared/model';
+import { useMemo, useState } from 'react';
 
 export function useBirthdayList() {
   const { isLoading, data: birthdays } = useGetAllBirthdays();
@@ -12,6 +13,15 @@ export function useBirthdayList() {
 
   const [editingId, setEditingId] = useState<number | null>(null);
   const [fullNameDraft, setFullNameDraft] = useState('');
+
+  const isListDirty = useMemo(() => {
+    if (editingId === null) return false;
+    const current = birthdays?.find((b) => b.id === editingId);
+    if (!current) return false;
+    return current.fullName !== fullNameDraft;
+  }, [editingId, birthdays, fullNameDraft]);
+
+  useSyncUnsavedSource('birthdays-list', isListDirty);
 
   const handleDelete = (id: number) => {
     deleteBirthday.mutate({ id });

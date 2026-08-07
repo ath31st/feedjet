@@ -1,18 +1,18 @@
 import * as Tabs from '@radix-ui/react-tabs';
-import { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 
 import { KioskSelectorWidget } from '@/widgets/kiosk-selector';
 import { AdminHelpPanel } from '@/widgets/admin-help-panel';
 import { useAdminHelp } from '@/features/admin-help-toggle';
-import { AdminTabTrigger, SlideSlot } from '@/shared/ui';
+import { AdminTabTrigger, SlideSlot, UnsavedChangesDialog } from '@/shared/ui';
 
 import { getVisibleAdminTabs } from '../model/tabs';
 import { useAdminPageGate } from '../model/useAdminPageGate';
+import { useAdminTabLeaveGuard } from '../model/useAdminTabLeaveGuard';
 
 export function AdminPage() {
   const { ready, kiosk, offlineMode } = useAdminPageGate();
-  const [tab, setTab] = useState('scenarios');
+  const { tab, handleTabChange, leaveDialog } = useAdminTabLeaveGuard();
   const isHelpEnabled = useAdminHelp((s) => s.enabled);
 
   if (!ready || !kiosk) {
@@ -45,7 +45,7 @@ export function AdminPage() {
         <KioskSelectorWidget />
       </SlideSlot>
 
-      <Tabs.Root value={tab} onValueChange={setTab}>
+      <Tabs.Root value={tab} onValueChange={handleTabChange}>
         <div className="flex items-start gap-6">
           <Tabs.List
             className="scrollbar-hide flex w-60 shrink-0 flex-col"
@@ -82,6 +82,12 @@ export function AdminPage() {
           </AnimatePresence>
         </div>
       </Tabs.Root>
+
+      <UnsavedChangesDialog
+        open={leaveDialog.open}
+        onStay={leaveDialog.onStay}
+        onDiscard={leaveDialog.onDiscard}
+      />
     </div>
   );
 }
