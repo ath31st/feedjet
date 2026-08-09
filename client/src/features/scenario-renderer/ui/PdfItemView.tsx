@@ -21,7 +21,7 @@ export const PdfItemView = ({
   onEnd,
   isPaused = false,
 }: Props) => {
-  const { pageNumber, pageSrc, onPageImageError } = usePdfItemPlayback({
+  const { pageSrc, onPageImageError } = usePdfItemPlayback({
     fileName,
     durationSeconds,
     onEnd,
@@ -33,7 +33,7 @@ export const PdfItemView = ({
       <AnimatePresence mode="wait">
         {pageSrc ? (
           <motion.img
-            key={pageNumber}
+            key={pageSrc}
             src={pageSrc}
             alt=""
             className="absolute inset-0 z-10 h-full w-full object-contain"

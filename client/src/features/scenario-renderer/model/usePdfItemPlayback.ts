@@ -20,9 +20,12 @@ export function usePdfItemPlayback({
   const pdfDocRef = useRef<PDFDocumentProxy | null>(null);
   const renderTaskRef = useRef<RenderTask | null>(null);
   const endedRef = useRef(false);
+  const pageNumberRef = useRef(1);
   const [pageNumber, setPageNumber] = useState(1);
   const [pageCount, setPageCount] = useState(0);
   const [pageSrc, setPageSrc] = useState<string | null>(null);
+
+  pageNumberRef.current = pageNumber;
 
   const handleEnd = useEffectEvent(() => {
     if (endedRef.current) return;
@@ -106,12 +109,14 @@ export function usePdfItemPlayback({
     };
   }, [pageNumber, pageCount]);
 
+  // Start duration only when a page image is ready — not when pageNumber alone changes
+  // (otherwise the timer runs against the previous page's blob and resets mid-flight).
   useEffect(() => {
     if (pageCount === 0 || !pageSrc || isPaused) return;
 
     const seconds = Math.max(1, durationSeconds ?? 10);
     const timeoutId = window.setTimeout(() => {
-      if (pageNumber >= pageCount) {
+      if (pageNumberRef.current >= pageCount) {
         handleEnd();
         return;
       }
@@ -121,10 +126,9 @@ export function usePdfItemPlayback({
     return () => {
       clearTimeout(timeoutId);
     };
-  }, [pageNumber, pageCount, pageSrc, durationSeconds, isPaused]);
+  }, [pageSrc, pageCount, durationSeconds, isPaused]);
 
   return {
-    pageNumber,
     pageSrc,
     onPageImageError: handleEnd,
   };
