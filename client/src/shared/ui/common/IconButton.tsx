@@ -1,3 +1,4 @@
+import { cn } from '@/shared/lib';
 import type { MouseEventHandler, ReactNode } from 'react';
 import { TooltipWrapper } from '../TooltipWrapper';
 
@@ -24,7 +25,10 @@ export function IconButton({
       onClick={onClick}
       disabled={disabled}
       aria-label={ariaLabel}
-      className={`cursor-pointer rounded-lg p-1 hover:bg-(--button-hover-bg) ${className}`}
+      className={cn(
+        'cursor-pointer rounded-lg p-1 hover:bg-(--button-hover-bg)',
+        className,
+      )}
     >
       {icon}
     </button>

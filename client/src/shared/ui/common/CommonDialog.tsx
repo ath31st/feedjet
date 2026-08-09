@@ -77,7 +77,12 @@ function CommonDialogHeader({
   className = '',
 }: CommonDialogHeaderProps) {
   return (
-    <div className={`mb-4 flex items-start justify-between gap-3 ${className}`}>
+    <div
+      className={cn(
+        'mb-4 flex items-start justify-between gap-3',
+        className,
+      )}
+    >
       <div className="flex items-start gap-3">
         {icon != null &&
           (iconVariant === 'boxed' ? (
@@ -119,7 +124,9 @@ function CommonDialogFooter({
   children,
 }: CommonDialogSectionProps) {
   return (
-    <div className={`mt-5 flex justify-end gap-2 ${className}`}>{children}</div>
+    <div className={cn('mt-5 flex justify-end gap-2', className)}>
+      {children}
+    </div>
   );
 }
 

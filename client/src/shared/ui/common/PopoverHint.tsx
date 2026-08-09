@@ -1,3 +1,4 @@
+import { cn } from '@/shared/lib';
 import * as Popover from '@radix-ui/react-popover';
 import { InfoCircledIcon } from '@radix-ui/react-icons';
 
@@ -20,7 +21,10 @@ export function PopoverHint({ content, trigger, className }: PopoverHintProps) {
         <Popover.Content
           align="start"
           sideOffset={4}
-          className={`z-50 max-w-xs rounded-lg border border-(--border) bg-(--card-bg) p-3 text-sm ${className ?? ''}`}
+          className={cn(
+            'z-50 max-w-xs rounded-lg border border-(--border) bg-(--card-bg) p-3 text-sm',
+            className,
+          )}
         >
           {content}
         </Popover.Content>

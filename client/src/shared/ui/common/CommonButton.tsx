@@ -1,3 +1,4 @@
+import { cn } from '@/shared/lib';
 import type { MouseEventHandler } from 'react';
 import { TooltipWrapper } from '../TooltipWrapper';
 
@@ -20,7 +21,11 @@ export function CommonButton({
 }: CommonButtonProps) {
   const button = (
     <button
-      className={`rounded-lg border border-(--border) bg-(--button-bg) p-2 text-(--button-text) hover:bg-(--button-hover-bg) ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'} ${className}`}
+      className={cn(
+        'rounded-lg border border-(--border) bg-(--button-bg) p-2 text-(--button-text) hover:bg-(--button-hover-bg)',
+        disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer',
+        className,
+      )}
       type={type}
       onClick={onClick}
       disabled={disabled}
