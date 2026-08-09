@@ -1,3 +1,4 @@
+export * from './cn';
 export * from './formatBytes';
 export * from './formatDuration';
 export * from './parseAnimationParam';
