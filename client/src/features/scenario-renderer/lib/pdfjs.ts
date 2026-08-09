@@ -1,5 +1,8 @@
 import { GlobalWorkerOptions, getDocument } from 'pdfjs-dist';
-import pdfWorker from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
+import { installPdfRuntimeCompat } from './pdfCompat';
+import pdfWorker from './pdf.worker.entry.ts?worker&url';
+
+installPdfRuntimeCompat();
 
 GlobalWorkerOptions.workerSrc = pdfWorker;
 
