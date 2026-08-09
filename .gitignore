@@ -42,4 +42,5 @@ server/file-storage
 
 # nginx
 nginx/certs
-.aider*
+
+.cursor
