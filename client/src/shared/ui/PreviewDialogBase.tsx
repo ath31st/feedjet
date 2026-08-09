@@ -18,7 +18,7 @@ export function PreviewDialogBase({
       open={open}
       onOpenChange={onOpenChange}
       size="xl"
-      contentClassName="relative max-w-350 overflow-hidden p-0"
+      contentClassName="max-w-350 overflow-hidden p-0"
     >
       <CommonDialog.HiddenLabel title="Preview" description="Предпросмотр" />
 

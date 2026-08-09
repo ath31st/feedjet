@@ -1,4 +1,5 @@
 /** biome-ignore-all lint/a11y: dialog controls */
+import { cn } from '@/shared/lib';
 import * as Dialog from '@radix-ui/react-dialog';
 import type { ReactNode } from 'react';
 
@@ -54,7 +55,11 @@ function CommonDialogRoot({
         <Dialog.Overlay className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs" />
 
         <Dialog.Content
-          className={`fixed top-1/2 left-1/2 z-50 w-full -translate-x-1/2 -translate-y-1/2 rounded-lg border border-(--border)/40 bg-(--card-bg) p-5 shadow-xl ${contentSizes[size]} ${contentClassName}`}
+          className={cn(
+            'fixed top-1/2 left-1/2 z-51 w-full -translate-x-1/2 -translate-y-1/2 rounded-lg border border-(--border)/40 bg-(--card-bg) p-5 shadow-xl',
+            contentSizes[size],
+            contentClassName,
+          )}
         >
           {children}
         </Dialog.Content>
