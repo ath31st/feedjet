@@ -1,11 +1,13 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import { kioskSlideMotion } from '@/shared/ui';
+import type { AnimationType } from '@/shared/lib/parseAnimationParam';
+import { getKioskSlideMotion } from '@/shared/ui';
 import { usePdfItemPlayback } from '../model/usePdfItemPlayback';
 
 interface Props {
   fileName: string;
   durationSeconds: number | null;
   onEnd: () => void;
+  animation: AnimationType;
   isPaused?: boolean;
 }
 
@@ -13,6 +15,7 @@ export const PdfItemView = ({
   fileName,
   durationSeconds,
   onEnd,
+  animation,
   isPaused = false,
 }: Props) => {
   const { pageSrc, onPageImageError } = usePdfItemPlayback({
@@ -31,7 +34,7 @@ export const PdfItemView = ({
             src={pageSrc}
             alt=""
             className="absolute inset-0 z-10 h-full w-full object-contain"
-            {...kioskSlideMotion}
+            {...getKioskSlideMotion(animation)}
             onError={onPageImageError}
           />
         ) : null}

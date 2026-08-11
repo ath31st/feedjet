@@ -3,14 +3,28 @@ import {
   type AnimationType,
 } from '@/shared/lib/parseAnimationParam';
 
-/** Kiosk scenario slide / PDF page transition (tuned for weak TVs). */
-export const kioskSlideMotion = {
-  initial: { opacity: 0, scale: 1.04, y: 12 },
-  animate: { opacity: 1, scale: 1, y: 0 },
-  exit: { opacity: 0, scale: 0.97, y: -10 },
-  transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] as const },
-  style: { willChange: 'opacity, transform' },
-};
+const kioskSlideWillChange = { willChange: 'opacity, transform' };
+
+/** Lite: tuned for weak TVs. Full: curtain wipe. */
+export function getKioskSlideMotion(animation: AnimationType) {
+  if (isLiteAnimation(animation)) {
+    return {
+      initial: { opacity: 0, scale: 1.04, y: 12 },
+      animate: { opacity: 1, scale: 1, y: 0 },
+      exit: { opacity: 0, scale: 0.97, y: -10 },
+      transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] as const },
+      style: kioskSlideWillChange,
+    };
+  }
+
+  return {
+    initial: { opacity: 0, y: '100%' },
+    animate: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: '-100%' },
+    transition: { duration: 0.75, ease: [0.22, 1, 0.36, 1] as const },
+    style: kioskSlideWillChange,
+  };
+}
 
 export function getFeedCardMotion(animation: AnimationType, index: number) {
   if (isLiteAnimation(animation)) {

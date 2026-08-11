@@ -33,7 +33,7 @@ export { DurationInput } from './DurationInput';
 export {
   adminTabMotion,
   getFeedCardMotion,
-  kioskSlideMotion,
+  getKioskSlideMotion,
   popoverMotion,
   schedulePanelMotion,
 } from './motionPresets';

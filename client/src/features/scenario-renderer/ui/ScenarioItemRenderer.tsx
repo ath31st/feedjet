@@ -80,6 +80,7 @@ export const ScenarioItemRenderer = ({
         fileName={item.pdfFileName}
         durationSeconds={item.durationSeconds}
         onEnd={onPdfEnd}
+        animation={animation}
         isPaused={isPaused}
       />
     );

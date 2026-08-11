@@ -5,7 +5,7 @@ import {
   StaticBackground,
   Rotator,
   LoadingCenter,
-  kioskSlideMotion,
+  getKioskSlideMotion,
 } from '@/shared/ui';
 import {
   useScenarioRotation,
@@ -68,7 +68,7 @@ export function KioskPage() {
         <motion.div
           key={itemKey}
           className="absolute inset-0"
-          {...kioskSlideMotion}
+          {...getKioskSlideMotion(animation)}
         >
           <Rotator rotate={rotate}>
             <SeasonOverlay mode={seasonOverlay} />
