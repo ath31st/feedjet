@@ -1,4 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion';
+import { kioskSlideMotion } from '@/shared/ui';
 import { usePdfItemPlayback } from '../model/usePdfItemPlayback';
 
 interface Props {
@@ -7,13 +8,6 @@ interface Props {
   onEnd: () => void;
   isPaused?: boolean;
 }
-
-const pageMotion = {
-  initial: { opacity: 0, scale: 1.04, y: 12 },
-  animate: { opacity: 1, scale: 1, y: 0 },
-  exit: { opacity: 0, scale: 0.97, y: -10 },
-  transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] as const },
-};
 
 export const PdfItemView = ({
   fileName,
@@ -37,11 +31,7 @@ export const PdfItemView = ({
             src={pageSrc}
             alt=""
             className="absolute inset-0 z-10 h-full w-full object-contain"
-            initial={pageMotion.initial}
-            animate={pageMotion.animate}
-            exit={pageMotion.exit}
-            transition={pageMotion.transition}
-            style={{ willChange: 'opacity, transform' }}
+            {...kioskSlideMotion}
             onError={onPageImageError}
           />
         ) : null}

@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { KioskSelectorWidget } from '@/widgets/kiosk-selector';
 import { AdminHelpPanel } from '@/widgets/admin-help-panel';
 import { useAdminHelp } from '@/features/admin-help-toggle';
-import { AdminTabTrigger, SlideSlot, UnsavedChangesDialog } from '@/shared/ui';
+import { AdminTabTrigger, SlideSlot, UnsavedChangesDialog, adminTabMotion } from '@/shared/ui';
 
 import { getVisibleAdminTabs } from '../model/tabs';
 import { useAdminPageGate } from '../model/useAdminPageGate';
@@ -64,10 +64,7 @@ export function AdminPage() {
             <motion.div
               key={tab}
               className="flex min-w-0 flex-1 gap-6"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.25 }}
+              {...adminTabMotion}
             >
               <div className="min-w-0 flex-1">
                 {activeTab?.render(tabContext) ?? null}

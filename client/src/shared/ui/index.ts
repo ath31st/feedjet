@@ -30,6 +30,13 @@ export * from './IntegrationForm';
 export { SeasonOverlay } from './season-overlay/SeasonOverlay';
 export { BirthdayTransformView } from './BirthdayTransformView';
 export { DurationInput } from './DurationInput';
+export {
+  adminTabMotion,
+  getFeedCardMotion,
+  kioskSlideMotion,
+  popoverMotion,
+  schedulePanelMotion,
+} from './motionPresets';
 export { SlideSlot } from './SlideSlot';
 export * from './folder-tree-node/FolderTreeItem';
 export * from './folder-tree-node/FolderTreeContainer';

@@ -9,7 +9,7 @@ import { AdminHelpPanel } from '@/widgets/admin-help-panel';
 // import { HelpItems as userHelp } from '@/widgets/user-management';
 
 import { useAdminHelp } from '@/features/admin-help-toggle';
-import { AdminTabTrigger } from '@/shared/ui';
+import { AdminTabTrigger, adminTabMotion } from '@/shared/ui';
 
 import { List, Users } from 'lucide-react';
 import type { HelpItem } from '@/entities/help';
@@ -82,10 +82,7 @@ export function SuperAdminPage() {
             <motion.div
               key={tab}
               className="flex min-w-0 flex-1 gap-6"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.25 }}
+              {...adminTabMotion}
             >
               <div className="min-w-0 flex-1">{renderTab()}</div>
 

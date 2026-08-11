@@ -1,10 +1,8 @@
 import { motion } from 'framer-motion';
 import { FeedCard } from './FeedCard';
 import type { FeedItem } from '@/entities/feed';
-import {
-  isLiteAnimation,
-  type AnimationType,
-} from '@/shared/lib/parseAnimationParam';
+import type { AnimationType } from '@/shared/lib/parseAnimationParam';
+import { getFeedCardMotion } from '@/shared/ui';
 
 interface AnimatedFeedCardProps {
   item: FeedItem;
@@ -19,21 +17,11 @@ export function AnimatedFeedCard({
   cellsCount,
   animation,
 }: AnimatedFeedCardProps) {
-  const motionProps = isLiteAnimation(animation)
-    ? {
-        initial: { opacity: 0 },
-        animate: { opacity: 1 },
-        transition: { duration: 1.1, delay: index * 0.1 },
-      }
-    : {
-        initial: { opacity: 0, y: -150 },
-        animate: { opacity: 1, y: 0 },
-        transition: { duration: 0.7, delay: index * 0.1 },
-        layout: true,
-      };
-
   return (
-    <motion.div {...motionProps} className="h-full min-h-0">
+    <motion.div
+      {...getFeedCardMotion(animation, index)}
+      className="h-full min-h-0"
+    >
       <FeedCard item={item} cellsCount={cellsCount} />
     </motion.div>
   );

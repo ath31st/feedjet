@@ -3,15 +3,9 @@ import { CheckIcon, ResetIcon } from '@radix-ui/react-icons';
 import { AnimatePresence, motion } from 'framer-motion';
 import { formatShowPeriodSummary } from '@/entities/scenario';
 import { CommonButton, CommonDialog } from '@/shared/ui/common';
+import { schedulePanelMotion } from '@/shared/ui';
 import { useShowPeriodDialogState } from '../model/useShowPeriodDialogState';
 import { ShowPeriodCalendar } from './ShowPeriodCalendar';
-
-const schedulePanelMotion = {
-  initial: { opacity: 0, height: 0 },
-  animate: { opacity: 1, height: 'auto' },
-  exit: { opacity: 0, height: 0 },
-  transition: { duration: 0.2, ease: 'easeOut' as const },
-};
 
 interface ShowPeriodDialogProps {
   open: boolean;

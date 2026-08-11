@@ -2,6 +2,7 @@ import * as Popover from '@radix-ui/react-popover';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useMemo, useRef, useState, type RefObject } from 'react';
 import { formatDuration } from '../lib/formatDuration';
+import { popoverMotion } from './motionPresets';
 
 interface DurationInputProps {
   value: number;
@@ -30,13 +31,6 @@ function scrollSelectedIntoColumn(btn: HTMLButtonElement | null) {
   parent.scrollTop =
     btn.offsetTop - parent.clientHeight / 2 + btn.clientHeight / 2;
 }
-
-const popoverMotion = {
-  initial: { opacity: 0, y: -6, scale: 0.96 },
-  animate: { opacity: 1, y: 0, scale: 1 },
-  exit: { opacity: 0, y: -6, scale: 0.96 },
-  transition: { duration: 0.15, ease: 'easeOut' as const },
-};
 
 export function DurationInput({
   value,

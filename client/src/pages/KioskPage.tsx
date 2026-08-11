@@ -5,6 +5,7 @@ import {
   StaticBackground,
   Rotator,
   LoadingCenter,
+  kioskSlideMotion,
 } from '@/shared/ui';
 import {
   useScenarioRotation,
@@ -65,18 +66,9 @@ export function KioskPage() {
     <div className="relative h-screen w-screen overflow-hidden">
       <AnimatePresence mode="wait">
         <motion.div
-          //           key={currentWidgetKey}
-          //           initial={{ opacity: 0 }}
-          //           animate={{ opacity: 1 }}
-          //           exit={{ opacity: 0 }}
-          //           transition={{ duration: 1.0 }}
           key={itemKey}
           className="absolute inset-0"
-          initial={{ opacity: 0, scale: 1.04, y: 12 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.97, y: -10 }}
-          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-          style={{ willChange: 'opacity, transform' }}
+          {...kioskSlideMotion}
         >
           <Rotator rotate={rotate}>
             <SeasonOverlay mode={seasonOverlay} />
