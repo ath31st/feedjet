@@ -78,10 +78,7 @@ function CommonDialogHeader({
 }: CommonDialogHeaderProps) {
   return (
     <div
-      className={cn(
-        'mb-4 flex items-start justify-between gap-3',
-        className,
-      )}
+      className={cn('mb-4 flex items-start justify-between gap-3', className)}
     >
       <div className="flex items-start gap-3">
         {icon != null &&

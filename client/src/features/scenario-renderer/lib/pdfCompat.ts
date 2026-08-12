@@ -47,7 +47,10 @@ const installMapUpsert = () => {
   }
 
   if (typeof weakProto.getOrInsertComputed !== 'function') {
-    weakProto.getOrInsertComputed = function getOrInsertComputed(key, callback) {
+    weakProto.getOrInsertComputed = function getOrInsertComputed(
+      key,
+      callback,
+    ) {
       if (!this.has(key)) {
         this.set(key, callback(key));
       }

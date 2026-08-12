@@ -4,7 +4,12 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { KioskSelectorWidget } from '@/widgets/kiosk-selector';
 import { AdminHelpPanel } from '@/widgets/admin-help-panel';
 import { useAdminHelp } from '@/features/admin-help-toggle';
-import { AdminTabTrigger, SlideSlot, UnsavedChangesDialog, adminTabMotion } from '@/shared/ui';
+import {
+  AdminTabTrigger,
+  SlideSlot,
+  UnsavedChangesDialog,
+  adminTabMotion,
+} from '@/shared/ui';
 
 import { getVisibleAdminTabs } from '../model/tabs';
 import { useAdminPageGate } from '../model/useAdminPageGate';

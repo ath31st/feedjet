@@ -73,7 +73,9 @@ export function ScenarioAddItemModal({
 
                   <div className="min-w-0 flex-1">
                     <div className="font-semibold text-sm">{label}</div>
-                    <div className="mt-1 text-xs leading-snug">{description}</div>
+                    <div className="mt-1 text-xs leading-snug">
+                      {description}
+                    </div>
                   </div>
 
                   <Plus
