@@ -56,7 +56,7 @@ function CommonDialogRoot({
 
         <Dialog.Content
           className={cn(
-            'fixed top-1/2 left-1/2 z-51 w-full -translate-x-1/2 -translate-y-1/2 rounded-lg border border-(--border)/40 bg-(--card-bg) p-5 shadow-xl',
+            'fixed top-1/2 left-1/2 z-50 w-full -translate-x-1/2 -translate-y-1/2 rounded-lg border border-(--border)/40 bg-(--card-bg) p-5 shadow-xl',
             contentSizes[size],
             contentClassName,
           )}

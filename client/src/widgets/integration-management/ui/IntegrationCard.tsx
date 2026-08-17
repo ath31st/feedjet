@@ -9,7 +9,12 @@ import type { ScreenState } from '@/entities/device-control';
 import { ScreenStateValue } from '@/entities/device-control';
 import { CommonButton } from '@/shared/ui/common';
 import { Pencil, Trash2 } from 'lucide-react';
-import { CardField, CardTitle, EntityCard } from '@/shared/ui';
+import {
+  CardField,
+  CardTitle,
+  ConfirmActionDialog,
+  EntityCard,
+} from '@/shared/ui';
 
 interface IntegrationCardProps {
   integration: Integration;
@@ -46,13 +51,17 @@ export function IntegrationCard({
             <Pencil size={15} />
           </CommonButton>
 
-          <CommonButton
-            type="button"
-            onClick={() => onDelete(integration.id)}
-            tooltip="Удалить интеграцию"
-          >
-            <Trash2 size={15} />
-          </CommonButton>
+          <ConfirmActionDialog
+            title="Удалить интеграцию?"
+            description={`Вы уверены, что хотите удалить интеграцию ${typeLabel} для устройства ${integration.ip}:${integration.port}?`}
+            confirmText="Удалить"
+            onConfirm={() => onDelete(integration.id)}
+            trigger={
+              <CommonButton type="button" tooltip="Удалить интеграцию">
+                <Trash2 size={15} />
+              </CommonButton>
+            }
+          />
         </>
       }
     >
