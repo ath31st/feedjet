@@ -1,5 +1,5 @@
 /**
- * Runtime APIs that pdfjs-dist 5.x assumes, but SaluteTV / some Android
+ * Runtime APIs that pdfjs-dist 5+/6+ assumes, but SaluteTV / some Android
  * WebViews lack even when the UA claims a modern Chrome.
  */
 /** biome-ignore-all lint/style/noNonNullAssertion: some ai shit here */

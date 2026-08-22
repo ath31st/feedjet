@@ -1,7 +1,10 @@
 import { useEffect, useEffectEvent, useRef, useState } from 'react';
 import type { PDFDocumentProxy, RenderTask } from 'pdfjs-dist';
 import { buildPdfUrl } from '@/entities/pdf';
-import { getDocument } from '../lib/pdfjs';
+import {
+  destroyPdfDocument,
+  loadPdfDocument,
+} from '../lib/loadPdfDocument';
 import { renderPdfPageToObjectUrl } from '../lib/renderPdfPageToObjectUrl';
 
 interface UsePdfItemPlaybackParams {
@@ -39,9 +42,9 @@ export function usePdfItemPlayback({
 
     const load = async () => {
       try {
-        const doc = await getDocument(buildPdfUrl(fileName)).promise;
+        const doc = await loadPdfDocument(buildPdfUrl(fileName)).promise;
         if (cancelled) {
-          await doc.destroy();
+          destroyPdfDocument(doc);
           return;
         }
         pdfDocRef.current = doc;
@@ -62,7 +65,7 @@ export function usePdfItemPlayback({
       renderTaskRef.current = null;
       const doc = pdfDocRef.current;
       pdfDocRef.current = null;
-      void doc?.destroy();
+      destroyPdfDocument(doc);
       setPageSrc((prev) => {
         if (prev) URL.revokeObjectURL(prev);
         return null;
