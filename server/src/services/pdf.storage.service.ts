@@ -351,7 +351,10 @@ export class PdfStorageService extends FileStorageService {
   async syncWithDisk() {
     const files = await this.listFiles();
     const withoutThumbnails = files.filter(
-      (f) => !f.includes('_thumbnail') && !f.endsWith('.tmp.pdf') && !f.includes('.thumb.tmp.'),
+      (f) =>
+        !f.includes('_thumbnail') &&
+        !f.endsWith('.tmp.pdf') &&
+        !f.includes('.thumb.tmp.'),
     );
     const pdfFiles = withoutThumbnails.filter(
       (f) => path.extname(f).toLowerCase() === '.pdf',

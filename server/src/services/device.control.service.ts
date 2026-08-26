@@ -112,9 +112,7 @@ export class DeviceControlService {
   }
 
   getScreenStates(): Record<string, ScreenState> {
-    const ips = [
-      ...new Set(this.integrationService.getAll().map((i) => i.ip)),
-    ];
+    const ips = [...new Set(this.integrationService.getAll().map((i) => i.ip))];
 
     return Object.fromEntries(
       ips.map((ip) => [ip, this.screenStateCache.get(ip) ?? 'unreachable']),

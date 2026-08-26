@@ -1,10 +1,7 @@
 import { useEffect, useEffectEvent, useRef, useState } from 'react';
 import type { PDFDocumentProxy, RenderTask } from 'pdfjs-dist';
 import { buildPdfUrl } from '@/entities/pdf';
-import {
-  destroyPdfDocument,
-  loadPdfDocument,
-} from '../lib/loadPdfDocument';
+import { destroyPdfDocument, loadPdfDocument } from '../lib/loadPdfDocument';
 import { renderPdfPageToObjectUrl } from '../lib/renderPdfPageToObjectUrl';
 
 interface UsePdfItemPlaybackParams {

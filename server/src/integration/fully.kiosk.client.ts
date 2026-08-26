@@ -81,9 +81,9 @@ export class FullyKioskClient {
       }
     }
 
-    const nestedObjects = Object.values(payload as Record<string, unknown>).filter(
-      (value) => value && typeof value === 'object',
-    );
+    const nestedObjects = Object.values(
+      payload as Record<string, unknown>,
+    ).filter((value) => value && typeof value === 'object');
 
     for (const nested of nestedObjects) {
       const parsed = this.extractScreenOnState(nested);
@@ -135,7 +135,9 @@ export class FullyKioskClient {
         res.data && typeof res.data === 'object'
           ? Object.keys(res.data as Record<string, unknown>).join(',')
           : 'non-object payload';
-      throw new Error(`Unexpected deviceInfo screen state payload keys: ${keys}`);
+      throw new Error(
+        `Unexpected deviceInfo screen state payload keys: ${keys}`,
+      );
     }
 
     return isScreenOn;

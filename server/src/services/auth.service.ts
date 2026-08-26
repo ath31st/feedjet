@@ -51,7 +51,10 @@ export class AuthService {
       const payload = jwt.verify(token, this.jwtSecret) as JwtPayload;
       return payload;
     } catch (err) {
-      this.logger.warn({ err, fn: 'validateAccessToken' }, 'Invalid access token');
+      this.logger.warn(
+        { err, fn: 'validateAccessToken' },
+        'Invalid access token',
+      );
       throw new AuthError('Invalid token');
     }
   };

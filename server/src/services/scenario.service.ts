@@ -352,8 +352,7 @@ export class ScenarioService {
           item: ReplaceScenarioItemInput;
           order: number;
         }[] = [];
-        const inserts: { item: ReplaceScenarioItemInput; order: number }[] =
-          [];
+        const inserts: { item: ReplaceScenarioItemInput; order: number }[] = [];
 
         items.forEach((item, order) => {
           if (item.id != null && existingIds.has(item.id)) {

@@ -24,15 +24,13 @@ export const rssRouter = t.router({
     }),
   ),
 
-  create: protectedProcedure
-    .input(rssCreateSchema)
-    .mutation(({ input }) =>
-      handleServiceCall(() => {
-        const created = rssService.create(input);
-        refetchIfClientsOnline();
-        return created;
-      }),
-    ),
+  create: protectedProcedure.input(rssCreateSchema).mutation(({ input }) =>
+    handleServiceCall(() => {
+      const created = rssService.create(input);
+      refetchIfClientsOnline();
+      return created;
+    }),
+  ),
 
   update: protectedProcedure
     .input(

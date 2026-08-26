@@ -95,7 +95,8 @@ function extractOrderedText(nodes: unknown): string {
     }
 
     if (SPACE_TAG in node) {
-      const attrs = (node[ATTR_KEY] as Record<string, string> | undefined) ?? {};
+      const attrs =
+        (node[ATTR_KEY] as Record<string, string> | undefined) ?? {};
       const count = Number(attrs['@_c'] ?? 1);
       out += ' '.repeat(Number.isFinite(count) && count > 0 ? count : 1);
       continue;

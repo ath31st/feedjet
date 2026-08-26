@@ -68,9 +68,7 @@ export const logoStorageService = new LogoStorageService(db, fileStorageDir);
 
 export const weatherForecastClient: WeatherForecastClient | null =
   !offlineMode && openWeatherApiKey
-    ? new WeatherForecastClient(
-        new OpenWeatherAPI({ key: openWeatherApiKey }),
-      )
+    ? new WeatherForecastClient(new OpenWeatherAPI({ key: openWeatherApiKey }))
     : null;
 
 export const rssParser = new RssParser(new Parser());

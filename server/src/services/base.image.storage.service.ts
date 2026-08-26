@@ -185,8 +185,7 @@ export abstract class BaseImageStorageService extends FileStorageService {
       .toBuffer();
 
     const savingRatio = 1 - webpBuffer.length / Math.max(buffer.length, 1);
-    const useWebp =
-      needsResize || savingRatio >= this.minSizeSavingRatio;
+    const useWebp = needsResize || savingRatio >= this.minSizeSavingRatio;
 
     if (!useWebp) {
       return { buffer, fileName: originalFileName, changed: false };
